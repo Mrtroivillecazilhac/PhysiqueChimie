@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2nde — Physique-Chimie</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html" class="current">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+  <a href="a-propos.html">À propos</a>
+</nav>
+
+<header class="page-head">
+  <div class="eyebrow">Niveau</div>
+  <h1>2nde</h1>
+</header>
+
+<main>
+  <section>
+    <h2>Roue de chimie</h2>
+    <div class="wheel-zone">
+      <div class="wheel-wrap">
+        <div class="pointer"></div>
+        <svg id="wheel-chimie" class="wheel" viewBox="0 0 200 200"></svg>
+        <div class="hub"></div>
+      </div>
+      <div class="spin-panel">
+        <button id="spinBtn-chimie" class="spin-btn">🎡 Tourner la roue</button>
+        <div class="result-card">
+          <div class="tag" id="resultTag-chimie">En attente</div>
+          <div class="q" id="resultQ-chimie">Lance la roue pour une question flash.</div>
+          <div class="timer" id="timer-chimie"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Roue de physique</h2>
+    <div class="wheel-zone">
+      <div class="wheel-wrap">
+        <div class="pointer"></div>
+        <svg id="wheel-physique" class="wheel" viewBox="0 0 200 200"></svg>
+        <div class="hub"></div>
+      </div>
+      <div class="spin-panel">
+        <button id="spinBtn-physique" class="spin-btn">🎡 Tourner la roue</button>
+        <div class="result-card">
+          <div class="tag" id="resultTag-physique">En attente</div>
+          <div class="q" id="resultQ-physique">Lance la roue pour une question flash.</div>
+          <div class="timer" id="timer-physique"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Activité — Le tableau périodique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:14px;">Replace les 18 premiers éléments (H à Ar) à leur bonne place dans le tableau.</p>
+    <a href="tableau-periodique-2nde.html" class="spin-btn">🧪 Ouvrir l'activité</a>
+  </section>
+</main>
+
+<footer>Site pédagogique — physique-chimie.</footer>
+
+<script src="script.js"></script>
+<script>
+  initWheel({
+    levelLabel: "2nde — Chimie",
+    wheelId: "wheel-chimie",
+    spinBtnId: "spinBtn-chimie",
+    resultTagId: "resultTag-chimie",
+    resultQId: "resultQ-chimie",
+    timerId: "timer-chimie",
+    questions: [
+      "Quelle est la différence entre un mélange et une transformation chimique ?",
+      "Dans une transformation chimique, qu'appelle-t-on réactifs et produits ?",
+      "Énonce la loi de conservation de la masse lors d'une transformation chimique."
+    ]
+  });
+
+  initWheel({
+    levelLabel: "2nde — Physique",
+    wheelId: "wheel-physique",
+    spinBtnId: "spinBtn-physique",
+    resultTagId: "resultTag-physique",
+    resultQId: "resultQ-physique",
+    timerId: "timer-physique",
+    questions: [
+      "Énonce la loi d'unicité de l'intensité dans un circuit électrique en série.",
+      "Comment se branche un voltmètre dans un circuit électrique ?",
+      "Qu'est-ce que la réfraction de la lumière ?"
+    ]
+  });
+</script>
+</body>
+</html>

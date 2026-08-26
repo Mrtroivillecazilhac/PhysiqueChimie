@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 3 — Oxydo-réduction — 1ère spé PC</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch3.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 3 — Oxydo-réduction</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch3-1ere">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch3-1ere"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Savoir reconnaître un oxydant, un réducteur, et un couple oxydant/réducteur</li>
+        <li>Savoir écrire une demi-équation électronique, méthodiquement</li>
+        <li>Savoir équilibrer une équation d'oxydoréduction à partir de deux demi-équations</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Oxydants et réducteurs</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une réaction d'oxydo-réduction est une transformation chimique qui met en jeu des transferts d'<strong>électrons</strong> entre un oxydant et un réducteur.
+    </div>
+    <p class="course-text">
+      Un <strong>oxydant</strong>, noté Ox, est une entité capable de capter un ou plusieurs électrons notés e⁻. Un <strong>réducteur</strong>, noté Red, est une entité capable de céder un ou plusieurs électrons.
+    </p>
+    <p class="course-text">
+      Exemple : l'ion cuivre (II) Cu²⁺(aq) est un oxydant et l'atome de cuivre Cu(s) est un réducteur.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis le nombre d'électrons échangés, puis lance le transfert.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="etSvgCours" viewBox="0 0 260 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre d'électrons échangés (n) — exemple M / Yⁿ⁺</label>
+        <input type="range" id="etNCours" min="1" max="5" value="2" step="1">
+        <div class="anim-readout" id="etReadoutCours"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:14px;">
+          <button id="etPlayCours">▶ Transférer</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Le couple oxydant/réducteur</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un oxydant et un réducteur sont dits <strong>conjugués</strong> et forment un couple oxydant/réducteur, noté Ox/Red, s'ils peuvent être reliés par une <strong>demi-équation électronique</strong>.
+    </div>
+    <div class="formula">Ox + n e⁻ ⇌ Red</div>
+    <p class="course-text">Le nombre d'électrons échangés est noté <em>n</em>.</p>
+  </section>
+
+  <section>
+    <h2>c. Réduction et oxydation</h2>
+    <p class="course-text">
+      Le passage de l'oxydant à son réducteur conjugué est une <strong>réduction</strong>. Le passage du réducteur à son oxydant conjugué est une <strong>oxydation</strong>.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      L'oxydant est <strong>réduit</strong> en son réducteur conjugué, tandis que le réducteur est <strong>oxydé</strong> en son oxydant conjugué.
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Écrire une demi-équation électronique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'écriture d'une demi-équation électronique doit respecter la conservation des <strong>éléments</strong> et de la <strong>charge électrique</strong>.
+    </div>
+    <div class="method-box">
+      <span class="box-label">🔧 Méthode (exemple MnO₄⁻/Mn²⁺)</span>
+      <ol style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li>Conservation de l'élément <strong>métallique</strong> (ici Mn)</li>
+        <li>Conservation de l'<strong>oxygène</strong>, en ajoutant des molécules d'eau H₂O</li>
+        <li>Conservation de l'<strong>hydrogène</strong>, en ajoutant des ions H⁺</li>
+        <li>Conservation de la <strong>charge</strong>, en ajoutant des électrons e⁻</li>
+      </ol>
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Avance étape par étape pour voir la méthode appliquée en direct.</p>
+    <div class="step-eq" id="stepEqCours"></div>
+    <div class="step-explain" id="stepExplainCours"></div>
+    <div class="step-nav">
+      <button id="stepPrevCours">◀ Précédent</button>
+      <span id="stepLabelCours"></span>
+      <button id="stepNextCours">Suivant ▶</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>e. Les réactions d'oxydoréduction</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une réaction d'oxydoréduction est une réaction dont les réactifs sont un oxydant et un réducteur de <strong>deux couples</strong> oxydant/réducteur différents.
+    </div>
+    <p class="course-text">
+      L'équation d'une réaction d'oxydoréduction s'obtient en combinant les deux demi-équations électroniques, de sorte que le nombre d'électrons libérés par le réducteur soit <strong>égal</strong> au nombre d'électrons captés par l'oxydant.
+    </p>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Dans l'équation finale, les électrons échangés ne doivent <strong>jamais</strong> apparaître.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Ajuste les coefficients pour équilibrer les électrons libérés et captés.</p>
+    <div id="ebHalfEqCours"></div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ebSvgCours" viewBox="0 0 260 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Coefficient devant (Al ⇌ Al³⁺ + 3e⁻)</label>
+        <input type="range" id="ebRedCours" min="1" max="6" value="1" step="1">
+        <label>Coefficient devant (Cu²⁺ + 2e⁻ ⇌ Cu)</label>
+        <input type="range" id="ebOxCours" min="1" max="6" value="1" step="1">
+        <div class="anim-readout" id="ebReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. Oxydants et réducteurs</h3>
+      <p>
+        Une réaction d'oxydo-réduction est une transformation chimique qui met en jeu des transferts d'<input class="blank" data-answer="électrons|electrons" size="14"> entre un oxydant et un réducteur.
+      </p>
+      <p>
+        Un <input class="blank" data-answer="oxydant" size="12">, noté Ox, est une entité capable de capter un ou plusieurs électrons notés e⁻. Un <input class="blank" data-answer="réducteur|reducteur" size="12">, noté Red, est une entité capable de céder un ou plusieurs électrons.
+      </p>
+      <p>
+        Exemple : l'ion cuivre (II) Cu²⁺(aq) est un <input class="blank" data-answer="oxydant" size="12"> et l'atome de cuivre Cu(s) est un <input class="blank" data-answer="réducteur|reducteur" size="12">.
+      </p>
+
+      <h3>b. Le couple oxydant/réducteur</h3>
+      <p>
+        Un oxydant et un réducteur sont dits <input class="blank" data-answer="conjugués|conjugues" size="14"> et forment un couple oxydant/réducteur, noté Ox/Red, s'ils peuvent être reliés par une <input class="blank" data-answer="demi-équation électronique|demi equation electronique" size="24">.
+      </p>
+      <div class="formula">Ox + n e⁻ ⇌ Red</div>
+      <p>Le nombre d'électrons échangés est noté <input class="blank" data-answer="n" size="4">.</p>
+
+      <h3>c. Réduction et oxydation</h3>
+      <p>
+        Le passage de l'oxydant à son réducteur conjugué est une <input class="blank" data-answer="réduction|reduction" size="14">. Le passage du réducteur à son oxydant conjugué est une <input class="blank" data-answer="oxydation" size="14">.
+      </p>
+      <p>
+        L'oxydant est <input class="blank" data-answer="réduit|reduit" size="10"> en son réducteur conjugué, tandis que le réducteur est <input class="blank" data-answer="oxydé|oxyde" size="10"> en son oxydant conjugué.
+      </p>
+
+      <h3>d. Écrire une demi-équation électronique</h3>
+      <p>
+        L'écriture d'une demi-équation électronique doit respecter la conservation des <input class="blank" data-answer="éléments|elements" size="12"> et de la <input class="blank" data-answer="charge électrique|charge electrique" size="18">.
+      </p>
+      <p>
+        Méthode (exemple MnO₄⁻/Mn²⁺) : on assure d'abord la conservation de l'élément <input class="blank" data-answer="métallique|metallique" size="14"> (ici Mn), puis celle de l'<input class="blank" data-answer="oxygène|oxygene" size="12"> en ajoutant des molécules d'eau H₂O, puis celle de l'<input class="blank" data-answer="hydrogène|hydrogene" size="14"> en ajoutant des ions H⁺, et enfin celle de la <input class="blank" data-answer="charge" size="10"> en ajoutant des électrons e⁻.
+      </p>
+
+      <h3>e. Les réactions d'oxydoréduction</h3>
+      <p>
+        Une réaction d'oxydoréduction est une réaction dont les réactifs sont un oxydant et un réducteur de <input class="blank" data-answer="deux couples|2 couples" size="16"> oxydant/réducteur différents.
+      </p>
+      <p>
+        L'équation d'une réaction d'oxydoréduction s'obtient en combinant les deux demi-équations électroniques, de sorte que le nombre d'électrons libérés par le réducteur soit <input class="blank" data-answer="égal|egal" size="10"> au nombre d'électrons captés par l'oxydant.
+      </p>
+      <p>
+        Dans l'équation finale, les électrons échangés ne doivent <input class="blank" data-answer="jamais" size="10"> apparaître.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Transfert d'électrons entre deux espèces</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis le nombre d'électrons échangés, puis lance le transfert.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="etSvg" viewBox="0 0 260 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre d'électrons échangés (n) — exemple M / Yⁿ⁺</label>
+        <input type="range" id="etN" min="1" max="5" value="2" step="1">
+        <div class="anim-readout" id="etReadout"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:14px;">
+          <button id="etPlay">▶ Transférer</button>
+        </div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actElecTransfer"></div></div>
+  </section>
+
+  <section>
+    <h2>Construction pas à pas d'une demi-équation</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Exemple du couple MnO₄⁻(aq) / Mn²⁺(aq) — avance étape par étape.</p>
+    <div class="step-eq" id="stepEq"></div>
+    <div class="step-explain" id="stepExplain"></div>
+    <div class="step-nav">
+      <button id="stepPrev">◀ Précédent</button>
+      <span id="stepLabel"></span>
+      <button id="stepNext">Suivant ▶</button>
+    </div>
+    <div class="activity-block"><div id="actHalfEq"></div></div>
+  </section>
+
+  <section>
+    <h2>Équilibrer les électrons entre deux couples</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Exemple Al(s)/Al³⁺ (3 e⁻ libérés) et Cu²⁺/Cu(s) (2 e⁻ captés). Ajuste les <strong>coefficients</strong> (les nombres devant chaque demi-équation) pour équilibrer la balance.</p>
+    <div id="ebHalfEq"></div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ebSvg" viewBox="0 0 260 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Coefficient devant (Al ⇌ Al³⁺ + 3e⁻)</label>
+        <input type="range" id="ebRed" min="1" max="6" value="1" step="1">
+        <label>Coefficient devant (Cu²⁺ + 2e⁻ ⇌ Cu)</label>
+        <input type="range" id="ebOx" min="1" max="6" value="1" step="1">
+        <div class="anim-readout" id="ebReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actElecBalance"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Définition / formule</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Oxydant (Ox)</td><td style="padding:10px 8px;">capte des électrons</td><td style="padding:10px 8px; color:var(--chalk-dim);">devient réducteur (réduction)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réducteur (Red)</td><td style="padding:10px 8px;">cède des électrons</td><td style="padding:10px 8px; color:var(--chalk-dim);">devient oxydant (oxydation)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Couple Ox/Red</td><td style="padding:10px 8px;">Ox + n e⁻ ⇌ Red</td><td style="padding:10px 8px; color:var(--chalk-dim);">n = nombre d'électrons échangés</td></tr>
+          <tr><td style="padding:10px 8px;">Réaction d'oxydoréduction</td><td style="padding:10px 8px;">combine 2 couples différents</td><td style="padding:10px 8px; color:var(--chalk-dim);">e⁻ libérés = e⁻ captés, jamais visibles dans l'équation finale</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Écrire une demi-équation, en 4 étapes</span>
+      <ol style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li>Conservation de l'élément métallique</li>
+        <li>Conservation de l'oxygène (ajouter H₂O)</li>
+        <li>Conservation de l'hydrogène (ajouter H⁺)</li>
+        <li>Conservation de la charge (ajouter e⁻)</li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 3 — Oxydo-réduction (1ère spé PC).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch3-1ere", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initElectronTransfer({ svgId: "etSvgCours", sliderId: "etNCours", playBtnId: "etPlayCours", readoutId: "etReadoutCours" });
+initHalfEquationBuilder({ eqId: "stepEqCours", explainId: "stepExplainCours", prevBtnId: "stepPrevCours", nextBtnId: "stepNextCours", stepId: "stepLabelCours" });
+initElectronBalance({ svgId: "ebSvgCours", halfEqId: "ebHalfEqCours", coefRedId: "ebRedCours", coefOxId: "ebOxCours", readoutId: "ebReadoutCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initElectronTransfer({ svgId: "etSvg", sliderId: "etN", playBtnId: "etPlay", readoutId: "etReadout" });
+initHalfEquationBuilder({ eqId: "stepEq", explainId: "stepExplain", prevBtnId: "stepPrev", nextBtnId: "stepNext", stepId: "stepLabel" });
+initElectronBalance({ svgId: "ebSvg", halfEqId: "ebHalfEq", coefRedId: "ebRed", coefOxId: "ebOx", readoutId: "ebReadout" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actElecTransfer", chapterId: "ch3-1ere", activityId: "qcm-electron-transfer",
+  prompt: "Sur l'animation ci-dessus, M cède des électrons pour devenir Mⁿ⁺. Quel rôle M jouait-il avant de céder ces électrons ?",
+  options: [
+    { text: "Réducteur", correct: true },
+    { text: "Oxydant", correct: false },
+    { text: "Ni l'un ni l'autre", correct: false }
+  ],
+  explanation: "Une entité qui cède des électrons est, par définition, un réducteur. En les cédant, il s'oxyde et devient son oxydant conjugué."
+});
+
+initVraiFaux({
+  containerId: "actHalfEq", chapterId: "ch3-1ere", activityId: "vf-half-eq",
+  prompt: "Dans l'équation finale d'une réaction d'oxydoréduction, les électrons échangés doivent apparaître explicitement.",
+  correct: false,
+  explanation: "Faux : les électrons échangés ne doivent jamais apparaître dans l'équation finale — ils s'éliminent quand on combine les deux demi-équations avec les bons coefficients."
+});
+
+initEstimation({
+  containerId: "actElecBalance", chapterId: "ch3-1ere", activityId: "est-elec-balance",
+  prompt: "Le réducteur libère 3 e⁻ et l'oxydant capte 2 e⁻ à chaque fois. Quel est le plus petit nombre total d'électrons échangés qui permet d'équilibrer les deux (PPCM de 3 et 2) ?",
+  answer: 6, tolerance: 0.5, unit: "électrons",
+  explanation: "PPCM(3, 2) = 6 : il faut ×2 la demi-équation du réducteur (2×3=6 e⁻ libérés) et ×3 celle de l'oxydant (3×2=6 e⁻ captés)."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch3-1ere");
+initProgressBar("ch3-1ere", 4); // texte à trous complet + 3 activités liées aux animations
+</script>
+</body>
+</html>

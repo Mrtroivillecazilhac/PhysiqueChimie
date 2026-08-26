@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 1 — Quantité de matière — 1ère spé PC</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch1.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 1 — La quantité de matière</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch1-1ere">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch1-1ere"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Savoir manipuler la quantité de matière n, et la relier au nombre d'entités, à la masse, au volume (gaz) et à la concentration</li>
+        <li>Comprendre le principe d'une dilution et savoir calculer un facteur de dilution</li>
+        <li>Connaître la loi de Beer-Lambert et savoir exploiter une courbe d'étalonnage pour déterminer une concentration inconnue</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. La quantité de matière et la mole</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>quantité de matière</strong> est la grandeur qui permet de compter des entités chimiques (atomes, molécules, ions...). Elle s'exprime en <strong>moles (mol)</strong> et se note <em>n</em>.
+    </div>
+    <p class="course-text">
+      Compter des atomes un par un serait absurde : dans une seule goutte d'eau, il y a déjà environ 10²¹ molécules. Les chimistes ont donc besoin d'une unité "de paquet" — un peu comme "une douzaine" pour les œufs, qui veut toujours dire 12, quel que soit ce qu'on compte.
+    </p>
+    <p class="course-text">
+      Cette unité, c'est la <strong>mole</strong> : une mole correspond toujours au même nombre d'entités, appelé <strong>constante d'Avogadro</strong>, noté <em>N</em><sub>A</sub>. Depuis 2019, ce nombre est fixé exactement à 6,02 × 10²³ mol⁻¹ — que l'on compte des atomes, des molécules, des ions, ou même (en théorie) des grains de sable.
+    </p>
+    <div class="formula">n = <span class="frac"><span class="num">N</span><span class="den">N<sub>A</sub></span></span></div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      1 mole = 6,02 × 10²³ entités — toujours le même nombre, quelle que soit la nature de l'entité comptée.
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Ne confonds pas <strong>quantité de matière</strong> (<em>n</em>, en mol — un nombre d'entités) et <strong>masse</strong> (<em>m</em>, en g — combien ça pèse). La relation entre les deux arrive juste après.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Manipule le curseur pour observer comment le nombre d'entités augmente avec n.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="bagSvgCours" viewBox="0 0 200 220"></svg>
+      </div>
+      <div class="anim-controls">
+        <div style="font-family:var(--font-display); font-size:1.3rem; color:var(--yellow); margin:10px 0;" id="bagReadoutCours">n = 0,5 mol</div>
+        <input type="range" id="bagRangeCours" min="5" max="60" value="10" step="5">
+        <div style="color:var(--chalk-dim); font-size:0.85rem;" id="bagWarnCours"></div>
+        <div class="anim-readout" id="bagCountCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>b. La masse molaire atomique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>masse molaire atomique</strong> d'un élément, notée <em>M</em>, est la masse d'une mole d'atomes de cet élément. Elle s'exprime en <strong>g/mol</strong> (ou g·mol⁻¹).
+    </div>
+    <p class="course-text">
+      Chaque élément chimique a sa propre masse molaire atomique : elle dépend de la masse de ses atomes. Ces valeurs ont été mesurées une fois pour toutes et sont rassemblées dans le tableau périodique — pas besoin de les retenir par cœur, juste de savoir où les trouver et comment les utiliser.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Les valeurs des masses molaires atomiques se trouvent dans le tableau périodique, en général juste sous le symbole de l'élément.
+    </div>
+  </section>
+
+  <section>
+    <h2>c. La masse molaire moléculaire</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>masse molaire moléculaire</strong> d'une molécule est égale à la <strong>somme</strong> des masses molaires atomiques de tous les atomes qui la composent.
+    </div>
+    <div class="formula">
+      Exemple, méthanal CH₂O : M = M(C) + 2 × M(H) + M(O) = 30,0 g·mol⁻¹
+    </div>
+    <p class="course-text">
+      Il suffit d'additionner la masse molaire de chaque atome, en comptant bien chaque atome autant de fois qu'il apparaît dans la formule brute de la molécule.
+    </p>
+  </section>
+
+  <section>
+    <h2>d. Relier masse et quantité de matière</h2>
+    <p class="course-text">La quantité de matière <em>n</em> d'une espèce de masse <em>m</em> et de masse molaire <em>M</em> est donnée par :</p>
+    <div class="formula">n = <span class="frac"><span class="num">m</span><span class="den">M</span></span></div>
+    <p class="course-text">
+      Cette relation est la plus utilisée du chapitre : elle permet de passer d'une grandeur qu'on mesure facilement au laboratoire (la masse, avec une balance) à une grandeur qu'on utilise dans tous les calculs de chimie (la quantité de matière).
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier n et M (taille/couleur des boules) : observe où va l'aiguille de la balance.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="scaleSvgCours" viewBox="0 0 200 220"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Quantité de matière n (nombre de boules)</label>
+        <input type="range" id="scaleNCours" min="1" max="10" value="4" step="1">
+        <label>Masse molaire M (g/mol) — masse d'une boule</label>
+        <input type="range" id="scaleMCours" min="10" max="200" value="60" step="1">
+        <div class="anim-readout" id="scaleReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>e. La quantité de matière d'un gaz</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Pour un gaz en conditions standard (à 20 °C et sous une pression de 1013 hPa), une mole de gaz occupe toujours le même volume, appelé <strong>volume molaire</strong>, noté <em>V</em><sub>m</sub> (environ 24,0 L·mol⁻¹).
+    </div>
+    <div class="formula">n = <span class="frac"><span class="num">V</span><span class="den">V<sub>m</sub></span></span></div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Le volume molaire ne dépend pas de la nature du gaz : à conditions égales, 1 mole de dihydrogène occupe le même volume que 1 mole de dioxygène.
+    </div>
+  </section>
+
+  <section>
+    <h2>f. La concentration en quantité de matière</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>concentration en quantité de matière</strong> d'une espèce en solution, notée <em>C</em>, est le quotient de la quantité de matière <em>n</em> de soluté par le volume de la solution. Elle s'exprime en <strong>mol/L</strong>.
+    </div>
+    <div class="formula">C = <span class="frac"><span class="num">n</span><span class="den">V<sub>solution</sub></span></span></div>
+  </section>
+
+  <section>
+    <h2>g. La dilution</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>dilution</strong> d'une solution aqueuse consiste à ajouter de l'eau à cette solution afin de <strong>diminuer</strong> sa concentration en soluté.
+    </div>
+    <p class="course-text">
+      Au cours d'une dilution, la quantité de matière de soluté prélevée dans la solution mère (notée <em>n</em><sub>m</sub>) est <strong>égale</strong> à la quantité de matière de soluté présente dans la solution fille (notée <em>n</em><sub>f</sub>) : <em>n</em><sub>m</sub> = <em>n</em><sub>f</sub>, donc <em>C</em><sub>m</sub> × <em>V</em><sub>m</sub> = <em>C</em><sub>f</sub> × <em>V</em><sub>f</sub>.
+    </p>
+    <div class="formula">
+      F = <span class="frac"><span class="num">C<sub>m</sub></span><span class="den">C<sub>f</sub></span></span>
+      &nbsp;=&nbsp;
+      <span class="frac"><span class="num">V<sub>f</sub></span><span class="den">V<sub>m</sub></span></span>
+      &nbsp;(avec F &gt; 1)
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Diluer ne change pas la quantité de matière de soluté présente — seulement sa <strong>concentration</strong>, qui diminue parce que le volume, lui, augmente.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier n et V : observe comment la densité de particules (donc la concentration) évolue.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="diluSvgCours" viewBox="0 0 200 220"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Quantité de matière n (mol)</label>
+        <input type="range" id="diluNCours" min="10" max="300" value="100" step="5">
+        <label>Volume de la solution V (L)</label>
+        <input type="range" id="diluVCours" min="10" max="300" value="100" step="5">
+        <div class="anim-readout" id="diluReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>h. L'absorbance et la loi de Beer-Lambert</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'<strong>absorbance</strong> <em>A</em> d'une solution est une grandeur sans unité liée à la proportion de lumière absorbée par la solution, pour une longueur d'onde λ donnée. Elle se mesure à l'aide d'un <strong>spectrophotomètre</strong>.
+    </div>
+    <p class="course-text">Pour une longueur d'onde fixée, l'absorbance d'une solution diluée est donnée par la loi de Beer-Lambert :</p>
+    <div class="formula">A = ε × ℓ × C</div>
+    <p class="course-text">
+      où ℓ est l'épaisseur de solution traversée par la lumière (en cm) et ε est le <strong>coefficient d'absorption molaire</strong> (en L·mol⁻¹·cm⁻¹).
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Pour une solution donnée (ℓ et λ fixées), l'absorbance est <strong>proportionnelle</strong> à la concentration : A = k × C.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier la concentration : observe le faisceau qui ressort atténué, et la valeur de A qui évolue.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="beerSvgCours" viewBox="0 0 260 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Concentration C (× 10⁻⁴ mol/L)</label>
+        <input type="range" id="beerCCours" min="0" max="70" value="30" step="1">
+        <div class="anim-readout" id="beerReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>i. La spectroscopie UV-visible</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le spectrophotomètre permet de tracer le <strong>spectre d'absorption</strong> d'une solution, c'est-à-dire le graphe de l'absorbance en fonction de la longueur d'onde.
+    </div>
+    <p class="course-text">
+      Un maximum d'absorption dans le domaine visible indique la présence d'une espèce colorée dans la solution. La couleur perçue est la couleur <strong>complémentaire</strong> de celle qui est absorbée — on la détermine à l'aide du cercle chromatique.
+    </p>
+  </section>
+
+  <section>
+    <h2>j. Le dosage par étalonnage</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un <strong>dosage par étalonnage</strong> consiste à déterminer la concentration d'une espèce chimique dans une solution en comparant une grandeur physique (par exemple l'absorbance) à celles de solutions étalons de concentration connue.
+    </div>
+    <div class="method-box">
+      <span class="box-label">🔧 Méthode</span>
+      <ol style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li>Préparer une gamme de solutions étalons par dilution à partir d'une solution mère</li>
+        <li>Mesurer l'absorbance de chaque solution étalon</li>
+        <li>Tracer la courbe d'étalonnage A = f(C) — une droite qui passe par l'origine</li>
+        <li>Mesurer l'absorbance de la solution inconnue</li>
+        <li>Lire graphiquement sa concentration sur la courbe</li>
+      </ol>
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention — limite du modèle</span>
+      Pour des solutions trop concentrées, la loi de Beer-Lambert ne s'applique plus : A et C ne sont plus proportionnelles (on sort du domaine de linéarité).
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Déplace le curseur "A mesurée" : observe comment on lit graphiquement la concentration inconnue.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:280px;">
+        <svg id="calibSvgCours" viewBox="0 0 260 205"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Absorbance mesurée A</label>
+        <input type="range" id="calibACours" min="0" max="130" value="70" step="1">
+        <div class="anim-readout" id="calibReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. La quantité de matière et la mole</h3>
+      <p>
+        La <input class="blank" data-answer="quantité de matière|quantite de matiere" size="10"> est la grandeur qui permet de compter des entités chimiques (atomes, molécules, ions...). Elle s'exprime en <input class="blank" data-answer="mol" size="4"> et se note <em>n</em>.
+      </p>
+      <p>
+        Une <input class="blank" data-answer="mole" size="8"> correspond à un nombre fixe d'entités, appelé constante d'<input class="blank" data-answer="avogadro" size="10">, noté <em>N</em><sub>A</sub>, et qui vaut 6,02 × 10²³ mol⁻¹.
+      </p>
+      <div class="formula">n = <span class="frac"><span class="num">N</span><span class="den">N<sub>A</sub></span></span></div>
+
+      <h3>b. La masse molaire atomique</h3>
+      <p>
+        La masse molaire <input class="blank" data-answer="atomique" size="10"> d'un élément, notée <em>M</em>, est la masse d'une <input class="blank" data-answer="mole" size="8"> d'atomes de cet élément. Elle s'exprime en <input class="blank" data-answer="g/mol|g·mol-1|g.mol-1|g·mol⁻¹" size="10">.
+      </p>
+      <p>
+        Les valeurs des masses molaires atomiques se trouvent dans le <input class="blank" data-answer="tableau périodique|tableau periodique" size="16">.
+      </p>
+
+      <h3>c. La masse molaire moléculaire</h3>
+      <p>
+        La masse molaire <input class="blank" data-answer="moléculaire|moleculaire" size="12"> d'une molécule est égale à la <input class="blank" data-answer="somme" size="8"> des <input class="blank" data-answer="masses molaires atomiques|masse molaire atomique" size="18"> de tous les <input class="blank" data-answer="atomes" size="8"> qui la composent.
+      </p>
+      <div class="formula">
+        Exemple, méthanal CH₂O : M = M(C) + <input class="blank" data-answer="2" size="3"> × M(H) + M(O) = 30,0 g·mol⁻¹
+      </div>
+
+      <h3>d. Relier masse et quantité de matière</h3>
+      <p>La quantité de matière <em>n</em> d'une espèce de masse <em>m</em> et de masse molaire <em>M</em> est donnée par :</p>
+      <div class="formula">n = <span class="frac"><span class="num">m</span><span class="den">M</span></span></div>
+
+      <h3>e. La quantité de matière d'un gaz</h3>
+      <p>
+        Pour un gaz en conditions standard (à 20 °C et sous une pression de 1013 hPa), une mole de gaz occupe toujours le même volume, appelé <input class="blank" data-answer="volume molaire" size="14">, noté <em>V</em><sub>m</sub>, (qui vaut environ 24,0 L·mol⁻¹).
+      </p>
+      <div class="formula">n = <span class="frac"><span class="num">V</span><span class="den">V<sub>m</sub></span></span></div>
+
+      <h3>f. La concentration en quantité de matière</h3>
+      <p>
+        La concentration en quantité de matière d'une espèce en solution, notée <em>C</em>, est le quotient de la quantité de matière <em>n</em> de soluté par le <input class="blank" data-answer="volume" size="8"> de la solution.
+      </p>
+      <div class="formula">C = <span class="frac"><span class="num">n</span><span class="den">V<sub>solution</sub></span></span></div>
+      <p>
+        Elle s'exprime en <input class="blank" data-answer="mol/L|mol.l-1|mol·l-1|mol·L⁻¹" size="10">.
+      </p>
+
+      <h3>g. La dilution</h3>
+      <p>
+        La dilution d'une solution aqueuse consiste à ajouter <input class="blank" data-answer="de l'eau|eau" size="10"> à cette solution afin de <input class="blank" data-answer="diminuer" size="10"> sa concentration en soluté.
+      </p>
+      <p>
+        Au cours d'une dilution, la quantité de matière de soluté prélevée dans la solution mère (notée <em>n</em><sub>m</sub>) est <input class="blank" data-answer="égale|egale" size="8"> à la quantité de matière de soluté présente dans la solution fille (notée <em>n</em><sub>f</sub>) : <em>n</em><sub>m</sub> = <em>n</em><sub>f</sub>, donc <em>C</em><sub>m</sub> × <em>V</em><sub>m</sub> = <em>C</em><sub>f</sub> × <em>V</em><sub>f</sub>.
+      </p>
+      <div class="formula">
+        F = <span class="frac"><span class="num">C<sub>m</sub></span><span class="den">C<sub>f</sub></span></span>
+        &nbsp; = &nbsp;
+        <span class="frac"><span class="num">V<sub>f</sub></span><span class="den">V<sub>m</sub></span></span>
+        &nbsp; (avec F &gt; 1)
+      </div>
+
+      <h3>h. L'absorbance et la loi de Beer-Lambert</h3>
+      <p>
+        L'absorbance <em>A</em> d'une solution est une grandeur sans unité liée à la proportion de lumière absorbée par la solution, pour une longueur d'onde λ donnée. Elle se mesure à l'aide d'un <input class="blank" data-answer="spectrophotomètre|spectrophotometre" size="16">.
+      </p>
+      <p>
+        Pour une longueur d'onde fixée, l'absorbance d'une solution diluée est donnée par la loi de <input class="blank" data-answer="beer-lambert|beer lambert" size="14"> : A = ε × ℓ × C, où ℓ est <input class="blank" data-answer="l'épaisseur|epaisseur|l'epaisseur" size="12"> de solution traversée par la lumière (en cm) et ε est le <input class="blank" data-answer="coefficient d'absorption molaire|coefficient d'absorption molaire" size="22"> (en L·mol⁻¹·cm⁻¹).
+      </p>
+      <p>
+        Pour une solution donnée (ℓ et λ fixées), l'absorbance est <input class="blank" data-answer="proportionnelle" size="14"> à la concentration : A = k × C.
+      </p>
+
+      <h3>i. La spectroscopie UV-visible</h3>
+      <p>
+        Le spectrophotomètre permet de tracer le <input class="blank" data-answer="spectre d'absorption|spectre d absorption" size="18">  d'une solution, c'est-à-dire le graphe de <input class="blank" data-answer="l'absorbance|absorbance" size="12"> en fonction de la <input class="blank" data-answer="longueur d'onde|longueur d onde" size="16">.
+      </p>
+      <p>
+        Un maximum d'absorption dans le domaine visible indique la présence d'une espèce colorée dans la solution. La couleur observée de la solution est la couleur <input class="blank" data-answer="complémentaire|complementaire" size="14"> de celle qui est absorbée. On la détermine à l'aide du cercle chromatique.
+      </p>
+
+      <h3>j. Le dosage par étalonnage</h3>
+      <p>
+        Un dosage par étalonnage consiste à déterminer la concentration d'une espèce chimique dans une solution en comparant une grandeur physique (par exemple l'absorbance) à celles de solutions <input class="blank" data-answer="étalons|etalons" size="10"> de concentration <input class="blank" data-answer="connue" size="10">.
+      </p>
+      <p>
+        Étapes : on prépare une gamme de solutions étalons par <input class="blank" data-answer="dilution" size="10"> à partir d'une solution mère, on mesure leurs absorbances, puis on trace la courbe d'étalonnage A = f(C). C'est une <input class="blank" data-answer="droite" size="10"> qui passe par l'<input class="blank" data-answer="origine" size="10">. On mesure ensuite l'absorbance de la solution inconnue et on lit graphiquement sa concentration sur cette courbe.
+      </p>
+      <p>
+        Limite du modèle : pour des solutions trop concentrées, la loi de Beer-Lambert ne s'applique plus. A et C ne sont plus proportionnelles (on sort du domaine de linéarité).
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Le sac de la mole</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:6px;">La mole est une <strong style="color:var(--chalk);">quantité de matière</strong> : un nombre fixe d'entités, tout comme "une douzaine" veut toujours dire 12.</p>
+    <p style="color:var(--yellow); font-family:var(--font-display); font-size:1.1rem; margin-bottom:14px;">1 mole = 6,02 × 10²³ entités (nombre d'Avogadro)</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="bagSvg" viewBox="0 0 200 220"></svg>
+      </div>
+      <div class="anim-controls">
+        <div style="font-family:var(--font-display); font-size:1.3rem; color:var(--yellow); margin:10px 0;" id="bagReadout">n = 0,5 mol</div>
+        <input type="range" id="bagRange" min="5" max="60" value="10" step="5">
+        <div style="color:var(--chalk-dim); font-size:0.85rem;" id="bagWarn"></div>
+        <div class="anim-readout" id="bagCount"></div>
+      </div>
+    </div>
+    <p style="color:var(--chalk-dim); font-size:0.78rem; margin-top:10px; text-align:center;">⚠️ Chaque tas est symbolique (impossible de dessiner 6,02 × 10²³ points) — seul le nombre en texte est exact.</p>
+    <div class="activity-block"><div id="actMoleBag"></div></div>
+  </section>
+
+  <section>
+    <h2>Balance analogique masse ↔ quantité de matière</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier le nombre de boules (n) et la masse molaire (M — taille et couleur des boules) : observe où va l'aiguille.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="scaleSvg" viewBox="0 0 200 220"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Quantité de matière n (nombre de boules)</label>
+        <input type="range" id="scaleN" min="1" max="10" value="4" step="1">
+        <label>Masse molaire M (g/mol) — masse d'un élément (une boule)</label>
+        <input type="range" id="scaleM" min="10" max="200" value="60" step="1">
+        <div class="anim-readout" id="scaleReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actScale"></div></div>
+  </section>
+
+  <section>
+    <h2>Dilution animée</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier la quantité de matière et le volume : observe comment la concentration (donc la densité de particules) évolue.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="diluSvg" viewBox="0 0 200 220"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Quantité de matière n (mol)</label>
+        <input type="range" id="diluN" min="10" max="300" value="100" step="5">
+        <label>Volume de la solution V (L)</label>
+        <input type="range" id="diluV" min="10" max="300" value="100" step="5">
+        <div class="anim-readout" id="diluReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actDilution"></div></div>
+  </section>
+
+  <section>
+    <h2>Cuve interactive — loi de Beer-Lambert</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier la concentration : observe le faisceau qui ressort atténué, et la valeur de A qui évolue.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="beerSvg" viewBox="0 0 260 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Concentration C (× 10⁻⁴ mol/L)</label>
+        <input type="range" id="beerC" min="0" max="70" value="30" step="1">
+        <div class="anim-readout" id="beerReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actBeer"></div></div>
+  </section>
+
+  <section>
+    <h2>Courbe d'étalonnage — lecture graphique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Déplace le curseur "A mesurée" : les pointillés montrent comment on lit la concentration inconnue sur la droite d'étalonnage.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:280px;">
+        <svg id="calibSvg" viewBox="0 0 260 205"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Absorbance mesurée A</label>
+        <input type="range" id="calibA" min="0" max="130" value="70" step="1">
+        <div class="anim-readout" id="calibReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actCalib"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Formule</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">Grandeurs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Quantité de matière</td><td style="padding:10px 8px; color:var(--yellow);">n = N / N<sub>A</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">n (mol) • N (entités) • N<sub>A</sub> = 6,02×10²³ mol⁻¹</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Masse molaire moléculaire</td><td style="padding:10px 8px; color:var(--yellow);">M = Σ M(atomes)</td><td style="padding:10px 8px; color:var(--chalk-dim);">M (g/mol), somme sur tous les atomes de la molécule</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Masse ↔ quantité de matière</td><td style="padding:10px 8px; color:var(--yellow);">n = m / M</td><td style="padding:10px 8px; color:var(--chalk-dim);">m (g) • M (g/mol)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Quantité de matière d'un gaz</td><td style="padding:10px 8px; color:var(--yellow);">n = V / V<sub>m</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">V (L) • V<sub>m</sub> ≈ 24,0 L/mol</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Concentration</td><td style="padding:10px 8px; color:var(--yellow);">C = n / V<sub>solution</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">C (mol/L)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Dilution</td><td style="padding:10px 8px; color:var(--yellow);">C<sub>m</sub>V<sub>m</sub> = C<sub>f</sub>V<sub>f</sub> ; F = C<sub>m</sub>/C<sub>f</sub> = V<sub>f</sub>/V<sub>m</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">F : facteur de dilution (F &gt; 1)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Loi de Beer-Lambert</td><td style="padding:10px 8px; color:var(--yellow);">A = ε × ℓ × C</td><td style="padding:10px 8px; color:var(--chalk-dim);">ε (L·mol⁻¹·cm⁻¹) • ℓ (cm)</td></tr>
+          <tr><td style="padding:10px 8px;">Dosage par étalonnage</td><td style="padding:10px 8px; color:var(--yellow);">A = k × C (droite par l'origine)</td><td style="padding:10px 8px; color:var(--chalk-dim);">lecture graphique de C inconnue</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 La méthode du dosage par étalonnage, en 5 étapes</span>
+      <ol style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li>Préparer une gamme de solutions étalons par dilution</li>
+        <li>Mesurer l'absorbance de chaque solution étalon</li>
+        <li>Tracer la courbe A = f(C) (droite par l'origine)</li>
+        <li>Mesurer l'absorbance de la solution inconnue</li>
+        <li>Lire graphiquement sa concentration</li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 1 — Quantité de matière (1ère spé PC).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch1-1ere", "trous-complet", true);
+});
+
+/* ---------- Animations (inchangées) ---------- */
+initMoleBag({ svgId: "bagSvgCours", rangeId: "bagRangeCours", readoutId: "bagReadoutCours", countId: "bagCountCours", warnId: "bagWarnCours" });
+initMassScale({ svgId: "scaleSvgCours", nRangeId: "scaleNCours", molarRangeId: "scaleMCours", readoutId: "scaleReadoutCours" });
+initDilution({ svgId: "diluSvgCours", nRangeId: "diluNCours", vRangeId: "diluVCours", readoutId: "diluReadoutCours" });
+initBeerLambert({ svgId: "beerSvgCours", cRangeId: "beerCCours", readoutId: "beerReadoutCours" });
+initCalibrationCurve({ svgId: "calibSvgCours", sliderId: "calibACours", readoutId: "calibReadoutCours" });
+initMoleBag({ svgId: "bagSvg", rangeId: "bagRange", readoutId: "bagReadout", countId: "bagCount", warnId: "bagWarn" });
+initMassScale({ svgId: "scaleSvg", nRangeId: "scaleN", molarRangeId: "scaleM", readoutId: "scaleReadout" });
+initDilution({ svgId: "diluSvg", nRangeId: "diluN", vRangeId: "diluV", readoutId: "diluReadout" });
+initBeerLambert({ svgId: "beerSvg", cRangeId: "beerC", readoutId: "beerReadout" });
+initCalibrationCurve({ svgId: "calibSvg", sliderId: "calibA", readoutId: "calibReadout" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actMoleBag", chapterId: "ch1-1ere", activityId: "qcm-mole-bag",
+  prompt: "Sur l'animation ci-dessus, si tu doubles n (par exemple de 1 à 2 mol), que devient le nombre d'entités N ?",
+  options: [
+    { text: "N double aussi", correct: true },
+    { text: "N reste le même", correct: false },
+    { text: "N est divisé par 2", correct: false }
+  ],
+  explanation: "Comme n = N / N_A, on a N = n × N_A : N est proportionnel à n, donc si n double, N double aussi."
+});
+
+initEstimation({
+  containerId: "actScale", chapterId: "ch1-1ere", activityId: "est-scale",
+  prompt: "Avec n = 5 mol et une masse molaire M = 40 g/mol, quelle masse (en g) la balance doit-elle indiquer ?",
+  answer: 200, tolerance: 5, unit: "g",
+  explanation: "n = m/M, donc m = n × M = 5 × 40 = 200 g."
+});
+
+initVraiFaux({
+  containerId: "actDilution", chapterId: "ch1-1ere", activityId: "vf-dilution",
+  prompt: "Quand on dilue une solution, la quantité de matière de soluté qu'elle contient diminue.",
+  correct: false,
+  explanation: "Faux : la quantité de matière de soluté ne change pas pendant une dilution (n<sub>m</sub> = n<sub>f</sub>). C'est la concentration qui diminue, car le volume, lui, augmente."
+});
+
+initEstimation({
+  containerId: "actBeer", chapterId: "ch1-1ere", activityId: "est-beer",
+  prompt: "Pour une solution de concentration C = 4 × 10⁻⁴ mol/L, avec ε = 1700 L·mol⁻¹·cm⁻¹ et ℓ = 1 cm, quelle est l'absorbance A ?",
+  answer: 0.68, tolerance: 0.05, unit: "(sans unité)",
+  explanation: "A = ε × ℓ × C = 1700 × 1 × 4×10⁻⁴ = 0,68."
+});
+
+initQCM({
+  containerId: "actCalib", chapterId: "ch1-1ere", activityId: "qcm-calib",
+  prompt: "Pourquoi la droite d'étalonnage A = f(C) passe-t-elle par l'origine ?",
+  options: [
+    { text: "Car A = k × C : quand C = 0 (pas de soluté), A = 0", correct: true },
+    { text: "Par convention, toutes les droites d'étalonnage passent par l'origine", correct: false },
+    { text: "Uniquement parce qu'on règle le zéro avec un blanc avant de mesurer", correct: false }
+  ],
+  explanation: "La proportionnalité A = k×C impose A(0) = 0 : sans soluté, il n'y a rien à absorber."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch1-1ere");
+initProgressBar("ch1-1ere", 6); // texte à trous complet + 5 activités liées aux animations
+</script>
+</body>
+</html>
