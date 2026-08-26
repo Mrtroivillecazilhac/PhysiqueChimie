@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4ème — Physique-Chimie</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html" class="current">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+  <a href="a-propos.html">À propos</a>
+</nav>
+
+<header class="page-head">
+  <div class="eyebrow">Niveau</div>
+  <h1>4ème</h1>
+</header>
+
+<main>
+  <section>
+    <h2>Roue de chimie</h2>
+    <div class="wheel-zone">
+      <div class="wheel-wrap">
+        <div class="pointer"></div>
+        <svg id="wheel-chimie" class="wheel" viewBox="0 0 200 200"></svg>
+        <div class="hub"></div>
+      </div>
+      <div class="spin-panel">
+        <button id="spinBtn-chimie" class="spin-btn">🎡 Tourner la roue</button>
+        <div class="result-card">
+          <div class="tag" id="resultTag-chimie">En attente</div>
+          <div class="q" id="resultQ-chimie">Lance la roue pour une question flash.</div>
+          <div class="timer" id="timer-chimie"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Roue de physique</h2>
+    <div class="wheel-zone">
+      <div class="wheel-wrap">
+        <div class="pointer"></div>
+        <svg id="wheel-physique" class="wheel" viewBox="0 0 200 200"></svg>
+        <div class="hub"></div>
+      </div>
+      <div class="spin-panel">
+        <button id="spinBtn-physique" class="spin-btn">🎡 Tourner la roue</button>
+        <div class="result-card">
+          <div class="tag" id="resultTag-physique">En attente</div>
+          <div class="q" id="resultQ-physique">Lance la roue pour une question flash.</div>
+          <div class="timer" id="timer-physique"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Chrono-verrerie</h2>
+    <div class="speed-toolbar">
+      <div class="speed-prompt-wrap">
+        <span class="speed-instr">Trouve :</span>
+        <span class="speed-prompt" id="speedPrompt">—</span>
+      </div>
+      <div class="timer" id="speedTimer">⏱ 0:00</div>
+    </div>
+    <div class="glass-grid" id="speedGrid"></div>
+    <div class="memo-toolbar">
+      <div class="memo-stats" id="speedStats">0/6 trouvés · 0 erreur</div>
+      <button class="reset-btn" id="resetSpeed">Recommencer</button>
+    </div>
+    <div class="win-msg" id="speedWin"></div>
+  </section>
+</main>
+
+<footer>Site pédagogique — physique-chimie.</footer>
+
+<script src="script.js"></script>
+<script>
+  initWheel({
+    levelLabel: "4ème — Chimie",
+    wheelId: "wheel-chimie",
+    spinBtnId: "spinBtn-chimie",
+    resultTagId: "resultTag-chimie",
+    resultQId: "resultQ-chimie",
+    timerId: "timer-chimie",
+    questions: [
+      "Cite les trois états physiques de l'eau et donne un exemple de chaque état dans la vie courante.",
+      "Qu'est-ce qu'un mélange ? Donne un exemple que tu utilises au quotidien.",
+      "Quelle est la différence entre un mélange homogène et un mélange hétérogène ?",
+      "Qu'est-ce que la dissolution d'un solide dans l'eau ? Donne un exemple.",
+      "Quel instrument utilise-t-on pour mesurer une masse en laboratoire ?",
+      "Cite une règle de sécurité à respecter lors d'une manipulation en chimie."
+    ]
+  });
+
+  initWheel({
+    levelLabel: "4ème — Physique",
+    wheelId: "wheel-physique",
+    spinBtnId: "spinBtn-physique",
+    resultTagId: "resultTag-physique",
+    resultQId: "resultQ-physique",
+    timerId: "timer-physique",
+    questions: [
+      "Qu'est-ce qu'un circuit électrique fermé ?",
+      "Cite deux exemples de sources de lumière que tu utilises au quotidien.",
+      "Comment appelle-t-on un objet qui ne produit pas sa propre lumière mais que l'on peut voir ?",
+      "Cite deux formes d'énergie que tu connais.",
+      "Donne un exemple de conversion d'énergie, d'une forme à une autre.",
+      "Qu'est-ce qu'une source d'énergie renouvelable ? Donne un exemple."
+    ]
+  });
+
+  initSpeedID([
+    { id: "becher", name: "Bécher" },
+    { id: "erlenmeyer", name: "Erlenmeyer" },
+    { id: "eprouvette", name: "Éprouvette graduée" },
+    { id: "ballon", name: "Ballon à fond rond" },
+    { id: "burette", name: "Burette graduée" },
+    { id: "pipette", name: "Pipette jaugée" }
+  ]);
+</script>
+</body>
+</html>

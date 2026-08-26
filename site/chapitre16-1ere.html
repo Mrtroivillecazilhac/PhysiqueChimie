@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 16 — Synthèse chimique — 1ère spé PC</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch16.js"></script>
+<style>
+  .badge-inline{
+    display:inline-block; font-family:var(--font-body); font-size:0.72rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.05em; padding:4px 12px; border-radius:999px;
+    background:var(--coral); color:var(--board); margin-bottom:10px;
+  }
+  .course-text{ line-height:2; font-size:0.98rem; }
+  .course-text h3{
+    font-family:var(--font-display); color:var(--teal); font-size:1.15rem;
+    margin:26px 0 10px;
+  }
+  .formula{
+    background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; margin:10px 0 16px; font-family:var(--font-body);
+    color:var(--yellow); text-align:center; font-size:1.25rem;
+  }
+  .frac{
+    display:inline-flex; flex-direction:column; align-items:center;
+    vertical-align:middle; margin:0 8px; line-height:1.15;
+  }
+  .frac .num{ border-bottom:2px solid currentColor; padding:0 6px 3px; }
+  .frac .den{ padding:3px 6px 0; }
+  .blank{
+    background:var(--board-2); border:none; border-bottom:2px solid var(--chalk-dim);
+    color:var(--chalk); font-family:var(--font-body); font-size:0.95rem;
+    padding:2px 6px; text-align:center; width:150px;
+  }
+  .blank:focus{ outline:none; border-bottom-color:var(--yellow); }
+  .blank.ok{ border-bottom-color:var(--teal); background:rgba(107,191,171,0.15); }
+  .blank.ko{ border-bottom-color:var(--coral); background:rgba(217,122,99,0.15); }
+  .reveal{ color:var(--coral); font-size:0.78rem; font-style:italic; margin-left:6px; }
+  .score-line{
+    text-align:center; font-family:var(--font-display); font-size:1.3rem;
+    color:var(--yellow); margin:18px 0 6px; min-height:1.4em;
+  }
+  .actions{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:6px; }
+  .actions button{
+    font-family:var(--font-display); font-size:1.05rem;
+    background:var(--coral); color:var(--board); border:none;
+    border-radius:10px; padding:12px 22px; cursor:pointer; font-weight:700;
+  }
+  .anim-zone{ display:flex; flex-wrap:wrap; gap:26px; align-items:center; justify-content:center; }
+  .anim-wrap{ width:260px; flex:none; }
+  .anim-controls{ flex:1; min-width:240px; }
+  .anim-controls label{ font-size:0.8rem; color:var(--chalk-dim); display:block; margin-top:10px; }
+  .anim-controls input[type=range]{ width:100%; }
+  .anim-readout{ font-size:0.9rem; margin-top:14px; color:var(--chalk-dim); line-height:1.6; }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+  <a href="a-propos.html">À propos</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline">Chimie</div>
+  <h1>Chapitre 16 — Synthèse chimique</h1>
+  <p class="sub">Complète le cours à trous, puis explore les animations.</p>
+</header>
+
+<main>
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>1a. La synthèse chimique</h3>
+      <p>
+        Une synthèse est la <input class="blank" data-answer="fabrication" size="16"> d'une espèce chimique au laboratoire. Elle s'effectue en général en quatre étapes : prélèvement des réactifs, transformation <input class="blank" data-answer="chimique" size="14">, <input class="blank" data-answer="isolement" size="14">, analyse. Si nécessaire, une étape de <input class="blank" data-answer="purification" size="16"> peut ensuite être réalisée.
+      </p>
+
+      <h3>1c. Étape 2 : la transformation chimique</h3>
+      <p>
+        Le produit est formé au cours de l'étape de transformation chimique. Le montage de chauffage à <input class="blank" data-answer="reflux" size="14"> permet de chauffer le milieu réactionnel tout en évitant les pertes de matière par vaporisation, grâce au <input class="blank" data-answer="réfrigérant|refrigerant" size="16"> qui liquéfie les vapeurs.
+      </p>
+
+      <h3>1d. Étape 3 : l'isolement</h3>
+      <p>
+        L'isolement consiste à séparer le <input class="blank" data-answer="produit" size="14"> du milieu réactionnel. Il conduit au produit <input class="blank" data-answer="brut" size="12">.
+      </p>
+
+      <h3>1e. Étape 4 : l'analyse</h3>
+      <p>
+        L'analyse permet l'identification de l'espèce chimique obtenue et le contrôle de sa <input class="blank" data-answer="pureté|purete" size="14">. Pour un solide, on peut mesurer sa température de <input class="blank" data-answer="fusion" size="14"> ; pour un liquide, sa masse volumique, sa température d'ébullition ou son indice de <input class="blank" data-answer="réfraction|refraction" size="16">.
+      </p>
+
+      <h3>1f. L'étape éventuelle de purification</h3>
+      <p>
+        Une distillation <input class="blank" data-answer="fractionnée|fractionnee" size="18"> permet de séparer les constituants d'un mélange de liquides miscibles ayant des températures d'ébullition nettement différentes. Le liquide le plus volatil est le <input class="blank" data-answer="distillat" size="14">.
+      </p>
+
+      <h3>2. Le rendement</h3>
+      <p>
+        Le rendement η d'une synthèse est le quotient de la quantité de produit effectivement obtenue par la quantité <input class="blank" data-answer="maximale" size="16"> attendue. Il est sans <input class="blank" data-answer="unité|unite" size="12"> et peut s'exprimer en pourcent.
+      </p>
+      <div class="formula">
+        η = <span class="frac"><span class="num">n<sub>P</sub></span><span class="den">n<sub>max</sub></span></span>
+      </div>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Les 4 étapes d'une synthèse, pas à pas</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Du prélèvement des réactifs jusqu'à l'analyse du produit.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ssSvg" viewBox="0 0 180 200"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:280px;">
+        <div class="anim-readout" id="ssExplain" style="min-height:5em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="ssPrev" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="ssStep"></span>
+          <button id="ssNext" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Calculateur de rendement</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la quantité obtenue et la quantité maximale attendue.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:200px;">
+        <svg id="ycSvg" viewBox="0 0 180 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>n<sub>P</sub> — quantité obtenue (mol)</label>
+        <input type="range" id="ycNp" min="0" max="1" value="0.65" step="0.01">
+        <label>n<sub>max</sub> — quantité maximale attendue (mol)</label>
+        <input type="range" id="ycNmax" min="0.1" max="1" value="1" step="0.01">
+        <div class="anim-readout" id="ycReadout"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>Chapitre 16 — Synthèse chimique (1ère spé PC).</footer>
+
+<script>
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+});
+
+initSynthesisSteps({ svgId: "ssSvg", explainId: "ssExplain", prevBtnId: "ssPrev", nextBtnId: "ssNext", stepId: "ssStep" });
+initYieldCalculator({ svgId: "ycSvg", npRangeId: "ycNp", nmaxRangeId: "ycNmax", readoutId: "ycReadout" });
+</script>
+</body>
+</html>

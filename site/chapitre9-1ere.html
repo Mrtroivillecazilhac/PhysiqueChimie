@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 9 — Structure et polarité — 1ère spé PC</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch9.js"></script>
+<script src="modules-common.js"></script>
+<style>
+  /* Tableau périodique (repris du chapitre 2nde) */
+  .ptable-wrap{ overflow-x:auto; padding-bottom:6px; }
+  .ptable-grid{
+    display:grid; grid-template-columns:repeat(18, minmax(26px,1fr));
+    gap:3px; min-width:560px; margin-bottom:10px;
+  }
+  .ptable-cell.empty{ visibility:hidden; }
+  .ptable-slot{
+    aspect-ratio:1/1; border:1.5px dashed var(--line); border-radius:5px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-size:0.95rem; color:var(--chalk-dim);
+    cursor:pointer; transition:all .15s ease;
+  }
+  .ptable-slot:hover{ border-color:var(--yellow); }
+  .ptable-slot.cat-metal{ background:rgba(217,122,99,0.10); }
+  .ptable-slot.cat-nonmetal{ background:rgba(107,191,171,0.10); }
+  .ptable-slot.cat-noble{ background:rgba(232,196,104,0.10); }
+  .ptable-slot.cat-h{ background:rgba(242,237,225,0.06); }
+  .ptable-slot.selected{ border-style:solid; border-color:var(--yellow); background:var(--yellow); color:var(--board); font-weight:700; }
+
+  /* Tableau de Pauling */
+  .en-slot{ flex-direction:column; gap:0; font-size:0.65rem; }
+  .en-symbol{ font-family:var(--font-display); font-size:0.75rem; }
+  .en-value{ font-family:var(--font-body); font-size:0.56rem; color:var(--chalk-dim); }
+  .en-slot.pick-a{ border-style:solid; border-color:var(--teal); background:rgba(107,191,171,0.25); }
+  .en-slot.pick-b{ border-style:solid; border-color:var(--coral); background:rgba(217,122,99,0.25); }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 9 — De la structure à la polarité</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch9-1ere">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch9-1ere"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Savoir établir le schéma de Lewis d'un atome, d'une molécule, d'un ion polyatomique</li>
+        <li>Prévoir la géométrie d'une molécule (méthode VSEPR)</li>
+        <li>Comprendre la polarité d'une liaison et d'une molécule</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. La stabilité des gaz nobles (rappel de 2nde)</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Les atomes des éléments des trois premières périodes tendent à obtenir une configuration électronique identique à celle d'un <strong>gaz noble</strong>.
+    </div>
+    <p class="course-text">
+      Pour cela, leur couche de valence doit être saturée à <strong>deux</strong> électrons si n = 1, ou à <strong>huit</strong> électrons si 1 &lt; n ≤ 3.
+    </p>
+  </section>
+
+  <section>
+    <h2>b. Schéma de Lewis d'un atome</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le schéma de Lewis d'un atome permet de représenter la structure électronique <strong>externe</strong> d'un atome. Le noyau et les électrons des couches internes sont représentés par le <strong>symbole</strong> de l'élément.
+    </div>
+    <p class="course-text">
+      Les électrons de valence sont représentés par des points s'ils sont <strong>célibataires</strong>, ou par un tiret s'ils forment un <strong>doublet</strong>. Jusqu'à quatre électrons de valence, l'atome est entouré d'électrons célibataires ; au-delà, les électrons supplémentaires s'ajoutent pour former des doublets.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique un élément du tableau : les électrons de valence se placent selon la règle.</p>
+    <div class="ptable-wrap">
+      <div class="ptable-grid" id="lbTableCours"></div>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="lbSvgCours" viewBox="0 0 200 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="lbReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>c. Schéma de Lewis d'une molécule</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le schéma de Lewis d'une molécule s'établit en assemblant les schémas de Lewis des <strong>atomes</strong>. En général, un atome forme autant de liaisons qu'il a d'électrons <strong>célibataires</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Explore H₂, CH₄, NH₃, H₂O, HF, puis CO₂ et N₂ (liaisons multiples).</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="mfH2Cours">H₂</button>
+      <button class="toggle-btn" id="mfCH4Cours">CH₄</button>
+      <button class="toggle-btn" id="mfNH3Cours">NH₃</button>
+      <button class="toggle-btn" id="mfH2OCours">H₂O</button>
+      <button class="toggle-btn" id="mfHFCours">HF</button>
+      <button class="toggle-btn" id="mfCO2Cours">CO₂</button>
+      <button class="toggle-btn" id="mfN2Cours">N₂</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="mfSvgCours" viewBox="0 0 280 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="actions" style="justify-content:flex-start; margin-bottom:12px;">
+          <button id="mfFormBtnCours">⚛️ Former !</button>
+        </div>
+        <div class="anim-readout" id="mfReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Schéma de Lewis d'un ion polyatomique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un atome engagé dans un ion porte une charge <strong>formelle</strong> s'il n'est pas entouré du même nombre d'électrons qu'à l'état isolé.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Un ion H⁺ arrive ou part — ça change qui « possède » quel électron, donc la charge formelle.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ionNH4Cours">NH₄⁺</button>
+      <button class="toggle-btn" id="ionOHCours">OH⁻</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ionSvgCours" viewBox="0 0 260 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="actions" style="justify-content:flex-start; margin-bottom:12px;">
+          <button id="ionFormBtnCours">⚛️ Former l'ion !</button>
+        </div>
+        <div class="anim-readout" id="ionReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>e. Lacune électronique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une lacune électronique indique un déficit de <strong>deux</strong> électrons par rapport aux règles de stabilité. Elle est représentée par une case <strong>rectangulaire</strong>.
+    </div>
+  </section>
+
+  <section>
+    <h2>f. Géométrie des édifices atomiques</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La géométrie d'une molécule est celle dans laquelle les doublets d'électrons externes s'écartent au <strong>maximum</strong> les uns des autres.
+    </div>
+    <p class="course-text">
+      4 doublets, atome central lié à 4 atomes → <strong>tétraédrique</strong>. 4 doublets, lié à 3 atomes (1 doublet non liant) → <strong>pyramidale</strong> à base triangulaire. 4 doublets, lié à 2 atomes (2 doublets non liants) → <strong>coudée</strong>.
+    </p>
+    <p class="course-text">
+      3 doublets, lié à 3 atomes → <strong>triangulaire</strong>. 2 doublets, lié à 2 atomes → <strong>linéaire</strong>.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis une combinaison liaisons / doublets non liants : observe la géométrie qui en résulte.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="geTetraCours">4 liaisons</button>
+      <button class="toggle-btn" id="gePyraCours">3 liaisons + 1 doublet</button>
+      <button class="toggle-btn" id="geCoud4Cours">2 liaisons + 2 doublets</button>
+      <button class="toggle-btn" id="geTriCours">3 liaisons</button>
+      <button class="toggle-btn" id="geCoud3Cours">2 liaisons + 1 doublet</button>
+      <button class="toggle-btn" id="geLinCours">2 liaisons</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <p style="text-align:center; color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Géométrie (abstraite)</p>
+        <svg id="geSvgCours" viewBox="0 0 240 220"></svg>
+      </div>
+      <div class="anim-wrap">
+        <p style="text-align:center; color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Exemple réel</p>
+        <svg id="geExSvgCours" viewBox="0 0 200 200"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="geReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>g. Polarité</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'<strong>électronégativité</strong> traduit l'aptitude d'un atome à attirer vers lui le doublet d'électrons qui le lie à un autre atome. C'est une grandeur sans unité, notée χ.
+    </div>
+    <p class="course-text">
+      Une liaison covalente est <strong>polarisée</strong> si les deux atomes ont des électronégativités <strong>différentes</strong>.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique deux éléments du tableau pour former une liaison : les charges partielles apparaissent selon Δχ.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:250px;">
+        <div style="display:flex; align-items:flex-start; gap:4px;">
+          <svg width="34" height="112" viewBox="0 0 34 112" style="flex:none;">
+            <line x1="24" y1="106" x2="24" y2="14" stroke="var(--chalk-dim)" stroke-width="2"/>
+            <polygon points="24,4 18,16 30,16" fill="var(--chalk-dim)"/>
+            <text x="10" y="56" font-size="10" fill="var(--chalk-dim)" text-anchor="middle">χ</text>
+            <text x="10" y="68" font-size="7" fill="var(--chalk-dim)" text-anchor="middle">aug-</text>
+            <text x="10" y="77" font-size="7" fill="var(--chalk-dim)" text-anchor="middle">mente</text>
+          </svg>
+          <div style="flex:1;">
+            <div class="ptable-wrap">
+              <div class="ptable-grid" id="enTableCours" style="grid-template-columns:repeat(7, minmax(28px,1fr)); min-width:220px; gap:2px;"></div>
+            </div>
+            <svg width="100%" height="28" viewBox="0 0 220 28" style="margin-top:4px;">
+              <line x1="4" y1="10" x2="204" y2="10" stroke="var(--chalk-dim)" stroke-width="2"/>
+              <polygon points="214,10 202,4 202,16" fill="var(--chalk-dim)"/>
+              <text x="110" y="25" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">χ augmente</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="anim-wrap">
+        <svg id="enSvgCours" viewBox="0 0 220 110"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="enReadoutCours"></div>
+      </div>
+    </div>
+
+    <p class="course-text" style="margin-top:20px;">
+      Une molécule est <strong>polaire</strong> si les positions moyennes des charges partielles positives et négatives ne sont pas confondues, <strong>apolaire</strong> dans le cas contraire.
+    </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : le CO₂ a des liaisons polarisées mais est <strong>apolaire</strong> (molécule linéaire et symétrique) ; l'eau, coudée, est polaire.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Même type de liaisons polarisées dans les deux cas — décortique étape par étape pour voir pourquoi une seule des deux est polaire.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="polLinearCours">CO₂ (linéaire)</button>
+      <button class="toggle-btn" id="polBentCours">H₂O (coudée)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="polSvgCours" viewBox="0 0 260 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="polReadoutCours" style="min-height:4em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="polPrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="polStepCours"></span>
+          <button id="polNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. La stabilité des gaz nobles (rappel de 2nde)</h3>
+      <p>
+        Les atomes des éléments des trois premières périodes tendent à obtenir une configuration électronique identique à celle d'un <input class="blank" data-answer="gaz noble" size="14">. Pour cela, leur couche de valence doit être saturée à <input class="blank" data-answer="deux" size="10"> électrons si n = 1, ou à <input class="blank" data-answer="huit" size="10"> électrons si 1 &lt; n ≤ 3.
+      </p>
+
+      <h3>b. Schéma de Lewis d'un atome</h3>
+      <p>
+        Le schéma de Lewis d'un atome permet de représenter la structure électronique <input class="blank" data-answer="externe" size="14"> d'un atome. Le noyau et les électrons des couches internes sont représentés par le <input class="blank" data-answer="symbole" size="14"> de l'élément.
+      </p>
+      <p>
+        Les électrons de valence sont représentés par des points s'ils sont <input class="blank" data-answer="célibataires|celibataires" size="16">, ou par un tiret s'ils forment un <input class="blank" data-answer="doublet" size="14">. Jusqu'à quatre électrons de valence, l'atome est entouré d'électrons célibataires ; au-delà, les électrons supplémentaires s'ajoutent pour former des <input class="blank" data-answer="doublets" size="14">.
+      </p>
+
+      <h3>c. Schéma de Lewis d'une molécule</h3>
+      <p>
+        Le schéma de Lewis d'une molécule s'établit en assemblant les schémas de Lewis des <input class="blank" data-answer="atomes" size="14">. En général, un atome forme autant de liaisons qu'il a d'électrons <input class="blank" data-answer="célibataires|celibataires" size="16">.
+      </p>
+
+      <h3>d. Schéma de Lewis d'un ion polyatomique</h3>
+      <p>
+        Un atome engagé dans un ion porte une charge <input class="blank" data-answer="formelle" size="14"> s'il n'est pas entouré du même nombre d'électrons qu'à l'état isolé.
+      </p>
+
+      <h3>e. Lacune électronique</h3>
+      <p>
+        Une lacune électronique indique un déficit de <input class="blank" data-answer="deux" size="10"> électrons par rapport aux règles de stabilité. Elle est représentée par une case <input class="blank" data-answer="rectangulaire" size="16">.
+      </p>
+
+      <h3>f. Géométrie des édifices atomiques</h3>
+      <p>
+        La géométrie d'une molécule est celle dans laquelle les doublets d'électrons externes s'écartent au <input class="blank" data-answer="maximum" size="14"> les uns des autres.
+      </p>
+      <p>
+        4 doublets, atome central lié à 4 atomes → <input class="blank" data-answer="tétraédrique|tetraedrique" size="16">. 4 doublets, lié à 3 atomes (1 doublet non liant) → <input class="blank" data-answer="pyramidale" size="16"> à base triangulaire. 4 doublets, lié à 2 atomes (2 doublets non liants) → <input class="blank" data-answer="coudée|coudee" size="14">.
+      </p>
+      <p>
+        3 doublets, lié à 3 atomes → <input class="blank" data-answer="triangulaire" size="16">. 2 doublets, lié à 2 atomes → <input class="blank" data-answer="linéaire|lineaire" size="14">.
+      </p>
+
+      <h3>g. Polarité</h3>
+      <p>
+        L'<input class="blank" data-answer="électronégativité|electronegativite" size="20"> traduit l'aptitude d'un atome à attirer vers lui le doublet d'électrons qui le lie à un autre atome. C'est une grandeur sans <input class="blank" data-answer="unité|unite" size="12">, notée χ.
+      </p>
+      <p>
+        Une liaison covalente est <input class="blank" data-answer="polarisée|polarisee" size="16"> si les deux atomes ont des électronégativités <input class="blank" data-answer="différentes|differentes" size="16">.
+      </p>
+      <p>
+        Une molécule est <input class="blank" data-answer="polaire" size="12"> si les positions moyennes des charges partielles positives et négatives ne sont pas confondues, <input class="blank" data-answer="apolaire" size="12"> dans le cas contraire.
+      </p>
+      <em class="note">Exemple : le CO₂ a des liaisons polarisées mais est <input class="blank" data-answer="apolaire" size="12"> (molécule linéaire et symétrique) ; l'eau, coudée, est polaire.</em>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Constructeur de schéma de Lewis</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Clique un élément du tableau : les électrons de valence se placent selon la règle (célibataires puis doublets).</p>
+    <div class="ptable-wrap">
+      <div class="ptable-grid" id="lbTable"></div>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="lbSvg" viewBox="0 0 200 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="lbReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actLewisBuilder"></div></div>
+  </section>
+
+  <section>
+    <h2>Formation de molécules par liaison covalente</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Un atome forme autant de liaisons qu'il a d'électrons célibataires. Explore H₂, CH₄, NH₃, H₂O, HF, puis CO₂ et N₂ (liaisons multiples).</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="mfH2">H₂</button>
+      <button class="toggle-btn" id="mfCH4">CH₄</button>
+      <button class="toggle-btn" id="mfNH3">NH₃</button>
+      <button class="toggle-btn" id="mfH2O">H₂O</button>
+      <button class="toggle-btn" id="mfHF">HF</button>
+      <button class="toggle-btn" id="mfCO2">CO₂</button>
+      <button class="toggle-btn" id="mfN2">N₂</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="mfSvg2" viewBox="0 0 280 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="actions" style="justify-content:flex-start; margin-bottom:12px;">
+          <button id="mfFormBtn">⚛️ Former !</button>
+        </div>
+        <div class="anim-readout" id="mfReadout2"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMoleculeFormation"></div></div>
+  </section>
+
+  <section>
+    <h2>Formation des ions polyatomiques : NH₄⁺ et OH⁻</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Un atome d'hydrogène sans son électron (H⁺) arrive ou part — ça change qui « possède » quel électron, donc la charge formelle.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ionNH4">NH₄⁺</button>
+      <button class="toggle-btn" id="ionOH">OH⁻</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ionSvg" viewBox="0 0 260 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="actions" style="justify-content:flex-start; margin-bottom:12px;">
+          <button id="ionFormBtn">⚛️ Former l'ion !</button>
+        </div>
+        <div class="anim-readout" id="ionReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actIonFormation"></div></div>
+  </section>
+
+  <section>
+    <h2>Explorateur de géométrie (VSEPR)</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis une combinaison liaisons / doublets non liants : observe la géométrie qui en résulte.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="geTetra">4 liaisons</button>
+      <button class="toggle-btn" id="gePyra">3 liaisons + 1 doublet</button>
+      <button class="toggle-btn" id="geCoud4">2 liaisons + 2 doublets</button>
+      <button class="toggle-btn" id="geTri">3 liaisons</button>
+      <button class="toggle-btn" id="geCoud3">2 liaisons + 1 doublet</button>
+      <button class="toggle-btn" id="geLin">2 liaisons</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <p style="text-align:center; color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Géométrie (abstraite)</p>
+        <svg id="geSvg" viewBox="0 0 240 220"></svg>
+      </div>
+      <div class="anim-wrap">
+        <p style="text-align:center; color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Exemple réel</p>
+        <svg id="geExSvg" viewBox="0 0 200 200"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="geReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actGeometry"></div></div>
+  </section>
+
+  <section>
+    <h2>Polarité d'une liaison</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Clique deux éléments du tableau pour former une liaison : les charges partielles apparaissent automatiquement selon Δχ.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:250px;">
+        <div style="display:flex; align-items:flex-start; gap:4px;">
+          <svg width="34" height="112" viewBox="0 0 34 112" style="flex:none;">
+            <line x1="24" y1="106" x2="24" y2="14" stroke="var(--chalk-dim)" stroke-width="2"/>
+            <polygon points="24,4 18,16 30,16" fill="var(--chalk-dim)"/>
+            <text x="10" y="56" font-size="10" fill="var(--chalk-dim)" text-anchor="middle">χ</text>
+            <text x="10" y="68" font-size="7" fill="var(--chalk-dim)" text-anchor="middle">aug-</text>
+            <text x="10" y="77" font-size="7" fill="var(--chalk-dim)" text-anchor="middle">mente</text>
+          </svg>
+          <div style="flex:1;">
+            <div class="ptable-wrap">
+              <div class="ptable-grid" id="enTable" style="grid-template-columns:repeat(7, minmax(28px,1fr)); min-width:220px; gap:2px;"></div>
+            </div>
+            <svg width="100%" height="28" viewBox="0 0 220 28" style="margin-top:4px;">
+              <line x1="4" y1="10" x2="204" y2="10" stroke="var(--chalk-dim)" stroke-width="2"/>
+              <polygon points="214,10 202,4 202,16" fill="var(--chalk-dim)"/>
+              <text x="110" y="25" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">χ augmente</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="anim-wrap">
+        <svg id="enSvg" viewBox="0 0 220 110"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="enReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actBondPolarity"></div></div>
+  </section>
+
+  <section>
+    <h2>Polarité d'une molécule : CO₂ vs H₂O</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Même type de liaisons polarisées dans les deux cas — on décortique étape par étape pour voir pourquoi une seule des deux est polaire.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="polLinear">CO₂ (linéaire)</button>
+      <button class="toggle-btn" id="polBent">H₂O (coudée)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="polSvg" viewBox="0 0 260 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="polReadout" style="min-height:4em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="polPrev" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="polStep"></span>
+          <button id="polNext" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actPolarityDemo"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Définition</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Schéma de Lewis (atome)</td><td style="padding:10px 8px;">points = célibataires, tirets = doublets</td><td style="padding:10px 8px; color:var(--chalk-dim);">4 e⁻ max de célibataires avant de doubler</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Charge formelle</td><td style="padding:10px 8px;">nombre d'électrons ≠ état isolé</td><td style="padding:10px 8px; color:var(--chalk-dim);">apparaît dans les ions polyatomiques</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Géométrie VSEPR</td><td style="padding:10px 8px;">doublets écartés au maximum</td><td style="padding:10px 8px; color:var(--chalk-dim);">4→tétra/pyram./coudée · 3→triang. · 2→linéaire</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Électronégativité χ</td><td style="padding:10px 8px;">aptitude à attirer le doublet liant</td><td style="padding:10px 8px; color:var(--chalk-dim);">Δχ ≠ 0 → liaison polarisée</td></tr>
+          <tr><td style="padding:10px 8px;">Polarité d'une molécule</td><td style="padding:10px 8px;">barycentres des charges non confondus</td><td style="padding:10px 8px; color:var(--chalk-dim);">CO₂ apolaire (symétrique) / H₂O polaire (coudée)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Géométrie VSEPR — l'essentiel</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li>4 doublets, 4 atomes liés → <strong>tétraédrique</strong></li>
+        <li>4 doublets, 3 atomes liés (1 doublet non liant) → <strong>pyramidale</strong></li>
+        <li>4 doublets, 2 atomes liés (2 doublets non liants) → <strong>coudée</strong></li>
+        <li>3 doublets, 3 atomes liés → <strong>triangulaire</strong></li>
+        <li>2 doublets, 2 atomes liés → <strong>linéaire</strong></li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 9 — De la structure à la polarité d'une entité chimique (1ère spé PC).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch9-1ere", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initLewisBuilder({ svgId: "lbSvgCours", readoutId: "lbReadoutCours", tableId: "lbTableCours" });
+initMoleculeFormation({
+  svgId: "mfSvgCours", readoutId: "mfReadoutCours", formBtnId: "mfFormBtnCours",
+  buttonIds: ["mfH2Cours", "mfCH4Cours", "mfNH3Cours", "mfH2OCours", "mfHFCours", "mfCO2Cours", "mfN2Cours"],
+  moleculeKeys: ["H2", "CH4", "NH3", "H2O", "HF", "CO2", "N2"]
+});
+initIonFormation({
+  svgId: "ionSvgCours", readoutId: "ionReadoutCours", formBtnId: "ionFormBtnCours",
+  btnNH4Id: "ionNH4Cours", btnOHId: "ionOHCours"
+});
+initGeometryExplorer({
+  svgId: "geSvgCours", exampleSvgId: "geExSvgCours", readoutId: "geReadoutCours",
+  buttonIds: ["geTetraCours", "gePyraCours", "geCoud4Cours", "geTriCours", "geCoud3Cours", "geLinCours"]
+});
+initBondPolarity({ tableId: "enTableCours", svgId: "enSvgCours", readoutId: "enReadoutCours" });
+initPolarityDemo({ svgId: "polSvgCours", readoutId: "polReadoutCours", btnLinearId: "polLinearCours", btnBentId: "polBentCours", prevBtnId: "polPrevCours", nextBtnId: "polNextCours", stepId: "polStepCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activités) ---------- */
+initLewisBuilder({ svgId: "lbSvg", readoutId: "lbReadout", tableId: "lbTable" });
+initMoleculeFormation({
+  svgId: "mfSvg2", readoutId: "mfReadout2", formBtnId: "mfFormBtn",
+  buttonIds: ["mfH2", "mfCH4", "mfNH3", "mfH2O", "mfHF", "mfCO2", "mfN2"],
+  moleculeKeys: ["H2", "CH4", "NH3", "H2O", "HF", "CO2", "N2"]
+});
+initIonFormation({
+  svgId: "ionSvg", readoutId: "ionReadout", formBtnId: "ionFormBtn",
+  btnNH4Id: "ionNH4", btnOHId: "ionOH"
+});
+initGeometryExplorer({
+  svgId: "geSvg", exampleSvgId: "geExSvg", readoutId: "geReadout",
+  buttonIds: ["geTetra", "gePyra", "geCoud4", "geTri", "geCoud3", "geLin"]
+});
+initBondPolarity({ tableId: "enTable", svgId: "enSvg", readoutId: "enReadout" });
+initPolarityDemo({ svgId: "polSvg", readoutId: "polReadout", btnLinearId: "polLinear", btnBentId: "polBent", prevBtnId: "polPrev", nextBtnId: "polNext", stepId: "polStep" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actLewisBuilder", chapterId: "ch9-1ere", activityId: "qcm-lewis-builder",
+  prompt: "L'oxygène a 6 électrons de valence. Combien de doublets non liants (paires) a-t-il dans son schéma de Lewis ?",
+  options: [
+    { text: "1", correct: false },
+    { text: "2", correct: true },
+    { text: "3", correct: false }
+  ],
+  explanation: "Les 4 premiers électrons sont célibataires ; les 2 suivants s'apparient avec 2 des célibataires : on obtient 2 doublets non liants et 2 électrons célibataires restants."
+});
+
+initEstimation({
+  containerId: "actMoleculeFormation", chapterId: "ch9-1ere", activityId: "est-molecule-formation",
+  prompt: "Forme la molécule de CO₂ sur l'animation. Combien de liaisons doubles carbone=oxygène compte-t-elle ?",
+  answer: 2, tolerance: 0, unit: "liaison(s) double(s)",
+  explanation: "Le carbone (4 électrons célibataires) forme 2 liaisons doubles, une avec chaque atome d'oxygène : O=C=O."
+});
+
+initQCM({
+  containerId: "actIonFormation", chapterId: "ch9-1ere", activityId: "qcm-ion-formation",
+  prompt: "Dans NH₄⁺ formé par addition de H⁺ à NH₃, quel atome porte la charge formelle + ?",
+  options: [
+    { text: "L'azote N", correct: true },
+    { text: "Un des hydrogènes H", correct: false },
+    { text: "Aucun atome en particulier", correct: false }
+  ],
+  explanation: "N possède 4 liaisons et aucun doublet non liant dans NH₄⁺, contre 3 liaisons + 1 doublet non liant à l'état isolé dans NH₃ : il porte donc la charge formelle +."
+});
+
+initEstimation({
+  containerId: "actGeometry", chapterId: "ch9-1ere", activityId: "est-geometry",
+  prompt: "Choisis la combinaison « 3 liaisons + 1 doublet » (NH₃) sur l'animation. Combien de doublets d'électrons externes au total entourent l'atome central ?",
+  answer: 4, tolerance: 0, unit: "doublets",
+  explanation: "3 doublets liants + 1 doublet non liant = 4 doublets au total, qui s'écartent au maximum pour donner la géométrie pyramidale."
+});
+
+initVraiFaux({
+  containerId: "actBondPolarity", chapterId: "ch9-1ere", activityId: "vf-bond-polarity",
+  prompt: "Une liaison entre deux atomes de même électronégativité (Δχ = 0) est apolaire.",
+  correct: true,
+  explanation: "Vrai : une liaison n'est polarisée que si les deux atomes ont des électronégativités différentes. Si Δχ = 0, le doublet liant est partagé équitablement."
+});
+
+initVraiFaux({
+  containerId: "actPolarityDemo", chapterId: "ch9-1ere", activityId: "vf-polarity-demo",
+  prompt: "Le CO₂ possède des liaisons polarisées mais est une molécule apolaire.",
+  correct: true,
+  explanation: "Vrai : les deux liaisons C=O sont bien polarisées, mais la géométrie linéaire et symétrique de CO₂ fait que les deux effets s'annulent — les barycentres des charges + et − restent confondus."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch9-1ere");
+initProgressBar("ch9-1ere", 7); // texte à trous complet + 6 activités liées aux animations
+</script>
+</body>
+</html>

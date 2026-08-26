@@ -1,0 +1,468 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+  --board:#16261f;
+  --board-2:#1d3229;
+  --chalk:#f2ede1;
+  --chalk-dim:#c9c2b0;
+  --yellow:#e8c468;
+  --teal:#6bbfab;
+  --coral:#d97a63;
+  --line: rgba(242,237,225,0.14);
+  --font-display: 'Kalam','Segoe Print',cursive;
+  --font-body: 'Space Grotesk','Segoe UI',sans-serif;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background: var(--board);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px),
+    radial-gradient(ellipse at top left, rgba(255,255,255,0.05), transparent 60%);
+  background-size: 42px 42px, 42px 42px, 100% 100%;
+  color:var(--chalk);
+  font-family:var(--font-body);
+  padding:0 0 80px;
+}
+
+/* --- Navigation --- */
+nav.topbar{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  padding:22px 20px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:36px;
+}
+nav.topbar a{
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:0.88rem;
+  text-decoration:none;
+  color:var(--chalk-dim);
+  border:1.5px dashed var(--line);
+  border-radius:999px;
+  padding:8px 16px;
+  transition:all .15s ease;
+}
+nav.topbar a:hover{ border-color:var(--yellow); color:var(--chalk); }
+nav.topbar a.current{
+  background:var(--yellow);
+  color:var(--board);
+  border-color:var(--yellow);
+  border-style:solid;
+}
+
+header.page-head{
+  max-width:900px;
+  margin:0 auto 36px;
+  text-align:center;
+  padding:0 20px;
+}
+.eyebrow{
+  font-family:var(--font-display);
+  color:var(--yellow);
+  font-size:1.1rem;
+  margin-bottom:4px;
+}
+h1{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:clamp(2.2rem,5vw,3.4rem);
+  margin:0 0 8px;
+  color:var(--chalk);
+  text-shadow:0 0 18px rgba(232,196,104,0.15);
+}
+.sub{
+  color:var(--chalk-dim);
+  font-size:1rem;
+  max-width:560px;
+  margin:0 auto;
+}
+
+main{
+  max-width:960px;
+  margin:0 auto;
+  padding:0 20px;
+  display:grid;
+  gap:28px;
+}
+
+section{
+  background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08));
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:28px;
+}
+section h2{
+  font-family:var(--font-display);
+  font-size:1.5rem;
+  margin:0 0 18px;
+  color:var(--teal);
+}
+
+/* --- Cartes d'accueil (choix de niveau) --- */
+.level-cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+@media (max-width:900px){ .level-cards{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:520px){ .level-cards{ grid-template-columns:1fr; } }
+.level-card{
+  display:block;
+  text-decoration:none;
+  background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.1));
+  border:1.5px solid var(--line);
+  border-radius:16px;
+  padding:26px 20px;
+  text-align:center;
+  transition:transform .15s ease, border-color .15s ease;
+}
+.level-card:hover{ transform:translateY(-4px); border-color:var(--yellow); }
+.level-card .emoji{ font-size:2rem; display:block; margin-bottom:10px; }
+.level-card .name{
+  font-family:var(--font-display);
+  font-size:1.4rem;
+  color:var(--chalk);
+  display:block;
+  margin-bottom:6px;
+}
+.level-card .desc{ color:var(--chalk-dim); font-size:0.85rem; }
+
+/* --- Roue --- */
+.wheel-zone{
+  display:flex;
+  flex-wrap:wrap;
+  gap:34px;
+  align-items:center;
+  justify-content:center;
+}
+.wheel-wrap{ position:relative; width:280px; height:280px; flex:none; }
+.pointer{
+  position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+  width:0;height:0;
+  border-left:12px solid transparent; border-right:12px solid transparent;
+  border-top:20px solid var(--yellow);
+  z-index:5;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,0.4));
+}
+.wheel{
+  width:100%;height:100%;
+  border-radius:50%;
+  border:4px solid var(--chalk-dim);
+  transition: transform 4.2s cubic-bezier(.16,.86,.2,1.01);
+  box-shadow:0 0 0 6px var(--board-2), 0 8px 30px rgba(0,0,0,0.5);
+}
+.hub{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:44px;height:44px; border-radius:50%;
+  background:var(--board-2); border:3px solid var(--yellow); z-index:4;
+}
+.spin-panel{ flex:1; min-width:260px; display:flex; flex-direction:column; gap:14px; }
+.spin-btn{
+  font-family:var(--font-display); font-size:1.2rem;
+  background:var(--coral); color:var(--board); border:none;
+  border-radius:12px; padding:14px 20px; cursor:pointer; font-weight:700;
+  transition:transform .1s ease;
+}
+.spin-btn:hover{ transform:translateY(-2px); }
+.spin-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
+.result-card{
+  border:1.5px solid var(--line); border-radius:14px; padding:18px 20px;
+  min-height:96px; display:flex; flex-direction:column; justify-content:center; gap:8px;
+  background:rgba(0,0,0,0.15);
+}
+.result-card .tag{ font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--yellow); }
+.result-card .q{ font-size:1.05rem; line-height:1.4; }
+.timer{ font-family:var(--font-display); font-size:1.4rem; color:var(--teal); }
+
+/* --- Jeu de mémoire --- */
+.memo-toolbar{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:18px; }
+.memo-stats{ color:var(--chalk-dim); font-size:0.9rem; }
+.reset-btn{
+  font-family:var(--font-body); font-size:0.82rem; background:transparent;
+  border:1px solid var(--line); color:var(--chalk-dim); padding:7px 14px; border-radius:8px; cursor:pointer;
+}
+.reset-btn:hover{ border-color:var(--chalk-dim); color:var(--chalk); }
+.grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+@media (max-width:600px){ .grid{ grid-template-columns:repeat(3,1fr); } }
+.card{ aspect-ratio:1/1; perspective:800px; cursor:pointer; }
+.card-inner{ position:relative; width:100%;height:100%; transform-style:preserve-3d; transition:transform .45s ease; }
+.card.flipped .card-inner, .card.matched .card-inner{ transform:rotateY(180deg); }
+.face{
+  position:absolute; inset:0; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  text-align:center; padding:8px; backface-visibility:hidden; font-size:0.78rem; line-height:1.25;
+}
+.front{
+  background:repeating-linear-gradient(135deg, var(--board-2), var(--board-2) 8px, #223a30 8px, #223a30 16px);
+  border:1.5px solid var(--line); color:var(--yellow); font-family:var(--font-display); font-size:1.6rem;
+}
+.back{ background:var(--chalk); color:var(--board); transform:rotateY(180deg); font-weight:600; border:1.5px solid var(--yellow); }
+.card.matched .back{ background:var(--teal); border-color:var(--teal); color:var(--board); }
+.back.kind-name{ font-family:var(--font-display); font-size:1rem; }
+.back.kind-desc{ font-size:0.72rem; }
+.win-msg{ text-align:center; font-family:var(--font-display); color:var(--yellow); font-size:1.2rem; margin-top:16px; min-height:1.4em; }
+
+a.spin-btn{ display:inline-block; text-decoration:none; }
+
+/* --- Cartes de chapitre (badge Chimie/Physique) --- */
+.chapter-card{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px 20px;
+  text-decoration:none;
+  color:var(--chalk);
+  transition:border-color .15s ease, transform .15s ease;
+  margin-bottom:10px;
+}
+.chapter-card:hover{ border-color:var(--yellow); transform:translateY(-2px); }
+.chapter-card .ch-title{ font-family:var(--font-display); font-size:1.1rem; }
+.chapter-card .badge{
+  font-family:var(--font-body); font-size:0.7rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.05em;
+  padding:4px 10px; border-radius:999px; flex:none;
+}
+.badge-chimie{ background:var(--coral); color:var(--board); }
+.badge-physique{ background:var(--teal); color:var(--board); }
+
+/* --- Utilitaire pour cacher/montrer du contenu (chapitres, activités...) ---
+   Ajoute class="hidden" à N'IMPORTE QUEL élément (une carte, une section
+   entière) pour le cacher aux élèves. Retire juste ce mot pour le remontrer.
+   Le contenu reste dans le code, juste invisible — rien n'est supprimé. */
+.hidden{ display:none !important; }
+
+.soon{
+  text-align:center;
+  color:var(--chalk-dim);
+  font-style:italic;
+  padding:20px;
+}
+
+/* --- Chrono-verrerie --- */
+.speed-toolbar{
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:14px; margin-bottom:20px;
+}
+.speed-prompt-wrap{ display:flex; align-items:baseline; gap:10px; }
+.speed-instr{
+  color:var(--chalk-dim); font-size:0.8rem;
+  text-transform:uppercase; letter-spacing:0.06em;
+}
+.speed-prompt{ font-family:var(--font-display); font-size:1.7rem; color:var(--yellow); }
+.glass-grid{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:18px;
+}
+@media (max-width:600px){ .glass-grid{ grid-template-columns:repeat(2,1fr); } }
+.glass-tile{
+  aspect-ratio:1/1;
+  background:rgba(0,0,0,0.15);
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  color:var(--chalk);
+  display:flex; align-items:center; justify-content:center;
+  padding:14px;
+  cursor:pointer;
+  transition: border-color .15s ease, background .15s ease, transform .1s ease;
+}
+.glass-tile svg{ width:70%; height:70%; }
+.glass-tile:hover{ border-color:var(--yellow); transform:translateY(-2px); }
+.glass-tile.correct{ border-color:var(--teal); background:rgba(107,191,171,0.3); }
+.glass-tile.wrong{ border-color:var(--coral); background:rgba(217,122,99,0.3); }
+
+footer{
+  max-width:900px;
+  margin:40px auto 0;
+  text-align:center;
+  color:var(--chalk-dim);
+  font-size:0.8rem;
+  padding:0 20px;
+}
+
+/* ============================================================
+   SYSTÈME DE MODULES PÉDAGOGIQUES (COURS / ENTRAÎNEMENT / SYNTHÈSE)
+   Classes communes migrées ici depuis les <style> locaux de chaque
+   chapitre (évite la duplication), + nouvelles classes du système.
+   ============================================================ */
+
+/* --- Éléments communs (cours à trous, formules, animations) --- */
+.badge-inline{
+  display:inline-block; font-family:var(--font-body); font-size:0.72rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.05em; padding:4px 12px; border-radius:999px;
+  color:var(--board); margin-bottom:10px;
+}
+.badge-inline.chimie{ background:var(--coral); }
+.badge-inline.physique{ background:var(--teal); }
+
+.course-text{ line-height:2; font-size:0.98rem; }
+.course-text h3{ font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin:26px 0 10px; }
+
+.formula{
+  background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:10px;
+  padding:14px 16px; margin:10px 0 16px; font-family:var(--font-body);
+  color:var(--yellow); text-align:center; font-size:1.25rem;
+}
+.frac{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 8px; line-height:1.15; }
+.frac .num{ border-bottom:2px solid currentColor; padding:0 6px 3px; }
+.frac .den{ padding:3px 6px 0; }
+
+.blank{
+  background:var(--board-2); border:none; border-bottom:2px solid var(--chalk-dim);
+  color:var(--chalk); font-family:var(--font-body); font-size:1rem;
+  padding:8px 10px; text-align:center; width:130px; min-height:40px;
+}
+.blank:focus{ outline:none; border-bottom-color:var(--yellow); }
+.blank.ok{ border-bottom-color:var(--teal); background:rgba(107,191,171,0.15); }
+.blank.ko{ border-bottom-color:var(--coral); background:rgba(217,122,99,0.15); }
+.reveal{ color:var(--coral); font-size:0.78rem; font-style:italic; margin-left:6px; }
+
+.score-line{
+  text-align:center; font-family:var(--font-display); font-size:1.3rem;
+  color:var(--yellow); margin:18px 0 6px; min-height:1.4em;
+}
+.actions{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:6px; }
+.actions button{
+  font-family:var(--font-display); font-size:1.05rem;
+  background:var(--coral); color:var(--board); border:none;
+  border-radius:10px; padding:12px 22px; cursor:pointer; font-weight:700;
+}
+
+.anim-zone{ display:flex; flex-wrap:wrap; gap:26px; align-items:center; justify-content:center; }
+.anim-wrap{ width:260px; flex:none; }
+.anim-controls{ flex:1; min-width:240px; }
+.anim-controls label{ font-size:0.8rem; color:var(--chalk-dim); display:block; margin-top:10px; }
+.anim-controls input[type=range]{ width:100%; height:30px; }
+.anim-readout{ font-size:0.9rem; margin-top:14px; color:var(--chalk-dim); line-height:1.6; }
+
+.toggle-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.toggle-btn{
+  font-family:var(--font-body); font-size:0.8rem; background:transparent;
+  border:1.5px dashed var(--line); color:var(--chalk-dim); padding:8px 12px; border-radius:8px; cursor:pointer;
+}
+.toggle-btn:hover{ border-color:var(--chalk); color:var(--chalk); }
+.toggle-btn.active-hist{ background:var(--teal); border-color:var(--teal); border-style:solid; color:var(--board); }
+
+/* mobile : cibles tactiles plus grandes */
+@media (max-width:600px){
+  input[type=range]{ height:30px; }
+  .blank{ min-height:40px; font-size:1rem; }
+}
+
+/* --- Boîtes pédagogiques (mode cours) --- */
+.box-label{
+  display:block; font-family:var(--font-display); font-size:0.95rem;
+  font-weight:700; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.03em;
+}
+.objectifs-box{
+  border-left:3px solid var(--teal); background:rgba(107,191,171,0.06);
+  border-radius:0 10px 10px 0; padding:14px 18px; margin:16px 0;
+}
+.objectifs-box .box-label{ color:var(--teal); }
+.objectifs-box ul{ margin:8px 0 0; padding-left:20px; }
+
+.definition-box{
+  border-left:3px solid var(--teal); background:rgba(107,191,171,0.08);
+  border-radius:0 10px 10px 0; padding:14px 18px; margin:16px 0;
+}
+.definition-box .box-label{ color:var(--teal); }
+
+.recall-box{
+  border-left:3px solid var(--yellow); background:rgba(232,196,104,0.10);
+  border-radius:0 10px 10px 0; padding:14px 18px; margin:16px 0;
+}
+.recall-box .box-label{ color:var(--yellow); }
+
+.warning-box{
+  border-left:3px solid var(--coral); background:rgba(217,122,99,0.10);
+  border-radius:0 10px 10px 0; padding:14px 18px; margin:16px 0;
+}
+.warning-box .box-label{ color:var(--coral); }
+
+.method-box{
+  border-left:3px solid var(--chalk-dim); background:rgba(255,255,255,0.03);
+  border-radius:0 10px 10px 0; padding:14px 18px; margin:16px 0;
+}
+.method-box .box-label{ color:var(--chalk-dim); }
+
+/* --- Onglets de mode (Cours / Entraînement / Synthèse) --- */
+.mode-tabs{
+  display:flex; justify-content:center; gap:10px; flex-wrap:wrap;
+  margin:0 auto 28px; max-width:960px; padding:0 20px;
+}
+.mode-tab{
+  font-family:var(--font-display); font-size:1.1rem;
+  background:transparent; border:2px solid var(--line); color:var(--chalk-dim);
+  padding:10px 24px; border-radius:999px; cursor:pointer; transition:all .15s ease;
+}
+.mode-tab:hover{ border-color:var(--yellow); color:var(--chalk); }
+.mode-tab.active{ background:var(--yellow); border-color:var(--yellow); color:var(--board); }
+.mode-panel{ display:none; }
+.mode-panel.active{ display:grid; gap:28px; }
+
+/* --- Barre de progression --- */
+.progress-wrap{ max-width:960px; margin:0 auto 20px; padding:0 20px; }
+.progress-bar-track{
+  width:100%; height:10px; background:var(--board-2); border-radius:999px;
+  overflow:hidden; border:1px solid var(--line);
+}
+.progress-bar-fill{
+  height:100%; background:var(--teal); border-radius:999px; transition:width .3s ease; width:0%;
+}
+.progress-label{ font-size:0.82rem; color:var(--chalk-dim); margin-bottom:6px; display:flex; justify-content:space-between; }
+
+/* --- Composants d'activité (QCM, Vrai/Faux, estimation) --- */
+.activity-block{
+  border:1.5px solid var(--line); border-radius:14px; padding:20px;
+  margin-top:16px; background:rgba(0,0,0,0.1);
+}
+.activity-prompt{ font-size:0.98rem; margin-bottom:14px; color:var(--chalk); }
+.activity-options{ display:grid; gap:10px; }
+.activity-option{
+  text-align:left; font-family:var(--font-body); font-size:0.92rem;
+  background:var(--board-2); border:1.5px solid var(--line); color:var(--chalk);
+  padding:12px 16px; border-radius:10px; cursor:pointer; transition:all .12s ease;
+}
+.activity-option:hover{ border-color:var(--yellow); }
+.activity-option.selected-correct{ border-color:var(--teal); background:rgba(107,191,171,0.2); }
+.activity-option.selected-wrong{ border-color:var(--coral); background:rgba(217,122,99,0.2); }
+.activity-option.reveal-correct{ border-color:var(--teal); }
+.activity-feedback{
+  margin-top:12px; font-size:0.9rem; line-height:1.5; padding:10px 14px;
+  border-radius:8px; display:none;
+}
+.activity-feedback.show{ display:block; }
+.activity-feedback.feedback-ok{ background:rgba(107,191,171,0.15); color:var(--teal); }
+.activity-feedback.feedback-ko{ background:rgba(217,122,99,0.15); color:var(--coral); }
+.activity-estimate-input{
+  background:var(--board-2); border:1.5px solid var(--line); color:var(--chalk);
+  font-family:var(--font-body); font-size:1rem; padding:10px 14px; border-radius:8px; width:160px; min-height:40px;
+}
+
+/* --- Construction pas à pas (équations, étapes numérotées) --- */
+.step-eq{
+  font-family:var(--font-body); font-size:1.15rem; color:var(--yellow);
+  background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:10px;
+  padding:14px; text-align:center; margin-bottom:10px;
+}
+.step-explain{ color:var(--chalk-dim); font-size:0.88rem; min-height:2.6em; margin-bottom:10px; }
+.step-nav{ display:flex; align-items:center; justify-content:center; gap:14px; }
+.step-nav button{
+  font-family:var(--font-body); font-size:0.85rem; background:transparent;
+  border:1px solid var(--line); color:var(--chalk-dim); padding:8px 14px; border-radius:8px; cursor:pointer;
+}
+.step-nav button:hover:not(:disabled){ border-color:var(--chalk); color:var(--chalk); }
+.step-nav button:disabled{ opacity:0.35; cursor:not-allowed; }
+.step-nav span{ color:var(--chalk-dim); font-size:0.8rem; }
+.hl{ color:var(--coral); font-weight:700; }
+.halfeq-line{
+  font-family:var(--font-body); font-size:1rem; color:var(--chalk);
+  background:rgba(0,0,0,0.15); border:1px solid var(--line); border-radius:8px;
+  padding:10px 14px; margin-bottom:8px;
+}

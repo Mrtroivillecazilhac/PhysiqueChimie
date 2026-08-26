@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frise chronologique — Terminale ES</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Styles propres à cette activité — pas ajoutés à styles.css
+     partagé, puisque cette page est amenée à être retirée/remise
+     du site selon les périodes de l'année. Tout est ici, autonome. */
+
+  .frise-track{
+    position:relative;
+    height:64px;
+    background:rgba(0,0,0,0.2);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    margin:10px 0 6px;
+  }
+  .frise-axis{
+    display:flex; justify-content:space-between;
+    font-size:0.7rem; color:var(--chalk-dim); margin-bottom:22px;
+  }
+  .marker{
+    position:absolute;
+    top:8px;
+    width:26px;height:26px;
+    margin-left:-13px;
+    border-radius:50%;
+    background:var(--coral);
+    border:2px solid var(--board);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.65rem; font-weight:700; color:var(--board);
+    cursor:default;
+  }
+  .marker.ref{ background:var(--teal); top:34px; }
+  .marker[title]{ position:absolute; }
+
+  .notion-list{ display:grid; gap:10px; }
+  .notion-card{
+    display:grid;
+    grid-template-columns: 1fr 170px 1fr;
+    gap:10px;
+    align-items:center;
+    background:rgba(255,255,255,0.03);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 14px;
+  }
+  @media (max-width:720px){ .notion-card{ grid-template-columns:1fr; } }
+  .notion-card .label{ font-size:0.88rem; }
+  .notion-card select, .notion-card input{
+    width:100%;
+    background:var(--board-2);
+    border:1px solid var(--line);
+    color:var(--chalk);
+    border-radius:8px;
+    padding:7px 8px;
+    font-family:var(--font-body);
+    font-size:0.85rem;
+  }
+  .date-inputs{ display:flex; gap:6px; }
+  .date-inputs input{ flex:1; }
+  .date-inputs select{ flex:1; }
+  .frise-btn-group{ display:flex; gap:8px; }
+  .frise-btn{
+    flex:1;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.8rem;
+    background:transparent;
+    border:1.5px dashed var(--line);
+    color:var(--chalk-dim);
+    border-radius:8px;
+    padding:8px 6px;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .frise-btn:hover{ border-color:var(--chalk); color:var(--chalk); }
+  .frise-btn.active-hist{ background:var(--teal); border-color:var(--teal); border-style:solid; color:var(--board); }
+  .frise-btn.active-geo{ background:var(--coral); border-color:var(--coral); border-style:solid; color:var(--board); }
+
+  .axis-break{
+    position:absolute;
+    top:0; bottom:0;
+    width:0;
+    border-left:2px dashed var(--chalk-dim);
+    opacity:0.5;
+  }
+  .tick-label{
+    position:absolute;
+    font-size:0.62rem;
+    color:var(--chalk-dim);
+    transform:translateX(-50%);
+    white-space:nowrap;
+  }
+
+  .notion-card.scored{ border-color:var(--teal); }
+  .notion-card .score-tag{
+    font-family:var(--font-display);
+    color:var(--yellow);
+    font-size:0.9rem;
+    text-align:right;
+  }
+
+  .score-banner{
+    text-align:center;
+    font-family:var(--font-display);
+    font-size:1.6rem;
+    color:var(--yellow);
+    margin:18px 0 4px;
+    min-height:1.4em;
+  }
+  .actions{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+  .actions button{
+    font-family:var(--font-display); font-size:1.05rem;
+    border:none; border-radius:10px; padding:12px 22px; cursor:pointer; font-weight:700;
+  }
+  #checkBtn{ background:var(--coral); color:var(--board); }
+  #resetBtn2{ background:transparent; border:1.5px solid var(--line); color:var(--chalk-dim); }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="eyebrow">Chapitre 0 — Terminale ES</div>
+  <h1>La frise à deux échelles</h1>
+  <p class="sub">Place chaque notion sur la bonne frise (historique ou géologique), donne une date ou un ordre de grandeur, puis corrige.</p>
+</header>
+
+<main>
+  <section>
+    <h2>Frise historique <span style="color:var(--chalk-dim); font-size:0.8rem; font-family:var(--font-body);">(600 av. J.-C. → 2025, échelle linéaire)</span></h2>
+    <div class="frise-track" id="trackHist"></div>
+    <div style="position:relative; height:16px;" id="axisHist"></div>
+  </section>
+
+  <section>
+    <h2>Frise géologique <span style="color:var(--chalk-dim); font-size:0.8rem; font-family:var(--font-body);">(temps profonds, échelle logarithmique)</span></h2>
+    <div class="frise-track" id="trackGeo"></div>
+    <div style="position:relative; height:16px;" id="axisGeo"></div>
+  </section>
+
+  <section>
+    <h2>Les 18 notions</h2>
+    <div class="notion-list" id="notionList"></div>
+    <div class="score-banner" id="scoreBanner"></div>
+    <div class="actions">
+      <button id="checkBtn">✅ Corriger</button>
+      <button id="resetBtn2">↺ Réinitialiser</button>
+    </div>
+  </section>
+</main>
+
+<footer>Activité Chapitre 0 — physique-chimie.</footer>
+
+<script>
+const NOTIONS = [
+  { id: 1,  label: "Formation de la Terre", frise: "geo", trueYearsAgo: 4.54e9 },
+  { id: 2,  label: "Apparition des premières formes de vie", frise: "geo", trueYearsAgo: 3.8e9 },
+  { id: 3,  label: "La Grande Oxydation (l'oxygène envahit l'atmosphère)", frise: "geo", trueYearsAgo: 2.4e9 },
+  { id: 4,  label: "Apparition des premières cellules complexes (eucaryotes)", frise: "geo", trueYearsAgo: 2e9 },
+  { id: 5,  label: "L'explosion cambrienne (explosion de la biodiversité)", frise: "geo", trueYearsAgo: 541e6 },
+  { id: 6,  label: "Extinction des dinosaures", frise: "geo", trueYearsAgo: 66e6 },
+  { id: 7,  label: "Homo sapiens à Jebel Irhoud (Maroc)", frise: "geo", trueYearsAgo: 300000 },
+  { id: 8,  label: "Thalès observe l'attraction de l'ambre frotté", frise: "hist", trueYear: -600 },
+  { id: 9,  label: "Invention de la pile électrique (Volta)", frise: "hist", trueYear: 1800 },
+  { id: 10, label: "Découverte de l'effet photovoltaïque (Becquerel)", frise: "hist", trueYear: 1839 },
+  { id: 11, label: "Révolution industrielle (essor du charbon)", frise: "hist", trueYear: 1850 },
+  { id: 12, label: "Darwin publie L'Origine des espèces", frise: "hist", trueYear: 1859 },
+  { id: 13, label: "Découverte des cycles climatiques liés à l'orbite terrestre (Milanković)", frise: "hist", trueYear: 1924 },
+  { id: 14, label: "Première centrale nucléaire civile (Obninsk)", frise: "hist", trueYear: 1954 },
+  { id: 15, label: "Découverte de la batterie lithium-ion (Yazami)", frise: "hist", trueYear: 1980 },
+  { id: 16, label: "Catastrophe nucléaire de Tchernobyl", frise: "hist", trueYear: 1986 },
+  { id: 17, label: "Création du GIEC", frise: "hist", trueYear: 1988 },
+  { id: 18, label: "COP22 à Marrakech / centrale solaire Noor", frise: "hist", trueYear: 2016 }
+];
+
+const HIST_MIN = -700, HIST_BREAK = 1750, HIST_MAX = 2030;
+const HIST_BREAK_POS = 18; // % de largeur allouée au segment "avant 1750"
+const GEO_EXP_MIN = 5, GEO_EXP_MAX = 9.7; // log10(années)
+
+function histPos(year) {
+  if (year <= HIST_BREAK) {
+    return ((year - HIST_MIN) / (HIST_BREAK - HIST_MIN)) * HIST_BREAK_POS;
+  }
+  return HIST_BREAK_POS + ((year - HIST_BREAK) / (HIST_MAX - HIST_BREAK)) * (100 - HIST_BREAK_POS);
+}
+function geoPos(yearsAgo) {
+  const exp = Math.log10(yearsAgo);
+  const clamped = Math.max(GEO_EXP_MIN, Math.min(GEO_EXP_MAX, exp));
+  return Math.max(0, Math.min(100, ((GEO_EXP_MAX - clamped) / (GEO_EXP_MAX - GEO_EXP_MIN)) * 100));
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function buildAxes() {
+  const axisHist = document.getElementById("axisHist");
+  const axisGeo = document.getElementById("axisGeo");
+  axisHist.innerHTML = "";
+  axisGeo.innerHTML = "";
+
+  document.getElementById("trackHist").innerHTML =
+    `<div class="axis-break" style="left:${HIST_BREAK_POS}%"></div>`;
+
+  [-600, 0, 1750, 1900, 2000, 2025].forEach(year => {
+    const t = document.createElement("div");
+    t.className = "tick-label";
+    t.style.left = histPos(year) + "%";
+    t.textContent = year < 0 ? `${-year} av. J.-C.` : year;
+    axisHist.appendChild(t);
+  });
+
+  [1e9, 1e8, 1e7, 1e6, 3e5].forEach(y => {
+    const t = document.createElement("div");
+    t.className = "tick-label";
+    t.style.left = geoPos(y) + "%";
+    t.textContent = y >= 1e9 ? (y / 1e9) + " Md ans" : y >= 1e6 ? (y / 1e6) + " M ans" : (y / 1000) + " mille ans";
+    axisGeo.appendChild(t);
+  });
+}
+
+const listEl = document.getElementById("notionList");
+const trackHist = document.getElementById("trackHist");
+const trackGeo = document.getElementById("trackGeo");
+const scoreBanner = document.getElementById("scoreBanner");
+
+function buildCards() {
+  listEl.innerHTML = "";
+  shuffle([...NOTIONS]).forEach(n => {
+    const card = document.createElement("div");
+    card.className = "notion-card";
+    card.id = "card-" + n.id;
+    card.innerHTML = `
+      <div class="label">${n.label}</div>
+      <div class="frise-btn-group" data-id="${n.id}">
+        <button type="button" class="frise-btn" data-frisebtn="hist" data-id="${n.id}">📜 Historique</button>
+        <button type="button" class="frise-btn" data-frisebtn="geo" data-id="${n.id}">🪨 Géologique</button>
+      </div>
+      <div class="date-inputs" data-id="${n.id}"></div>
+    `;
+    listEl.appendChild(card);
+  });
+}
+
+function renderDateInput(id, kind) {
+  const wrap = document.querySelector(`.date-inputs[data-id="${id}"]`);
+  if (!kind) { wrap.innerHTML = ""; return; }
+  if (kind === "hist") {
+    wrap.innerHTML = `<input type="number" placeholder="Année (négatif = av. J.-C.)" data-year="${id}">`;
+  } else {
+    wrap.innerHTML = `
+      <input type="number" min="0" placeholder="Nombre" data-geoval="${id}">
+      <select data-geounit="${id}">
+        <option value="1">ans</option>
+        <option value="1000">milliers d'années</option>
+        <option value="1000000">millions d'années</option>
+        <option value="1000000000" selected>milliards d'années</option>
+      </select>`;
+  }
+}
+
+function updateMarker(n) {
+  const existing = document.getElementById("marker-" + n.id);
+  if (existing) existing.remove();
+  const group = document.querySelector(`.frise-btn-group[data-id="${n.id}"]`);
+  const frise = group.querySelector(".active-hist") ? "hist" : group.querySelector(".active-geo") ? "geo" : "";
+  if (frise === "hist") {
+    const yearInput = document.querySelector(`input[data-year="${n.id}"]`);
+    if (!yearInput || yearInput.value === "") return;
+    const pos = histPos(Number(yearInput.value));
+    addMarker(trackHist, n.id, pos, n.id);
+  } else if (frise === "geo") {
+    const val = document.querySelector(`input[data-geoval="${n.id}"]`);
+    const unit = document.querySelector(`select[data-geounit="${n.id}"]`);
+    if (!val || val.value === "") return;
+    const yearsAgo = Number(val.value) * Number(unit.value);
+    if (yearsAgo <= 0) return;
+    const pos = geoPos(yearsAgo);
+    addMarker(trackGeo, n.id, pos, n.id);
+  }
+}
+
+function addMarker(track, id, posPct, label) {
+  const m = document.createElement("div");
+  m.className = "marker";
+  m.id = "marker-" + id;
+  m.style.left = posPct + "%";
+  m.textContent = label;
+  m.title = NOTIONS.find(x => x.id === id).label;
+  track.appendChild(m);
+}
+
+listEl.addEventListener("click", (e) => {
+  const btn = e.target.closest(".frise-btn");
+  if (!btn) return;
+  const id = Number(btn.dataset.id);
+  const kind = btn.dataset.frisebtn;
+  const group = btn.parentElement;
+  group.querySelectorAll(".frise-btn").forEach(b => b.classList.remove("active-hist", "active-geo"));
+  btn.classList.add(kind === "hist" ? "active-hist" : "active-geo");
+  renderDateInput(id, kind);
+  updateMarker(NOTIONS.find(x => x.id === id));
+});
+listEl.addEventListener("change", (e) => {
+  if (e.target.dataset.role === "frise") return; // ancien menu, plus utilisé
+  const id = Number(e.target.dataset.id || e.target.dataset.year || e.target.dataset.geoval || e.target.dataset.geounit);
+  if (!id) return;
+  updateMarker(NOTIONS.find(x => x.id === id));
+});
+listEl.addEventListener("input", (e) => {
+  const id = Number(e.target.dataset.year || e.target.dataset.geoval);
+  if (!id) return;
+  updateMarker(NOTIONS.find(x => x.id === id));
+});
+
+function clearMarkers() {
+  document.querySelectorAll(".marker").forEach(m => m.remove());
+}
+
+function reset() {
+  buildCards();
+  clearMarkers();
+  scoreBanner.textContent = "";
+}
+
+document.getElementById("checkBtn").addEventListener("click", () => {
+  clearMarkers();
+  let total = 0, max = 0;
+
+  const histItems = NOTIONS.filter(n => n.frise === "hist").sort((a, b) => a.trueYear - b.trueYear);
+  const geoItems = NOTIONS.filter(n => n.frise === "geo").sort((a, b) => b.trueYearsAgo - a.trueYearsAgo);
+
+  // repères de référence (petits points teal, sous les repères élève)
+  histItems.forEach(n => addRefMarker(trackHist, histPos(n.trueYear)));
+  geoItems.forEach(n => addRefMarker(trackGeo, geoPos(n.trueYearsAgo)));
+
+  // classement de l'élève par frise, à partir de ses propres saisies
+  const studentHist = [];
+  const studentGeo = [];
+  NOTIONS.forEach(n => {
+    const group = document.querySelector(`.frise-btn-group[data-id="${n.id}"]`);
+    const frise = group.querySelector(".active-hist") ? "hist" : group.querySelector(".active-geo") ? "geo" : "";
+    if (frise === "hist") {
+      const yearInput = document.querySelector(`input[data-year="${n.id}"]`);
+      const year = yearInput && yearInput.value !== "" ? Number(yearInput.value) : null;
+      studentHist.push({ n, year });
+    } else if (frise === "geo") {
+      const val = document.querySelector(`input[data-geoval="${n.id}"]`);
+      const unit = document.querySelector(`select[data-geounit="${n.id}"]`);
+      const yearsAgo = val && val.value !== "" ? Number(val.value) * Number(unit.value) : null;
+      studentGeo.push({ n, yearsAgo });
+    }
+  });
+  studentHist.sort((a, b) => (a.year ?? 99999) - (b.year ?? 99999));
+  studentGeo.sort((a, b) => (b.yearsAgo ?? 0) - (a.yearsAgo ?? 0));
+
+  function scoreOne(n, studentRank, trueRank, precisionPts) {
+    max += (n.frise === "hist" ? 3 : 2);
+    let pts = 0;
+    if (studentRank === trueRank) pts += 1;
+    pts += precisionPts;
+    total += pts;
+    const card = document.getElementById("card-" + n.id);
+    card.classList.add("scored");
+    const tag = document.createElement("div");
+    tag.className = "score-tag";
+    tag.textContent = `+${pts} pt${pts > 1 ? "s" : ""}`;
+    card.appendChild(tag);
+  }
+
+  histItems.forEach((n, trueRank) => {
+    const studentRank = studentHist.findIndex(s => s.n.id === n.id);
+    const entry = studentHist.find(s => s.n.id === n.id);
+    let precisionPts = 0;
+    if (entry && entry.year !== null) {
+      const diff = Math.abs(entry.year - n.trueYear);
+      if (diff === 0) precisionPts = 2;
+      else if (diff <= 10) precisionPts = 1;
+    }
+    scoreOne(n, studentRank, trueRank, precisionPts);
+  });
+
+  geoItems.forEach((n, trueRank) => {
+    const studentRank = studentGeo.findIndex(s => s.n.id === n.id);
+    const entry = studentGeo.find(s => s.n.id === n.id);
+    let precisionPts = 0;
+    if (entry && entry.yearsAgo) {
+      const trueExp = Math.floor(Math.log10(n.trueYearsAgo));
+      const guessExp = Math.floor(Math.log10(entry.yearsAgo));
+      if (trueExp === guessExp) precisionPts = 1;
+    }
+    scoreOne(n, studentRank, trueRank, precisionPts);
+  });
+
+  scoreBanner.textContent = `Score : ${total} / ${max} points`;
+});
+
+function addRefMarker(track, posPct) {
+  const m = document.createElement("div");
+  m.className = "marker ref";
+  m.style.left = posPct + "%";
+  m.textContent = "✓";
+  track.appendChild(m);
+}
+
+document.getElementById("resetBtn2").addEventListener("click", reset);
+buildAxes();
+reset();
+</script>
+</body>
+</html>

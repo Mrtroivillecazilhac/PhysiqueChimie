@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>À propos — Robin Troiville-Cazilhac</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Styles propres à cette page, non ajoutés au styles.css partagé. */
+  .intro-zone{
+    display:flex; gap:26px; align-items:center; flex-wrap:wrap;
+  }
+  .photo-frame{
+    width:150px; height:150px; flex:none; border-radius:50%;
+    border:3px solid var(--yellow); overflow:hidden; position:relative;
+  }
+  .photo-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .photo-placeholder{
+    display:none; width:100%; height:100%;
+    flex-direction:column; align-items:center; justify-content:center;
+    background:var(--board-2); color:var(--chalk-dim);
+    font-size:0.7rem; text-align:center; gap:6px; padding:10px;
+  }
+  .intro-text{ flex:1; min-width:220px; color:var(--chalk-dim); line-height:1.7; text-align:justify; }
+  .placeholder-note{ color:var(--coral); font-style:italic; font-size:0.85rem; }
+
+  .parcours-row{
+    display:flex; align-items:center; justify-content:center;
+    gap:10px; flex-wrap:wrap; margin:10px 0;
+  }
+  .parcours-stop{
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    background:rgba(255,255,255,0.03); border:1px solid var(--line);
+    border-radius:14px; padding:16px 18px; min-width:130px; text-align:center;
+  }
+  .parcours-stop .emoji{ font-size:1.8rem; }
+  .parcours-stop .city{ font-family:var(--font-display); font-size:1.05rem; color:var(--chalk); }
+  .parcours-stop .role{ font-size:0.72rem; color:var(--chalk-dim); }
+  .parcours-arrow{ font-size:1.4rem; color:var(--yellow); flex:none; }
+
+  .cv-list{ list-style:none; padding:0; margin:0; display:grid; gap:12px; }
+  .cv-list li{
+    border-left:3px solid var(--teal); padding:6px 0 6px 14px;
+    color:var(--chalk-dim); line-height:1.5;
+  }
+  .cv-list li strong{ color:var(--chalk); display:block; font-family:var(--font-display); font-size:1.05rem; }
+  .cv-institution{ color:var(--yellow); font-weight:600; margin-top:8px; }
+  .cv-sublist{ list-style:none; padding:0; margin:4px 0 0; display:grid; gap:3px; }
+  .cv-sublist li{ border:none; padding:0 0 0 4px; font-size:0.92rem; }
+  .sub-secondary{ opacity:0.75; font-size:0.9em; margin-top:-4px; }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+  <a href="a-propos.html" class="current">À propos</a>
+</nav>
+
+<header class="page-head">
+  <div class="eyebrow">À propos</div>
+  <h1>Robin Troiville-Cazilhac</h1>
+  <p class="sub">Professeur de physique-chimie à l'École Française Internationale de Casablanca</p>
+  <p class="sub sub-secondary">Docteur en Physique et Chimie des matériaux</p>
+</header>
+
+<main>
+  <section>
+    <div class="intro-zone">
+      <div class="photo-frame">
+        <img src="photo-robin.jpg" alt="Photo de Robin Troiville-Cazilhac"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="photo-placeholder">📷<br><span>Ajoute un fichier<br><strong>photo-robin.jpg</strong><br>dans le dossier</span></div>
+      </div>
+      <div class="intro-text">
+        <p>Docteur en Physique et Chimie des matériaux, j'ai passé plusieurs années de recherche en laboratoires français et internationaux qui m'ont permis d'explorer et affiner ma compréhension de la matière à l'échelle micro et macroscopique. Désormais tourné vers l'enseignement, je souhaite partager ce qui m'a toujours fasciné dans cette matière : sa capacité à transformer notre regard sur le monde, une expérience à la fois.</p>
+        <p>Ce site a été créé dans un objectif purement pédagogique. Il sera modifié et complété tout au long de l'année scolaire et me permet de créer un cours animé, ainsi que des activités pédagogiques interactives. Ceci me permet de varier les supports d'information pour que les élèves puissent comprendre et assimiler les concepts chimiques & physiques à leur rythme et selon leur besoin.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Parcours</h2>
+    <div class="parcours-row">
+      <div class="parcours-stop">
+        <span class="emoji">🇫🇷</span>
+        <span class="city">Paris</span>
+        <span class="role">Thèse de doctorat, Sorbonne Université<br>— 2020-2023<br>ATER<br>— 2023-2024</span>
+      </div>
+      <span class="parcours-arrow">→</span>
+      <div class="parcours-stop">
+        <span class="emoji">🇯🇵</span>
+        <span class="city">Okinawa</span>
+        <span class="role">Chercheur postdoctoral, OIST<br>— 2024-2026</span>
+      </div>
+      <span class="parcours-arrow">→</span>
+      <div class="parcours-stop">
+        <span class="emoji">🇲🇦</span>
+        <span class="city">Casablanca</span>
+        <span class="role">EFI Casablanca<br>— 2026-...</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Formation & distinctions</h2>
+    <ul class="cv-list">
+      <li>
+        <strong>Doctorat en Physique et Chimie des matériaux</strong>
+        Sorbonne Université, 2020-2023 — « Nouveaux matériaux à gains pour des lasers organiques à l'état solide de hautes performances »
+      </li>
+      <li>
+        <strong>Prix des Jeunes Talents de la Chimie — Société Chimique de France (SCF), section Île-de-France</strong>
+        2024 — récompensant mes travaux de thèse
+      </li>
+      <li>
+        <strong>Bourse postdoctorale JSPS (Japan Society for the Promotion of Science)</strong>
+        2024-2026 — recherche postdoctorale à l'OIST, au Japon
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Enseignement</h2>
+    <ul class="cv-list">
+      <li>
+        <strong>Professeur de Physique-Chimie — 2026-...</strong>
+        <div class="cv-institution">EFI Casablanca</div>
+        <ul class="cv-sublist">
+          <li>4ème — Physique-Chimie</li>
+          <li>2nde — Physique-Chimie</li>
+          <li>1ère spécialité Physique-Chimie</li>
+          <li>Terminale — Enseignement Scientifique</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Attaché Temporaire d'Enseignement et de Recherche (ATER) — 2023-2024</strong>
+        <div class="cv-institution">Sorbonne Université</div>
+        <ul class="cv-sublist">
+          <li>Licence 2e année de Chimie — UE Chimie Organique</li>
+          <li>Licence 3e année de Chimie — UE Biomolécules</li>
+          <li>Master 1 de Chimie — UE Polymères</li>
+          <li>Master 1 de Chimie — UE Projet Bibliographique</li>
+        </ul>
+        <div class="cv-institution">Polytech Sorbonne — école d'ingénieur</div>
+        <ul class="cv-sublist">
+          <li>2e année de prépa — UE Chimie Organique</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Chargé d'enseignements — 2020-2023</strong>
+        <div class="cv-institution">Sorbonne Université</div>
+        <ul class="cv-sublist">
+          <li>Licence 2e année de Chimie — UE Chimie Organique</li>
+          <li>Licence 3e année de Chimie — UE Biomolécules</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+</main>
+
+<footer>Site pédagogique — physique-chimie.</footer>
+
+</body>
+</html>

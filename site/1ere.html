@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1ère spé PC — Physique-Chimie</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html" class="current">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+  <a href="a-propos.html">À propos</a>
+</nav>
+
+<header class="page-head">
+  <div class="eyebrow">Niveau</div>
+  <h1>1ère spé PC</h1>
+</header>
+
+<main>
+  <section>
+    <h2>Chapitres</h2>
+    <a href="chapitre1-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 1 — La quantité de matière</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+    <a href="chapitre2-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 2 — Forces et champs</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre3-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 3 — Oxydo-réduction</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+    <a href="chapitre4-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 4 — Ondes mécaniques</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre5-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 5 — Tableau d'avancement</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+    <a href="chapitre6-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 6 — Fluide au repos</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre7-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 7 — Titrages colorimétriques</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+    <a href="chapitre8-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 8 — Lentilles minces convergentes</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre9-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 9 — De la structure à la polarité</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+    <a href="chapitre10-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 10 — Mouvements d'un système</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre11-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 11 — Cohésion de la matière</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+    <a href="chapitre13-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 13 — Énergie des systèmes électriques</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre14-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 14 — Structure des entités organiques</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+    <a href="chapitre15-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 15 — Couleurs</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre16-1ere.html" class="chapter-card">
+      <span class="ch-title">Chapitre 16 — Synthèse chimique</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+  </section>
+
+  <section>
+    <h2>Roue de chimie</h2>
+    <div class="wheel-zone">
+      <div class="wheel-wrap">
+        <div class="pointer"></div>
+        <svg id="wheel-chimie" class="wheel" viewBox="0 0 200 200"></svg>
+        <div class="hub"></div>
+      </div>
+      <div class="spin-panel">
+        <button id="spinBtn-chimie" class="spin-btn">🎡 Tourner la roue</button>
+        <div class="result-card">
+          <div class="tag" id="resultTag-chimie">En attente</div>
+          <div class="q" id="resultQ-chimie">Lance la roue pour une question flash.</div>
+          <div class="timer" id="timer-chimie"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Roue de physique</h2>
+    <div class="wheel-zone">
+      <div class="wheel-wrap">
+        <div class="pointer"></div>
+        <svg id="wheel-physique" class="wheel" viewBox="0 0 200 200"></svg>
+        <div class="hub"></div>
+      </div>
+      <div class="spin-panel">
+        <button id="spinBtn-physique" class="spin-btn">🎡 Tourner la roue</button>
+        <div class="result-card">
+          <div class="tag" id="resultTag-physique">En attente</div>
+          <div class="q" id="resultQ-physique">Lance la roue pour une question flash.</div>
+          <div class="timer" id="timer-physique"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Activité — Grandeurs, symboles & unités</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:14px;">Activité transversale, valable toute l'année — deux manches : symboles puis unités.</p>
+    <a href="grandeurs-1ere.html" class="spin-btn">📏 Ouvrir l'activité</a>
+  </section>
+</main>
+
+<footer>Site pédagogique — physique-chimie.</footer>
+
+<script src="script.js"></script>
+<script>
+  initWheel({
+    levelLabel: "1ère spé PC — Chimie",
+    wheelId: "wheel-chimie",
+    spinBtnId: "spinBtn-chimie",
+    resultTagId: "resultTag-chimie",
+    resultQId: "resultQ-chimie",
+    timerId: "timer-chimie",
+    questions: [
+      "Donne la relation entre concentration, quantité de matière et volume d'une solution.",
+      "Qu'est-ce que la quantité de matière et dans quelle unité l'exprime-t-on ?",
+      "Comment prépare-t-on une solution par dilution ?"
+    ]
+  });
+
+  initWheel({
+    levelLabel: "1ère spé PC — Physique",
+    wheelId: "wheel-physique",
+    spinBtnId: "spinBtn-physique",
+    resultTagId: "resultTag-physique",
+    resultQId: "resultQ-physique",
+    timerId: "timer-physique",
+    questions: [
+      "Définis la vitesse moyenne et donne son unité usuelle.",
+      "Qu'est-ce que l'énergie cinétique d'un objet en mouvement ?",
+      "Cite deux exemples d'ondes mécaniques."
+    ]
+  });
+</script>
+</body>
+</html>
