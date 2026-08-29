@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 3 — Solutions aqueuses — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch3-2nde.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 3 — Solutions aqueuses</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch3-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch3-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Savoir ce qu'est une solution, un soluté, un solvant, et calculer une concentration en masse</li>
+        <li>Savoir préparer une solution par dissolution ou par dilution</li>
+        <li>Comprendre le principe d'un dosage par gamme d'étalonnage</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1a. Solution, soluté et solvant</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>solution</strong> est obtenue lorsqu'on introduit une espèce chimique dans un <strong>solvant</strong>, l'ensemble formant un mélange homogène. Les espèces chimiques dissoutes dans le solvant sont les <strong>solutés</strong>.
+    </div>
+    <p class="course-text">
+      Lorsque le solvant est l'<strong>eau</strong>, la solution est appelée <strong>solution aqueuse</strong>.
+    </p>
+  </section>
+
+  <section>
+    <h2>1b. Des ions ou des molécules en solution</h2>
+    <p class="course-text">
+      Les solutés peuvent être des espèces <strong>ioniques</strong> et/ou <strong>moléculaires</strong>. Par exemple, les ions chlorure et sodium dissous en solution aqueuse (Na⁺(aq) + Cl⁻(aq)) forment un soluté ionique, tandis que les molécules de glucose dissoutes (C₆H₁₂O₆(aq)) forment un soluté moléculaire.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux types de soluté.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="stIonicCours">Soluté ionique</button>
+      <button class="toggle-btn" id="stMolecularCours">Soluté moléculaire</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="stSvgCours" viewBox="0 0 220 190"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="stReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. La concentration en masse</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>concentration en masse</strong>, ou <strong>titre massique</strong>, t d'une solution en une espèce chimique dissoute est le quotient de la masse m<sub>soluté</sub> de soluté par le volume V<sub>solution</sub> de la solution.
+    </div>
+    <div class="formula">t = <span class="frac"><span class="num">m<sub>soluté</sub></span><span class="den">V<sub>solution</sub></span></span></div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : une solution de volume 500 mL contenant une masse de 2,5 g de glucose dissous a une concentration en masse t = 2,5 / (500×10⁻³) = 5,0 g·L⁻¹.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la masse de soluté et le volume de la solution.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:210px;">
+        <svg id="mcSvgCours" viewBox="0 0 210 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse de soluté m (g)</label>
+        <input type="range" id="mcMCours" min="0" max="20" value="2.5" step="0.1">
+        <label>Volume de la solution V (mL)</label>
+        <input type="range" id="mcVCours" min="50" max="500" value="500" step="10">
+        <div class="anim-readout" id="mcReadoutCours"></div>
+      </div>
+    </div>
+
+    <div class="warning-box" style="margin-top:20px;">
+      <span class="box-label">⚠️ Attention</span>
+      La masse volumique ρ<sub>solution</sub> d'une solution et la concentration en masse t<sub>soluté</sub> d'un soluté s'expriment dans la même unité, mais ce sont deux grandeurs différentes : ρ<sub>solution</sub> = m<sub>solution</sub>/V<sub>solution</sub>, alors que t<sub>soluté</sub> = m<sub>soluté</sub>/V<sub>solution</sub>.
+    </div>
+  </section>
+
+  <section>
+    <h2>3a. Les préparations de solutions — par dissolution</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>dissolution</strong> est l'obtention d'une solution par mélange d'un solvant et d'une espèce chimique.
+    </div>
+    <p class="course-text">
+      Pour préparer une solution aqueuse de volume V<sub>solution</sub> à la concentration en masse t, il faut peser une masse m d'espèce chimique à dissoudre dans l'eau, à l'aide d'une fiole jaugée complétée jusqu'au trait de jauge.
+    </p>
+    <div class="formula">m = t × V<sub>solution</sub></div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : pour préparer 100,0 mL d'une solution de glucose à t = 20,0 g·L⁻¹, il faut peser m = 20,0 × 100,0×10⁻³ = 2,00 g.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle t et V : observe la masse à peser.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="dpSvgCours" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Concentration visée t (g/L)</label>
+        <input type="range" id="dpTCours" min="1" max="30" value="20" step="1">
+        <label>Volume de la solution V (mL)</label>
+        <input type="range" id="dpVCours" min="50" max="500" value="100" step="10">
+        <div class="anim-readout" id="dpReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3b. Les préparations de solutions — par dilution</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>dilution</strong> d'une solution aqueuse est l'ajout d'eau à cette solution. La solution obtenue (<strong>solution fille</strong>) est moins concentrée que la solution initiale (<strong>solution mère</strong>).
+    </div>
+    <p class="course-text">
+      Au cours d'une dilution, la masse de soluté prélevée dans la solution mère est égale à celle présente dans la solution fille : t<sub>m</sub> × V<sub>m</sub> = t<sub>f</sub> × V<sub>f</sub>.
+    </p>
+    <div class="formula">F = <span class="frac"><span class="num">t<sub>m</sub></span><span class="den">t<sub>f</sub></span></span> = <span class="frac"><span class="num">V<sub>f</sub></span><span class="den">V<sub>m</sub></span></span></div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Comme t<sub>f</sub> &lt; t<sub>m</sub>, le facteur de dilution F est toujours <strong>supérieur à 1</strong>.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : pour diluer 5 fois une solution mère à t<sub>m</sub> = 10,0 g·L⁻¹ et obtenir V<sub>f</sub> = 100,0 mL, on prélève V<sub>m</sub> = V<sub>f</sub>/F = 20,0 mL ; la solution fille obtenue a pour concentration t<sub>f</sub> = t<sub>m</sub>/F = 2,0 g·L⁻¹.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la concentration mère et le facteur de dilution.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="dlSvgCours" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Concentration mère t<sub>m</sub> (g/L)</label>
+        <input type="range" id="dlTmCours" min="1" max="30" value="10" step="1">
+        <label>Facteur de dilution F</label>
+        <input type="range" id="dlFCours" min="2" max="10" value="5" step="1">
+        <div class="anim-readout" id="dlReadoutCours"></div>
+      </div>
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.85rem;">La préparation par dissolution ou par dilution nécessite de la <strong>verrerie de précision</strong> : pipette jaugée, fiole jaugée, burette graduée.</p>
+  </section>
+
+  <section>
+    <h2>4. Les dosages à l'aide d'une gamme d'étalonnage</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Pour déterminer la concentration en masse t d'une solution S, on compare une grandeur physique ou une caractéristique de S (par exemple sa couleur) avec celles de plusieurs <strong>solutions étalon</strong> dont on connaît les concentrations.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Une <strong>échelle de teintes</strong> permet d'estimer la concentration d'une solution colorée par comparaison de sa teinte avec celles d'une gamme de solutions étalon — cela donne un <strong>encadrement</strong> de la concentration, pas une valeur exacte.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Déplace S le long de l'échelle et observe l'encadrement obtenu.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="csSvgCours" viewBox="0 0 220 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Position de S sur l'échelle</label>
+        <input type="range" id="csSCours" min="1" max="5" value="3.4" step="0.1">
+        <div class="anim-readout" id="csReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>1a. Solution, soluté et solvant</h3>
+      <p>
+        Une <input class="blank" data-answer="solution" size="14"> est obtenue lorsqu'on introduit une espèce chimique dans un <input class="blank" data-answer="solvant" size="14">, l'ensemble formant un mélange <input class="blank" data-answer="homogène|homogene" size="14">. Les espèces chimiques dissoutes dans le solvant sont les <input class="blank" data-answer="solutés|solutes" size="14">.
+      </p>
+      <p>
+        Lorsque le solvant est l'eau, la solution est appelée solution <input class="blank" data-answer="aqueuse" size="14">.
+      </p>
+
+      <h3>1b. Des ions ou des molécules en solution</h3>
+      <p>
+        Les solutés peuvent être des espèces <input class="blank" data-answer="ioniques" size="14"> et/ou <input class="blank" data-answer="moléculaires|moleculaires" size="16">.
+      </p>
+
+      <h3>2. La concentration en masse</h3>
+      <p>
+        La concentration en masse, ou <input class="blank" data-answer="titre massique" size="18">, t d'une solution en une espèce chimique dissoute est le quotient de la <input class="blank" data-answer="masse" size="10"> de soluté par le <input class="blank" data-answer="volume" size="12"> de la solution.
+      </p>
+      <div class="formula">t = <span class="frac"><span class="num">m<sub>soluté</sub></span><span class="den">V<sub>solution</sub></span></span></div>
+      <p>
+        La masse volumique ρ<sub>solution</sub> d'une solution et la concentration en masse t<sub>soluté</sub> d'un soluté s'expriment dans la <input class="blank" data-answer="même unité|meme unite" size="16">, mais ce sont deux grandeurs <input class="blank" data-answer="différentes|differentes" size="16">.
+      </p>
+
+      <h3>3a. Les préparations de solutions — par dissolution</h3>
+      <p>
+        Une <input class="blank" data-answer="dissolution" size="16"> est l'obtention d'une solution par mélange d'un solvant et d'une espèce chimique.
+      </p>
+      <div class="formula">m = t × V<sub>solution</sub></div>
+
+      <h3>3b. Les préparations de solutions — par dilution</h3>
+      <p>
+        La <input class="blank" data-answer="dilution" size="14"> d'une solution aqueuse est l'ajout d'<input class="blank" data-answer="eau" size="8"> à cette solution. La solution obtenue (solution <input class="blank" data-answer="fille" size="10">) est moins concentrée que la solution initiale (solution <input class="blank" data-answer="mère|mere" size="10">).
+      </p>
+      <p>
+        Au cours d'une dilution, la masse de soluté prélevée dans la solution mère est <input class="blank" data-answer="égale|egale" size="12"> à celle présente dans la solution fille.
+      </p>
+      <div class="formula">F = <span class="frac"><span class="num">t<sub>m</sub></span><span class="den">t<sub>f</sub></span></span> = <span class="frac"><span class="num">V<sub>f</sub></span><span class="den">V<sub>m</sub></span></span></div>
+      <p>
+        Le facteur de dilution F est toujours <input class="blank" data-answer="supérieur|superieur" size="16"> à 1.
+      </p>
+
+      <h3>4. Les dosages à l'aide d'une gamme d'étalonnage</h3>
+      <p>
+        Pour déterminer la concentration d'une solution S, on compare une grandeur physique ou une caractéristique de S avec celles de plusieurs solutions <input class="blank" data-answer="étalon|etalon" size="14"> dont on connaît les concentrations.
+      </p>
+      <p>
+        Une échelle de teintes permet d'obtenir un <input class="blank" data-answer="encadrement" size="16"> de la concentration, par comparaison de sa <input class="blank" data-answer="teinte" size="12"> avec celles des solutions étalon.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Soluté ionique ou moléculaire</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux types de soluté.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="stIonic">Soluté ionique</button>
+      <button class="toggle-btn" id="stMolecular">Soluté moléculaire</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="stSvg" viewBox="0 0 220 190"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="stReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSoluteType"></div></div>
+  </section>
+
+  <section>
+    <h2>Calculateur de concentration en masse</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la masse de soluté et le volume de la solution.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:210px;">
+        <svg id="mcSvg" viewBox="0 0 210 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse de soluté m (g)</label>
+        <input type="range" id="mcM" min="0" max="20" value="2.5" step="0.1">
+        <label>Volume de la solution V (mL)</label>
+        <input type="range" id="mcV" min="50" max="500" value="500" step="10">
+        <div class="anim-readout" id="mcReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMassConcentration"></div></div>
+  </section>
+
+  <section>
+    <h2>Préparation par dissolution</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle t et V : observe la masse à peser.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="dpSvg" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Concentration visée t (g/L)</label>
+        <input type="range" id="dpT" min="1" max="30" value="20" step="1">
+        <label>Volume de la solution V (mL)</label>
+        <input type="range" id="dpV" min="50" max="500" value="100" step="10">
+        <div class="anim-readout" id="dpReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actDissolutionPrep"></div></div>
+  </section>
+
+  <section>
+    <h2>Préparation par dilution</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la concentration mère et le facteur de dilution.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="dlSvg" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Concentration mère t<sub>m</sub> (g/L)</label>
+        <input type="range" id="dlTm" min="1" max="30" value="10" step="1">
+        <label>Facteur de dilution F</label>
+        <input type="range" id="dlF" min="2" max="10" value="5" step="1">
+        <div class="anim-readout" id="dlReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actDilutionPrep"></div></div>
+  </section>
+
+  <section>
+    <h2>Gamme d'étalonnage (échelle de teintes)</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Déplace S le long de l'échelle et observe l'encadrement obtenu.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="csSvg" viewBox="0 0 220 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Position de S sur l'échelle</label>
+        <input type="range" id="csS" min="1" max="5" value="3.4" step="0.1">
+        <div class="anim-readout" id="csReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actColorScale"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Formule</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Concentration en masse</td><td style="padding:10px 8px; color:var(--yellow);">t = m<sub>soluté</sub> / V<sub>solution</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">en g/L ; soluté ionique et/ou moléculaire</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Préparation par dissolution</td><td style="padding:10px 8px; color:var(--yellow);">m = t × V<sub>solution</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">masse à peser, fiole jaugée</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Préparation par dilution</td><td style="padding:10px 8px; color:var(--yellow);">t<sub>m</sub>V<sub>m</sub> = t<sub>f</sub>V<sub>f</sub> ; F = t<sub>m</sub>/t<sub>f</sub> = V<sub>f</sub>/V<sub>m</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">F toujours &gt; 1</td></tr>
+          <tr><td style="padding:10px 8px;">Gamme d'étalonnage</td><td style="padding:10px 8px; color:var(--yellow);">—</td><td style="padding:10px 8px; color:var(--chalk-dim);">comparaison à des solutions étalon → encadrement de t</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Étapes de préparation</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li><strong>Dissolution</strong> : peser la masse m, verser dans une fiole jaugée, dissoudre, compléter à l'eau distillée jusqu'au trait de jauge</li>
+        <li><strong>Dilution</strong> : prélever V<sub>m</sub> de solution mère à la pipette jaugée, verser dans une fiole jaugée, compléter à l'eau distillée jusqu'au trait de jauge</li>
+        <li>Verrerie de précision : pipette jaugée, pipette graduée, burette graduée, fiole jaugée</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 3 — Solutions aqueuses (2nde).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch3-2nde", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initSoluteType({ svgId: "stSvgCours", readoutId: "stReadoutCours", btnIonicId: "stIonicCours", btnMolecularId: "stMolecularCours" });
+initMassConcentration({ svgId: "mcSvgCours", mRangeId: "mcMCours", vRangeId: "mcVCours", readoutId: "mcReadoutCours" });
+initDissolutionPrep({ svgId: "dpSvgCours", tRangeId: "dpTCours", vRangeId: "dpVCours", readoutId: "dpReadoutCours" });
+initDilutionPrep({ svgId: "dlSvgCours", tmRangeId: "dlTmCours", fRangeId: "dlFCours", readoutId: "dlReadoutCours" });
+initColorScale({ svgId: "csSvgCours", sRangeId: "csSCours", readoutId: "csReadoutCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initSoluteType({ svgId: "stSvg", readoutId: "stReadout", btnIonicId: "stIonic", btnMolecularId: "stMolecular" });
+initMassConcentration({ svgId: "mcSvg", mRangeId: "mcM", vRangeId: "mcV", readoutId: "mcReadout" });
+initDissolutionPrep({ svgId: "dpSvg", tRangeId: "dpT", vRangeId: "dpV", readoutId: "dpReadout" });
+initDilutionPrep({ svgId: "dlSvg", tmRangeId: "dlTm", fRangeId: "dlF", readoutId: "dlReadout" });
+initColorScale({ svgId: "csSvg", sRangeId: "csS", readoutId: "csReadout" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actSoluteType", chapterId: "ch3-2nde", activityId: "qcm-solute-type",
+  prompt: "Le glucose dissous en solution aqueuse, noté C₆H₁₂O₆(aq), est un soluté…",
+  options: [
+    { text: "Moléculaire", correct: true },
+    { text: "Ionique", correct: false },
+    { text: "Ni l'un ni l'autre", correct: false }
+  ],
+  explanation: "Le glucose est une molécule neutre (pas de charge électrique) : c'est donc un soluté moléculaire, contrairement à des ions comme Na⁺ ou Cl⁻."
+});
+
+initEstimation({
+  containerId: "actMassConcentration", chapterId: "ch3-2nde", activityId: "est-mass-concentration",
+  prompt: "Une masse m = 2,5 g de glucose est dissoute dans un volume V = 500 mL de solution. Quelle est la concentration en masse t (en g/L) ?",
+  answer: 5.0, tolerance: 0.3, unit: "g/L",
+  explanation: "t = m/V = 2,5 / 0,500 = 5,0 g/L."
+});
+
+initEstimation({
+  containerId: "actDissolutionPrep", chapterId: "ch3-2nde", activityId: "est-dissolution-prep",
+  prompt: "Pour préparer V = 100,0 mL d'une solution à t = 20,0 g/L, quelle masse m (en g) faut-il peser ?",
+  answer: 2.00, tolerance: 0.1, unit: "g",
+  explanation: "m = t × V = 20,0 × 0,1000 = 2,00 g."
+});
+
+initVraiFaux({
+  containerId: "actDilutionPrep", chapterId: "ch3-2nde", activityId: "vf-dilution-prep",
+  prompt: "Le facteur de dilution F est toujours supérieur à 1.",
+  correct: true,
+  explanation: "Vrai : une dilution rend la solution moins concentrée (t_f < t_m), donc F = t_m/t_f est toujours supérieur à 1."
+});
+
+initQCM({
+  containerId: "actColorScale", chapterId: "ch3-2nde", activityId: "qcm-color-scale",
+  prompt: "Que permet de déterminer une échelle de teintes ?",
+  options: [
+    { text: "Un encadrement de la concentration, par comparaison des teintes", correct: true },
+    { text: "La valeur exacte de la concentration, sans aucune incertitude", correct: false },
+    { text: "Uniquement la couleur de la solution, rien de plus", correct: false }
+  ],
+  explanation: "En comparant la teinte de la solution S à celles des solutions étalon, on obtient un encadrement de sa concentration (par exemple t₃ < t < t₄), pas une valeur exacte."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch3-2nde");
+initProgressBar("ch3-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+</script>
+</body>
+</html>

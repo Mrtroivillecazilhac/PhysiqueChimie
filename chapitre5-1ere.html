@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapitre 5 — Tableau d'avancement — 1ère spé PC</title>
+<title>Chapitre 5 — Titrages colorimétriques — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
 <script src="animations-common.js"></script>
 <script src="animations-ch5.js"></script>
 <script src="modules-common.js"></script>
 <style>
   .big-equation{
-    text-align:center; font-family:var(--font-body); font-size:1.5rem;
+    text-align:center; font-family:var(--font-body); font-size:1.4rem;
     background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:12px;
-    padding:18px; margin-bottom:16px; letter-spacing:0.02em;
+    padding:16px; margin-bottom:16px; letter-spacing:0.02em;
   }
   .big-equation .coef{
     display:inline-flex; align-items:center; justify-content:center;
-    width:26px; height:26px; border-radius:50%;
+    width:24px; height:24px; border-radius:50%;
     background:var(--yellow); color:var(--board);
-    font-weight:800; font-size:0.75em; vertical-align:middle;
+    font-weight:800; font-size:0.7em; vertical-align:middle;
   }
-  .adv-table{ width:100%; border-collapse:collapse; margin-top:18px; font-size:0.85rem; }
+  .adv-table{ width:100%; border-collapse:collapse; margin-top:14px; font-size:0.82rem; }
   .adv-table th, .adv-table td{
-    border:1px solid var(--line); padding:8px 10px; text-align:center; color:var(--chalk-dim);
+    border:1px solid var(--line); padding:7px 8px; text-align:center; color:var(--chalk-dim);
   }
   .adv-table th{ color:var(--chalk); font-family:var(--font-display); font-weight:400; }
   .adv-table tr.row-active{ background:rgba(232,196,104,0.15); }
@@ -42,7 +42,7 @@
 
 <header class="page-head">
   <div class="badge-inline chimie">Chimie</div>
-  <h1>Chapitre 5 — Tableau d'avancement</h1>
+  <h1>Chapitre 5 — Titrages colorimétriques</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
 </header>
 
@@ -73,65 +73,59 @@
     <div class="objectifs-box">
       <span class="box-label">🎯 Objectifs du chapitre</span>
       <ul>
-        <li>Savoir construire et compléter un tableau d'avancement</li>
-        <li>Déterminer l'avancement maximal et identifier le réactif limitant</li>
-        <li>Reconnaître un mélange stœchiométrique et en connaître les conséquences</li>
+        <li>Savoir identifier réactif titré, réactif titrant et repérer l'équivalence</li>
+        <li>Comprendre pourquoi le réactif limitant change à l'équivalence</li>
+        <li>Savoir exploiter la relation à l'équivalence pour calculer une concentration inconnue</li>
       </ul>
     </div>
   </section>
 
   <section>
-    <h2>a. Avancement d'une réaction chimique</h2>
+    <h2>a. Les dosages</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      L'<strong>avancement</strong> d'une réaction, noté x, est une grandeur exprimée en <strong>mole</strong> qui permet de décrire l'évolution des quantités de matière présentes dans un système au cours d'une transformation chimique.
-    </div>
-  </section>
-
-  <section>
-    <h2>b. Tableau d'avancement</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      Le tableau d'avancement décrit l'évolution des quantités de matière d'un système chimique de l'état <strong>initial</strong> à l'état <strong>final</strong>, en fonction de l'avancement x de la réaction.
+      Un dosage permet de déterminer la quantité de <strong>matière</strong> ou la <strong>concentration</strong> d'une espèce chimique dissoute dans une solution.
     </div>
     <p class="course-text">
-      Le système évolue depuis l'état initial pour lequel x = 0 vers l'état final pour lequel x = x<sub>f</sub>. Les quantités des réactifs <strong>diminuent</strong> alors que celles des produits <strong>augmentent</strong>. Elles n'évoluent plus lorsque l'état final est atteint.
-    </p>
-  </section>
-
-  <section>
-    <h2>c. Transformations totales et non totales</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      L'<strong>avancement maximal</strong> x<sub>max</sub> correspond à la plus petite valeur de l'avancement pour laquelle la quantité finale de l'un au moins des réactifs est <strong>nulle</strong>. Ce réactif est appelé <strong>réactif limitant</strong>.
-    </div>
-    <p class="course-text">
-      Si x<sub>f</sub> = x<sub>max</sub>, la transformation est <strong>totale</strong>. Si x<sub>f</sub> &lt; x<sub>max</sub>, la transformation est <strong>non totale</strong>.
+      Un dosage par titrage est une technique de dosage mettant en jeu une réaction chimique <strong>totale</strong> et <strong>rapide</strong>.
     </p>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      L'avancement final x<sub>f</sub> permet de réaliser le <strong>bilan de matière</strong>, c'est-à-dire de calculer les quantités de matière de toutes les espèces à l'état final.
+      Les dosages par étalonnage diffèrent des dosages par titrage : aucune <strong>réaction chimique</strong> n'est nécessaire pour les réaliser.
     </div>
   </section>
 
   <section>
-    <h2>d. Le mélange stœchiométrique</h2>
+    <h2>b. Réaction support d'un titrage</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Un mélange initial est dit <strong>stœchiométrique</strong> si les quantités initiales des réactifs sont dans les mêmes proportions que les nombres stœchiométriques de l'équation de la réaction.
+      Lors d'un titrage, le réactif <strong>titré</strong> A, dont on cherche à déterminer la concentration C<sub>A</sub>, réagit avec le réactif <strong>titrant</strong> B de concentration C<sub>B</sub> connue.
     </div>
-    <div class="formula">
-      <span class="frac"><span class="num">n₀(A)</span><span class="den">a</span></span>
-      &nbsp;=&nbsp;
-      <span class="frac"><span class="num">n₀(B)</span><span class="den">b</span></span>
-    </div>
-    <div class="recall-box">
-      <span class="box-label">📌 À retenir</span>
-      Dans le cas d'une transformation totale et pour un mélange stœchiométrique, les quantités finales des réactifs sont <strong>nulles</strong>. Seuls les <strong>produits</strong> de la réaction et éventuellement les espèces <strong>spectatrices</strong> sont présents à l'état final.
-    </div>
+    <div class="formula">a A + b B → c C + d D</div>
+  </section>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier n₀ et x : observe le réactif limitant, et repère le cas particulier du mélange stœchiométrique.</p>
-    <h3 style="font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-bottom:10px;">Réaction entre le diiode et les ions thiosulfate — une oxydo-réduction</h3>
+  <section>
+    <h2>c. Équivalence d'un titrage</h2>
+    <p class="course-text">
+      Au cours d'un titrage, le réactif <strong>titrant</strong> est versé jusqu'à ce que le réactif <strong>titré</strong> ait totalement réagi : l'<strong>équivalence</strong> est alors atteinte. Elle correspond à un mélange <strong>stœchiométrique</strong> des réactifs titré et titrant.
+    </p>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Avant l'équivalence, le réactif <strong>titrant</strong> est totalement consommé : il est le réactif limitant. Après l'équivalence, le réactif <strong>titré</strong> est totalement consommé : il devient le réactif limitant. À l'équivalence, il y a <strong>changement de réactif limitant</strong>.
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Titrages colorimétriques</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Lors d'un titrage colorimétrique, un changement de <strong>couleur</strong> du mélange réactionnel permet de repérer l'équivalence.
+    </div>
+    <p class="course-text">
+      Exemple : dosage du diiode par les ions thiosulfate. Avant l'équivalence, la solution est colorée par la présence du <strong>diiode</strong>. À l'équivalence, il a totalement disparu, la solution devient <strong>incolore</strong>.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Verse le titrant petit à petit et observe la couleur de l'erlenmeyer.</p>
     <div class="big-equation">
       <span class="coef">1</span> <span style="color:var(--yellow);">I₂</span>
       &nbsp;+&nbsp;
@@ -141,39 +135,42 @@
       &nbsp;+&nbsp;
       <span class="coef">1</span> <span style="color:var(--chalk);">S₄O₆²⁻</span>
     </div>
-    <div class="actions" style="justify-content:flex-start; margin-bottom:14px;">
-      <button id="atViewToggleCours">🔵 Voir les molécules</button>
-    </div>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="atSvgCours" viewBox="0 0 260 150"></svg>
+        <svg id="tsFlaskSvgCours" viewBox="0 0 190 195"></svg>
+      </div>
+      <div class="anim-wrap" style="width:260px;">
+        <svg id="tsMolSvgCours" viewBox="0 0 210 135"></svg>
       </div>
       <div class="anim-controls">
-        <label>n₀(I₂) en mmol</label>
-        <input type="range" id="atN0ACours" min="1" max="8" value="2" step="0.5">
-        <label>n₀(S₂O₃²⁻) en mmol</label>
-        <input type="range" id="atN0BCours" min="1" max="8" value="4" step="0.5">
-        <label>Avancement x (mmol)</label>
-        <input type="range" id="atXCours" min="0" max="60" value="0" step="1">
-        <div class="anim-readout" id="atReadoutCours"></div>
+        <label>Volume versé V<sub>B</sub> (mL)</label>
+        <input type="range" id="tsVBCours" min="0" max="60" value="0" step="1">
+        <div class="anim-readout" id="tsReadoutCours"></div>
       </div>
     </div>
-
     <table class="adv-table">
-      <caption style="caption-side:top; text-align:left; font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-bottom:10px; padding:0;">Tableau d'avancement de la réaction</caption>
       <thead>
-        <tr><th>État du système</th><th>Avancement</th><th>I₂</th><th>S₂O₃²⁻</th><th>I⁻</th><th>S₄O₆²⁻</th></tr>
+        <tr><th>État</th><th>Avancement</th><th>I₂</th><th>S₂O₃²⁻</th><th>I⁻</th><th>S₄O₆²⁻</th></tr>
       </thead>
-      <tbody id="atTableBodyCours"></tbody>
+      <tbody id="tsTableBodyCours"></tbody>
     </table>
   </section>
 
   <section>
-    <h2>e. Espèce en excès</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      Si une espèce est en très large excès devant les autres, alors on indique "<strong>excès</strong>" dans les cases du tableau d'avancement correspondant à cette espèce. C'est le cas de l'eau quand les réactifs sont en solutions <strong>aqueuses</strong>.
+    <h2>e. Relation à l'équivalence</h2>
+    <div class="formula">
+      <span class="frac"><span class="num">C<sub>A</sub> × V<sub>A</sub></span><span class="den">a</span></span>
+      &nbsp;=&nbsp;
+      <span class="frac"><span class="num">C<sub>B</sub> × V<sub>E</sub></span><span class="den">b</span></span>
     </div>
+    <p class="course-text">La concentration C<sub>A</sub> recherchée est donc :</p>
+    <div class="formula">
+      C<sub>A</sub> = <span class="frac"><span class="num">a</span><span class="den">b</span></span> ×
+      <span class="frac"><span class="num">C<sub>B</sub> × V<sub>E</sub></span><span class="den">V<sub>A</sub></span></span>
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Remarque : les ions <strong>spectateurs</strong> (par exemple Na⁺) n'interviennent pas dans l'équation support du titrage.
+    </p>
   </section>
 
 </div>
@@ -187,47 +184,56 @@
     <h2>Cours à trous</h2>
     <div class="course-text" id="courseText">
 
-      <h3>a. Avancement d'une réaction chimique</h3>
+      <h3>a. Les dosages</h3>
       <p>
-        L'avancement d'une réaction, noté x, est une grandeur exprimée en <input class="blank" data-answer="mole|mol" size="10"> qui permet de décrire l'évolution des quantités de matière présentes dans un système au cours d'une transformation chimique.
+        Un dosage permet de déterminer la quantité de <input class="blank" data-answer="matière|matiere" size="12"> ou la <input class="blank" data-answer="concentration" size="16"> d'une espèce chimique dissoute dans une solution.
+      </p>
+      <p>
+        Un dosage par titrage est une technique de dosage mettant en jeu une réaction chimique <input class="blank" data-answer="totale" size="12"> et <input class="blank" data-answer="rapide" size="12">.
+      </p>
+      <p>
+        Les dosages par étalonnage diffèrent des dosages par titrage car aucune <input class="blank" data-answer="réaction chimique|reaction chimique" size="20"> n'est nécessaire pour les réaliser.
       </p>
 
-      <h3>b. Tableau d'avancement</h3>
+      <h3>b. Réaction support d'un titrage</h3>
       <p>
-        Le tableau d'avancement décrit l'évolution des quantités de matière d'un système chimique de l'état <input class="blank" data-answer="initial" size="12"> à l'état <input class="blank" data-answer="final" size="12">, en fonction de l'avancement x de la réaction.
+        Lors d'un titrage, le réactif <input class="blank" data-answer="titré|titre" size="12"> A, dont on cherche à déterminer la concentration C<sub>A</sub>, réagit avec le réactif <input class="blank" data-answer="titrant" size="12"> B de concentration C<sub>B</sub> connue.
+      </p>
+      <div class="formula">a A + b B → c C + d D</div>
+
+      <h3>c. Équivalence d'un titrage</h3>
+      <p>
+        Au cours d'un titrage, le réactif <input class="blank" data-answer="titrant" size="12"> est versé jusqu'à ce que le réactif <input class="blank" data-answer="titré|titre" size="12"> ait totalement réagi : l'<input class="blank" data-answer="équivalence|equivalence" size="16"> est alors atteinte.
       </p>
       <p>
-        Le système évolue depuis l'état initial pour lequel x = <input class="blank" data-answer="0" size="4"> vers l'état final pour lequel x = x<sub>f</sub>. Les quantités des réactifs <input class="blank" data-answer="diminuent" size="14"> alors que celles des produits <input class="blank" data-answer="augmentent" size="14">. Elles n'évoluent plus lorsque l'état final est atteint.
+        L'équivalence est atteinte lorsqu'on a réalisé un mélange <input class="blank" data-answer="stœchiométrique|stoechiometrique" size="20"> des réactifs titré et titrant.
+      </p>
+      <p>
+        Avant l'équivalence, le réactif <input class="blank" data-answer="titrant" size="12"> est totalement consommé : il est le réactif limitant. Après l'équivalence, le réactif <input class="blank" data-answer="titré|titre" size="12"> est totalement consommé : il devient le réactif limitant. À l'équivalence, il y a changement de réactif limitant.
       </p>
 
-      <h3>c. Transformations totales et non totales</h3>
+      <h3>d. Titrages colorimétriques</h3>
       <p>
-        L'avancement maximal x<sub>max</sub> correspond à la plus petite valeur de l'avancement pour laquelle la quantité finale de l'un au moins des réactifs est <input class="blank" data-answer="nulle" size="10">. Ce réactif est appelé <input class="blank" data-answer="réactif limitant|reactif limitant" size="18">.
+        Lors d'un titrage colorimétrique, un changement de <input class="blank" data-answer="couleur" size="12"> du mélange réactionnel permet de repérer l'équivalence.
       </p>
       <p>
-        Si x<sub>f</sub> = x<sub>max</sub>, alors la transformation est <input class="blank" data-answer="totale" size="12">. Si x<sub>f</sub> &lt; x<sub>max</sub>, alors la transformation est <input class="blank" data-answer="non totale" size="14">.
-      </p>
-      <p>
-        L'avancement final x<sub>f</sub> permet de réaliser le <input class="blank" data-answer="bilan de matière|bilan de matiere" size="20">, c'est-à-dire de calculer les quantités de matière de toutes les espèces à l'état final.
+        Exemple : dosage du diiode par les ions thiosulfate. Avant l'équivalence, la solution est colorée par la présence du <input class="blank" data-answer="diiode" size="12">. À l'équivalence, il a totalement disparu, la solution devient <input class="blank" data-answer="incolore" size="12">.
       </p>
 
-      <h3>d. Le mélange stœchiométrique</h3>
-      <p>
-        Un mélange initial est dit <input class="blank" data-answer="stœchiométrique|stoechiometrique" size="20"> si les quantités initiales des réactifs sont dans les mêmes proportions que les nombres stœchiométriques de l'équation de la réaction.
-      </p>
+      <h3>e. Relation à l'équivalence</h3>
       <div class="formula">
-        <span class="frac"><span class="num">n₀(A)</span><span class="den">a</span></span>
+        <span class="frac"><span class="num">C<sub>A</sub> × V<sub>A</sub></span><span class="den">a</span></span>
         &nbsp;=&nbsp;
-        <span class="frac"><span class="num">n₀(B)</span><span class="den">b</span></span>
+        <span class="frac"><span class="num">C<sub>B</sub> × V<sub>E</sub></span><span class="den">b</span></span>
       </div>
       <p>
-        Dans le cas d'une transformation totale et pour un mélange stœchiométrique, les quantités finales des réactifs sont <input class="blank" data-answer="nulles" size="10">. Seuls les <input class="blank" data-answer="produits" size="12"> de la réaction et éventuellement les espèces <input class="blank" data-answer="spectatrices" size="16"> sont présents à l'état final.
+        La concentration C<sub>A</sub> recherchée est donc :
       </p>
-
-      <h3>e. Espèce en excès</h3>
-      <p>
-        Si une espèce est en très large excès devant les autres, alors on indique "<input class="blank" data-answer="excès|exces" size="10">" dans les cases du tableau d'avancement correspondant à cette espèce. C'est le cas de l'eau quand les réactifs sont en solutions <input class="blank" data-answer="aqueuses" size="14">.
-      </p>
+      <div class="formula">
+        C<sub>A</sub> = <span class="frac"><span class="num">a</span><span class="den">b</span></span> ×
+        <span class="frac"><span class="num">C<sub>B</sub> × V<sub>E</sub></span><span class="den">V<sub>A</sub></span></span>
+      </div>
+      <em class="note">Remarque : les ions <input class="blank" data-answer="spectateurs" size="14"> (par exemple Na⁺) n'interviennent pas dans l'équation support du titrage.</em>
 
     </div>
 
@@ -236,8 +242,7 @@
   </section>
 
   <section>
-    <h2>Tableau d'avancement interactif</h2>
-    <h3 style="font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-bottom:10px;">Réaction entre le diiode et les ions thiosulfate — une oxydo-réduction</h3>
+    <h2>Simulation du titrage colorimétrique</h2>
     <div class="big-equation">
       <span class="coef">1</span> <span style="color:var(--yellow);">I₂</span>
       &nbsp;+&nbsp;
@@ -247,36 +252,30 @@
       &nbsp;+&nbsp;
       <span class="coef">1</span> <span style="color:var(--chalk);">S₄O₆²⁻</span>
     </div>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier n₀ et x, observe ce qui se passe.</p>
-    <div class="actions" style="justify-content:flex-start; margin-bottom:14px;">
-      <button id="atViewToggle">🔵 Voir les molécules</button>
-    </div>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Même réaction que le tableau d'avancement du chapitre 4. Verse le titrant petit à petit et observe la couleur de l'erlenmeyer.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="atSvg" viewBox="0 0 260 150"></svg>
+        <svg id="tsFlaskSvg" viewBox="0 0 190 195"></svg>
+      </div>
+      <div class="anim-wrap" style="width:260px;">
+        <svg id="tsMolSvg" viewBox="0 0 210 135"></svg>
       </div>
       <div class="anim-controls">
-        <label>n₀(I₂) en mmol</label>
-        <input type="range" id="atN0A" min="1" max="8" value="2" step="0.5">
-        <label>n₀(S₂O₃²⁻) en mmol</label>
-        <input type="range" id="atN0B" min="1" max="8" value="4" step="0.5">
-        <label>Avancement x (mmol)</label>
-        <input type="range" id="atX" min="0" max="60" value="0" step="1">
-        <div class="anim-readout" id="atReadout"></div>
+        <label>Volume versé V<sub>B</sub> (mL)</label>
+        <input type="range" id="tsVB" min="0" max="60" value="0" step="1">
+        <div class="anim-readout" id="tsReadout"></div>
       </div>
     </div>
-
     <table class="adv-table">
-      <caption style="caption-side:top; text-align:left; font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-bottom:10px; padding:0;">Tableau d'avancement de la réaction</caption>
       <thead>
-        <tr><th>État du système</th><th>Avancement</th><th>I₂</th><th>S₂O₃²⁻</th><th>I⁻</th><th>S₄O₆²⁻</th></tr>
+        <tr><th>État</th><th>Avancement</th><th>I₂</th><th>S₂O₃²⁻</th><th>I⁻</th><th>S₄O₆²⁻</th></tr>
       </thead>
-      <tbody id="atTableBody"></tbody>
+      <tbody id="tsTableBody"></tbody>
     </table>
 
+    <div class="activity-block"><div id="actVeEstimate"></div></div>
     <div class="activity-block"><div id="actLimitingReagent"></div></div>
-    <div class="activity-block"><div id="actXMax"></div></div>
-    <div class="activity-block"><div id="actStoichio"></div></div>
+    <div class="activity-block"><div id="actEtalonnage"></div></div>
   </section>
 
 </div>
@@ -292,45 +291,33 @@
         <thead>
           <tr style="border-bottom:2px solid var(--line);">
             <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
-            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Formule / définition</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Définition / formule</th>
             <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Avancement x</td><td style="padding:10px 8px;">en mol</td><td style="padding:10px 8px; color:var(--chalk-dim);">décrit l'évolution du système</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réactifs</td><td style="padding:10px 8px;">n₀ − coefficient × x</td><td style="padding:10px 8px; color:var(--chalk-dim);">diminuent</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Produits</td><td style="padding:10px 8px;">coefficient × x</td><td style="padding:10px 8px; color:var(--chalk-dim);">augmentent</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Avancement maximal x<sub>max</sub></td><td style="padding:10px 8px;">plus petite valeur qui annule un réactif</td><td style="padding:10px 8px; color:var(--chalk-dim);">ce réactif est le réactif limitant</td></tr>
-          <tr><td style="padding:10px 8px;">Mélange stœchiométrique</td><td style="padding:10px 8px;">n₀(A)/a = n₀(B)/b</td><td style="padding:10px 8px; color:var(--chalk-dim);">réactifs épuisés ensemble (si transformation totale)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Dosage</td><td style="padding:10px 8px;">détermine n ou C d'une espèce</td><td style="padding:10px 8px; color:var(--chalk-dim);">par titrage (réaction) ou étalonnage (sans réaction)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réactif titré / titrant</td><td style="padding:10px 8px;">A (C<sub>A</sub> cherché) + B (C<sub>B</sub> connu)</td><td style="padding:10px 8px; color:var(--chalk-dim);">aA + bB → cC + dD</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Équivalence</td><td style="padding:10px 8px;">mélange stœchiométrique</td><td style="padding:10px 8px; color:var(--chalk-dim);">changement de réactif limitant</td></tr>
+          <tr><td style="padding:10px 8px;">Relation à l'équivalence</td><td style="padding:10px 8px;">C<sub>A</sub>V<sub>A</sub>/a = C<sub>B</sub>V<sub>E</sub>/b</td><td style="padding:10px 8px; color:var(--chalk-dim);">permet de calculer C<sub>A</sub></td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="method-box" style="margin-top:20px;">
-      <span class="box-label">🔧 Le squelette du tableau d'avancement</span>
-      <table style="width:100%; border-collapse:collapse; font-size:0.85rem; margin-top:10px;">
-        <thead>
-          <tr style="border-bottom:1px solid var(--line);">
-            <th style="text-align:left; padding:6px 8px; color:var(--chalk-dim);">État</th>
-            <th style="text-align:left; padding:6px 8px; color:var(--chalk-dim);">Avancement</th>
-            <th style="text-align:left; padding:6px 8px; color:var(--chalk-dim);">a A</th>
-            <th style="text-align:left; padding:6px 8px; color:var(--chalk-dim);">+ b B</th>
-            <th style="text-align:left; padding:6px 8px; color:var(--chalk-dim);">→ c C</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td style="padding:6px 8px;">Initial</td><td style="padding:6px 8px;">x = 0</td><td style="padding:6px 8px;">n₀(A)</td><td style="padding:6px 8px;">n₀(B)</td><td style="padding:6px 8px;">0</td></tr>
-          <tr><td style="padding:6px 8px;">Intermédiaire</td><td style="padding:6px 8px;">x</td><td style="padding:6px 8px;">n₀(A) − ax</td><td style="padding:6px 8px;">n₀(B) − bx</td><td style="padding:6px 8px;">cx</td></tr>
-          <tr><td style="padding:6px 8px;">Final</td><td style="padding:6px 8px;">x<sub>max</sub></td><td style="padding:6px 8px;">n₀(A) − a·x<sub>max</sub></td><td style="padding:6px 8px;">n₀(B) − b·x<sub>max</sub></td><td style="padding:6px 8px;">c·x<sub>max</sub></td></tr>
-        </tbody>
-      </table>
+      <span class="box-label">🔧 Avant / à / après l'équivalence</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li><strong>Avant</strong> : le titrant est le réactif limitant (totalement consommé dès qu'il est versé)</li>
+        <li><strong>À l'équivalence</strong> : mélange stœchiométrique, changement de réactif limitant</li>
+        <li><strong>Après</strong> : le titré est le réactif limitant (déjà totalement consommé, le titrant s'accumule en excès)</li>
+      </ul>
     </div>
   </section>
 </div>
 
 </main>
 
-<footer>Chapitre 5 — Tableau d'avancement (1ère spé PC).</footer>
+<footer>Chapitre 5 — Titrages colorimétriques (1ère spé PC).</footer>
 
 <script>
 /* ---------- Correction du texte à trous (mode entraînement) ---------- */
@@ -362,35 +349,35 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 });
 
 /* ---------- Animation — instance "Cours" (exploration libre) ---------- */
-initAdvancementTable({ svgId: "atSvgCours", n0AId: "atN0ACours", n0BId: "atN0BCours", xId: "atXCours", readoutId: "atReadoutCours", viewToggleId: "atViewToggleCours", tableBodyId: "atTableBodyCours" });
+initTitrationSim({ svgFlaskId: "tsFlaskSvgCours", svgMolId: "tsMolSvgCours", vbRangeId: "tsVBCours", readoutId: "tsReadoutCours", tableBodyId: "tsTableBodyCours" });
 
 /* ---------- Animation — instance "Entraînement" (avec activités) ---------- */
-initAdvancementTable({ svgId: "atSvg", n0AId: "atN0A", n0BId: "atN0B", xId: "atX", readoutId: "atReadout", viewToggleId: "atViewToggle", tableBodyId: "atTableBody" });
+initTitrationSim({ svgFlaskId: "tsFlaskSvg", svgMolId: "tsMolSvg", vbRangeId: "tsVB", readoutId: "tsReadout", tableBodyId: "tsTableBody" });
 
 /* ---------- Activités liées à l'animation ---------- */
-initQCM({
-  containerId: "actLimitingReagent", chapterId: "ch5-1ere", activityId: "qcm-limiting-reagent",
-  prompt: "Règle n₀(I₂) = 3 mmol et n₀(S₂O₃²⁻) = 4 mmol sur l'animation. Quel est le réactif limitant ?",
-  options: [
-    { text: "I₂", correct: false },
-    { text: "S₂O₃²⁻", correct: true },
-    { text: "Impossible à dire", correct: false }
-  ],
-  explanation: "x_max(I₂) = 3/1 = 3 et x_max(S₂O₃²⁻) = 4/2 = 2. Le plus petit x_max correspond au réactif limitant : S₂O₃²⁻."
+initEstimation({
+  containerId: "actVeEstimate", chapterId: "ch5-1ere", activityId: "est-ve",
+  prompt: "D'après l'animation (N₀(I₂) = 1,0 mmol, C_B = 0,050 mmol/mL, coefficients 1 I₂ + 2 S₂O₃²⁻), à quel volume V_E versé environ la solution devient-elle incolore ?",
+  answer: 40, tolerance: 2, unit: "mL",
+  explanation: "À l'équivalence, n(S₂O₃²⁻) versé = 2 × n(I₂) initial, donc C_B × V_E = 2 × 1,0 → V_E = 2/0,050 = 40 mL."
 });
 
-initEstimation({
-  containerId: "actXMax", chapterId: "ch5-1ere", activityId: "est-xmax",
-  prompt: "Avec les valeurs par défaut n₀(I₂) = 2 mmol et n₀(S₂O₃²⁻) = 4 mmol, quel est l'avancement maximal x_max (en mmol) ?",
-  answer: 2, tolerance: 0.1, unit: "mmol",
-  explanation: "x_max(I₂) = 2/1 = 2 et x_max(S₂O₃²⁻) = 4/2 = 2 : les deux sont égaux, donc x_max = 2 mmol (mélange stœchiométrique)."
+initQCM({
+  containerId: "actLimitingReagent", chapterId: "ch5-1ere", activityId: "qcm-limiting-reagent-titration",
+  prompt: "Juste avant l'équivalence, quel est le réactif limitant ?",
+  options: [
+    { text: "Le réactif titrant (S₂O₃²⁻)", correct: true },
+    { text: "Le réactif titré (I₂)", correct: false },
+    { text: "Aucun, les deux sont en excès", correct: false }
+  ],
+  explanation: "Avant l'équivalence, le titrant versé est immédiatement consommé (il reste encore du diiode en excès) : c'est donc lui le réactif limitant à chaque instant."
 });
 
 initVraiFaux({
-  containerId: "actStoichio", chapterId: "ch5-1ere", activityId: "vf-stoichio",
-  prompt: "Dans un mélange stœchiométrique, si la transformation est totale, il reste des réactifs à l'état final.",
+  containerId: "actEtalonnage", chapterId: "ch5-1ere", activityId: "vf-etalonnage",
+  prompt: "Comme le titrage colorimétrique, un dosage par étalonnage nécessite une réaction chimique.",
   correct: false,
-  explanation: "Faux : dans un mélange stœchiométrique avec transformation totale, les deux réactifs sont entièrement consommés — leurs quantités finales sont nulles."
+  explanation: "Faux : un dosage par étalonnage (par exemple par mesure d'absorbance) ne nécessite aucune réaction chimique, contrairement à un titrage."
 });
 
 /* ---------- Onglets + barre de progression ---------- */

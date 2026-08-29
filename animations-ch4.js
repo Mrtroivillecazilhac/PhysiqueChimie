@@ -1,179 +1,132 @@
-/* Animations du chapitre 4 — 1ère spé PC */
+/* Animations du chapitre 5 — 1ère spé PC */
 
-/* ---------- 12. Vague animée (propagation transverse) ---------- */
-function initWaveAnimation(cfg) {
+/* ---------- 15. Tableau d'avancement interactif (barres animées) ---------- */
+function initAdvancementTable(cfg) {
   const svg = document.getElementById(cfg.svgId);
-  const tRange = document.getElementById(cfg.tRangeId);
-  const lambdaRange = document.getElementById(cfg.lambdaRangeId);
+  const n0AR = document.getElementById(cfg.n0AId);
+  const n0BR = document.getElementById(cfg.n0BId);
+  const xR = document.getElementById(cfg.xId);
   const readout = document.getElementById(cfg.readoutId);
+  const viewBtn = document.getElementById(cfg.viewToggleId);
+  const tableBody = document.getElementById(cfg.tableBodyId);
 
-  const W = 260, baseline = 60, amplitude = 28;
-  let lastTime = performance.now();
-  let phase = 0; // accumulée progressivement, jamais recalculée d'un bloc
+  const COEF = { I2: 1, S2O3: 2, I: 2, S4O6: 1 };
+  const SPECIES = [
+    { key: "I2", label: "I₂", color: "var(--yellow)" },
+    { key: "S2O3", label: "S₂O₃²⁻", color: "var(--teal)" },
+    { key: "I", label: "I⁻", color: "var(--coral)" },
+    { key: "S4O6", label: "S₄O₆²⁻", color: "var(--chalk)" }
+  ];
 
-  function frame(now) {
-    const dt = (now - lastTime) / 1000;
-    lastTime = now;
-    const T = Number(tRange.value) / 10;      // secondes
-    const lambda = Number(lambdaRange.value);  // "unités" arbitraires
-    const omega = (2 * Math.PI) / T;
-    phase += omega * dt; // pas de saut : on avance depuis la phase actuelle
-    const k = (2 * Math.PI) / lambda;
+  const W = 260, H = 150, baseline = 130, barW = 42, gap = 20;
+  const SCALE = 20; // px par mmol
+  let mode = "bars"; // ou "molecules"
 
-    let path = "";
-    for (let x = 0; x <= W; x += 4) {
-      const y = baseline - amplitude * Math.sin(k * x - phase);
-      path += (x === 0 ? "M" : "L") + x + " " + y + " ";
-    }
-    const markX = 130;
-    const markY = baseline - amplitude * Math.sin(k * markX - phase);
+  // positions fixes pour la vue molécules (grille 4×5, jusqu'à 20 points par zone)
+  const DOT_GRID = [];
+  for (let row = 0; row < 4; row++) for (let col = 0; col < 5; col++) DOT_GRID.push([col, row]);
 
-    svg.innerHTML = `
-      <line x1="0" y1="${baseline}" x2="${W}" y2="${baseline}" stroke="var(--line)" stroke-width="1"/>
-      <path d="${path}" fill="none" stroke="var(--teal)" stroke-width="2.5"/>
-      <line x1="${markX}" y1="${baseline - amplitude - 12}" x2="${markX}" y2="${baseline + amplitude + 12}" stroke="var(--line)" stroke-width="1" stroke-dasharray="2,2"/>
-      <circle cx="${markX}" cy="${markY}" r="6" fill="var(--yellow)"/>`;
-
-    readout.innerHTML = `T = ${T.toFixed(1)} s · λ = ${lambda} → v = λ/T ≈ <strong style="color:var(--yellow)">${(lambda / T).toFixed(1)}</strong> · le point jaune oscille, il n'avance pas`;
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-}
-
-/* ---------- 13. Retard entre deux points (A → B) — bosse sur une corde ---------- */
-function initWaveDelay(cfg) {
-  const svg = document.getElementById(cfg.svgId);
-  const distRange = document.getElementById(cfg.distRangeId);
-  const veloRange = document.getElementById(cfg.veloRangeId);
-  const playBtn = document.getElementById(cfg.playBtnId);
-  const readout = document.getElementById(cfg.readoutId);
-
-  const startX = 10, baseline = 55, amplitude = 22, bumpWidth = 24, lead = 30;
-  let animId = null;
-
-  function ropeY(x, pulseX) {
-    const dx = x - pulseX;
-    if (Math.abs(dx) > bumpWidth) return baseline;
-    return baseline - amplitude * 0.5 * (1 + Math.cos((Math.PI * dx) / bumpWidth));
+  function computeQuantities() {
+    const n0I2 = Number(n0AR.value), n0S2O3 = Number(n0BR.value);
+    const xMaxI2 = n0I2 / COEF.I2, xMaxS2O3 = n0S2O3 / COEF.S2O3;
+    const xMax = Math.min(xMaxI2, xMaxS2O3);
+    const x = Math.min(Number(xR.value) / 10, xMax);
+    return {
+      n0I2, n0S2O3, xMax, x,
+      quantities: {
+        I2: Math.max(0, n0I2 - COEF.I2 * x),
+        S2O3: Math.max(0, n0S2O3 - COEF.S2O3 * x),
+        I: COEF.I * x,
+        S4O6: COEF.S4O6 * x
+      }
+    };
   }
 
-  function drawFrame(pulseX, aReached, bReached) {
-    const D = Number(distRange.value);
-    const Ax = startX + lead, Bx = Ax + D;
-    const W = Bx + lead + 20;
-
-    let path = "";
-    for (let x = 0; x <= W; x += 4) {
-      const y = ropeY(x, pulseX);
-      path += (x === 0 ? "M" : "L") + x + " " + y + " ";
-    }
-
-    const Ay = ropeY(Ax, pulseX), By = ropeY(Bx, pulseX);
-    let svgContent = `<path d="${path}" fill="none" stroke="var(--yellow)" stroke-width="2.5"/>`;
-    svgContent += `<line x1="${startX}" y1="${baseline}" x2="${W}" y2="${baseline}" stroke="var(--line)" stroke-width="1" stroke-dasharray="2,3"/>`;
-    svgContent += `<circle cx="${Ax}" cy="${Ay}" r="6" fill="${aReached ? 'var(--teal)' : 'var(--chalk-dim)'}"/><text x="${Ax}" y="${baseline + amplitude + 16}" font-size="10" fill="var(--chalk-dim)" text-anchor="middle">A</text>`;
-    svgContent += `<circle cx="${Bx}" cy="${By}" r="6" fill="${bReached ? 'var(--coral)' : 'var(--chalk-dim)'}"/><text x="${Bx}" y="${baseline + amplitude + 16}" font-size="10" fill="var(--chalk-dim)" text-anchor="middle">B</text>`;
-    svg.setAttribute("viewBox", `0 0 ${W} ${baseline + amplitude + 30}`);
+  function drawBars(quantities) {
+    let svgContent = `<line x1="10" y1="${baseline}" x2="${W - 10}" y2="${baseline}" stroke="var(--line)" stroke-width="1.5"/>`;
+    SPECIES.forEach((sp, i) => {
+      const bx = 25 + i * (barW + gap);
+      const h = Math.min(baseline - 10, quantities[sp.key] * SCALE);
+      svgContent += `<rect x="${bx}" y="${baseline - h}" width="${barW}" height="${h}" fill="${sp.color}" opacity="0.85" rx="3"/>`;
+      svgContent += `<text x="${bx + barW / 2}" y="${baseline + 14}" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">${sp.label}</text>`;
+      svgContent += `<text x="${bx + barW / 2}" y="${baseline - h - 5}" font-size="8.5" fill="${sp.color}" text-anchor="middle">${quantities[sp.key].toFixed(2)}</text>`;
+    });
     svg.innerHTML = svgContent;
   }
 
-  function play() {
-    const D = Number(distRange.value);
-    const v = Number(veloRange.value);
-    const dt = D / v;
-    const Ax = startX + lead, Bx = Ax + D;
-    const pulseStart = Ax - lead, pulseEnd = Bx + lead;
-    const totalDist = pulseEnd - pulseStart;
-    const totalDur = totalDist / v;
-    const start = performance.now();
-    cancelAnimationFrame(animId);
-    let aFlashed = false, bFlashed = false;
+  function drawMolecules(quantities) {
+    const zoneW = 58, zoneH = 96, zoneY = 12, gapM = 6, r = 3.4;
+    let svgContent = "";
+    SPECIES.forEach((sp, i) => {
+      const zx = 8 + i * (zoneW + gapM);
+      svgContent += `<rect x="${zx}" y="${zoneY}" width="${zoneW}" height="${zoneH}" fill="rgba(255,255,255,0.03)" stroke="${sp.color}" stroke-width="1.3" stroke-dasharray="3,2" rx="6"/>`;
 
-    function frame(now) {
-      const elapsed = (now - start) / 1000;
-      const progress = Math.min(1, elapsed / totalDur);
-      const pulseX = pulseStart + progress * totalDist;
-      if (pulseX >= Ax) aFlashed = true;
-      if (pulseX >= Bx) bFlashed = true;
-      drawFrame(pulseX, aFlashed, bFlashed);
-      if (progress < 1) {
-        animId = requestAnimationFrame(frame);
-      } else {
-        readout.innerHTML = `d = ${D}, v = ${v} → retard <strong style="color:var(--coral)">Δt = d / v = ${dt.toFixed(2)} s</strong> entre le passage en A et en B`;
+      const exact = Math.min(20, quantities[sp.key] * 4); // 4 points par mmol (exact, pas arrondi)
+      const fullDots = Math.floor(exact);
+      const remainder = exact - fullDots; // partie fractionnaire → demi-boule si assez grande
+
+      for (let d = 0; d < fullDots; d++) {
+        const [col, row] = DOT_GRID[d];
+        const dx = zx + 9 + col * 10, dy = zoneY + 12 + row * 20;
+        svgContent += `<circle cx="${dx}" cy="${dy}" r="${r}" fill="${sp.color}"/>`;
       }
-    }
-    readout.textContent = "La déformation parcourt la corde de A vers B…";
-    animId = requestAnimationFrame(frame);
+      if (remainder >= 0.15 && fullDots < 20) {
+        const [col, row] = DOT_GRID[fullDots];
+        const dx = zx + 9 + col * 10, dy = zoneY + 12 + row * 20;
+        // demi-boule : cercle plein en fond léger + moitié gauche pleine
+        svgContent += `<circle cx="${dx}" cy="${dy}" r="${r}" fill="${sp.color}" opacity="0.2"/>`;
+        svgContent += `<path d="M${dx} ${dy - r} A${r} ${r} 0 0 0 ${dx} ${dy + r} Z" fill="${sp.color}"/>`;
+      }
+
+      svgContent += `<text x="${zx + zoneW / 2}" y="${zoneY + zoneH + 14}" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">${sp.label}</text>`;
+      svgContent += `<text x="${zx + zoneW / 2}" y="${zoneY + zoneH + 26}" font-size="8.5" fill="${sp.color}" text-anchor="middle">${quantities[sp.key].toFixed(2)} mmol</text>`;
+    });
+    svg.innerHTML = svgContent;
   }
 
-  distRange.addEventListener("input", () => drawFrame(-999, false, false));
-  veloRange.addEventListener("input", () => drawFrame(-999, false, false));
-  playBtn.addEventListener("click", play);
-  drawFrame(-999, false, false);
-}
+  function fmt(n) { return n.toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }); }
 
-/* ---------- 14. Double périodicité (temporelle vs spatiale) ---------- */
-function initDoublePeriodicity(cfg) {
-  const svgTime = document.getElementById(cfg.svgTimeId);
-  const svgSpace = document.getElementById(cfg.svgSpaceId);
-  const readout = document.getElementById(cfg.readoutId);
-  const syncBtn = document.getElementById(cfg.syncBtnId);
+  function drawTable(n0I2, n0S2O3, x, xMax) {
+    const isInitial = x <= 0.001;
+    const isFinal = x >= xMax - 0.001;
+    const isInter = !isInitial && !isFinal;
 
-  // Plus de curseurs propres à cette animation : les valeurs viennent
-  // uniquement de "Figer les réglages" (lu depuis la vague animée).
-  let currentT = Number(document.getElementById(cfg.sourceTId).value) / 10;
-  let currentLambda = Number(document.getElementById(cfg.sourceLambdaId).value);
-
-  const W = 240, baseline = 55, amplitude = 26;
-  const PX_PER_SEC = 60;   // échelle FIXE : le graphe s'étire/se compresse vraiment avec T
-  const PX_PER_UNIT = 1.2; // échelle FIXE pour λ (même plage que l'anim 1 : 40 à 200)
-
-  function sineSvg(period, pxPerUnit, axisLabel, periodLabel, color) {
-    let path = "";
-    for (let x = 0; x <= W; x += 3) {
-      const y = baseline - amplitude * Math.sin((2 * Math.PI / (period * pxPerUnit)) * x);
-      path += (x === 0 ? "M" : "L") + x + " " + y + " ";
-    }
-    const periodPxFull = period * pxPerUnit;
-    // repère placé entre deux crêtes (sommets), toujours visible même si
-    // la période totale dépasse la largeur du cadre
-    const bracketPx = Math.min(periodPxFull, W * 0.65);
-    const x1 = bracketPx / 4;       // 1ère crête (sin = 1)
-    const x2 = x1 + bracketPx;      // crête suivante, une période plus loin
-    const peakY = baseline - amplitude;
-    const arrowY = peakY - 16;
-
-    const markerId = "periodArrow-" + color.replace(/[^a-z]/gi, "");
-    let s = `<defs>
-      <marker id="${markerId}" markerWidth="6" markerHeight="6" refX="3" refY="3" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="${color}"/></marker>
-    </defs>`;
-    s += `<line x1="0" y1="${baseline}" x2="${W}" y2="${baseline}" stroke="var(--line)" stroke-width="1"/>`;
-    s += `<path d="${path}" fill="none" stroke="${color}" stroke-width="2.2"/>`;
-    // pointillés reliant les deux crêtes à la flèche du haut
-    s += `<line x1="${x1}" y1="${peakY}" x2="${x1}" y2="${arrowY}" stroke="${color}" stroke-width="1" stroke-dasharray="2,2" opacity="0.7"/>`;
-    s += `<line x1="${x2}" y1="${peakY}" x2="${x2}" y2="${arrowY}" stroke="${color}" stroke-width="1" stroke-dasharray="2,2" opacity="0.7"/>`;
-    // double flèche horizontale entre les deux pointillés
-    s += `<line x1="${x1 + 2}" y1="${arrowY}" x2="${x2 - 2}" y2="${arrowY}" stroke="${color}" stroke-width="1.5" marker-start="url(#${markerId})" marker-end="url(#${markerId})"/>`;
-    s += `<text x="${(x1 + x2) / 2}" y="${arrowY - 6}" font-size="9" fill="${color}" text-anchor="middle" font-weight="700">${periodLabel}</text>`;
-    s += `<text x="${W / 2}" y="${baseline + amplitude + 24}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">${axisLabel}</text>`;
-    return s;
+    tableBody.innerHTML = `
+      <tr class="${isInitial ? 'row-active' : ''}">
+        <td>État initial</td><td>x = 0</td>
+        <td>${fmt(n0I2)}</td><td>${fmt(n0S2O3)}</td><td>0,0</td><td>0,0</td>
+      </tr>
+      <tr class="${isInter ? 'row-active' : ''}">
+        <td>État intermédiaire</td><td>0 &lt; x &lt; x<sub>max</sub></td>
+        <td>${fmt(n0I2)} − x</td><td>${fmt(n0S2O3)} − 2x</td><td>2x</td><td>x</td>
+      </tr>
+      <tr class="${isFinal ? 'row-active' : ''}">
+        <td>État final</td><td>x = x<sub>max</sub> = ${fmt(xMax)}</td>
+        <td>${fmt(n0I2 - xMax)}</td><td>${fmt(n0S2O3 - 2 * xMax)}</td><td>${fmt(2 * xMax)}</td><td>${fmt(xMax)}</td>
+      </tr>
+    `;
   }
 
   function draw() {
-    const T = currentT;
-    const lambda = currentLambda;
-    svgTime.innerHTML = sineSvg(T, PX_PER_SEC, "Temps (s)", `T = ${T.toFixed(1)} s`, "var(--coral)");
-    svgSpace.innerHTML = sineSvg(lambda, PX_PER_UNIT, "Distance (m)", `λ = ${lambda} m`, "var(--teal)");
-    readout.innerHTML = `📸 Ceci est un <strong style="color:var(--yellow);">instantané figé</strong> de l'onde animée ci-dessus. Les deux graphes décrivent <strong style="color:var(--yellow)">la même onde</strong>. À gauche : on reste au même endroit et on regarde l'élongation évoluer dans le <strong style="color:var(--coral)">temps</strong> (période T). À droite : on prend une "photo" à un instant donné et on regarde comment l'élongation varie dans l'<strong style="color:var(--teal)">espace</strong> (période λ).`;
+    const { n0I2, n0S2O3, xMax, x, quantities } = computeQuantities();
+    if (mode === "bars") drawBars(quantities); else drawMolecules(quantities);
+    drawTable(n0I2, n0S2O3, x, xMax);
+
+    const ratioI2 = n0I2 / COEF.I2, ratioS2O3 = n0S2O3 / COEF.S2O3;
+    const isStoich = Math.abs(ratioI2 - ratioS2O3) < 0.05;
+    const limitingText = isStoich
+      ? `<strong style="color:var(--yellow)">mélange stœchiométrique !</strong> (les deux réactifs s'épuisent en même temps)`
+      : `réactif limitant : <strong style="color:var(--coral)">${ratioI2 <= ratioS2O3 ? "I₂" : "S₂O₃²⁻"}</strong>`;
+    readout.innerHTML = `x = ${x.toFixed(2)} mmol (x<sub>max</sub> = ${xMax.toFixed(2)} mmol, ${limitingText})`;
   }
 
-  syncBtn.addEventListener("click", () => {
-    const sourceT = document.getElementById(cfg.sourceTId);
-    const sourceLambda = document.getElementById(cfg.sourceLambdaId);
-    currentT = Number(sourceT.value) / 10;
-    currentLambda = Number(sourceLambda.value);
+  viewBtn.addEventListener("click", () => {
+    mode = mode === "bars" ? "molecules" : "bars";
+    viewBtn.textContent = mode === "bars" ? "🔵 Voir les molécules" : "📊 Voir les barres";
     draw();
   });
-
+  n0AR.addEventListener("input", draw);
+  n0BR.addEventListener("input", draw);
+  xR.addEventListener("input", draw);
   draw();
 }

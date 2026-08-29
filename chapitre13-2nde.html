@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 13 — Transformation physique — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch13-2nde.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 13 — Transformation physique</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch13-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch13-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Connaître le nom des 6 changements d'état et savoir écrire leur équation</li>
+        <li>Savoir si un changement d'état est endothermique ou exothermique</li>
+        <li>Savoir calculer une énergie de changement d'état Q = m × L</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1a. Transformation physique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>transformation physique</strong> a lieu quand une espèce passe d'un état physique (solide, liquide ou gaz) à un autre.
+    </div>
+    <p class="course-text">
+      Des noms sont attribués aux changements d'état : fusion/solidification (solide ↔ liquide), vaporisation/liquéfaction (liquide ↔ gaz), sublimation/condensation (solide ↔ gaz).
+    </p>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention à ne pas confondre fusion et dissolution</span>
+      Lorsque du sucre est introduit dans de l'eau, il est inexact de dire que « le sucre fond ». Le sucre ne passe pas d'un état solide à un état liquide : il se dissout dans l'eau.
+    </div>
+    <p class="course-text">
+      Lors d'une transformation physique, l'espèce chimique ne change pas ; seules les interactions entre les molécules sont modifiées. Les changements d'état d'un corps pur s'effectuent à <strong>température constante</strong> sous une pression donnée. Les deux états coexistent lors du changement d'état.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 6 changements d'état.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="scFusionCours">Fusion</button>
+      <button class="toggle-btn" id="scSolidCours">Solidification</button>
+      <button class="toggle-btn" id="scVapoCours">Vaporisation</button>
+      <button class="toggle-btn" id="scLiquefCours">Liquéfaction</button>
+      <button class="toggle-btn" id="scSublimCours">Sublimation</button>
+      <button class="toggle-btn" id="scCondCours">Condensation</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="scSvgCours" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="scReadoutCours"></div>
+      </div>
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem; margin-top:20px;">👉 Bascule entre fusion et vaporisation : observe le palier de température.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="tpFusionCours">Fusion</button>
+      <button class="toggle-btn" id="tpVapoCours">Vaporisation</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="tpSvgCours" viewBox="0 0 260 155"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="tpReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>1b. Équation d'un changement d'état</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'<strong>équation d'un changement d'état</strong> est l'écriture symbolique, à l'échelle macroscopique, de la transformation physique d'une espèce.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : la fusion de l'eau peut être modélisée par l'équation H₂O(s) → H₂O(ℓ).
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre plusieurs équations de changement d'état.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="seFusionCours">Fusion de l'eau</button>
+      <button class="toggle-btn" id="seVapoCours">Vaporisation de l'eau</button>
+      <button class="toggle-btn" id="seSublimCours">Sublimation du CO₂</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="seSvgCours" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="seReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2a. Énergie massique de changement d'état</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Lors d'une <strong>fusion</strong>, d'une <strong>vaporisation</strong> ou d'une <strong>sublimation</strong>, l'énergie de l'espèce augmente : la transformation est <strong>endothermique</strong> (Q &gt; 0), le milieu extérieur se refroidit. Lors d'une <strong>solidification</strong>, d'une <strong>liquéfaction</strong> ou d'une <strong>condensation</strong>, l'énergie de l'espèce diminue : la transformation est <strong>exothermique</strong> (Q &lt; 0), le milieu extérieur se réchauffe.
+    </div>
+    <div class="formula">Q = m × L</div>
+    <p class="course-text">
+      L'énergie transférée lors du changement d'état d'un kilogramme d'une espèce est l'<strong>énergie massique de changement d'état</strong>, notée L (aussi appelée chaleur latente), en J·kg⁻¹.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la masse : observe l'énergie Q se calculer.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="eeFusionCours">Fusion (L = 334 kJ/kg)</button>
+      <button class="toggle-btn" id="eeVapoCours">Vaporisation (L = 2257 kJ/kg)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="eeSvgCours" viewBox="0 0 200 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse m (kg)</label>
+        <input type="range" id="eeMCours" min="0.5" max="5" value="2" step="0.5">
+        <div class="anim-readout" id="eeReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2b. Détermination expérimentale (méthode des mélanges)</h2>
+    <p class="course-text">
+      La détermination des énergies massiques de changement d'état peut s'effectuer dans un <strong>calorimètre</strong>, en utilisant la méthode des mélanges. Un calorimètre est thermiquement isolé.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Dans la <strong>méthode des mélanges</strong>, la somme des énergies transférées entre les différentes parties d'un système isolé est nulle : Q<sub>1</sub> + Q<sub>2</sub> + ... = 0.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle Q₁ à Q₄ : observe Q₅ se calculer pour que la somme soit nulle.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="mmSvgCours" viewBox="0 0 220 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Q₁ (J)</label>
+        <input type="range" id="mmQ1Cours" min="-500" max="500" value="100" step="10">
+        <label>Q₂ (J)</label>
+        <input type="range" id="mmQ2Cours" min="-500" max="500" value="-300" step="10">
+        <label>Q₃ (J)</label>
+        <input type="range" id="mmQ3Cours" min="-500" max="500" value="50" step="10">
+        <label>Q₄ (J)</label>
+        <input type="range" id="mmQ4Cours" min="-500" max="500" value="80" step="10">
+        <div class="anim-readout" id="mmReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>1a. Transformation physique</h3>
+      <p>
+        Une transformation physique a lieu quand une espèce passe d'un <input class="blank" data-answer="état physique|etat physique" size="18"> à un autre.
+      </p>
+      <p>
+        Les changements d'état d'un corps pur s'effectuent à <input class="blank" data-answer="température constante|temperature constante" size="22"> sous une pression donnée.
+      </p>
+      <p>
+        Lorsque du sucre est introduit dans de l'eau, il se <input class="blank" data-answer="dissout" size="14"> — il ne fond pas.
+      </p>
+
+      <h3>1b. Équation d'un changement d'état</h3>
+      <p>
+        L'équation d'un changement d'état est l'écriture <input class="blank" data-answer="symbolique" size="16"> de la transformation physique d'une espèce.
+      </p>
+
+      <h3>2a. Énergie massique de changement d'état</h3>
+      <p>
+        Lors d'une fusion, l'énergie de l'espèce <input class="blank" data-answer="augmente" size="14"> : la transformation est <input class="blank" data-answer="endothermique" size="18">.
+      </p>
+      <p>
+        Lors d'une solidification, l'énergie de l'espèce <input class="blank" data-answer="diminue" size="14"> : la transformation est <input class="blank" data-answer="exothermique" size="18">.
+      </p>
+      <div class="formula">Q = m × L</div>
+      <p>
+        L'énergie massique de changement d'état est aussi appelée <input class="blank" data-answer="chaleur latente" size="18">.
+      </p>
+
+      <h3>2b. Détermination expérimentale</h3>
+      <p>
+        Dans la méthode des mélanges, la somme des énergies transférées entre les différentes parties d'un système isolé est <input class="blank" data-answer="nulle" size="12">.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Les 6 changements d'état</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 6 changements d'état.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="scFusion">Fusion</button>
+      <button class="toggle-btn" id="scSolid">Solidification</button>
+      <button class="toggle-btn" id="scVapo">Vaporisation</button>
+      <button class="toggle-btn" id="scLiquef">Liquéfaction</button>
+      <button class="toggle-btn" id="scSublim">Sublimation</button>
+      <button class="toggle-btn" id="scCond">Condensation</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="scSvg" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="scReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actStateChanges"></div></div>
+  </section>
+
+  <section>
+    <h2>Palier de température</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre fusion et vaporisation : observe le palier de température.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="tpFusion">Fusion</button>
+      <button class="toggle-btn" id="tpVapo">Vaporisation</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="tpSvg" viewBox="0 0 260 155"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="tpReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actTemperaturePlateau"></div></div>
+  </section>
+
+  <section>
+    <h2>Équation d'un changement d'état</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre plusieurs équations de changement d'état.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="seFusion">Fusion de l'eau</button>
+      <button class="toggle-btn" id="seVapo">Vaporisation de l'eau</button>
+      <button class="toggle-btn" id="seSublim">Sublimation du CO₂</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="seSvg" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="seReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actStateEquation"></div></div>
+  </section>
+
+  <section>
+    <h2>Calculateur d'énergie Q = m × L</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la masse : observe l'énergie Q se calculer.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="eeFusion">Fusion (L = 334 kJ/kg)</button>
+      <button class="toggle-btn" id="eeVapo">Vaporisation (L = 2257 kJ/kg)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="eeSvg" viewBox="0 0 200 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse m (kg)</label>
+        <input type="range" id="eeM" min="0.5" max="5" value="2" step="0.5">
+        <div class="anim-readout" id="eeReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actStateEnergy"></div></div>
+  </section>
+
+  <section>
+    <h2>Méthode des mélanges</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle Q₁ à Q₄ : observe Q₅ se calculer pour que la somme soit nulle.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="mmSvg" viewBox="0 0 220 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Q₁ (J)</label>
+        <input type="range" id="mmQ1" min="-500" max="500" value="100" step="10">
+        <label>Q₂ (J)</label>
+        <input type="range" id="mmQ2" min="-500" max="500" value="-300" step="10">
+        <label>Q₃ (J)</label>
+        <input type="range" id="mmQ3" min="-500" max="500" value="50" step="10">
+        <label>Q₄ (J)</label>
+        <input type="range" id="mmQ4" min="-500" max="500" value="80" step="10">
+        <div class="anim-readout" id="mmReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMixtureMethod"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Changement d'état</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Transition</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">Nature (signe de Q)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Fusion</td><td style="padding:10px 8px;">S → L</td><td style="padding:10px 8px; color:var(--teal);">endothermique (Q &gt; 0)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Solidification</td><td style="padding:10px 8px;">L → S</td><td style="padding:10px 8px; color:var(--coral);">exothermique (Q &lt; 0)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Vaporisation</td><td style="padding:10px 8px;">L → G</td><td style="padding:10px 8px; color:var(--teal);">endothermique (Q &gt; 0)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Liquéfaction</td><td style="padding:10px 8px;">G → L</td><td style="padding:10px 8px; color:var(--coral);">exothermique (Q &lt; 0)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Sublimation</td><td style="padding:10px 8px;">S → G</td><td style="padding:10px 8px; color:var(--teal);">endothermique (Q &gt; 0)</td></tr>
+          <tr><td style="padding:10px 8px;">Condensation</td><td style="padding:10px 8px;">G → S</td><td style="padding:10px 8px; color:var(--coral);">exothermique (Q &lt; 0)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Formules essentielles</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li><strong>Énergie de changement d'état</strong> : Q = m × L (m en kg, L en J·kg⁻¹, Q en J)</li>
+        <li><strong>Relations entre L</strong> : L<sub>fus</sub> = −L<sub>solid</sub> ; L<sub>vapo</sub> = −L<sub>liquéf</sub> ; L<sub>sublim</sub> = −L<sub>cond</sub></li>
+        <li><strong>Méthode des mélanges</strong> : Q₁ + Q₂ + ... = 0 dans un système isolé</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 13 — Transformation physique (2nde).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch13-2nde", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initStateChanges({
+  svgId: "scSvgCours", readoutId: "scReadoutCours",
+  buttonIds: ["scFusionCours", "scSolidCours", "scVapoCours", "scLiquefCours", "scSublimCours", "scCondCours"]
+});
+initTemperaturePlateau({ svgId: "tpSvgCours", readoutId: "tpReadoutCours", btnFusionId: "tpFusionCours", btnVapoId: "tpVapoCours" });
+initStateEquation({ svgId: "seSvgCours", readoutId: "seReadoutCours", btnFusionId: "seFusionCours", btnVapoId: "seVapoCours", btnSublimId: "seSublimCours" });
+initStateEnergy({ svgId: "eeSvgCours", mRangeId: "eeMCours", readoutId: "eeReadoutCours", btnFusionId: "eeFusionCours", btnVapoId: "eeVapoCours" });
+initMixtureMethod({ svgId: "mmSvgCours", q1RangeId: "mmQ1Cours", q2RangeId: "mmQ2Cours", q3RangeId: "mmQ3Cours", q4RangeId: "mmQ4Cours", readoutId: "mmReadoutCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initStateChanges({
+  svgId: "scSvg", readoutId: "scReadout",
+  buttonIds: ["scFusion", "scSolid", "scVapo", "scLiquef", "scSublim", "scCond"]
+});
+initTemperaturePlateau({ svgId: "tpSvg", readoutId: "tpReadout", btnFusionId: "tpFusion", btnVapoId: "tpVapo" });
+initStateEquation({ svgId: "seSvg", readoutId: "seReadout", btnFusionId: "seFusion", btnVapoId: "seVapo", btnSublimId: "seSublim" });
+initStateEnergy({ svgId: "eeSvg", mRangeId: "eeM", readoutId: "eeReadout", btnFusionId: "eeFusion", btnVapoId: "eeVapo" });
+initMixtureMethod({ svgId: "mmSvg", q1RangeId: "mmQ1", q2RangeId: "mmQ2", q3RangeId: "mmQ3", q4RangeId: "mmQ4", readoutId: "mmReadout" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actStateChanges", chapterId: "ch13-2nde", activityId: "qcm-state-changes",
+  prompt: "Quel est le nom du changement d'état gaz → solide ?",
+  options: [
+    { text: "Condensation", correct: true },
+    { text: "Sublimation", correct: false },
+    { text: "Liquéfaction", correct: false }
+  ],
+  explanation: "La condensation est le passage direct de l'état gazeux à l'état solide (le passage inverse, solide → gaz, s'appelle la sublimation)."
+});
+
+initVraiFaux({
+  containerId: "actTemperaturePlateau", chapterId: "ch13-2nde", activityId: "vf-temperature-plateau",
+  prompt: "Lors du changement d'état d'un corps pur, la température varie continuellement.",
+  correct: false,
+  explanation: "Faux : la température reste constante (palier) pendant tout le changement d'état d'un corps pur, sous une pression donnée."
+});
+
+initQCM({
+  containerId: "actStateEquation", chapterId: "ch13-2nde", activityId: "qcm-state-equation",
+  prompt: "Quelle équation modélise la fusion de l'eau ?",
+  options: [
+    { text: "H₂O(s) → H₂O(ℓ)", correct: true },
+    { text: "H₂O(ℓ) → H₂O(s)", correct: false },
+    { text: "H₂O(ℓ) → H₂O(g)", correct: false }
+  ],
+  explanation: "La fusion est le passage de l'état solide (s) à l'état liquide (ℓ)."
+});
+
+initEstimation({
+  containerId: "actStateEnergy", chapterId: "ch13-2nde", activityId: "est-state-energy",
+  prompt: "Avec m = 2 kg et L(fusion de l'eau) = 334 kJ/kg, quelle est l'énergie Q (en kJ) nécessaire à la fusion ?",
+  answer: 668, tolerance: 10, unit: "kJ",
+  explanation: "Q = m × L = 2 × 334 = 668 kJ."
+});
+
+initEstimation({
+  containerId: "actMixtureMethod", chapterId: "ch13-2nde", activityId: "est-mixture-method",
+  prompt: "Avec Q₁ = 100 J, Q₂ = −300 J, Q₃ = 50 J, Q₄ = 80 J, quelle est la valeur de Q₅ telle que la somme totale soit nulle ?",
+  answer: 70, tolerance: 5, unit: "J",
+  explanation: "Q₁+Q₂+Q₃+Q₄+Q₅=0 → Q₅ = −(100−300+50+80) = −(−70) = 70 J."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch13-2nde");
+initProgressBar("ch13-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+</script>
+</body>
+</html>

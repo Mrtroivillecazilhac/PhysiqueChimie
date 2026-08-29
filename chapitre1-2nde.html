@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 1 — Introduction : la précision en physique-chimie — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch1-2nde.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie · Physique</div>
+  <h1>Chapitre 1 — Introduction : la précision en physique-chimie</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch1-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch1-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Savoir compter les chiffres significatifs d'une mesure et écrire un nombre en notation scientifique</li>
+        <li>Savoir arrondir un résultat de calcul au bon nombre de chiffres significatifs</li>
+        <li>Comprendre ce qu'est une incertitude de mesure et savoir écrire un résultat avec son intervalle de confiance</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Pourquoi la précision compte en sciences</h2>
+    <p class="course-text">
+      Dans la vie de tous les jours, une mesure a toujours une incertitude — mais elle reste <strong>implicite</strong>, jamais énoncée. En physique-chimie, on est obligé de la rendre <strong>explicite</strong>, car on fait de la science : une mesure doit pouvoir être vérifiée et comparée par d'autres personnes.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux exemples.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ieTrajetCours">Trajet</button>
+      <button class="toggle-btn" id="ieTemperatureCours">Température</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ieSvgCours" viewBox="0 0 220 155"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="ieReadoutCours"></div>
+      </div>
+    </div>
+
+    <p class="course-text" style="margin-top:22px;">
+      Mais alors, pourquoi ne peut-on jamais avoir une précision parfaite, même avec le meilleur appareil du monde ?
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 Deux grandes familles d'erreurs</span>
+      Les <strong>erreurs aléatoires</strong> varient de façon imprévisible d'une mesure à l'autre (lecture, variabilité de l'objet mesuré...). Les <strong>erreurs systématiques</strong> biaisent la mesure toujours dans le même sens, en général à cause de l'appareil lui-même (sa résolution, son réglage...).
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Parcours les 3 sources d'erreur possibles.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="etSvgCours" viewBox="0 0 200 130"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:280px;">
+        <div class="anim-readout" id="etExplainCours" style="min-height:5em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="etPrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="etStepCours"></span>
+          <button id="etNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="warning-box" style="margin-top:20px;">
+      <span class="box-label">⚠️ Le lien avec les chiffres significatifs</span>
+      Écrire « 20 °C » ou « 20,0 °C » n'est <strong>pas la même chose</strong> : le nombre de chiffres écrits est déjà, en soi, une façon d'indiquer sa précision. C'est tout l'objet de la section suivante.
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Les chiffres significatifs</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Les <strong>chiffres significatifs (CS)</strong> d'un nombre sont les chiffres qui apportent une information sur sa valeur, indépendamment de la position de la virgule.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 Règles de comptage</span>
+      Tous les chiffres non nuls sont significatifs. Un zéro encadré par deux chiffres non nuls est significatif. Un zéro après la virgule, à la fin du nombre, est significatif. Les zéros de tête (avant le premier chiffre non nul) ne sont jamais significatifs.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les exemples pour voir quels chiffres sont significatifs.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="sfACours">3,20</button>
+      <button class="toggle-btn" id="sfBCours">0,0450</button>
+      <button class="toggle-btn" id="sfCCours">205</button>
+      <button class="toggle-btn" id="sfDCours">1200</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="sfSvgCours" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="sfReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>c. L'écriture scientifique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'<strong>écriture scientifique</strong> d'un nombre s'écrit sous la forme a × 10ⁿ, où 1 ≤ a &lt; 10 et n est un entier relatif.
+    </div>
+    <p class="course-text">
+      Cette écriture lève l'ambiguïté des zéros finaux : le nombre de chiffres écrits dans la mantisse a correspond exactement au nombre de chiffres significatifs voulu — aucune ambiguïté possible, contrairement à l'écriture décimale (voir l'exemple « 1200 » plus haut).
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les exemples de conversion.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="snACours">45 000</button>
+      <button class="toggle-btn" id="snBCours">0,0032</button>
+      <button class="toggle-btn" id="snCCours">720 000</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="snSvgCours" viewBox="0 0 220 110"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="snReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Chiffres significatifs et opérations</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Lors d'un produit ou d'un quotient de grandeurs mesurées, le résultat ne peut pas avoir plus de chiffres significatifs que la donnée la moins précise.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle le nombre de CS de chaque mesure : observe le résultat s'arrondir automatiquement.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="soSvgCours" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre de CS de v1</label>
+        <input type="range" id="soCS1Cours" min="2" max="4" value="2" step="1">
+        <label>Nombre de CS de v2</label>
+        <input type="range" id="soCS2Cours" min="2" max="4" value="3" step="1">
+        <div class="anim-readout" id="soReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>e. Incertitude de mesure</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'<strong>incertitude absolue</strong> U(x) mesure l'ampleur de l'imprécision autour d'une valeur mesurée x. Pour une lecture directe sur un instrument gradué, on prend en général U(x) égale à la moitié de la plus petite graduation.
+    </div>
+    <div class="formula">incertitude relative = <span class="frac"><span class="num">U(x)</span><span class="den">x</span></span> (souvent exprimée en %)</div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la plus petite graduation de l'instrument : observe l'incertitude se recalculer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="muSvgCours" viewBox="0 0 220 120"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Plus petite graduation (cm)</label>
+        <input type="range" id="muGradCours" min="1" max="100" value="100" step="1">
+        <div class="anim-readout" id="muReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>f. Donner un résultat de mesure : l'intervalle de confiance</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 Rappel — notation intervalle</span>
+      [a ; b] désigne l'ensemble de tous les nombres compris entre a et b (bornes incluses). Par exemple, [2 ; 5] contient 2, puis tous les nombres comme 3, 4,2 ou 4,99, jusqu'à 5.
+    </div>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un résultat de mesure s'écrit x = x<sub>mesuré</sub> ± U(x). Cela signifie que la valeur vraie de la grandeur a de bonnes chances de se trouver dans l'<strong>intervalle de confiance</strong> [x<sub>mesuré</sub> − U(x) ; x<sub>mesuré</sub> + U(x)].
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Une incertitude plus petite signifie un intervalle de confiance plus étroit, donc une mesure plus précise — mais jamais une certitude absolue sur la valeur vraie.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Même règle qu'à la section précédente (longueur mesurée : 15,3 cm). Règle l'incertitude U : observe l'intervalle de confiance se resserrer ou s'élargir.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ciSvgCours" viewBox="0 0 220 120"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Incertitude U (cm)</label>
+        <input type="range" id="ciUCours" min="1" max="100" value="30" step="1">
+        <div class="anim-readout" id="ciReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. Pourquoi la précision compte</h3>
+      <p>
+        Dans la vie de tous les jours, l'incertitude d'une mesure reste <input class="blank" data-answer="implicite" size="14">. En physique-chimie, on est obligé de la rendre <input class="blank" data-answer="explicite" size="14">.
+      </p>
+      <p>
+        Les erreurs <input class="blank" data-answer="aléatoires|aleatoires" size="16"> varient de façon imprévisible d'une mesure à l'autre. Les erreurs <input class="blank" data-answer="systématiques|systematiques" size="18"> biaisent la mesure toujours dans le même sens, en général à cause de l'appareil.
+      </p>
+
+      <h3>b. Les chiffres significatifs</h3>
+      <p>
+        Les chiffres significatifs sont les chiffres qui apportent une <input class="blank" data-answer="information" size="16"> sur la valeur d'un nombre.
+      </p>
+      <p>
+        Un zéro encadré par deux chiffres non nuls est <input class="blank" data-answer="significatif" size="16">. Les zéros de <input class="blank" data-answer="tête" size="10"> ne sont jamais significatifs.
+      </p>
+
+      <h3>c. L'écriture scientifique</h3>
+      <p>
+        L'écriture scientifique s'écrit a × 10<sup>n</sup>, avec <input class="blank" data-answer="1" size="4"> ≤ a &lt; 10.
+      </p>
+      <p>
+        Cette écriture lève l'ambiguïté des zéros <input class="blank" data-answer="finaux|finals" size="12">.
+      </p>
+
+      <h3>d. Chiffres significatifs et opérations</h3>
+      <p>
+        Lors d'un produit ou d'un quotient, le résultat ne peut pas avoir plus de chiffres significatifs que la donnée la <input class="blank" data-answer="moins" size="10"> précise.
+      </p>
+
+      <h3>e. Incertitude de mesure</h3>
+      <p>
+        L'incertitude absolue U(x) mesure l'ampleur de l'<input class="blank" data-answer="imprécision" size="16"> autour d'une valeur mesurée.
+      </p>
+      <p>
+        Pour une lecture directe sur un instrument gradué, on prend en général U(x) égale à la <input class="blank" data-answer="moitié" size="12"> de la plus petite graduation.
+      </p>
+
+      <h3>f. Intervalle de confiance</h3>
+      <p>
+        Un résultat de mesure s'écrit x = x<sub>mesuré</sub> ± <input class="blank" data-answer="U(x)|U" size="10">.
+      </p>
+      <p>
+        La valeur vraie a de bonnes chances de se trouver dans l'intervalle de <input class="blank" data-answer="confiance" size="14">.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Incertitude implicite vs explicite</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux exemples.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ieTrajet">Trajet</button>
+      <button class="toggle-btn" id="ieTemperature">Température</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ieSvg" viewBox="0 0 220 155"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="ieReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actImplicitExplicit"></div></div>
+  </section>
+
+  <section>
+    <h2>Pourquoi pas une précision parfaite ?</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Parcours les 3 sources d'erreur possibles.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="etSvg" viewBox="0 0 200 130"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:280px;">
+        <div class="anim-readout" id="etExplain" style="min-height:5em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="etPrev" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="etStep"></span>
+          <button id="etNext" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actErrorTypes"></div></div>
+  </section>
+
+  <section>
+    <h2>Compter les chiffres significatifs</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les exemples pour voir quels chiffres sont significatifs.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="sfA">3,20</button>
+      <button class="toggle-btn" id="sfB">0,0450</button>
+      <button class="toggle-btn" id="sfC">205</button>
+      <button class="toggle-btn" id="sfD">1200</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="sfSvg" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="sfReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSignificantFigures"></div></div>
+  </section>
+
+  <section>
+    <h2>Écriture scientifique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les exemples de conversion.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="snA">45 000</button>
+      <button class="toggle-btn" id="snB">0,0032</button>
+      <button class="toggle-btn" id="snC">720 000</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="snSvg" viewBox="0 0 220 110"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="snReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actScientificNotation"></div></div>
+  </section>
+
+  <section>
+    <h2>Chiffres significatifs et opérations</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle le nombre de CS de chaque mesure : observe le résultat s'arrondir automatiquement.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="soSvg" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre de CS de v1</label>
+        <input type="range" id="soCS1" min="2" max="4" value="2" step="1">
+        <label>Nombre de CS de v2</label>
+        <input type="range" id="soCS2" min="2" max="4" value="3" step="1">
+        <div class="anim-readout" id="soReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSigFigOperations"></div></div>
+  </section>
+
+  <section>
+    <h2>Incertitude de mesure</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la plus petite graduation de l'instrument : observe l'incertitude se recalculer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="muSvg" viewBox="0 0 220 120"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Plus petite graduation (cm)</label>
+        <input type="range" id="muGrad" min="1" max="100" value="100" step="1">
+        <div class="anim-readout" id="muReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMeasurementUncertainty"></div></div>
+  </section>
+
+  <section>
+    <h2>Intervalle de confiance</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Même règle qu'à la section précédente (longueur mesurée : 15,3 cm). Règle l'incertitude U : observe l'intervalle de confiance se resserrer ou s'élargir.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ciSvg" viewBox="0 0 220 120"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Incertitude U (cm)</label>
+        <input type="range" id="ciU" min="1" max="100" value="30" step="1">
+        <div class="anim-readout" id="ciReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actConfidenceInterval"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Règle / formule</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Chiffres significatifs</td><td style="padding:10px 8px; color:var(--yellow);">chiffres non nuls, zéros encadrés, zéros finaux après la virgule</td><td style="padding:10px 8px; color:var(--chalk-dim);">zéros de tête jamais significatifs</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Écriture scientifique</td><td style="padding:10px 8px; color:var(--yellow);">a × 10ⁿ, 1 ≤ a &lt; 10</td><td style="padding:10px 8px; color:var(--chalk-dim);">a contient exactement les CS</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">CS et opérations</td><td style="padding:10px 8px; color:var(--yellow);">résultat arrondi au plus petit nombre de CS</td><td style="padding:10px 8px; color:var(--chalk-dim);">produit/quotient de mesures</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Incertitude absolue</td><td style="padding:10px 8px; color:var(--yellow);">U(x) ≈ graduation / 2</td><td style="padding:10px 8px; color:var(--chalk-dim);">lecture directe sur un instrument</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Incertitude relative</td><td style="padding:10px 8px; color:var(--yellow);">U(x) / x</td><td style="padding:10px 8px; color:var(--chalk-dim);">souvent en %</td></tr>
+          <tr><td style="padding:10px 8px;">Intervalle de confiance</td><td style="padding:10px 8px; color:var(--yellow);">[x − U(x) ; x + U(x)]</td><td style="padding:10px 8px; color:var(--chalk-dim);">la valeur vraie s'y trouve probablement</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 1 — Introduction : la précision en physique-chimie (2nde).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch1-2nde", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initImplicitExplicit({ svgId: "ieSvgCours", readoutId: "ieReadoutCours", buttonIds: ["ieTrajetCours", "ieTemperatureCours"] });
+initErrorTypes({ svgId: "etSvgCours", explainId: "etExplainCours", prevBtnId: "etPrevCours", nextBtnId: "etNextCours", stepId: "etStepCours" });
+initSignificantFigures({ svgId: "sfSvgCours", readoutId: "sfReadoutCours", buttonIds: ["sfACours", "sfBCours", "sfCCours", "sfDCours"] });
+initScientificNotation({ svgId: "snSvgCours", readoutId: "snReadoutCours", buttonIds: ["snACours", "snBCours", "snCCours"] });
+initSigFigOperations({ svgId: "soSvgCours", cs1RangeId: "soCS1Cours", cs2RangeId: "soCS2Cours", readoutId: "soReadoutCours" });
+initMeasurementUncertainty({ svgId: "muSvgCours", gradRangeId: "muGradCours", readoutId: "muReadoutCours" });
+initConfidenceInterval({ svgId: "ciSvgCours", uRangeId: "ciUCours", readoutId: "ciReadoutCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initImplicitExplicit({ svgId: "ieSvg", readoutId: "ieReadout", buttonIds: ["ieTrajet", "ieTemperature"] });
+initErrorTypes({ svgId: "etSvg", explainId: "etExplain", prevBtnId: "etPrev", nextBtnId: "etNext", stepId: "etStep" });
+initSignificantFigures({ svgId: "sfSvg", readoutId: "sfReadout", buttonIds: ["sfA", "sfB", "sfC", "sfD"] });
+initScientificNotation({ svgId: "snSvg", readoutId: "snReadout", buttonIds: ["snA", "snB", "snC"] });
+initSigFigOperations({ svgId: "soSvg", cs1RangeId: "soCS1", cs2RangeId: "soCS2", readoutId: "soReadout" });
+initMeasurementUncertainty({ svgId: "muSvg", gradRangeId: "muGrad", readoutId: "muReadout" });
+initConfidenceInterval({ svgId: "ciSvg", uRangeId: "ciU", readoutId: "ciReadout" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initVraiFaux({
+  containerId: "actImplicitExplicit", chapterId: "ch1-2nde", activityId: "vf-implicit-explicit",
+  prompt: "Dans la vie de tous les jours, il n'y a aucune incertitude sur une mesure, contrairement à la physique-chimie.",
+  correct: false,
+  explanation: "Faux : l'incertitude existe toujours, même dans la vie quotidienne — elle reste seulement implicite (non énoncée). En sciences, on la rend explicite (chiffrée)."
+});
+
+initQCM({
+  containerId: "actErrorTypes", chapterId: "ch1-2nde", activityId: "qcm-error-types",
+  prompt: "Deux personnes qui lisent la même graduation d'un thermomètre obtiennent des valeurs légèrement différentes. De quel type d'erreur s'agit-il ?",
+  options: [
+    { text: "Une erreur aléatoire, liée à la lecture", correct: true },
+    { text: "Une erreur systématique, liée à l'appareil", correct: false },
+    { text: "Un dysfonctionnement de l'appareil", correct: false }
+  ],
+  explanation: "C'est une erreur aléatoire : elle varie de façon imprévisible d'une lecture à l'autre, selon l'angle de vue ou l'attention de la personne qui lit."
+});
+
+initQCM({
+  containerId: "actSignificantFigures", chapterId: "ch1-2nde", activityId: "qcm-significant-figures",
+  prompt: "Combien de chiffres significatifs contient le nombre 0,0450 ?",
+  options: [
+    { text: "3", correct: true },
+    { text: "5", correct: false },
+    { text: "2", correct: false }
+  ],
+  explanation: "Les deux zéros de tête ne sont pas significatifs ; 4, 5 et le zéro final (après la virgule) le sont : 3 chiffres significatifs."
+});
+
+initEstimation({
+  containerId: "actScientificNotation", chapterId: "ch1-2nde", activityId: "est-scientific-notation",
+  prompt: "Écris 0,0032 en notation scientifique a × 10ⁿ. Donne juste la valeur de n (avec son signe).",
+  answer: -3, tolerance: 0, unit: "",
+  explanation: "0,0032 = 3,2 × 10⁻³ : n = −3."
+});
+
+initEstimation({
+  containerId: "actSigFigOperations", chapterId: "ch1-2nde", activityId: "est-sigfig-operations",
+  prompt: "v1 = 12 (2 CS) et v2 = 3,68 (3 CS). Quel est le produit v1 × v2, arrondi au bon nombre de chiffres significatifs ?",
+  answer: 44, tolerance: 1, unit: "",
+  explanation: "12 × 3,68 = 44,16, arrondi à 2 CS (le plus petit des deux) : 44."
+});
+
+initEstimation({
+  containerId: "actMeasurementUncertainty", chapterId: "ch1-2nde", activityId: "est-measurement-uncertainty",
+  prompt: "Une règle a pour plus petite graduation 0,1 cm. Quelle incertitude absolue U(x) (en cm) associe-t-on à une lecture sur cette règle ?",
+  answer: 0.05, tolerance: 0.01, unit: "cm",
+  explanation: "U(x) = graduation / 2 = 0,1 / 2 = 0,05 cm."
+});
+
+initVraiFaux({
+  containerId: "actConfidenceInterval", chapterId: "ch1-2nde", activityId: "vf-confidence-interval",
+  prompt: "Écrire L = 15,3 ± 0,3 cm signifie que l'on est certain à 100 % que la longueur vraie vaut exactement 15,3 cm.",
+  correct: false,
+  explanation: "Faux : cela signifie que la valeur vraie a de bonnes chances de se trouver dans l'intervalle [15,0 ; 15,6] cm — ce n'est jamais une certitude absolue."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch1-2nde");
+initProgressBar("ch1-2nde", 8); // texte à trous complet + 7 activités liées aux animations
+</script>
+</body>
+</html>

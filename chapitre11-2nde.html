@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 11 — La mole — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch11-2nde.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 11 — La mole</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch11-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch11-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Savoir calculer la masse d'une entité (atome, ion, molécule)</li>
+        <li>Savoir calculer le nombre d'entités N dans un échantillon</li>
+        <li>Savoir calculer une quantité de matière n à l'aide de la constante d'Avogadro</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1. Masse m<sub>entité</sub> d'une entité</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>formule brute</strong> d'une entité (atome, ion ou molécule) est l'écriture la plus compacte décrivant la nature et le nombre des atomes de cette entité. La <strong>masse</strong> m<sub>entité</sub> d'une entité est égale à la masse des atomes qui la composent.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : la molécule de dioxyde de carbone CO₂ contient 1 atome de carbone et 2 atomes d'oxygène. m(CO₂) = m<sub>C</sub> + 2×m<sub>O</sub> = 2,00×10⁻²⁶ + 2×2,67×10⁻²⁶ = 7,35×10⁻²⁶ kg.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre plusieurs molécules : observe la masse se recalculer.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="emCO2Cours">CO₂</button>
+      <button class="toggle-btn" id="emCOCours">CO</button>
+      <button class="toggle-btn" id="emO2Cours">O₂</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="emSvgCours" viewBox="0 0 220 140"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="emReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. Nombre d'entités N</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le nombre d'entités N dans un échantillon est le quotient de la masse m de l'échantillon (en kg) par la masse m<sub>entité</sub> d'une entité (en kg). N est sans unité.
+    </div>
+    <div class="formula">N = <span class="frac"><span class="num">m</span><span class="den">m<sub>entité</sub></span></span></div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : dans un échantillon de dioxyde de carbone de masse m = 10 kg, N = 10/(7,35×10⁻²⁶) ≈ 1,4×10²⁶ molécules.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la masse de l'échantillon de CO₂ : observe N se calculer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:220px;">
+        <svg id="ecSvgCours" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse de l'échantillon (kg)</label>
+        <input type="range" id="ecMCours" min="1" max="50" value="10" step="1">
+        <div class="anim-readout" id="ecReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Quantité de matière n</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>mole</strong> d'entités d'une espèce est un « lot » de 6,02×10²³ entités. La <strong>constante d'Avogadro</strong> N<sub>A</sub> est le nombre d'entités dans une mole : N<sub>A</sub> = 6,02×10²³ mol⁻¹.
+    </div>
+    <p class="course-text">
+      La <strong>quantité de matière</strong> n représente le nombre de « lots » (de moles) présents dans l'échantillon.
+    </p>
+    <div class="formula">n = <span class="frac"><span class="num">N</span><span class="den">N<sub>A</sub></span></span></div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : avec N ≈ 1,4×10²⁶ molécules de CO₂, n = N/N<sub>A</sub> = 1,4×10²⁶ / 6,02×10²³ ≈ 2,3×10² mol.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle l'ordre de grandeur de N : observe n se calculer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:220px;">
+        <svg id="maSvgCours" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Exposant de N (N ≈ 1,4×10<sup>exposant</sup>)</label>
+        <input type="range" id="maNCours" min="20" max="28" value="26" step="1">
+        <div class="anim-readout" id="maReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>1. Masse m<sub>entité</sub> d'une entité</h3>
+      <p>
+        La <input class="blank" data-answer="formule brute" size="16"> d'une entité est l'écriture la plus compacte décrivant la nature et le nombre des atomes de cette entité.
+      </p>
+      <p>
+        La masse m<sub>entité</sub> d'une entité est égale à la <input class="blank" data-answer="masse" size="12"> des atomes qui la composent.
+      </p>
+
+      <h3>2. Nombre d'entités N</h3>
+      <div class="formula">N = <span class="frac"><span class="num">m</span><span class="den">m<sub>entité</sub></span></span></div>
+      <p>
+        N est le nombre d'entités dans un échantillon : c'est le quotient de la <input class="blank" data-answer="masse" size="12"> de l'échantillon par la masse d'une <input class="blank" data-answer="entité" size="14">.
+      </p>
+
+      <h3>3. Quantité de matière n</h3>
+      <p>
+        Une <input class="blank" data-answer="mole" size="10"> d'entités est un « lot » de 6,02×10²³ entités.
+      </p>
+      <p>
+        La constante d'<input class="blank" data-answer="Avogadro" size="14"> N<sub>A</sub> est le nombre d'entités dans une mole.
+      </p>
+      <div class="formula">n = <span class="frac"><span class="num">N</span><span class="den">N<sub>A</sub></span></span></div>
+      <p>
+        La quantité de matière n représente le nombre de <input class="blank" data-answer="lots" size="10"> (de moles) dans l'échantillon.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Calculateur de masse d'une entité</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre plusieurs molécules : observe la masse se recalculer.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="emCO2">CO₂</button>
+      <button class="toggle-btn" id="emCO">CO</button>
+      <button class="toggle-btn" id="emO2">O₂</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="emSvg" viewBox="0 0 220 140"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="emReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actEntityMass"></div></div>
+  </section>
+
+  <section>
+    <h2>Calculateur du nombre d'entités N</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la masse de l'échantillon de CO₂ : observe N se calculer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:220px;">
+        <svg id="ecSvg" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse de l'échantillon (kg)</label>
+        <input type="range" id="ecM" min="1" max="50" value="10" step="1">
+        <div class="anim-readout" id="ecReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actEntityCount"></div></div>
+  </section>
+
+  <section>
+    <h2>Calculateur de quantité de matière n</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle l'ordre de grandeur de N : observe n se calculer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:220px;">
+        <svg id="maSvg" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Exposant de N (N ≈ 1,4×10<sup>exposant</sup>)</label>
+        <input type="range" id="maN" min="20" max="28" value="26" step="1">
+        <div class="anim-readout" id="maReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMoleAmount"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Grandeur</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Formule</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">Unité</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Masse d'une entité</td><td style="padding:10px 8px; color:var(--yellow);">m<sub>entité</sub> = somme des masses des atomes</td><td style="padding:10px 8px; color:var(--chalk-dim);">kg</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Nombre d'entités</td><td style="padding:10px 8px; color:var(--yellow);">N = m / m<sub>entité</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">sans unité</td></tr>
+          <tr><td style="padding:10px 8px;">Quantité de matière</td><td style="padding:10px 8px; color:var(--yellow);">n = N / N<sub>A</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">mol</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 La chaîne de calcul complète</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li><strong>1.</strong> Calculer la masse d'une entité m<sub>entité</sub> (somme des masses des atomes qui la composent)</li>
+        <li><strong>2.</strong> Calculer le nombre d'entités N = m<sub>échantillon</sub> / m<sub>entité</sub></li>
+        <li><strong>3.</strong> Calculer la quantité de matière n = N / N<sub>A</sub>, avec N<sub>A</sub> = 6,02×10²³ mol⁻¹</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 11 — La mole (2nde).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch11-2nde", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initEntityMass({ svgId: "emSvgCours", readoutId: "emReadoutCours", btnCO2Id: "emCO2Cours", btnCOId: "emCOCours", btnO2Id: "emO2Cours" });
+initEntityCount({ svgId: "ecSvgCours", mRangeId: "ecMCours", readoutId: "ecReadoutCours" });
+initMoleAmount({ svgId: "maSvgCours", nRangeId: "maNCours", readoutId: "maReadoutCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initEntityMass({ svgId: "emSvg", readoutId: "emReadout", btnCO2Id: "emCO2", btnCOId: "emCO", btnO2Id: "emO2" });
+initEntityCount({ svgId: "ecSvg", mRangeId: "ecM", readoutId: "ecReadout" });
+initMoleAmount({ svgId: "maSvg", nRangeId: "maN", readoutId: "maReadout" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initEstimation({
+  containerId: "actEntityMass", chapterId: "ch11-2nde", activityId: "est-entity-mass",
+  prompt: "Avec m_C = 2,00×10⁻²⁶ kg et m_O = 2,67×10⁻²⁶ kg, quelle est la masse (en 10⁻²⁶ kg) d'une molécule de CO₂ (1 atome C, 2 atomes O) ? Donne juste le nombre devant 10⁻²⁶.",
+  answer: 7.35, tolerance: 0.05, unit: "×10⁻²⁶ kg",
+  explanation: "m(CO₂) = m_C + 2×m_O = 2,00 + 2×2,67 = 7,35 (×10⁻²⁶ kg)."
+});
+
+initEstimation({
+  containerId: "actEntityCount", chapterId: "ch11-2nde", activityId: "est-entity-count",
+  prompt: "Avec m = 10 kg et m_entité(CO₂) ≈ 7,35×10⁻²⁶ kg, quel est l'ordre de grandeur de l'exposant de N = m/m_entité (en écriture N = a×10^exposant) ?",
+  answer: 26, tolerance: 0, unit: "",
+  explanation: "N = 10 / (7,35×10⁻²⁶) ≈ 1,4×10²⁶ : l'exposant est 26."
+});
+
+initEstimation({
+  containerId: "actMoleAmount", chapterId: "ch11-2nde", activityId: "est-mole-amount",
+  prompt: "Avec N ≈ 1,4×10²⁶ entités et N_A = 6,02×10²³ mol⁻¹, quelle est la quantité de matière n (en centaines de mol, c'est-à-dire n/100) ?",
+  answer: 2.3, tolerance: 0.2, unit: "×10² mol",
+  explanation: "n = N/N_A = 1,4×10²⁶ / 6,02×10²³ ≈ 2,3×10² mol."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch11-2nde");
+initProgressBar("ch11-2nde", 4); // texte à trous complet + 3 activités liées aux animations
+</script>
+</body>
+</html>

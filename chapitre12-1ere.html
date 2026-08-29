@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapitre 12 — Énergie des systèmes électriques — 1ère spé PC</title>
+<title>Chapitre 12 — Fluide au repos — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
 <script src="animations-common.js"></script>
 <script src="animations-ch12.js"></script>
@@ -21,7 +21,7 @@
 
 <header class="page-head">
   <div class="badge-inline physique">Physique</div>
-  <h1>Chapitre 12 — Énergie des systèmes électriques</h1>
+  <h1>Chapitre 12 — Description d'un fluide au repos</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
 </header>
 
@@ -52,139 +52,106 @@
     <div class="objectifs-box">
       <span class="box-label">🎯 Objectifs du chapitre</span>
       <ul>
-        <li>Savoir relier intensité, charge et durée : I = Q/Δt</li>
-        <li>Distinguer source idéale et source réelle de tension, et tracer une caractéristique U = f(I)</li>
-        <li>Utiliser P = U×I, E = P×Δt, et le rendement η ≤ 1</li>
+        <li>Relier les grandeurs macroscopiques (T, P, ρ) à l'agitation, aux chocs et à la proximité des entités à l'échelle microscopique</li>
+        <li>Savoir utiliser F = P × S et la relation de la pression avec la profondeur</li>
+        <li>Connaître et savoir appliquer la loi de Mariotte pour un gaz</li>
       </ul>
     </div>
   </section>
 
   <section>
-    <h2>1. L'intensité du courant électrique</h2>
+    <h2>a. Les fluides au repos — échelles macro/micro</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Dans un circuit électrique, le courant est défini par le mouvement d'ensemble des porteurs de charge : des <strong>électrons</strong> dans les parties métalliques, des <strong>ions</strong> dans les solutions.
+      À l'échelle <strong>macroscopique</strong>, un fluide au repos n'a pas de mouvement d'ensemble. À l'échelle <strong>microscopique</strong> pourtant, les molécules qui le constituent sont en mouvement incessant et <strong>désordonné</strong>.
     </div>
     <p class="course-text">
-      L'intensité I du courant correspond au <strong>débit</strong> de charges dans une portion du circuit.
-    </p>
-    <div class="formula">
-      I = <span class="frac"><span class="num">Q</span><span class="den">Δt</span></span>
-    </div>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 L'intensité, c'est un débit de charges — plus de porteurs qui traversent une section, plus le courant est intense.</p>
-    <div class="toggle-row">
-      <button class="toggle-btn" id="cmMetalCours">Fil métallique (e⁻)</button>
-      <button class="toggle-btn" id="cmSolutionCours">Solution (ions)</button>
-    </div>
-    <div class="anim-zone">
-      <div class="anim-wrap" style="width:280px;">
-        <svg id="cmSvgCours" viewBox="0 0 240 180"></svg>
-      </div>
-      <div class="anim-controls">
-        <div class="formula" id="cmFormulaCours" style="font-size:1rem;"></div>
-        <label>Quantité de charge Q (C)</label>
-        <input type="range" id="cmQCours" min="2" max="15" value="6" step="1">
-        <label>Durée Δt (s) pour faire un tour complet</label>
-        <input type="range" id="cmDtCours" min="0.5" max="5" value="2" step="0.5">
-        <div class="anim-readout" id="cmReadoutCours"></div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>2. La source réelle de tension continue</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      Une source de tension est un dipôle permettant d'<strong>alimenter</strong> un circuit électrique. Sa caractéristique U = f(I) est obtenue avec un montage comportant un <strong>ampèremètre</strong> en série et un <strong>voltmètre</strong> en dérivation.
-    </div>
-    <p class="course-text">
-      Pour une source idéale, U est <strong>indépendante</strong> de I (U = E). Pour une source réelle, U <strong>diminue</strong> lorsque I augmente (U = E − r×I).
+      La température T reflète l'<strong>agitation</strong> des entités. La pression P reflète les <strong>chocs</strong> des entités. La masse volumique ρ = m/V reflète la <strong>proximité</strong> des entités.
     </p>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      Une source réelle de tension est modélisée par l'association en série d'une source idéale de tension et d'un <strong>conducteur ohmique</strong>.
+      Les gaz sont des fluides <strong>compressibles</strong>, les liquides des fluides <strong>incompressibles</strong>.
     </div>
+  </section>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier E et r : observe la différence entre source idéale et source réelle.</p>
+  <section>
+    <h2>b. La force pressante</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un fluide appuie sur toute paroi avec laquelle il est en contact. Cette action est modélisée par une force <strong>pressante</strong>.
+    </div>
+    <p class="course-text">
+      La direction de cette force est <strong>perpendiculaire</strong> à la paroi. Le sens de cette force va du <strong>fluide</strong> vers la paroi.
+    </p>
+    <div class="formula">F = P × S</div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Observe comment la pression augmente ou diminue en modifiant F et S.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <p style="text-align:center; color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Le circuit</p>
-        <svg id="cpCircuitSvgCours" viewBox="0 0 220 170"></svg>
-      </div>
-      <div class="anim-wrap" style="width:280px;">
-        <p style="text-align:center; color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">La caractéristique U = f(I)</p>
-        <svg id="cpSvgCours" viewBox="0 0 260 190"></svg>
+        <svg id="pfSvgCours" viewBox="0 0 260 200"></svg>
       </div>
       <div class="anim-controls">
-        <label>E (V)</label>
-        <input type="range" id="cpECours" min="2" max="12" value="9" step="1">
-        <label>Résistance interne r (Ω)</label>
-        <input type="range" id="cpRCours" min="0" max="2.5" value="1" step="0.25">
-        <div class="actions" style="justify-content:flex-start; margin-top:12px;">
-          <button id="cpTraceBtnCours">📈 Tracer !</button>
-        </div>
-        <div class="anim-readout" id="cpReadoutCours"></div>
+        <label>Force F (N)</label>
+        <input type="range" id="pfFCours" min="10" max="200" value="80" step="10">
+        <label>Surface S (m²)</label>
+        <input type="range" id="pfSCours" min="0.5" max="5" value="2" step="0.5">
+        <div class="anim-readout" id="pfReadoutCours"></div>
       </div>
     </div>
   </section>
 
   <section>
-    <h2>3a. Puissance et énergie électriques</h2>
+    <h2>c. La pression dans un fluide incompressible au repos</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      La puissance est une grandeur indiquant l'aptitude d'un système à convertir <strong>rapidement</strong> de l'énergie.
+      La pression dans l'eau <strong>augmente</strong> avec la profondeur.
     </div>
-    <div class="formula">P<sub>élec</sub> = U × I</div>
-    <div class="formula">E<sub>élec</sub> = P<sub>élec</sub> × Δt</div>
-    <p class="course-text">
-      On utilise aussi le <strong>kilowattheure</strong> comme unité d'énergie : 1 kWh = 3,6 × 10⁶ <strong>J</strong>.
-    </p>
+    <div class="formula">P<sub>B</sub> − P<sub>A</sub> = ρ × g × (z<sub>A</sub> − z<sub>B</sub>)</div>
+    <p class="course-text">L'axe des coordonnées verticales z est orienté vers le <strong>haut</strong>.</p>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la puissance et la durée, puis allume la machine : regarde l'énergie s'accumuler.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 À gauche, la vision macroscopique (la pression augmente avec la profondeur) ; à droite, l'explication microscopique (agitation, proximité, chocs).</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:280px;">
-        <svg id="eaSvgCours" viewBox="0 0 250 200"></svg>
+      <div class="anim-wrap">
+        <h3 style="text-align:center; font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin-bottom:8px;">Vision macroscopique</h3>
+        <svg id="mfMacroSvgCours" viewBox="0 0 240 225"></svg>
+        <label style="font-size:0.78rem; color:var(--chalk-dim); display:block; margin-top:6px;">Profondeur (m)</label>
+        <input type="range" id="mfDepthCours" min="0" max="25" value="0" step="1" style="width:100%;">
+      </div>
+      <div class="anim-wrap">
+        <h3 style="text-align:center; font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin-bottom:8px;">Vision microscopique</h3>
+        <svg id="mfSvgCours" viewBox="0 0 240 190"></svg>
       </div>
       <div class="anim-controls">
-        <label>Puissance P (W)</label>
-        <input type="range" id="eaPCours" min="10" max="2000" value="500" step="10">
-        <label>Durée Δt (s)</label>
-        <input type="range" id="eaDtCours" min="1" max="8" value="4" step="1">
-        <div class="actions" style="justify-content:flex-start; margin:12px 0;">
-          <button id="eaBtnCours">🔌 Allumer !</button>
-        </div>
-        <div class="formula" id="eaFormulaCours" style="font-size:1rem;"></div>
-        <div class="anim-readout" id="eaReadoutCours"></div>
+        <label>Température (°C)</label>
+        <input type="range" id="mfTempCours" min="0" max="100" value="20" step="5">
+        <label>Masse volumique (nombre d'entités)</label>
+        <input type="range" id="mfDensCours" min="4" max="26" value="12" step="2">
+        <div class="anim-readout" id="mfReadoutCours"></div>
       </div>
     </div>
   </section>
 
   <section>
-    <h2>3b. Bilan de puissance et rendement</h2>
-    <p class="course-text">
-      Au cours d'une conversion, l'énergie et la puissance sont des grandeurs qui se <strong>conservent</strong>.
-    </p>
+    <h2>d. La pression dans un gaz au repos — loi de Mariotte</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Le rendement de conversion η mesure l'<strong>efficacité</strong> d'un convertisseur. Il est toujours <strong>inférieur</strong> ou égal à 1.
+      À température <strong>constante</strong> et à quantité de matière <strong>constante</strong>, le produit de la pression P d'un gaz par le volume V qu'il occupe est <strong>constant</strong>.
     </div>
-    <div class="formula">
-      η = <span class="frac"><span class="num">P<sub>exploitable</sub></span><span class="den">P<sub>entrée</sub></span></span>
+    <div class="formula">P × V = constante</div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      La loi de Mariotte est un <strong>modèle</strong> qui décrit correctement le comportement des gaz aux faibles pressions.
     </div>
-    <p class="course-text">
-      Un conducteur ohmique convertit toute la puissance électrique reçue en puissance <strong>thermique</strong> (effet <strong>Joule</strong>).
-    </p>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 La puissance d'entrée se répartit toujours entre puissance exploitable et puissance dégradée.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais descendre le ballon dans le bassin : comme P×V est constant, son volume change avec la pression.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="pcSvgCours" viewBox="0 0 220 190"></svg>
+        <svg id="mbSvgCours" viewBox="0 0 200 225"></svg>
       </div>
       <div class="anim-controls">
-        <label>Rendement η (%)</label>
-        <input type="range" id="pcEtaCours" min="10" max="95" value="70" step="5">
-        <div class="anim-readout" id="pcReadoutCours"></div>
+        <label>Profondeur (m)</label>
+        <input type="range" id="mbDepthCours" min="0" max="25" value="0" step="1">
+        <div class="anim-readout" id="mbReadoutCours"></div>
       </div>
     </div>
   </section>
@@ -200,50 +167,42 @@
     <h2>Cours à trous</h2>
     <div class="course-text" id="courseText">
 
-      <h3>1. L'intensité du courant électrique</h3>
+      <h3>a. Les fluides au repos — échelles macro/micro</h3>
       <p>
-        Dans un circuit électrique, le courant est défini par le mouvement d'ensemble des porteurs de charge : des <input class="blank" data-answer="électrons|electrons" size="14"> dans les parties métalliques, des <input class="blank" data-answer="ions" size="10"> dans les solutions.
+        À l'échelle <input class="blank" data-answer="macroscopique" size="16">, un fluide au repos n'a pas de mouvement d'ensemble. À l'échelle <input class="blank" data-answer="microscopique" size="16"> pourtant, les molécules qui le constituent sont en mouvement incessant et <input class="blank" data-answer="désordonné|desordonne" size="14">.
       </p>
       <p>
-        L'intensité I du courant correspond au <input class="blank" data-answer="débit|debit" size="12"> de charges dans une portion du circuit.
-      </p>
-      <div class="formula">
-        I = <span class="frac"><span class="num">Q</span><span class="den">Δt</span></span>
-      </div>
-
-      <h3>2. La source réelle de tension continue</h3>
-      <p>
-        Une source de tension est un dipôle permettant d'<input class="blank" data-answer="alimenter" size="14"> un circuit électrique. Sa caractéristique U = f(I) est obtenue avec un montage comportant un <input class="blank" data-answer="ampèremètre|amperemetre" size="16"> en série et un <input class="blank" data-answer="voltmètre|voltmetre" size="16"> en dérivation.
+        La température T reflète l'<input class="blank" data-answer="agitation" size="14"> des entités. La pression P reflète les <input class="blank" data-answer="chocs" size="10"> des entités. La masse volumique ρ = m/V reflète la <input class="blank" data-answer="proximité|proximite" size="14"> des entités.
       </p>
       <p>
-        Pour une source idéale, U est <input class="blank" data-answer="indépendante|independante" size="16"> de I (U = E). Pour une source réelle, U <input class="blank" data-answer="diminue" size="14"> lorsque I augmente (U = E − r×I).
-      </p>
-      <p>
-        Une source réelle de tension est modélisée par l'association en série d'une source idéale de tension et d'un <input class="blank" data-answer="conducteur ohmique" size="20">.
+        Les gaz sont des fluides <input class="blank" data-answer="compressibles" size="16">, les liquides des fluides <input class="blank" data-answer="incompressibles" size="18">.
       </p>
 
-      <h3>3a. Puissance et énergie électriques</h3>
+      <h3>b. La force pressante</h3>
       <p>
-        La puissance est une grandeur indiquant l'aptitude d'un système à convertir <input class="blank" data-answer="rapidement" size="16"> de l'énergie.
+        Un fluide appuie sur toute paroi avec laquelle il est en contact. Cette action est modélisée par une force <input class="blank" data-answer="pressante" size="14">.
       </p>
-      <div class="formula">P<sub>élec</sub> = U × I</div>
-      <div class="formula">E<sub>élec</sub> = P<sub>élec</sub> × Δt</div>
       <p>
-        On utilise aussi le <input class="blank" data-answer="kilowattheure" size="16"> comme unité d'énergie : 1 kWh = 3,6 × 10⁶ <input class="blank" data-answer="J" size="6">.
+        La direction de cette force est <input class="blank" data-answer="perpendiculaire" size="18"> à la paroi. Le sens de cette force va du <input class="blank" data-answer="fluide" size="10"> vers la paroi.
+      </p>
+      <div class="formula">F = P × S</div>
+
+      <h3>c. La pression dans un fluide incompressible au repos</h3>
+      <p>
+        La pression dans l'eau <input class="blank" data-answer="augmente" size="14"> avec la profondeur.
+      </p>
+      <div class="formula">P<sub>B</sub> − P<sub>A</sub> = ρ × g × (z<sub>A</sub> − z<sub>B</sub>)</div>
+      <p>
+        L'axe des coordonnées verticales z est orienté vers le <input class="blank" data-answer="haut" size="10">.
       </p>
 
-      <h3>3b. Bilan de puissance et rendement</h3>
+      <h3>d. La pression dans un gaz au repos — loi de Mariotte</h3>
       <p>
-        Au cours d'une conversion, l'énergie et la puissance sont des grandeurs qui se <input class="blank" data-answer="conservent" size="16">.
+        À température <input class="blank" data-answer="constante" size="14"> et à quantité de matière <input class="blank" data-answer="constante" size="14">, le produit de la pression P d'un gaz par le volume V qu'il occupe est <input class="blank" data-answer="constant" size="14">.
       </p>
+      <div class="formula">P × V = constante</div>
       <p>
-        Le rendement de conversion η mesure l'<input class="blank" data-answer="efficacité|efficacite" size="16"> d'un convertisseur. Il est toujours <input class="blank" data-answer="inférieur|inferieur" size="16"> ou égal à 1.
-      </p>
-      <div class="formula">
-        η = <span class="frac"><span class="num">P<sub>exploitable</sub></span><span class="den">P<sub>entrée</sub></span></span>
-      </div>
-      <p>
-        Un conducteur ohmique convertit toute la puissance électrique reçue en puissance <input class="blank" data-answer="thermique" size="16"> (effet <input class="blank" data-answer="Joule" size="12">).
+        La loi de Mariotte est un <input class="blank" data-answer="modèle|modele" size="12"> qui décrit correctement le comportement des gaz aux faibles pressions.
       </p>
 
     </div>
@@ -253,90 +212,63 @@
   </section>
 
   <section>
-    <h2>Modèle microscopique du courant électrique</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">L'intensité, c'est un débit de charges — plus de porteurs qui traversent une section, plus le courant est intense.</p>
-    <div class="toggle-row">
-      <button class="toggle-btn" id="cmMetal">Fil métallique (e⁻)</button>
-      <button class="toggle-btn" id="cmSolution">Solution (ions)</button>
-    </div>
-    <div class="anim-zone">
-      <div class="anim-wrap" style="width:280px;">
-        <svg id="cmSvg" viewBox="0 0 240 180"></svg>
-      </div>
-      <div class="anim-controls">
-        <div class="formula" id="cmFormula" style="font-size:1rem;"></div>
-        <label>Quantité de charge Q (C)</label>
-        <input type="range" id="cmQ" min="2" max="15" value="6" step="1">
-        <label>Durée Δt (s) pour faire un tour complet</label>
-        <input type="range" id="cmDt" min="0.5" max="5" value="2" step="0.5">
-        <div class="anim-readout" id="cmReadout"></div>
-      </div>
-    </div>
-    <div class="activity-block"><div id="actCurrentModel"></div></div>
-  </section>
-
-  <section>
-    <h2>Tracé de la caractéristique U = f(I)</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier E et r : observe la différence entre source idéale et source réelle.</p>
+    <h2>La pression, c'est quoi ?</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Une presse applique une force F sur une surface de contact S. Observe comment la pression augmente ou diminue en modifiant les paramètres.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <p style="text-align:center; color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Le circuit</p>
-        <svg id="cpCircuitSvg" viewBox="0 0 220 170"></svg>
-      </div>
-      <div class="anim-wrap" style="width:280px;">
-        <p style="text-align:center; color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">La caractéristique U = f(I)</p>
-        <svg id="cpSvg" viewBox="0 0 260 190"></svg>
+        <svg id="pfSvg" viewBox="0 0 260 200"></svg>
       </div>
       <div class="anim-controls">
-        <label>E (V)</label>
-        <input type="range" id="cpE" min="2" max="12" value="9" step="1">
-        <label>Résistance interne r (Ω)</label>
-        <input type="range" id="cpR" min="0" max="2.5" value="1" step="0.25">
-        <div class="actions" style="justify-content:flex-start; margin-top:12px;">
-          <button id="cpTraceBtn">📈 Tracer !</button>
-        </div>
-        <div class="anim-readout" id="cpReadout"></div>
+        <label>Force F (N)</label>
+        <input type="range" id="pfF" min="10" max="200" value="80" step="10">
+        <label>Surface S (m²)</label>
+        <input type="range" id="pfS" min="0.5" max="5" value="2" step="0.5">
+        <div class="anim-readout" id="pfReadout"></div>
       </div>
     </div>
-    <div class="activity-block"><div id="actCharacteristic"></div></div>
+    <div class="activity-block"><div id="actPressureForce"></div></div>
   </section>
 
   <section>
-    <h2>Énergie électrique : E = P × Δt</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la puissance et la durée, puis allume la machine : regarde l'énergie s'accumuler.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap" style="width:280px;">
-        <svg id="eaSvg" viewBox="0 0 250 200"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Puissance P (W)</label>
-        <input type="range" id="eaP" min="10" max="2000" value="500" step="10">
-        <label>Durée Δt (s)</label>
-        <input type="range" id="eaDt" min="1" max="8" value="4" step="1">
-        <div class="actions" style="justify-content:flex-start; margin:12px 0;">
-          <button id="eaBtn">🔌 Allumer !</button>
-        </div>
-        <div class="formula" id="eaFormula" style="font-size:1rem;"></div>
-        <div class="anim-readout" id="eaReadout"></div>
-      </div>
-    </div>
-    <div class="activity-block"><div id="actEnergyAccumulator"></div></div>
-  </section>
-
-  <section>
-    <h2>Chaîne de puissance et rendement</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">La puissance d'entrée se répartit toujours entre puissance exploitable et puissance dégradée.</p>
+    <h2>Représentation macro vs micro du fluide au repos</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:6px;">À l'échelle macroscopique, un fluide au repos est perçu comme immobile. La pression en un point dépend en quelque sorte de la quantité de matière située au-dessus de lui, qui exerce une force pressante sur ce point.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">À l'échelle microscopique, la pression s'explique par les chocs des entités du fluide contre une paroi : leur agitation (la température) et leur proximité (la masse volumique) déterminent la fréquence de ces chocs — donc la pression.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="pcSvg" viewBox="0 0 220 190"></svg>
+        <h3 style="text-align:center; font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin-bottom:8px;">Vision macroscopique</h3>
+        <svg id="mfMacroSvg" viewBox="0 0 240 225"></svg>
+        <label style="font-size:0.78rem; color:var(--chalk-dim); display:block; margin-top:6px;">Profondeur (m)</label>
+        <input type="range" id="mfDepth" min="0" max="25" value="0" step="1" style="width:100%;">
+      </div>
+      <div class="anim-wrap">
+        <h3 style="text-align:center; font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin-bottom:8px;">Vision microscopique</h3>
+        <svg id="mfSvg" viewBox="0 0 240 190"></svg>
       </div>
       <div class="anim-controls">
-        <label>Rendement η (%)</label>
-        <input type="range" id="pcEta" min="10" max="95" value="70" step="5">
-        <div class="anim-readout" id="pcReadout"></div>
+        <label>Température (°C)</label>
+        <input type="range" id="mfTemp" min="0" max="100" value="20" step="5">
+        <label>Masse volumique (nombre d'entités)</label>
+        <input type="range" id="mfDens" min="4" max="26" value="12" step="2">
+        <div class="anim-readout" id="mfReadout"></div>
       </div>
     </div>
-    <div class="activity-block"><div id="actPowerChain"></div></div>
+    <div class="activity-block"><div id="actMicroFluid"></div></div>
+  </section>
+
+  <section>
+    <h2>Loi de Mariotte : exemple du ballon d'air dans l'eau</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais descendre le ballon dans le bassin : comme le produit P×V est constant, le volume du ballon change avec la pression.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="mbSvg" viewBox="0 0 200 225"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Profondeur (m)</label>
+        <input type="range" id="mbDepth" min="0" max="25" value="0" step="1">
+        <div class="anim-readout" id="mbReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMariotte"></div></div>
   </section>
 
 </div>
@@ -357,20 +289,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Intensité</td><td style="padding:10px 8px; color:var(--yellow);">I = Q / Δt</td><td style="padding:10px 8px; color:var(--chalk-dim);">I (A) • Q (C) • Δt (s)</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Source réelle de tension</td><td style="padding:10px 8px; color:var(--yellow);">U = E − r × I</td><td style="padding:10px 8px; color:var(--chalk-dim);">E idéale + r conducteur ohmique en série</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Puissance et énergie</td><td style="padding:10px 8px; color:var(--yellow);">P = U × I ; E = P × Δt</td><td style="padding:10px 8px; color:var(--chalk-dim);">1 kWh = 3,6×10⁶ J</td></tr>
-          <tr><td style="padding:10px 8px;">Rendement</td><td style="padding:10px 8px; color:var(--yellow);">η = P<sub>exploitable</sub> / P<sub>entrée</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">toujours η ≤ 1</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Force pressante</td><td style="padding:10px 8px; color:var(--yellow);">F = P × S</td><td style="padding:10px 8px; color:var(--chalk-dim);">F (N) • P (Pa) • S (m²)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Pression et profondeur</td><td style="padding:10px 8px; color:var(--yellow);">P<sub>B</sub> − P<sub>A</sub> = ρ×g×(z<sub>A</sub>−z<sub>B</sub>)</td><td style="padding:10px 8px; color:var(--chalk-dim);">z orienté vers le haut</td></tr>
+          <tr><td style="padding:10px 8px;">Loi de Mariotte (gaz)</td><td style="padding:10px 8px; color:var(--yellow);">P × V = constante</td><td style="padding:10px 8px; color:var(--chalk-dim);">à T et n constantes</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="method-box" style="margin-top:20px;">
-      <span class="box-label">🔧 Source idéale vs source réelle</span>
+      <span class="box-label">🔧 À l'échelle microscopique</span>
       <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li><strong>Idéale</strong> : U = E, indépendante de I (droite horizontale)</li>
-        <li><strong>Réelle</strong> : U = E − r×I, U diminue quand I augmente (droite décroissante)</li>
-        <li>Le conducteur ohmique convertit toute sa puissance reçue en chaleur (effet Joule)</li>
+        <li>Température T ↔ agitation des entités</li>
+        <li>Pression P ↔ chocs des entités contre la paroi</li>
+        <li>Masse volumique ρ ↔ proximité des entités</li>
       </ul>
     </div>
   </section>
@@ -378,7 +309,7 @@
 
 </main>
 
-<footer>Chapitre 12 — Énergie des systèmes électriques (1ère spé PC).</footer>
+<footer>Chapitre 12 — Description d'un fluide au repos (1ère spé PC).</footer>
 
 <script>
 /* ---------- Correction du texte à trous (mode entraînement) ---------- */
@@ -410,53 +341,44 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 });
 
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initCurrentModel({ svgId: "cmSvgCours", qRangeId: "cmQCours", dtRangeId: "cmDtCours", formulaId: "cmFormulaCours", readoutId: "cmReadoutCours", btnMetalId: "cmMetalCours", btnSolutionId: "cmSolutionCours" });
-initCharacteristicPlot({ svgId: "cpSvgCours", svgCircuitId: "cpCircuitSvgCours", eRangeId: "cpECours", rRangeId: "cpRCours", traceBtnId: "cpTraceBtnCours", readoutId: "cpReadoutCours" });
-initEnergyAccumulator({ svgId: "eaSvgCours", pRangeId: "eaPCours", dtRangeId: "eaDtCours", formulaId: "eaFormulaCours", readoutId: "eaReadoutCours", btnId: "eaBtnCours" });
-initPowerChain({ svgId: "pcSvgCours", etaRangeId: "pcEtaCours", readoutId: "pcReadoutCours" });
+initPressureForce({ svgId: "pfSvgCours", fRangeId: "pfFCours", sRangeId: "pfSCours", readoutId: "pfReadoutCours" });
+initMicroFluid({ svgId: "mfSvgCours", macroSvgId: "mfMacroSvgCours", depthRangeId: "mfDepthCours", tempRangeId: "mfTempCours", densRangeId: "mfDensCours", readoutId: "mfReadoutCours" });
+initMariotteBag({ svgId: "mbSvgCours", depthRangeId: "mbDepthCours", readoutId: "mbReadoutCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initCurrentModel({ svgId: "cmSvg", qRangeId: "cmQ", dtRangeId: "cmDt", formulaId: "cmFormula", readoutId: "cmReadout", btnMetalId: "cmMetal", btnSolutionId: "cmSolution" });
-initCharacteristicPlot({ svgId: "cpSvg", svgCircuitId: "cpCircuitSvg", eRangeId: "cpE", rRangeId: "cpR", traceBtnId: "cpTraceBtn", readoutId: "cpReadout" });
-initEnergyAccumulator({ svgId: "eaSvg", pRangeId: "eaP", dtRangeId: "eaDt", formulaId: "eaFormula", readoutId: "eaReadout", btnId: "eaBtn" });
-initPowerChain({ svgId: "pcSvg", etaRangeId: "pcEta", readoutId: "pcReadout" });
+initPressureForce({ svgId: "pfSvg", fRangeId: "pfF", sRangeId: "pfS", readoutId: "pfReadout" });
+initMicroFluid({ svgId: "mfSvg", macroSvgId: "mfMacroSvg", depthRangeId: "mfDepth", tempRangeId: "mfTemp", densRangeId: "mfDens", readoutId: "mfReadout" });
+initMariotteBag({ svgId: "mbSvg", depthRangeId: "mbDepth", readoutId: "mbReadout" });
 
 /* ---------- Activités liées à chaque animation ---------- */
 initEstimation({
-  containerId: "actCurrentModel", chapterId: "ch12-1ere", activityId: "est-current-model",
-  prompt: "Avec Q = 6 C et Δt = 2 s, quelle est l'intensité I = Q/Δt (en A) ?",
-  answer: 3, tolerance: 0.2, unit: "A",
-  explanation: "I = Q/Δt = 6/2 = 3 A."
+  containerId: "actPressureForce", chapterId: "ch12-1ere", activityId: "est-pressure-force",
+  prompt: "Avec F = 100 N et S = 2 m², quelle est la pression P = F/S (en Pa) ?",
+  answer: 50, tolerance: 2, unit: "Pa",
+  explanation: "P = F/S = 100/2 = 50 Pa."
 });
 
 initQCM({
-  containerId: "actCharacteristic", chapterId: "ch12-1ere", activityId: "qcm-characteristic",
-  prompt: "Pour une source réelle (résistance interne r > 0), quand l'intensité I augmente, la tension U aux bornes de la source…",
+  containerId: "actMicroFluid", chapterId: "ch12-1ere", activityId: "qcm-micro-fluid",
+  prompt: "Sur l'animation microscopique, si on augmente la température sans changer la masse volumique, qu'est-ce qui augmente ?",
   options: [
-    { text: "diminue", correct: true },
-    { text: "augmente", correct: false },
-    { text: "reste constante", correct: false }
+    { text: "La fréquence des chocs sur la paroi (donc la pression)", correct: true },
+    { text: "La masse volumique du fluide", correct: false },
+    { text: "La taille des particules", correct: false }
   ],
-  explanation: "U = E − r×I : plus I augmente, plus le terme r×I est grand, donc U diminue. C'est ce qui distingue une source réelle d'une source idéale."
-});
-
-initEstimation({
-  containerId: "actEnergyAccumulator", chapterId: "ch12-1ere", activityId: "est-energy-accumulator",
-  prompt: "Avec P = 500 W et Δt = 4 s, quelle est l'énergie électrique E = P×Δt (en J) ?",
-  answer: 2000, tolerance: 50, unit: "J",
-  explanation: "E = P × Δt = 500 × 4 = 2000 J."
+  explanation: "Une température plus élevée signifie une agitation plus grande des entités : elles se déplacent plus vite, donc heurtent la paroi plus souvent — la pression augmente."
 });
 
 initVraiFaux({
-  containerId: "actPowerChain", chapterId: "ch12-1ere", activityId: "vf-power-chain",
-  prompt: "Le rendement η d'un convertisseur peut être supérieur à 1 si celui-ci est particulièrement efficace.",
+  containerId: "actMariotte", chapterId: "ch12-1ere", activityId: "vf-mariotte",
+  prompt: "D'après la loi de Mariotte, si la pression P d'un gaz double (à T et n constantes), son volume V double aussi.",
   correct: false,
-  explanation: "Faux : η = P_exploitable / P_entrée est toujours inférieur ou égal à 1, car un convertisseur ne peut jamais restituer plus de puissance qu'il n'en reçoit (conservation de l'énergie)."
+  explanation: "Faux : P × V = constante. Si P double, V est divisé par 2 pour que le produit reste inchangé."
 });
 
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch12-1ere");
-initProgressBar("ch12-1ere", 5); // texte à trous complet + 4 activités liées aux animations
+initProgressBar("ch12-1ere", 4); // texte à trous complet + 3 activités liées aux animations
 </script>
 </body>
 </html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 2 — Corps purs et mélanges — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch2-2nde.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 2 — Corps purs et mélanges</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch2-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch2-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Distinguer corps pur et mélange, mélange homogène et hétérogène</li>
+        <li>Savoir calculer une proportion massique ou volumique</li>
+        <li>Connaître les trois méthodes d'identification d'une espèce chimique</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1. Les corps purs et les mélanges</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>espèce chimique</strong> correspond à un ensemble d'<strong>entités chimiques</strong> (atomes, ions, molécules...) identiques. Elle est représentée par une <strong>formule chimique</strong> — par exemple H₂O pour l'eau, ou Fe pour le fer.
+    </div>
+    <p class="course-text">
+      Un <strong>corps pur</strong> est constitué d'une seule espèce chimique. Un <strong>mélange</strong> est constitué de plusieurs espèces chimiques différentes. Le dioxygène et le diazote, pris séparément, sont des corps purs ; l'air, qui contient les deux, est un mélange. De même, l'eau et le sucre sont des corps purs, alors que l'eau sucrée est un mélange.
+    </p>
+    <p class="course-text">
+      On distingue deux catégories de mélanges. Un mélange <strong>homogène</strong> (comme l'eau sucrée) ne laisse voir aucun constituant distinct à l'œil nu, même après agitation. Un mélange <strong>hétérogène</strong> (comme l'eau et le sable) laisse voir au moins deux constituants différents, même après agitation.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Deux liquides sont dits <strong>miscibles</strong> s'ils forment un mélange homogène, et <strong>non miscibles</strong> s'ils forment un mélange hétérogène.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les trois cas et observe la répartition des points.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pmPureCours">Corps pur</button>
+      <button class="toggle-btn" id="pmHomoCours">Mélange homogène</button>
+      <button class="toggle-btn" id="pmHeteroCours">Mélange hétérogène</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="pmSvgCours" viewBox="0 0 220 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="pmReadoutCours"></div>
+      </div>
+    </div>
+
+    <p class="course-text" style="margin-top:20px;">
+      La composition d'un mélange peut être décrite par la <strong>proportion massique</strong> (ou son pourcentage) d'une espèce E, quotient de la masse de E par la masse totale du mélange, ou par sa <strong>proportion volumique</strong>, quotient du volume de E par le volume total.
+    </p>
+    <div class="formula">
+      <span class="frac"><span class="num">m(E)</span><span class="den">m<sub>tot</sub></span></span>
+      &nbsp;&nbsp;ou&nbsp;&nbsp;
+      <span class="frac"><span class="num">V(E)</span><span class="den">V<sub>tot</sub></span></span>
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : 10 L d'air contiennent environ 7,8 L de diazote, soit un pourcentage volumique de 78%. L'air contient en volume environ 78% de diazote, 21% de dioxygène et 1% d'autres gaz.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis le mode, puis règle la quantité de E et la quantité totale : observe la proportion se remplir.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="prMassCours">Proportion massique (g)</button>
+      <button class="toggle-btn" id="prVolCours">Proportion volumique (L)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="prSvgCours" viewBox="0 0 140 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Quantité de l'espèce E (<span id="prUnitECours">L</span>)</label>
+        <input type="range" id="prECours" min="1" max="10" value="7.8" step="0.1">
+        <label>Quantité totale (<span id="prUnitTotCours">L</span>)</label>
+        <input type="range" id="prTotCours" min="1" max="10" value="10" step="0.1">
+        <div class="anim-readout" id="prReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2a. Identification par les grandeurs physiques</h2>
+    <p class="course-text">
+      Les corps purs ont des <strong>caractéristiques physiques</strong> qui permettent de les identifier. Deux tests sont présentés ci-dessous : d'abord la température de changement d'état, puis la masse volumique (et la densité).
+    </p>
+
+    <h3 style="font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin:24px 0 10px;">Test 1 — La température de changement d'état</h3>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un corps pur possède une température de changement d'état bien définie et <strong>constante</strong> (elle forme un palier sur un graphique température-temps), contrairement à un mélange.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Compare l'allure de la courbe de refroidissement d'un corps pur et d'un mélange.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="scPureCours">Corps pur</button>
+      <button class="toggle-btn" id="scMixCours">Mélange</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:280px;">
+        <svg id="scSvgCours" viewBox="0 0 260 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="scReadoutCours"></div>
+      </div>
+    </div>
+
+    <h3 style="font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin:28px 0 10px;">Test 2 — La masse volumique et la densité</h3>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>masse volumique</strong> ρ d'un échantillon est le quotient de sa masse <em>m</em> par son volume <em>V</em>. Elle s'exprime en g/L (ou kg/L, g/mL, g/cm³).
+    </div>
+    <div class="formula">ρ = <span class="frac"><span class="num">m</span><span class="den">V</span></span></div>
+    <p class="course-text">
+      La masse volumique dépend des conditions expérimentales, en particulier de la <strong>température</strong> (la matière se dilate ou se contracte légèrement). Pour identifier une espèce sans avoir à se soucier précisément de la température du laboratoire, on utilise une grandeur qui compense cet effet : la <strong>densité</strong>.
+    </p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>densité</strong> d d'une espèce est le quotient de sa masse volumique par celle d'une espèce de <strong>référence</strong>, mesurée dans les mêmes conditions. Elle est sans unité.
+    </div>
+    <div class="formula">d = <span class="frac"><span class="num">ρ</span><span class="den">ρ<sub>référence</sub></span></span></div>
+    <p class="course-text">
+      Par convention, la référence est l'<strong>eau</strong> (ρ<sub>eau</sub> ≈ 1,00×10³ g/L à 20°C) pour un liquide ou un solide, et l'<strong>air</strong> (ρ<sub>air</sub> ≈ 1,3 g/L) pour un gaz. En comparant à une référence mesurée dans les mêmes conditions, la densité varie beaucoup moins que ρ seule d'un jour à l'autre — pratique pour identifier une espèce sans connaître précisément la température du labo (ce détail n'est pas à retenir par cœur, seulement à comprendre).
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Comparer la densité d'un liquide non miscible à l'eau permet de prévoir sa position : le moins dense des deux surnage.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la masse et le volume : le plateau descend selon la masse ; la taille du bécher (ou du ballon) dépend du volume.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="dcLiquidCours">Liquide (÷ eau)</button>
+      <button class="toggle-btn" id="dcGasCours">Gaz (÷ air)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="dcSvgCours" viewBox="0 0 200 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse m (<span id="dcUnitMCours">kg</span>)</label>
+        <input type="range" id="dcMCours" min="0.05" max="5" value="1.00" step="0.05">
+        <label>Volume V (L)</label>
+        <input type="range" id="dcVCours" min="0.1" max="5" value="1.00" step="0.05">
+        <div class="anim-readout" id="dcReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2b. Identification par des tests chimiques</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Des tests chimiques sont caractéristiques de certaines espèces et permettent de les détecter.
+    </div>
+    <p class="course-text">
+      Le <strong>sulfate de cuivre anhydre</strong> (blanc) bleuit en présence d'<strong>eau</strong>. Le <strong>dioxyde de carbone</strong> trouble l'eau de chaux. Le <strong>dioxygène</strong> ravive une allumette incandescente. Le <strong>dihydrogène</strong> produit une détonation au contact d'une flamme.
+    </p>
+  </section>
+
+  <section>
+    <h2>2c. Identification par la chromatographie</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Les espèces chimiques d'un mélange sont entraînées par une phase mobile (l'<strong>éluant</strong>) qui monte par capillarité dans une phase fixe (papier ou silice). La figure obtenue s'appelle un <strong>chromatogramme</strong>.
+    </div>
+    <p class="course-text">
+      La chromatographie sur couche mince (CCM) permet la séparation et l'identification des espèces chimiques présentes dans un mélange. Pour un éluant et un support donnés, une espèce chimique migre toujours de la même façon, qu'elle soit pure ou dans un mélange.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Si les espèces sont incolores, on révèle le chromatogramme sous lampe UV ou avec un révélateur chimique. Deux taches situées à la <strong>même hauteur</strong> correspondent à la <strong>même espèce chimique</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Trois dépôts : A pur, B pur, et le mélange A + B. Clique sur « Éluer ! » pour faire monter le solvant.</p>
+    <div class="actions" style="justify-content:flex-start; margin-bottom:12px;">
+      <button id="chEluerBtnCours">💧 Éluer !</button>
+      <button id="chResetBtnCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim);">↺ Recommencer</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="chSvgCours" viewBox="0 0 220 185"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="chReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>1. Les corps purs et les mélanges</h3>
+      <p>
+        Une <input class="blank" data-answer="espèce chimique|espece chimique" size="18"> correspond à un ensemble d'<input class="blank" data-answer="entités chimiques|entites chimiques" size="20"> identiques. Elle est représentée par une <input class="blank" data-answer="formule chimique" size="18">.
+      </p>
+      <p>
+        Un <input class="blank" data-answer="corps pur" size="14"> est constitué d'une seule espèce chimique. Un <input class="blank" data-answer="mélange|melange" size="14"> est constitué de plusieurs espèces chimiques.
+      </p>
+      <p>
+        Un mélange <input class="blank" data-answer="homogène|homogene" size="14"> ne laisse voir aucun constituant distinct à l'œil nu, même après agitation. Un mélange <input class="blank" data-answer="hétérogène|heterogene" size="16"> laisse voir au moins deux constituants différents.
+      </p>
+      <p>
+        Deux liquides sont dits <input class="blank" data-answer="miscibles" size="14"> s'ils forment un mélange homogène, et <input class="blank" data-answer="non miscibles" size="16"> s'ils forment un mélange hétérogène.
+      </p>
+      <p>
+        La proportion, en masse, d'une espèce E dans un mélange est le quotient de la <input class="blank" data-answer="masse" size="10"> de E par la masse totale. La proportion, en volume, est le quotient du <input class="blank" data-answer="volume" size="12"> de E par le volume total.
+      </p>
+      <div class="formula">
+        <span class="frac"><span class="num">m(E)</span><span class="den">m<sub>tot</sub></span></span>
+        &nbsp;&nbsp;ou&nbsp;&nbsp;
+        <span class="frac"><span class="num">V(E)</span><span class="den">V<sub>tot</sub></span></span>
+      </div>
+
+      <h3>2a. Identification par les grandeurs physiques (Test 1 : température ; Test 2 : masse volumique/densité)</h3>
+      <p>
+        Un corps pur possède une température de changement d'état <input class="blank" data-answer="constante" size="14">, contrairement à un mélange.
+      </p>
+      <p>
+        La masse volumique ρ d'un échantillon est le quotient de sa <input class="blank" data-answer="masse" size="10"> par son <input class="blank" data-answer="volume" size="10">.
+      </p>
+      <div class="formula">ρ = <span class="frac"><span class="num">m</span><span class="den">V</span></span></div>
+      <p>
+        La masse volumique dépend de la <input class="blank" data-answer="température|temperature" size="16">. La <input class="blank" data-answer="densité|densite" size="14"> compense cet effet : c'est le quotient de la masse volumique par celle d'une espèce de <input class="blank" data-answer="référence|reference" size="14">, mesurée dans les mêmes conditions.
+      </p>
+      <div class="formula">d = <span class="frac"><span class="num">ρ</span><span class="den">ρ<sub>référence</sub></span></span></div>
+      <p>
+        Pour un liquide ou un solide, la référence est l'<input class="blank" data-answer="eau" size="8">. Pour un gaz, la référence est l'<input class="blank" data-answer="air" size="8">. La densité est sans <input class="blank" data-answer="unité|unite" size="12">.
+      </p>
+      <p>
+        Comparer la densité de deux liquides non miscibles permet de prévoir leur position relative : le moins dense <input class="blank" data-answer="surnage" size="14">.
+      </p>
+
+      <h3>2b. Identification par des tests chimiques</h3>
+      <p>
+        Le sulfate de cuivre anhydre bleuit en présence d'<input class="blank" data-answer="eau" size="8">. Le dioxyde de carbone trouble l'<input class="blank" data-answer="eau de chaux" size="16">. Le dioxygène ravive une <input class="blank" data-answer="allumette incandescente|allumette" size="20">. Le dihydrogène produit une <input class="blank" data-answer="détonation|detonation" size="16"> au contact d'une flamme.
+      </p>
+
+      <h3>2c. Identification par la chromatographie</h3>
+      <p>
+        Les espèces chimiques d'un mélange sont entraînées par une phase mobile appelée l'<input class="blank" data-answer="éluant|eluant" size="14">, qui monte par capillarité dans une phase fixe. La figure obtenue s'appelle un <input class="blank" data-answer="chromatogramme" size="18">.
+      </p>
+      <p>
+        Pour un éluant et un support donnés, une espèce migre toujours de la <input class="blank" data-answer="même façon|meme facon" size="16">, qu'elle soit pure ou dans un mélange. Deux taches à la même <input class="blank" data-answer="hauteur" size="12"> correspondent à la même espèce chimique.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Corps pur / mélange homogène / hétérogène</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les trois cas et observe la répartition des points.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pmPure">Corps pur</button>
+      <button class="toggle-btn" id="pmHomo">Mélange homogène</button>
+      <button class="toggle-btn" id="pmHetero">Mélange hétérogène</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="pmSvg" viewBox="0 0 220 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="pmReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actPureMixture"></div></div>
+  </section>
+
+  <section>
+    <h2>Calculateur de proportion</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis le mode, puis règle la quantité de E et la quantité totale : observe la proportion se remplir.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="prMass">Proportion massique (g)</button>
+      <button class="toggle-btn" id="prVol">Proportion volumique (L)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="prSvg" viewBox="0 0 140 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Quantité de l'espèce E (<span id="prUnitE">L</span>)</label>
+        <input type="range" id="prE" min="1" max="10" value="7.8" step="0.1">
+        <label>Quantité totale (<span id="prUnitTot">L</span>)</label>
+        <input type="range" id="prTot" min="1" max="10" value="10" step="0.1">
+        <div class="anim-readout" id="prReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actProportion"></div></div>
+  </section>
+
+  <section>
+    <h2>Température de changement d'état</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Compare l'allure de la courbe de refroidissement d'un corps pur et d'un mélange.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="scPure">Corps pur</button>
+      <button class="toggle-btn" id="scMix">Mélange</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:280px;">
+        <svg id="scSvg" viewBox="0 0 260 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="scReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actStateChange"></div></div>
+  </section>
+
+  <section>
+    <h2>Masse volumique et densité</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la masse et le volume : le plateau descend selon la masse ; la taille du bécher (ou du ballon) dépend du volume.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="dcLiquid">Liquide (÷ eau)</button>
+      <button class="toggle-btn" id="dcGas">Gaz (÷ air)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="dcSvg" viewBox="0 0 200 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse m (<span id="dcUnitM">kg</span>)</label>
+        <input type="range" id="dcM" min="0.05" max="5" value="1.00" step="0.05">
+        <label>Volume V (L)</label>
+        <input type="range" id="dcV" min="0.1" max="5" value="1.00" step="0.05">
+        <div class="anim-readout" id="dcReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actDensity"></div></div>
+  </section>
+
+  <section>
+    <h2>Chromatographie interactive</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Trois dépôts : A pur, B pur, et le mélange A + B. Clique sur « Éluer ! » pour faire monter le solvant.</p>
+    <div class="actions" style="justify-content:flex-start; margin-bottom:12px;">
+      <button id="chEluerBtn">💧 Éluer !</button>
+      <button id="chResetBtn" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim);">↺ Recommencer</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="chSvg" viewBox="0 0 220 185"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="chReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actChromatography"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Définition / formule</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Corps pur / mélange</td><td style="padding:10px 8px;">1 espèce / plusieurs espèces</td><td style="padding:10px 8px; color:var(--chalk-dim);">homogène (indiscernable) ou hétérogène (≥2 visibles)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Proportion</td><td style="padding:10px 8px;">m(E)/m<sub>tot</sub> ou V(E)/V<sub>tot</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">massique ou volumique, exprimable en %</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Masse volumique</td><td style="padding:10px 8px;">ρ = m / V</td><td style="padding:10px 8px; color:var(--chalk-dim);">en g/L</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Densité</td><td style="padding:10px 8px;">d = ρ/ρ<sub>eau</sub> (liquide/solide) ou ρ/ρ<sub>air</sub> (gaz)</td><td style="padding:10px 8px; color:var(--chalk-dim);">sans unité ; le moins dense surnage</td></tr>
+          <tr><td style="padding:10px 8px;">Chromatographie</td><td style="padding:10px 8px;">migration dans une phase fixe via un éluant</td><td style="padding:10px 8px; color:var(--chalk-dim);">même hauteur = même espèce</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Les 3 méthodes d'identification d'une espèce</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li><strong>Grandeurs physiques</strong> : température de changement d'état, masse volumique/densité, solubilité, indice de réfraction</li>
+        <li><strong>Tests chimiques</strong> : eau (sulfate de cuivre anhydre bleuit), CO₂ (trouble l'eau de chaux), O₂ (ravive une allumette), H₂ (détonation)</li>
+        <li><strong>Chromatographie</strong> (CCM) : migration dans une phase fixe grâce à un éluant, comparaison des hauteurs de migration</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 2 — Corps purs et mélanges (2nde).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch2-2nde", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initPureOrMixture({ svgId: "pmSvgCours", readoutId: "pmReadoutCours", btnPureId: "pmPureCours", btnHomoId: "pmHomoCours", btnHeteroId: "pmHeteroCours" });
+initProportionCalculator({ svgId: "prSvgCours", eRangeId: "prECours", totRangeId: "prTotCours", readoutId: "prReadoutCours", btnMassId: "prMassCours", btnVolId: "prVolCours", unitLabelEId: "prUnitECours", unitLabelTotId: "prUnitTotCours" });
+initStateChangeGraph({ svgId: "scSvgCours", readoutId: "scReadoutCours", btnPureId: "scPureCours", btnMixId: "scMixCours" });
+initDensityCalculator({ svgId: "dcSvgCours", mRangeId: "dcMCours", vRangeId: "dcVCours", readoutId: "dcReadoutCours", btnLiquidId: "dcLiquidCours", btnGasId: "dcGasCours", unitMLabelId: "dcUnitMCours" });
+initChromatography({ svgId: "chSvgCours", readoutId: "chReadoutCours", eluerBtnId: "chEluerBtnCours", resetBtnId: "chResetBtnCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initPureOrMixture({ svgId: "pmSvg", readoutId: "pmReadout", btnPureId: "pmPure", btnHomoId: "pmHomo", btnHeteroId: "pmHetero" });
+initProportionCalculator({ svgId: "prSvg", eRangeId: "prE", totRangeId: "prTot", readoutId: "prReadout", btnMassId: "prMass", btnVolId: "prVol", unitLabelEId: "prUnitE", unitLabelTotId: "prUnitTot" });
+initStateChangeGraph({ svgId: "scSvg", readoutId: "scReadout", btnPureId: "scPure", btnMixId: "scMix" });
+initDensityCalculator({ svgId: "dcSvg", mRangeId: "dcM", vRangeId: "dcV", readoutId: "dcReadout", btnLiquidId: "dcLiquid", btnGasId: "dcGas", unitMLabelId: "dcUnitM" });
+initChromatography({ svgId: "chSvg", readoutId: "chReadout", eluerBtnId: "chEluerBtn", resetBtnId: "chResetBtn" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actPureMixture", chapterId: "ch2-2nde", activityId: "qcm-pure-mixture",
+  prompt: "Dans un mélange hétérogène, que peut-on observer à l'œil nu, même après agitation ?",
+  options: [
+    { text: "Au moins deux constituants distincts", correct: true },
+    { text: "Un seul constituant, comme dans un mélange homogène", correct: false },
+    { text: "Rien, il est toujours parfaitement transparent", correct: false }
+  ],
+  explanation: "C'est la définition même d'un mélange hétérogène : au moins deux des constituants restent visibles à l'œil nu, même après agitation."
+});
+
+initEstimation({
+  containerId: "actProportion", chapterId: "ch2-2nde", activityId: "est-proportion",
+  prompt: "10 L d'air contiennent environ 7,8 L de diazote. Quel est le pourcentage volumique de diazote (en %) ?",
+  answer: 78, tolerance: 2, unit: "%",
+  explanation: "7,8/10 = 78/100, soit 78%."
+});
+
+initVraiFaux({
+  containerId: "actStateChange", chapterId: "ch2-2nde", activityId: "vf-state-change",
+  prompt: "La température de changement d'état d'un mélange reste constante, tout comme pour un corps pur.",
+  correct: false,
+  explanation: "Faux : seul un corps pur change d'état à température constante (palier). Un mélange n'a pas de vrai palier."
+});
+
+initEstimation({
+  containerId: "actDensity", chapterId: "ch2-2nde", activityId: "est-density",
+  prompt: "L'acétone a une densité d = 0,783. Sachant que ρ(eau) ≈ 1,00×10³ g/L, quelle est la masse volumique de l'acétone (en g/L) ?",
+  answer: 783, tolerance: 10, unit: "g/L",
+  explanation: "d = ρ/ρ(eau), donc ρ = d × ρ(eau) = 0,783 × 1000 = 783 g/L."
+});
+
+initQCM({
+  containerId: "actChromatography", chapterId: "ch2-2nde", activityId: "qcm-chromatography",
+  prompt: "Sur la CCM, après élution, une tache du mélange A + B est à la même hauteur qu'une tache du composé A pur. Qu'en déduit-on ?",
+  options: [
+    { text: "Le mélange contient le composé A", correct: true },
+    { text: "Le mélange ne contient pas le composé A", correct: false },
+    { text: "On ne peut rien conclure sans autre information", correct: false }
+  ],
+  explanation: "Pour un éluant et un support donnés, une espèce migre toujours à la même hauteur (même Rf), pure ou dans un mélange : une même hauteur signale donc la même espèce."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch2-2nde");
+initProgressBar("ch2-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+</script>
+</body>
+</html>

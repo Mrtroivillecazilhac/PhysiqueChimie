@@ -3,14 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapitre 4 — Ondes mécaniques — 1ère spé PC</title>
+<title>Chapitre 4 — Tableau d'avancement — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
 <script src="animations-common.js"></script>
 <script src="animations-ch4.js"></script>
 <script src="modules-common.js"></script>
 <style>
-  .double-zone{ display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
-  .double-panel{ width:260px; flex:none; }
+  .big-equation{
+    text-align:center; font-family:var(--font-body); font-size:1.5rem;
+    background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:12px;
+    padding:18px; margin-bottom:16px; letter-spacing:0.02em;
+  }
+  .big-equation .coef{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%;
+    background:var(--yellow); color:var(--board);
+    font-weight:800; font-size:0.75em; vertical-align:middle;
+  }
+  .adv-table{ width:100%; border-collapse:collapse; margin-top:18px; font-size:0.85rem; }
+  .adv-table th, .adv-table td{
+    border:1px solid var(--line); padding:8px 10px; text-align:center; color:var(--chalk-dim);
+  }
+  .adv-table th{ color:var(--chalk); font-family:var(--font-display); font-weight:400; }
+  .adv-table tr.row-active{ background:rgba(232,196,104,0.15); }
+  .adv-table tr.row-active td{ color:var(--chalk); font-weight:700; }
+  .adv-table tr.row-active td:first-child{ border-left:3px solid var(--yellow); }
 </style>
 </head>
 <body>
@@ -24,8 +41,8 @@
 </nav>
 
 <header class="page-head">
-  <div class="badge-inline physique">Physique</div>
-  <h1>Chapitre 4 — Ondes mécaniques</h1>
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 4 — Tableau d'avancement</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
 </header>
 
@@ -56,130 +73,106 @@
     <div class="objectifs-box">
       <span class="box-label">🎯 Objectifs du chapitre</span>
       <ul>
-        <li>Comprendre qu'une onde mécanique transporte de l'énergie, pas de matière</li>
-        <li>Savoir calculer une célérité v = d/Δt, et relier v, λ et T</li>
-        <li>Comprendre la double périodicité (temporelle T et spatiale λ) d'une onde périodique</li>
+        <li>Savoir construire et compléter un tableau d'avancement</li>
+        <li>Déterminer l'avancement maximal et identifier le réactif limitant</li>
+        <li>Reconnaître un mélange stœchiométrique et en connaître les conséquences</li>
       </ul>
     </div>
   </section>
 
   <section>
-    <h2>a. Ondes mécaniques progressives — échelle macroscopique</h2>
+    <h2>a. Avancement d'une réaction chimique</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Lorsqu'un caillou tombe dans l'eau, il provoque une déformation de la surface. Cette perturbation qui se propage en s'éloignant du point d'impact est une onde mécanique <strong>progressive</strong>.
-    </div>
-    <p class="course-text">
-      Pour chaque point du milieu, on définit son <strong>élongation</strong> : elle mesure l'écart par rapport à la position de <strong>repos</strong>.
-    </p>
-    <p class="course-text">
-      Une onde mécanique progressive est le phénomène de propagation d'une perturbation dans un milieu matériel élastique, <strong>sans transport de matière</strong>, mais avec transport d'<strong>énergie</strong>.
-    </p>
-    <p class="course-text">L'élongation maximale est l'<strong>amplitude</strong> de l'onde.</p>
-    <div class="warning-box">
-      <span class="box-label">⚠️ Attention</span>
-      La lumière n'est pas une onde mécanique — elle peut se propager dans le <strong>vide</strong>, contrairement à une onde mécanique qui a toujours besoin d'un milieu matériel.
+      L'<strong>avancement</strong> d'une réaction, noté x, est une grandeur exprimée en <strong>mole</strong> qui permet de décrire l'évolution des quantités de matière présentes dans un système au cours d'une transformation chimique.
     </div>
   </section>
 
   <section>
-    <h2>b. Ondes mécaniques progressives — échelle microscopique</h2>
+    <h2>b. Tableau d'avancement</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      À l'échelle microscopique, les <strong>interactions</strong> entre les entités du milieu matériel expliquent la propagation. Au passage d'une perturbation, des entités sont écartées de leur position d'<strong>équilibre</strong>.
+      Le tableau d'avancement décrit l'évolution des quantités de matière d'un système chimique de l'état <strong>initial</strong> à l'état <strong>final</strong>, en fonction de l'avancement x de la réaction.
     </div>
     <p class="course-text">
-      Leurs interactions avec les entités <strong>voisines</strong> sont modifiées, qui sont à leur tour déplacées : la perturbation se propage <strong>de proche en proche</strong>.
+      Le système évolue depuis l'état initial pour lequel x = 0 vers l'état final pour lequel x = x<sub>f</sub>. Les quantités des réactifs <strong>diminuent</strong> alors que celles des produits <strong>augmentent</strong>. Elles n'évoluent plus lorsque l'état final est atteint.
     </p>
   </section>
 
   <section>
-    <h2>c. Célérité d'une onde</h2>
+    <h2>c. Transformations totales et non totales</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      La perturbation en un point A n'arrive pas instantanément au point B, mais avec un <strong>retard</strong> Δt = t<sub>B</sub> − t<sub>A</sub>. La <strong>célérité</strong> d'une onde est la valeur de sa vitesse de propagation.
+      L'<strong>avancement maximal</strong> x<sub>max</sub> correspond à la plus petite valeur de l'avancement pour laquelle la quantité finale de l'un au moins des réactifs est <strong>nulle</strong>. Ce réactif est appelé <strong>réactif limitant</strong>.
     </div>
-    <div class="formula">v = <span class="frac"><span class="num">d</span><span class="den">Δt</span></span></div>
+    <p class="course-text">
+      Si x<sub>f</sub> = x<sub>max</sub>, la transformation est <strong>totale</strong>. Si x<sub>f</sub> &lt; x<sub>max</sub>, la transformation est <strong>non totale</strong>.
+    </p>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      La célérité d'une onde dépend du <strong>milieu matériel</strong> dans lequel elle se propage.
-    </div>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis la distance et la célérité, puis lance la perturbation.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="delaySvgCours" viewBox="0 0 260 100"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Distance AB (d)</label>
-        <input type="range" id="delayDCours" min="60" max="220" value="150" step="10">
-        <label>Célérité (v)</label>
-        <input type="range" id="delayVCours" min="30" max="150" value="80" step="10">
-        <div class="anim-readout" id="delayReadoutCours"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:14px;">
-          <button id="delayPlayCours">▶ Lancer</button>
-        </div>
-      </div>
+      L'avancement final x<sub>f</sub> permet de réaliser le <strong>bilan de matière</strong>, c'est-à-dire de calculer les quantités de matière de toutes les espèces à l'état final.
     </div>
   </section>
 
   <section>
-    <h2>d. Double périodicité d'une onde périodique</h2>
+    <h2>d. Le mélange stœchiométrique</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Une onde est <strong>périodique</strong> lorsque la perturbation se reproduit dans le temps et dans l'espace.
+      Un mélange initial est dit <strong>stœchiométrique</strong> si les quantités initiales des réactifs sont dans les mêmes proportions que les nombres stœchiométriques de l'équation de la réaction.
     </div>
-    <p class="course-text">
-      La <strong>période temporelle</strong>, notée T, est la plus petite durée au bout de laquelle la perturbation se répète en un point donné. La <strong>fréquence</strong> f est le nombre de répétitions par seconde : f = 1/T.
-    </p>
-    <p class="course-text">
-      La <strong>période spatiale</strong> (ou longueur d'onde), notée λ, est la plus petite distance qui sépare deux points du milieu dans le même état vibratoire.
-    </p>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Ajuste T et λ : regarde le point jaune, il oscille de haut en bas mais n'avance jamais.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="waveSvgCours" viewBox="0 0 260 130"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Période T</label>
-        <input type="range" id="waveTCours" min="5" max="40" value="15" step="1">
-        <label>Longueur d'onde λ</label>
-        <input type="range" id="waveLambdaCours" min="40" max="200" value="90" step="5">
-        <div class="anim-readout" id="waveReadoutCours"></div>
-      </div>
+    <div class="formula">
+      <span class="frac"><span class="num">n₀(A)</span><span class="den">a</span></span>
+      &nbsp;=&nbsp;
+      <span class="frac"><span class="num">n₀(B)</span><span class="den">b</span></span>
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Dans le cas d'une transformation totale et pour un mélange stœchiométrique, les quantités finales des réactifs sont <strong>nulles</strong>. Seuls les <strong>produits</strong> de la réaction et éventuellement les espèces <strong>spectatrices</strong> sont présents à l'état final.
     </div>
 
-    <p class="course-text" style="margin-top:20px;">
-      Comme on ne peut pas représenter le <strong style="color:var(--coral);">temps</strong> et l'<strong style="color:var(--teal);">espace</strong> en même temps sur une page en 2 dimensions, il faut figer l'image : on représente séparément la période temporelle et la période spatiale.
-    </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier n₀ et x : observe le réactif limitant, et repère le cas particulier du mélange stœchiométrique.</p>
+    <h3 style="font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-bottom:10px;">Réaction entre le diiode et les ions thiosulfate — une oxydo-réduction</h3>
+    <div class="big-equation">
+      <span class="coef">1</span> <span style="color:var(--yellow);">I₂</span>
+      &nbsp;+&nbsp;
+      <span class="coef">2</span> <span style="color:var(--teal);">S₂O₃²⁻</span>
+      &nbsp;→&nbsp;
+      <span class="coef">2</span> <span style="color:var(--coral);">I⁻</span>
+      &nbsp;+&nbsp;
+      <span class="coef">1</span> <span style="color:var(--chalk);">S₄O₆²⁻</span>
+    </div>
     <div class="actions" style="justify-content:flex-start; margin-bottom:14px;">
-      <button id="dpSyncCours">📸 Figer les réglages ci-dessus</button>
+      <button id="atViewToggleCours">🔵 Voir les molécules</button>
     </div>
-    <div class="double-zone">
-      <div class="double-panel">
-        <svg id="dpTimeSvgCours" viewBox="0 0 260 130"></svg>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="atSvgCours" viewBox="0 0 260 150"></svg>
       </div>
-      <div class="double-panel">
-        <svg id="dpSpaceSvgCours" viewBox="0 0 260 130"></svg>
+      <div class="anim-controls">
+        <label>n₀(I₂) en mmol</label>
+        <input type="range" id="atN0ACours" min="1" max="8" value="2" step="0.5">
+        <label>n₀(S₂O₃²⁻) en mmol</label>
+        <input type="range" id="atN0BCours" min="1" max="8" value="4" step="0.5">
+        <label>Avancement x (mmol)</label>
+        <input type="range" id="atXCours" min="0" max="60" value="0" step="1">
+        <div class="anim-readout" id="atReadoutCours"></div>
       </div>
     </div>
-    <div class="anim-readout" id="dpReadoutCours"></div>
+
+    <table class="adv-table">
+      <caption style="caption-side:top; text-align:left; font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-bottom:10px; padding:0;">Tableau d'avancement de la réaction</caption>
+      <thead>
+        <tr><th>État du système</th><th>Avancement</th><th>I₂</th><th>S₂O₃²⁻</th><th>I⁻</th><th>S₄O₆²⁻</th></tr>
+      </thead>
+      <tbody id="atTableBodyCours"></tbody>
+    </table>
   </section>
 
   <section>
-    <h2>e. Relation entre période, longueur d'onde et célérité</h2>
-    <p class="course-text">
-      Une onde périodique de célérité v parcourt une distance égale à une longueur d'onde λ pendant une durée égale à une <strong>période</strong> T.
-    </p>
-    <div class="formula">v = <span class="frac"><span class="num">λ</span><span class="den">T</span></span></div>
-  </section>
-
-  <section>
-    <h2>f. Onde mécanique sinusoïdale</h2>
+    <h2>e. Espèce en excès</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Une onde est <strong>sinusoïdale</strong> lorsque l'élongation de tout point du milieu est une fonction sinusoïdale du temps. Elle est caractérisée par sa <strong>période</strong> et par son <strong>amplitude</strong>.
+      Si une espèce est en très large excès devant les autres, alors on indique "<strong>excès</strong>" dans les cases du tableau d'avancement correspondant à cette espèce. C'est le cas de l'eau quand les réactifs sont en solutions <strong>aqueuses</strong>.
     </div>
   </section>
 
@@ -194,64 +187,46 @@
     <h2>Cours à trous</h2>
     <div class="course-text" id="courseText">
 
-      <h3>a. Ondes mécaniques progressives — échelle macroscopique</h3>
+      <h3>a. Avancement d'une réaction chimique</h3>
       <p>
-        Lorsqu'un caillou tombe dans l'eau, il provoque une déformation de la surface. Cette perturbation qui se propage en s'éloignant du point d'impact est une onde mécanique <input class="blank" data-answer="progressive" size="14">.
-      </p>
-      <p>
-        Pour chaque point du milieu, on définit son <input class="blank" data-answer="élongation|elongation" size="14"> : elle mesure l'écart par rapport à la position de <input class="blank" data-answer="repos" size="10">.
-      </p>
-      <p>
-        Une onde mécanique progressive est le phénomène de propagation d'une perturbation dans un milieu matériel élastique, sans transport de <input class="blank" data-answer="matière|matiere" size="12">, mais avec transport d'<input class="blank" data-answer="énergie|energie" size="12">.
-      </p>
-      <p>
-        L'élongation maximale est l'<input class="blank" data-answer="amplitude" size="12"> de l'onde.
-      </p>
-      <em class="note">Attention : la lumière n'est pas une onde mécanique — elle peut se propager dans le <input class="blank" data-answer="vide" size="8">.</em>
-
-      <h3>b. Ondes mécaniques progressives — échelle microscopique</h3>
-      <p>
-        À l'échelle microscopique, les <input class="blank" data-answer="interactions" size="14"> entre les entités du milieu matériel expliquent la propagation. Au passage d'une perturbation, des entités sont écartées de leur position d'<input class="blank" data-answer="équilibre|equilibre" size="14">.
-      </p>
-      <p>
-        Leurs interactions avec les entités <input class="blank" data-answer="voisines" size="12"> sont modifiées, qui sont à leur tour déplacées : la perturbation se propage de <input class="blank" data-answer="proche en proche" size="20">.
+        L'avancement d'une réaction, noté x, est une grandeur exprimée en <input class="blank" data-answer="mole|mol" size="10"> qui permet de décrire l'évolution des quantités de matière présentes dans un système au cours d'une transformation chimique.
       </p>
 
-      <h3>c. Célérité d'une onde</h3>
+      <h3>b. Tableau d'avancement</h3>
       <p>
-        La perturbation en un point A n'arrive pas instantanément au point B, mais avec un <input class="blank" data-answer="retard" size="10"> Δt = t<sub>B</sub> − t<sub>A</sub>.
+        Le tableau d'avancement décrit l'évolution des quantités de matière d'un système chimique de l'état <input class="blank" data-answer="initial" size="12"> à l'état <input class="blank" data-answer="final" size="12">, en fonction de l'avancement x de la réaction.
       </p>
       <p>
-        La <input class="blank" data-answer="célérité|celerite" size="12"> d'une onde est la valeur de sa vitesse de propagation.
-      </p>
-      <div class="formula">v = <span class="frac"><span class="num">d</span><span class="den">Δt</span></span></div>
-      <p>
-        La célérité d'une onde dépend du <input class="blank" data-answer="milieu matériel|milieu materiel" size="18"> dans lequel elle se propage.
+        Le système évolue depuis l'état initial pour lequel x = <input class="blank" data-answer="0" size="4"> vers l'état final pour lequel x = x<sub>f</sub>. Les quantités des réactifs <input class="blank" data-answer="diminuent" size="14"> alors que celles des produits <input class="blank" data-answer="augmentent" size="14">. Elles n'évoluent plus lorsque l'état final est atteint.
       </p>
 
-      <h3>d. Double périodicité d'une onde périodique</h3>
+      <h3>c. Transformations totales et non totales</h3>
       <p>
-        Une onde est <input class="blank" data-answer="périodique|periodique" size="14"> lorsque la perturbation se reproduit dans le temps et dans l'espace.
+        L'avancement maximal x<sub>max</sub> correspond à la plus petite valeur de l'avancement pour laquelle la quantité finale de l'un au moins des réactifs est <input class="blank" data-answer="nulle" size="10">. Ce réactif est appelé <input class="blank" data-answer="réactif limitant|reactif limitant" size="18">.
       </p>
       <p>
-        La <input class="blank" data-answer="période temporelle|periode temporelle" size="20">, notée T, est la plus petite durée au bout de laquelle la perturbation se répète en un point donné.
+        Si x<sub>f</sub> = x<sub>max</sub>, alors la transformation est <input class="blank" data-answer="totale" size="12">. Si x<sub>f</sub> &lt; x<sub>max</sub>, alors la transformation est <input class="blank" data-answer="non totale" size="14">.
       </p>
       <p>
-        La <input class="blank" data-answer="fréquence|frequence" size="14"> f est le nombre de répétitions par seconde : f = 1/T.
-      </p>
-      <p>
-        La <input class="blank" data-answer="période spatiale|periode spatiale" size="18"> (ou longueur d'onde), notée λ, est la plus petite distance qui sépare deux points du milieu dans le même état vibratoire.
+        L'avancement final x<sub>f</sub> permet de réaliser le <input class="blank" data-answer="bilan de matière|bilan de matiere" size="20">, c'est-à-dire de calculer les quantités de matière de toutes les espèces à l'état final.
       </p>
 
-      <h3>e. Relation entre période, longueur d'onde et célérité</h3>
+      <h3>d. Le mélange stœchiométrique</h3>
       <p>
-        Une onde périodique de célérité v parcourt une distance égale à une longueur d'onde λ pendant une durée égale à une <input class="blank" data-answer="période|periode" size="12"> T.
+        Un mélange initial est dit <input class="blank" data-answer="stœchiométrique|stoechiometrique" size="20"> si les quantités initiales des réactifs sont dans les mêmes proportions que les nombres stœchiométriques de l'équation de la réaction.
       </p>
-      <div class="formula">v = <span class="frac"><span class="num">λ</span><span class="den">T</span></span></div>
-
-      <h3>f. Onde mécanique sinusoïdale</h3>
+      <div class="formula">
+        <span class="frac"><span class="num">n₀(A)</span><span class="den">a</span></span>
+        &nbsp;=&nbsp;
+        <span class="frac"><span class="num">n₀(B)</span><span class="den">b</span></span>
+      </div>
       <p>
-        Une onde est <input class="blank" data-answer="sinusoïdale|sinusoidale" size="14"> lorsque l'élongation de tout point du milieu est une fonction sinusoïdale du temps. Elle est caractérisée par sa <input class="blank" data-answer="période|periode" size="12"> et par son <input class="blank" data-answer="amplitude" size="12">.
+        Dans le cas d'une transformation totale et pour un mélange stœchiométrique, les quantités finales des réactifs sont <input class="blank" data-answer="nulles" size="10">. Seuls les <input class="blank" data-answer="produits" size="12"> de la réaction et éventuellement les espèces <input class="blank" data-answer="spectatrices" size="16"> sont présents à l'état final.
+      </p>
+
+      <h3>e. Espèce en excès</h3>
+      <p>
+        Si une espèce est en très large excès devant les autres, alors on indique "<input class="blank" data-answer="excès|exces" size="10">" dans les cases du tableau d'avancement correspondant à cette espèce. C'est le cas de l'eau quand les réactifs sont en solutions <input class="blank" data-answer="aqueuses" size="14">.
       </p>
 
     </div>
@@ -261,60 +236,47 @@
   </section>
 
   <section>
-    <h2>Vague animée &amp; double périodicité</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Ajuste T et λ : regarde le point jaune, il oscille de haut en bas mais n'avance jamais.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="waveSvg" viewBox="0 0 260 130"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Période T</label>
-        <input type="range" id="waveT" min="5" max="40" value="15" step="1">
-        <label>Longueur d'onde λ</label>
-        <input type="range" id="waveLambda" min="40" max="200" value="90" step="5">
-        <div class="anim-readout" id="waveReadout"></div>
-      </div>
+    <h2>Tableau d'avancement interactif</h2>
+    <h3 style="font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-bottom:10px;">Réaction entre le diiode et les ions thiosulfate — une oxydo-réduction</h3>
+    <div class="big-equation">
+      <span class="coef">1</span> <span style="color:var(--yellow);">I₂</span>
+      &nbsp;+&nbsp;
+      <span class="coef">2</span> <span style="color:var(--teal);">S₂O₃²⁻</span>
+      &nbsp;→&nbsp;
+      <span class="coef">2</span> <span style="color:var(--coral);">I⁻</span>
+      &nbsp;+&nbsp;
+      <span class="coef">1</span> <span style="color:var(--chalk);">S₄O₆²⁻</span>
     </div>
-
-    <hr style="border:none; border-top:1px solid var(--line); margin:26px 0;">
-
-    <p style="color:var(--chalk-dim); margin-bottom:6px;">Comme on ne peut pas représenter le <strong style="color:var(--coral);">temps</strong> et l'<strong style="color:var(--teal);">espace</strong> en même temps sur une page en 2 dimensions, il faut figer l'image : on représente séparément la <strong style="color:var(--coral);">période temporelle</strong> et la <strong style="color:var(--teal);">période spatiale</strong>.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier n₀ et x, observe ce qui se passe.</p>
     <div class="actions" style="justify-content:flex-start; margin-bottom:14px;">
-      <button id="dpSync">📸 Figer les réglages ci-dessus</button>
+      <button id="atViewToggle">🔵 Voir les molécules</button>
     </div>
-    <div class="double-zone">
-      <div class="double-panel">
-        <svg id="dpTimeSvg" viewBox="0 0 260 130"></svg>
-      </div>
-      <div class="double-panel">
-        <svg id="dpSpaceSvg" viewBox="0 0 260 130"></svg>
-      </div>
-    </div>
-    <div class="anim-readout" id="dpReadout"></div>
-
-    <div class="activity-block"><div id="actWaveOscillation"></div></div>
-    <div class="activity-block"><div id="actDoublePeriod"></div></div>
-  </section>
-
-  <section>
-    <h2>Retard entre deux points (A → B)</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis la distance et la célérité, puis lance la perturbation.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="delaySvg" viewBox="0 0 260 100"></svg>
+        <svg id="atSvg" viewBox="0 0 260 150"></svg>
       </div>
       <div class="anim-controls">
-        <label>Distance AB (d)</label>
-        <input type="range" id="delayD" min="60" max="220" value="150" step="10">
-        <label>Célérité (v)</label>
-        <input type="range" id="delayV" min="30" max="150" value="80" step="10">
-        <div class="anim-readout" id="delayReadout"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:14px;">
-          <button id="delayPlay">▶ Lancer</button>
-        </div>
+        <label>n₀(I₂) en mmol</label>
+        <input type="range" id="atN0A" min="1" max="8" value="2" step="0.5">
+        <label>n₀(S₂O₃²⁻) en mmol</label>
+        <input type="range" id="atN0B" min="1" max="8" value="4" step="0.5">
+        <label>Avancement x (mmol)</label>
+        <input type="range" id="atX" min="0" max="60" value="0" step="1">
+        <div class="anim-readout" id="atReadout"></div>
       </div>
     </div>
-    <div class="activity-block"><div id="actWaveDelay"></div></div>
+
+    <table class="adv-table">
+      <caption style="caption-side:top; text-align:left; font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-bottom:10px; padding:0;">Tableau d'avancement de la réaction</caption>
+      <thead>
+        <tr><th>État du système</th><th>Avancement</th><th>I₂</th><th>S₂O₃²⁻</th><th>I⁻</th><th>S₄O₆²⁻</th></tr>
+      </thead>
+      <tbody id="atTableBody"></tbody>
+    </table>
+
+    <div class="activity-block"><div id="actLimitingReagent"></div></div>
+    <div class="activity-block"><div id="actXMax"></div></div>
+    <div class="activity-block"><div id="actStoichio"></div></div>
   </section>
 
 </div>
@@ -330,33 +292,45 @@
         <thead>
           <tr style="border-bottom:2px solid var(--line);">
             <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
-            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Formule</th>
-            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">Grandeurs</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Formule / définition</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Onde mécanique progressive</td><td style="padding:10px 8px; color:var(--yellow);">—</td><td style="padding:10px 8px; color:var(--chalk-dim);">transport d'énergie, jamais de matière</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Célérité</td><td style="padding:10px 8px; color:var(--yellow);">v = d / Δt</td><td style="padding:10px 8px; color:var(--chalk-dim);">d (m) • Δt (s) • dépend du milieu</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Période temporelle</td><td style="padding:10px 8px; color:var(--yellow);">f = 1 / T</td><td style="padding:10px 8px; color:var(--chalk-dim);">T (s) : répétition en un point donné</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Période spatiale (λ)</td><td style="padding:10px 8px; color:var(--yellow);">—</td><td style="padding:10px 8px; color:var(--chalk-dim);">plus petite distance entre 2 points dans le même état vibratoire</td></tr>
-          <tr><td style="padding:10px 8px;">Relation v, λ, T</td><td style="padding:10px 8px; color:var(--yellow);">v = λ / T</td><td style="padding:10px 8px; color:var(--chalk-dim);">valable pour toute onde périodique</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Avancement x</td><td style="padding:10px 8px;">en mol</td><td style="padding:10px 8px; color:var(--chalk-dim);">décrit l'évolution du système</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réactifs</td><td style="padding:10px 8px;">n₀ − coefficient × x</td><td style="padding:10px 8px; color:var(--chalk-dim);">diminuent</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Produits</td><td style="padding:10px 8px;">coefficient × x</td><td style="padding:10px 8px; color:var(--chalk-dim);">augmentent</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Avancement maximal x<sub>max</sub></td><td style="padding:10px 8px;">plus petite valeur qui annule un réactif</td><td style="padding:10px 8px; color:var(--chalk-dim);">ce réactif est le réactif limitant</td></tr>
+          <tr><td style="padding:10px 8px;">Mélange stœchiométrique</td><td style="padding:10px 8px;">n₀(A)/a = n₀(B)/b</td><td style="padding:10px 8px; color:var(--chalk-dim);">réactifs épuisés ensemble (si transformation totale)</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="method-box" style="margin-top:20px;">
-      <span class="box-label">🔧 Ne pas confondre les deux périodicités</span>
-      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li><strong style="color:var(--coral);">Période temporelle T</strong> : on reste au même endroit, on regarde l'élongation évoluer dans le temps</li>
-        <li><strong style="color:var(--teal);">Période spatiale λ</strong> : on prend une "photo" à un instant donné, on regarde comment l'élongation varie dans l'espace</li>
-      </ul>
+      <span class="box-label">🔧 Le squelette du tableau d'avancement</span>
+      <table style="width:100%; border-collapse:collapse; font-size:0.85rem; margin-top:10px;">
+        <thead>
+          <tr style="border-bottom:1px solid var(--line);">
+            <th style="text-align:left; padding:6px 8px; color:var(--chalk-dim);">État</th>
+            <th style="text-align:left; padding:6px 8px; color:var(--chalk-dim);">Avancement</th>
+            <th style="text-align:left; padding:6px 8px; color:var(--chalk-dim);">a A</th>
+            <th style="text-align:left; padding:6px 8px; color:var(--chalk-dim);">+ b B</th>
+            <th style="text-align:left; padding:6px 8px; color:var(--chalk-dim);">→ c C</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:6px 8px;">Initial</td><td style="padding:6px 8px;">x = 0</td><td style="padding:6px 8px;">n₀(A)</td><td style="padding:6px 8px;">n₀(B)</td><td style="padding:6px 8px;">0</td></tr>
+          <tr><td style="padding:6px 8px;">Intermédiaire</td><td style="padding:6px 8px;">x</td><td style="padding:6px 8px;">n₀(A) − ax</td><td style="padding:6px 8px;">n₀(B) − bx</td><td style="padding:6px 8px;">cx</td></tr>
+          <tr><td style="padding:6px 8px;">Final</td><td style="padding:6px 8px;">x<sub>max</sub></td><td style="padding:6px 8px;">n₀(A) − a·x<sub>max</sub></td><td style="padding:6px 8px;">n₀(B) − b·x<sub>max</sub></td><td style="padding:6px 8px;">c·x<sub>max</sub></td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 </div>
 
 </main>
 
-<footer>Chapitre 4 — Ondes mécaniques (1ère spé PC).</footer>
+<footer>Chapitre 4 — Tableau d'avancement (1ère spé PC).</footer>
 
 <script>
 /* ---------- Correction du texte à trous (mode entraînement) ---------- */
@@ -387,45 +361,41 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   if (correct === blanks.length) ProgressStore.record("ch4-1ere", "trous-complet", true);
 });
 
-/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initWaveAnimation({ svgId: "waveSvgCours", tRangeId: "waveTCours", lambdaRangeId: "waveLambdaCours", readoutId: "waveReadoutCours" });
-initWaveDelay({ svgId: "delaySvgCours", distRangeId: "delayDCours", veloRangeId: "delayVCours", playBtnId: "delayPlayCours", readoutId: "delayReadoutCours" });
-initDoublePeriodicity({ svgTimeId: "dpTimeSvgCours", svgSpaceId: "dpSpaceSvgCours", readoutId: "dpReadoutCours", syncBtnId: "dpSyncCours", sourceTId: "waveTCours", sourceLambdaId: "waveLambdaCours" });
+/* ---------- Animation — instance "Cours" (exploration libre) ---------- */
+initAdvancementTable({ svgId: "atSvgCours", n0AId: "atN0ACours", n0BId: "atN0BCours", xId: "atXCours", readoutId: "atReadoutCours", viewToggleId: "atViewToggleCours", tableBodyId: "atTableBodyCours" });
 
-/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initWaveAnimation({ svgId: "waveSvg", tRangeId: "waveT", lambdaRangeId: "waveLambda", readoutId: "waveReadout" });
-initWaveDelay({ svgId: "delaySvg", distRangeId: "delayD", veloRangeId: "delayV", playBtnId: "delayPlay", readoutId: "delayReadout" });
-initDoublePeriodicity({ svgTimeId: "dpTimeSvg", svgSpaceId: "dpSpaceSvg", readoutId: "dpReadout", syncBtnId: "dpSync", sourceTId: "waveT", sourceLambdaId: "waveLambda" });
+/* ---------- Animation — instance "Entraînement" (avec activités) ---------- */
+initAdvancementTable({ svgId: "atSvg", n0AId: "atN0A", n0BId: "atN0B", xId: "atX", readoutId: "atReadout", viewToggleId: "atViewToggle", tableBodyId: "atTableBody" });
 
-/* ---------- Activités liées à chaque animation ---------- */
-initVraiFaux({
-  containerId: "actWaveOscillation", chapterId: "ch4-1ere", activityId: "vf-wave-oscillation",
-  prompt: "Sur l'animation ci-dessus, une onde mécanique progressive transporte de la matière lors de sa propagation (le point jaune finit par avancer avec l'onde).",
-  correct: false,
-  explanation: "Faux : le point jaune oscille sur place, de haut en bas — il ne se déplace jamais horizontalement. L'onde transporte de l'énergie, pas de matière."
-});
-
+/* ---------- Activités liées à l'animation ---------- */
 initQCM({
-  containerId: "actDoublePeriod", chapterId: "ch4-1ere", activityId: "qcm-double-period",
-  prompt: "Si on double la période T sans changer la longueur d'onde λ, que devient la célérité v = λ/T ?",
+  containerId: "actLimitingReagent", chapterId: "ch4-1ere", activityId: "qcm-limiting-reagent",
+  prompt: "Règle n₀(I₂) = 3 mmol et n₀(S₂O₃²⁻) = 4 mmol sur l'animation. Quel est le réactif limitant ?",
   options: [
-    { text: "Elle double", correct: false },
-    { text: "Elle est divisée par 2", correct: true },
-    { text: "Elle reste la même", correct: false }
+    { text: "I₂", correct: false },
+    { text: "S₂O₃²⁻", correct: true },
+    { text: "Impossible à dire", correct: false }
   ],
-  explanation: "v = λ/T : si T double (dénominateur ×2) et λ ne change pas, v est divisée par 2."
+  explanation: "x_max(I₂) = 3/1 = 3 et x_max(S₂O₃²⁻) = 4/2 = 2. Le plus petit x_max correspond au réactif limitant : S₂O₃²⁻."
 });
 
 initEstimation({
-  containerId: "actWaveDelay", chapterId: "ch4-1ere", activityId: "est-wave-delay",
-  prompt: "Avec d = 150 (unités) et v = 80 (unités/s), quel est le retard Δt = d/v entre le passage en A et en B ?",
-  answer: 1.875, tolerance: 0.1, unit: "s",
-  explanation: "Δt = d/v = 150/80 = 1,875 s."
+  containerId: "actXMax", chapterId: "ch4-1ere", activityId: "est-xmax",
+  prompt: "Avec les valeurs par défaut n₀(I₂) = 2 mmol et n₀(S₂O₃²⁻) = 4 mmol, quel est l'avancement maximal x_max (en mmol) ?",
+  answer: 2, tolerance: 0.1, unit: "mmol",
+  explanation: "x_max(I₂) = 2/1 = 2 et x_max(S₂O₃²⁻) = 4/2 = 2 : les deux sont égaux, donc x_max = 2 mmol (mélange stœchiométrique)."
+});
+
+initVraiFaux({
+  containerId: "actStoichio", chapterId: "ch4-1ere", activityId: "vf-stoichio",
+  prompt: "Dans un mélange stœchiométrique, si la transformation est totale, il reste des réactifs à l'état final.",
+  correct: false,
+  explanation: "Faux : dans un mélange stœchiométrique avec transformation totale, les deux réactifs sont entièrement consommés — leurs quantités finales sont nulles."
 });
 
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch4-1ere");
-initProgressBar("ch4-1ere", 4); // texte à trous complet + 3 activités liées aux animations
+initProgressBar("ch4-1ere", 4); // texte à trous complet + 3 activités liées à l'animation
 </script>
 </body>
 </html>

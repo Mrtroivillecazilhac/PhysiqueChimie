@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapitre 6 — Fluide au repos — 1ère spé PC</title>
+<title>Chapitre 6 — Ondes mécaniques — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
 <script src="animations-common.js"></script>
 <script src="animations-ch6.js"></script>
 <script src="modules-common.js"></script>
+<style>
+  .double-zone{ display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+  .double-panel{ width:260px; flex:none; }
+</style>
 </head>
 <body>
 
@@ -21,7 +25,7 @@
 
 <header class="page-head">
   <div class="badge-inline physique">Physique</div>
-  <h1>Chapitre 6 — Description d'un fluide au repos</h1>
+  <h1>Chapitre 6 — Ondes mécaniques</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
 </header>
 
@@ -52,107 +56,130 @@
     <div class="objectifs-box">
       <span class="box-label">🎯 Objectifs du chapitre</span>
       <ul>
-        <li>Relier les grandeurs macroscopiques (T, P, ρ) à l'agitation, aux chocs et à la proximité des entités à l'échelle microscopique</li>
-        <li>Savoir utiliser F = P × S et la relation de la pression avec la profondeur</li>
-        <li>Connaître et savoir appliquer la loi de Mariotte pour un gaz</li>
+        <li>Comprendre qu'une onde mécanique transporte de l'énergie, pas de matière</li>
+        <li>Savoir calculer une célérité v = d/Δt, et relier v, λ et T</li>
+        <li>Comprendre la double périodicité (temporelle T et spatiale λ) d'une onde périodique</li>
       </ul>
     </div>
   </section>
 
   <section>
-    <h2>a. Les fluides au repos — échelles macro/micro</h2>
+    <h2>a. Ondes mécaniques progressives — échelle macroscopique</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      À l'échelle <strong>macroscopique</strong>, un fluide au repos n'a pas de mouvement d'ensemble. À l'échelle <strong>microscopique</strong> pourtant, les molécules qui le constituent sont en mouvement incessant et <strong>désordonné</strong>.
+      Lorsqu'un caillou tombe dans l'eau, il provoque une déformation de la surface. Cette perturbation qui se propage en s'éloignant du point d'impact est une onde mécanique <strong>progressive</strong>.
     </div>
     <p class="course-text">
-      La température T reflète l'<strong>agitation</strong> des entités. La pression P reflète les <strong>chocs</strong> des entités. La masse volumique ρ = m/V reflète la <strong>proximité</strong> des entités.
+      Pour chaque point du milieu, on définit son <strong>élongation</strong> : elle mesure l'écart par rapport à la position de <strong>repos</strong>.
     </p>
-    <div class="recall-box">
-      <span class="box-label">📌 À retenir</span>
-      Les gaz sont des fluides <strong>compressibles</strong>, les liquides des fluides <strong>incompressibles</strong>.
+    <p class="course-text">
+      Une onde mécanique progressive est le phénomène de propagation d'une perturbation dans un milieu matériel élastique, <strong>sans transport de matière</strong>, mais avec transport d'<strong>énergie</strong>.
+    </p>
+    <p class="course-text">L'élongation maximale est l'<strong>amplitude</strong> de l'onde.</p>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      La lumière n'est pas une onde mécanique — elle peut se propager dans le <strong>vide</strong>, contrairement à une onde mécanique qui a toujours besoin d'un milieu matériel.
     </div>
   </section>
 
   <section>
-    <h2>b. La force pressante</h2>
+    <h2>b. Ondes mécaniques progressives — échelle microscopique</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Un fluide appuie sur toute paroi avec laquelle il est en contact. Cette action est modélisée par une force <strong>pressante</strong>.
+      À l'échelle microscopique, les <strong>interactions</strong> entre les entités du milieu matériel expliquent la propagation. Au passage d'une perturbation, des entités sont écartées de leur position d'<strong>équilibre</strong>.
     </div>
     <p class="course-text">
-      La direction de cette force est <strong>perpendiculaire</strong> à la paroi. Le sens de cette force va du <strong>fluide</strong> vers la paroi.
+      Leurs interactions avec les entités <strong>voisines</strong> sont modifiées, qui sont à leur tour déplacées : la perturbation se propage <strong>de proche en proche</strong>.
     </p>
-    <div class="formula">F = P × S</div>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Observe comment la pression augmente ou diminue en modifiant F et S.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="pfSvgCours" viewBox="0 0 260 200"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Force F (N)</label>
-        <input type="range" id="pfFCours" min="10" max="200" value="80" step="10">
-        <label>Surface S (m²)</label>
-        <input type="range" id="pfSCours" min="0.5" max="5" value="2" step="0.5">
-        <div class="anim-readout" id="pfReadoutCours"></div>
-      </div>
-    </div>
   </section>
 
   <section>
-    <h2>c. La pression dans un fluide incompressible au repos</h2>
+    <h2>c. Célérité d'une onde</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      La pression dans l'eau <strong>augmente</strong> avec la profondeur.
+      La perturbation en un point A n'arrive pas instantanément au point B, mais avec un <strong>retard</strong> Δt = t<sub>B</sub> − t<sub>A</sub>. La <strong>célérité</strong> d'une onde est la valeur de sa vitesse de propagation.
     </div>
-    <div class="formula">P<sub>B</sub> − P<sub>A</sub> = ρ × g × (z<sub>A</sub> − z<sub>B</sub>)</div>
-    <p class="course-text">L'axe des coordonnées verticales z est orienté vers le <strong>haut</strong>.</p>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 À gauche, la vision macroscopique (la pression augmente avec la profondeur) ; à droite, l'explication microscopique (agitation, proximité, chocs).</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <h3 style="text-align:center; font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin-bottom:8px;">Vision macroscopique</h3>
-        <svg id="mfMacroSvgCours" viewBox="0 0 240 225"></svg>
-        <label style="font-size:0.78rem; color:var(--chalk-dim); display:block; margin-top:6px;">Profondeur (m)</label>
-        <input type="range" id="mfDepthCours" min="0" max="25" value="0" step="1" style="width:100%;">
-      </div>
-      <div class="anim-wrap">
-        <h3 style="text-align:center; font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin-bottom:8px;">Vision microscopique</h3>
-        <svg id="mfSvgCours" viewBox="0 0 240 190"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Température (°C)</label>
-        <input type="range" id="mfTempCours" min="0" max="100" value="20" step="5">
-        <label>Masse volumique (nombre d'entités)</label>
-        <input type="range" id="mfDensCours" min="4" max="26" value="12" step="2">
-        <div class="anim-readout" id="mfReadoutCours"></div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>d. La pression dans un gaz au repos — loi de Mariotte</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      À température <strong>constante</strong> et à quantité de matière <strong>constante</strong>, le produit de la pression P d'un gaz par le volume V qu'il occupe est <strong>constant</strong>.
-    </div>
-    <div class="formula">P × V = constante</div>
+    <div class="formula">v = <span class="frac"><span class="num">d</span><span class="den">Δt</span></span></div>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      La loi de Mariotte est un <strong>modèle</strong> qui décrit correctement le comportement des gaz aux faibles pressions.
+      La célérité d'une onde dépend du <strong>milieu matériel</strong> dans lequel elle se propage.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais descendre le ballon dans le bassin : comme P×V est constant, son volume change avec la pression.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis la distance et la célérité, puis lance la perturbation.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="mbSvgCours" viewBox="0 0 200 225"></svg>
+        <svg id="delaySvgCours" viewBox="0 0 260 100"></svg>
       </div>
       <div class="anim-controls">
-        <label>Profondeur (m)</label>
-        <input type="range" id="mbDepthCours" min="0" max="25" value="0" step="1">
-        <div class="anim-readout" id="mbReadoutCours"></div>
+        <label>Distance AB (d)</label>
+        <input type="range" id="delayDCours" min="60" max="220" value="150" step="10">
+        <label>Célérité (v)</label>
+        <input type="range" id="delayVCours" min="30" max="150" value="80" step="10">
+        <div class="anim-readout" id="delayReadoutCours"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:14px;">
+          <button id="delayPlayCours">▶ Lancer</button>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Double périodicité d'une onde périodique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une onde est <strong>périodique</strong> lorsque la perturbation se reproduit dans le temps et dans l'espace.
+    </div>
+    <p class="course-text">
+      La <strong>période temporelle</strong>, notée T, est la plus petite durée au bout de laquelle la perturbation se répète en un point donné. La <strong>fréquence</strong> f est le nombre de répétitions par seconde : f = 1/T.
+    </p>
+    <p class="course-text">
+      La <strong>période spatiale</strong> (ou longueur d'onde), notée λ, est la plus petite distance qui sépare deux points du milieu dans le même état vibratoire.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Ajuste T et λ : regarde le point jaune, il oscille de haut en bas mais n'avance jamais.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="waveSvgCours" viewBox="0 0 260 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Période T</label>
+        <input type="range" id="waveTCours" min="5" max="40" value="15" step="1">
+        <label>Longueur d'onde λ</label>
+        <input type="range" id="waveLambdaCours" min="40" max="200" value="90" step="5">
+        <div class="anim-readout" id="waveReadoutCours"></div>
+      </div>
+    </div>
+
+    <p class="course-text" style="margin-top:20px;">
+      Comme on ne peut pas représenter le <strong style="color:var(--coral);">temps</strong> et l'<strong style="color:var(--teal);">espace</strong> en même temps sur une page en 2 dimensions, il faut figer l'image : on représente séparément la période temporelle et la période spatiale.
+    </p>
+    <div class="actions" style="justify-content:flex-start; margin-bottom:14px;">
+      <button id="dpSyncCours">📸 Figer les réglages ci-dessus</button>
+    </div>
+    <div class="double-zone">
+      <div class="double-panel">
+        <svg id="dpTimeSvgCours" viewBox="0 0 260 130"></svg>
+      </div>
+      <div class="double-panel">
+        <svg id="dpSpaceSvgCours" viewBox="0 0 260 130"></svg>
+      </div>
+    </div>
+    <div class="anim-readout" id="dpReadoutCours"></div>
+  </section>
+
+  <section>
+    <h2>e. Relation entre période, longueur d'onde et célérité</h2>
+    <p class="course-text">
+      Une onde périodique de célérité v parcourt une distance égale à une longueur d'onde λ pendant une durée égale à une <strong>période</strong> T.
+    </p>
+    <div class="formula">v = <span class="frac"><span class="num">λ</span><span class="den">T</span></span></div>
+  </section>
+
+  <section>
+    <h2>f. Onde mécanique sinusoïdale</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une onde est <strong>sinusoïdale</strong> lorsque l'élongation de tout point du milieu est une fonction sinusoïdale du temps. Elle est caractérisée par sa <strong>période</strong> et par son <strong>amplitude</strong>.
     </div>
   </section>
 
@@ -167,42 +194,64 @@
     <h2>Cours à trous</h2>
     <div class="course-text" id="courseText">
 
-      <h3>a. Les fluides au repos — échelles macro/micro</h3>
+      <h3>a. Ondes mécaniques progressives — échelle macroscopique</h3>
       <p>
-        À l'échelle <input class="blank" data-answer="macroscopique" size="16">, un fluide au repos n'a pas de mouvement d'ensemble. À l'échelle <input class="blank" data-answer="microscopique" size="16"> pourtant, les molécules qui le constituent sont en mouvement incessant et <input class="blank" data-answer="désordonné|desordonne" size="14">.
+        Lorsqu'un caillou tombe dans l'eau, il provoque une déformation de la surface. Cette perturbation qui se propage en s'éloignant du point d'impact est une onde mécanique <input class="blank" data-answer="progressive" size="14">.
       </p>
       <p>
-        La température T reflète l'<input class="blank" data-answer="agitation" size="14"> des entités. La pression P reflète les <input class="blank" data-answer="chocs" size="10"> des entités. La masse volumique ρ = m/V reflète la <input class="blank" data-answer="proximité|proximite" size="14"> des entités.
+        Pour chaque point du milieu, on définit son <input class="blank" data-answer="élongation|elongation" size="14"> : elle mesure l'écart par rapport à la position de <input class="blank" data-answer="repos" size="10">.
       </p>
       <p>
-        Les gaz sont des fluides <input class="blank" data-answer="compressibles" size="16">, les liquides des fluides <input class="blank" data-answer="incompressibles" size="18">.
+        Une onde mécanique progressive est le phénomène de propagation d'une perturbation dans un milieu matériel élastique, sans transport de <input class="blank" data-answer="matière|matiere" size="12">, mais avec transport d'<input class="blank" data-answer="énergie|energie" size="12">.
+      </p>
+      <p>
+        L'élongation maximale est l'<input class="blank" data-answer="amplitude" size="12"> de l'onde.
+      </p>
+      <em class="note">Attention : la lumière n'est pas une onde mécanique — elle peut se propager dans le <input class="blank" data-answer="vide" size="8">.</em>
+
+      <h3>b. Ondes mécaniques progressives — échelle microscopique</h3>
+      <p>
+        À l'échelle microscopique, les <input class="blank" data-answer="interactions" size="14"> entre les entités du milieu matériel expliquent la propagation. Au passage d'une perturbation, des entités sont écartées de leur position d'<input class="blank" data-answer="équilibre|equilibre" size="14">.
+      </p>
+      <p>
+        Leurs interactions avec les entités <input class="blank" data-answer="voisines" size="12"> sont modifiées, qui sont à leur tour déplacées : la perturbation se propage de <input class="blank" data-answer="proche en proche" size="20">.
       </p>
 
-      <h3>b. La force pressante</h3>
+      <h3>c. Célérité d'une onde</h3>
       <p>
-        Un fluide appuie sur toute paroi avec laquelle il est en contact. Cette action est modélisée par une force <input class="blank" data-answer="pressante" size="14">.
+        La perturbation en un point A n'arrive pas instantanément au point B, mais avec un <input class="blank" data-answer="retard" size="10"> Δt = t<sub>B</sub> − t<sub>A</sub>.
       </p>
       <p>
-        La direction de cette force est <input class="blank" data-answer="perpendiculaire" size="18"> à la paroi. Le sens de cette force va du <input class="blank" data-answer="fluide" size="10"> vers la paroi.
+        La <input class="blank" data-answer="célérité|celerite" size="12"> d'une onde est la valeur de sa vitesse de propagation.
       </p>
-      <div class="formula">F = P × S</div>
-
-      <h3>c. La pression dans un fluide incompressible au repos</h3>
+      <div class="formula">v = <span class="frac"><span class="num">d</span><span class="den">Δt</span></span></div>
       <p>
-        La pression dans l'eau <input class="blank" data-answer="augmente" size="14"> avec la profondeur.
-      </p>
-      <div class="formula">P<sub>B</sub> − P<sub>A</sub> = ρ × g × (z<sub>A</sub> − z<sub>B</sub>)</div>
-      <p>
-        L'axe des coordonnées verticales z est orienté vers le <input class="blank" data-answer="haut" size="10">.
+        La célérité d'une onde dépend du <input class="blank" data-answer="milieu matériel|milieu materiel" size="18"> dans lequel elle se propage.
       </p>
 
-      <h3>d. La pression dans un gaz au repos — loi de Mariotte</h3>
+      <h3>d. Double périodicité d'une onde périodique</h3>
       <p>
-        À température <input class="blank" data-answer="constante" size="14"> et à quantité de matière <input class="blank" data-answer="constante" size="14">, le produit de la pression P d'un gaz par le volume V qu'il occupe est <input class="blank" data-answer="constant" size="14">.
+        Une onde est <input class="blank" data-answer="périodique|periodique" size="14"> lorsque la perturbation se reproduit dans le temps et dans l'espace.
       </p>
-      <div class="formula">P × V = constante</div>
       <p>
-        La loi de Mariotte est un <input class="blank" data-answer="modèle|modele" size="12"> qui décrit correctement le comportement des gaz aux faibles pressions.
+        La <input class="blank" data-answer="période temporelle|periode temporelle" size="20">, notée T, est la plus petite durée au bout de laquelle la perturbation se répète en un point donné.
+      </p>
+      <p>
+        La <input class="blank" data-answer="fréquence|frequence" size="14"> f est le nombre de répétitions par seconde : f = 1/T.
+      </p>
+      <p>
+        La <input class="blank" data-answer="période spatiale|periode spatiale" size="18"> (ou longueur d'onde), notée λ, est la plus petite distance qui sépare deux points du milieu dans le même état vibratoire.
+      </p>
+
+      <h3>e. Relation entre période, longueur d'onde et célérité</h3>
+      <p>
+        Une onde périodique de célérité v parcourt une distance égale à une longueur d'onde λ pendant une durée égale à une <input class="blank" data-answer="période|periode" size="12"> T.
+      </p>
+      <div class="formula">v = <span class="frac"><span class="num">λ</span><span class="den">T</span></span></div>
+
+      <h3>f. Onde mécanique sinusoïdale</h3>
+      <p>
+        Une onde est <input class="blank" data-answer="sinusoïdale|sinusoidale" size="14"> lorsque l'élongation de tout point du milieu est une fonction sinusoïdale du temps. Elle est caractérisée par sa <input class="blank" data-answer="période|periode" size="12"> et par son <input class="blank" data-answer="amplitude" size="12">.
       </p>
 
     </div>
@@ -212,63 +261,60 @@
   </section>
 
   <section>
-    <h2>La pression, c'est quoi ?</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Une presse applique une force F sur une surface de contact S. Observe comment la pression augmente ou diminue en modifiant les paramètres.</p>
+    <h2>Vague animée &amp; double périodicité</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Ajuste T et λ : regarde le point jaune, il oscille de haut en bas mais n'avance jamais.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="pfSvg" viewBox="0 0 260 200"></svg>
+        <svg id="waveSvg" viewBox="0 0 260 130"></svg>
       </div>
       <div class="anim-controls">
-        <label>Force F (N)</label>
-        <input type="range" id="pfF" min="10" max="200" value="80" step="10">
-        <label>Surface S (m²)</label>
-        <input type="range" id="pfS" min="0.5" max="5" value="2" step="0.5">
-        <div class="anim-readout" id="pfReadout"></div>
+        <label>Période T</label>
+        <input type="range" id="waveT" min="5" max="40" value="15" step="1">
+        <label>Longueur d'onde λ</label>
+        <input type="range" id="waveLambda" min="40" max="200" value="90" step="5">
+        <div class="anim-readout" id="waveReadout"></div>
       </div>
     </div>
-    <div class="activity-block"><div id="actPressureForce"></div></div>
+
+    <hr style="border:none; border-top:1px solid var(--line); margin:26px 0;">
+
+    <p style="color:var(--chalk-dim); margin-bottom:6px;">Comme on ne peut pas représenter le <strong style="color:var(--coral);">temps</strong> et l'<strong style="color:var(--teal);">espace</strong> en même temps sur une page en 2 dimensions, il faut figer l'image : on représente séparément la <strong style="color:var(--coral);">période temporelle</strong> et la <strong style="color:var(--teal);">période spatiale</strong>.</p>
+    <div class="actions" style="justify-content:flex-start; margin-bottom:14px;">
+      <button id="dpSync">📸 Figer les réglages ci-dessus</button>
+    </div>
+    <div class="double-zone">
+      <div class="double-panel">
+        <svg id="dpTimeSvg" viewBox="0 0 260 130"></svg>
+      </div>
+      <div class="double-panel">
+        <svg id="dpSpaceSvg" viewBox="0 0 260 130"></svg>
+      </div>
+    </div>
+    <div class="anim-readout" id="dpReadout"></div>
+
+    <div class="activity-block"><div id="actWaveOscillation"></div></div>
+    <div class="activity-block"><div id="actDoublePeriod"></div></div>
   </section>
 
   <section>
-    <h2>Représentation macro vs micro du fluide au repos</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:6px;">À l'échelle macroscopique, un fluide au repos est perçu comme immobile. La pression en un point dépend en quelque sorte de la quantité de matière située au-dessus de lui, qui exerce une force pressante sur ce point.</p>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">À l'échelle microscopique, la pression s'explique par les chocs des entités du fluide contre une paroi : leur agitation (la température) et leur proximité (la masse volumique) déterminent la fréquence de ces chocs — donc la pression.</p>
+    <h2>Retard entre deux points (A → B)</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis la distance et la célérité, puis lance la perturbation.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <h3 style="text-align:center; font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin-bottom:8px;">Vision macroscopique</h3>
-        <svg id="mfMacroSvg" viewBox="0 0 240 225"></svg>
-        <label style="font-size:0.78rem; color:var(--chalk-dim); display:block; margin-top:6px;">Profondeur (m)</label>
-        <input type="range" id="mfDepth" min="0" max="25" value="0" step="1" style="width:100%;">
-      </div>
-      <div class="anim-wrap">
-        <h3 style="text-align:center; font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin-bottom:8px;">Vision microscopique</h3>
-        <svg id="mfSvg" viewBox="0 0 240 190"></svg>
+        <svg id="delaySvg" viewBox="0 0 260 100"></svg>
       </div>
       <div class="anim-controls">
-        <label>Température (°C)</label>
-        <input type="range" id="mfTemp" min="0" max="100" value="20" step="5">
-        <label>Masse volumique (nombre d'entités)</label>
-        <input type="range" id="mfDens" min="4" max="26" value="12" step="2">
-        <div class="anim-readout" id="mfReadout"></div>
+        <label>Distance AB (d)</label>
+        <input type="range" id="delayD" min="60" max="220" value="150" step="10">
+        <label>Célérité (v)</label>
+        <input type="range" id="delayV" min="30" max="150" value="80" step="10">
+        <div class="anim-readout" id="delayReadout"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:14px;">
+          <button id="delayPlay">▶ Lancer</button>
+        </div>
       </div>
     </div>
-    <div class="activity-block"><div id="actMicroFluid"></div></div>
-  </section>
-
-  <section>
-    <h2>Loi de Mariotte : exemple du ballon d'air dans l'eau</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais descendre le ballon dans le bassin : comme le produit P×V est constant, le volume du ballon change avec la pression.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="mbSvg" viewBox="0 0 200 225"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Profondeur (m)</label>
-        <input type="range" id="mbDepth" min="0" max="25" value="0" step="1">
-        <div class="anim-readout" id="mbReadout"></div>
-      </div>
-    </div>
-    <div class="activity-block"><div id="actMariotte"></div></div>
+    <div class="activity-block"><div id="actWaveDelay"></div></div>
   </section>
 
 </div>
@@ -289,19 +335,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Force pressante</td><td style="padding:10px 8px; color:var(--yellow);">F = P × S</td><td style="padding:10px 8px; color:var(--chalk-dim);">F (N) • P (Pa) • S (m²)</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Pression et profondeur</td><td style="padding:10px 8px; color:var(--yellow);">P<sub>B</sub> − P<sub>A</sub> = ρ×g×(z<sub>A</sub>−z<sub>B</sub>)</td><td style="padding:10px 8px; color:var(--chalk-dim);">z orienté vers le haut</td></tr>
-          <tr><td style="padding:10px 8px;">Loi de Mariotte (gaz)</td><td style="padding:10px 8px; color:var(--yellow);">P × V = constante</td><td style="padding:10px 8px; color:var(--chalk-dim);">à T et n constantes</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Onde mécanique progressive</td><td style="padding:10px 8px; color:var(--yellow);">—</td><td style="padding:10px 8px; color:var(--chalk-dim);">transport d'énergie, jamais de matière</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Célérité</td><td style="padding:10px 8px; color:var(--yellow);">v = d / Δt</td><td style="padding:10px 8px; color:var(--chalk-dim);">d (m) • Δt (s) • dépend du milieu</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Période temporelle</td><td style="padding:10px 8px; color:var(--yellow);">f = 1 / T</td><td style="padding:10px 8px; color:var(--chalk-dim);">T (s) : répétition en un point donné</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Période spatiale (λ)</td><td style="padding:10px 8px; color:var(--yellow);">—</td><td style="padding:10px 8px; color:var(--chalk-dim);">plus petite distance entre 2 points dans le même état vibratoire</td></tr>
+          <tr><td style="padding:10px 8px;">Relation v, λ, T</td><td style="padding:10px 8px; color:var(--yellow);">v = λ / T</td><td style="padding:10px 8px; color:var(--chalk-dim);">valable pour toute onde périodique</td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="method-box" style="margin-top:20px;">
-      <span class="box-label">🔧 À l'échelle microscopique</span>
+      <span class="box-label">🔧 Ne pas confondre les deux périodicités</span>
       <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li>Température T ↔ agitation des entités</li>
-        <li>Pression P ↔ chocs des entités contre la paroi</li>
-        <li>Masse volumique ρ ↔ proximité des entités</li>
+        <li><strong style="color:var(--coral);">Période temporelle T</strong> : on reste au même endroit, on regarde l'élongation évoluer dans le temps</li>
+        <li><strong style="color:var(--teal);">Période spatiale λ</strong> : on prend une "photo" à un instant donné, on regarde comment l'élongation varie dans l'espace</li>
       </ul>
     </div>
   </section>
@@ -309,7 +356,7 @@
 
 </main>
 
-<footer>Chapitre 6 — Description d'un fluide au repos (1ère spé PC).</footer>
+<footer>Chapitre 6 — Ondes mécaniques (1ère spé PC).</footer>
 
 <script>
 /* ---------- Correction du texte à trous (mode entraînement) ---------- */
@@ -341,39 +388,39 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 });
 
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initPressureForce({ svgId: "pfSvgCours", fRangeId: "pfFCours", sRangeId: "pfSCours", readoutId: "pfReadoutCours" });
-initMicroFluid({ svgId: "mfSvgCours", macroSvgId: "mfMacroSvgCours", depthRangeId: "mfDepthCours", tempRangeId: "mfTempCours", densRangeId: "mfDensCours", readoutId: "mfReadoutCours" });
-initMariotteBag({ svgId: "mbSvgCours", depthRangeId: "mbDepthCours", readoutId: "mbReadoutCours" });
+initWaveAnimation({ svgId: "waveSvgCours", tRangeId: "waveTCours", lambdaRangeId: "waveLambdaCours", readoutId: "waveReadoutCours" });
+initWaveDelay({ svgId: "delaySvgCours", distRangeId: "delayDCours", veloRangeId: "delayVCours", playBtnId: "delayPlayCours", readoutId: "delayReadoutCours" });
+initDoublePeriodicity({ svgTimeId: "dpTimeSvgCours", svgSpaceId: "dpSpaceSvgCours", readoutId: "dpReadoutCours", syncBtnId: "dpSyncCours", sourceTId: "waveTCours", sourceLambdaId: "waveLambdaCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initPressureForce({ svgId: "pfSvg", fRangeId: "pfF", sRangeId: "pfS", readoutId: "pfReadout" });
-initMicroFluid({ svgId: "mfSvg", macroSvgId: "mfMacroSvg", depthRangeId: "mfDepth", tempRangeId: "mfTemp", densRangeId: "mfDens", readoutId: "mfReadout" });
-initMariotteBag({ svgId: "mbSvg", depthRangeId: "mbDepth", readoutId: "mbReadout" });
+initWaveAnimation({ svgId: "waveSvg", tRangeId: "waveT", lambdaRangeId: "waveLambda", readoutId: "waveReadout" });
+initWaveDelay({ svgId: "delaySvg", distRangeId: "delayD", veloRangeId: "delayV", playBtnId: "delayPlay", readoutId: "delayReadout" });
+initDoublePeriodicity({ svgTimeId: "dpTimeSvg", svgSpaceId: "dpSpaceSvg", readoutId: "dpReadout", syncBtnId: "dpSync", sourceTId: "waveT", sourceLambdaId: "waveLambda" });
 
 /* ---------- Activités liées à chaque animation ---------- */
-initEstimation({
-  containerId: "actPressureForce", chapterId: "ch6-1ere", activityId: "est-pressure-force",
-  prompt: "Avec F = 100 N et S = 2 m², quelle est la pression P = F/S (en Pa) ?",
-  answer: 50, tolerance: 2, unit: "Pa",
-  explanation: "P = F/S = 100/2 = 50 Pa."
+initVraiFaux({
+  containerId: "actWaveOscillation", chapterId: "ch6-1ere", activityId: "vf-wave-oscillation",
+  prompt: "Sur l'animation ci-dessus, une onde mécanique progressive transporte de la matière lors de sa propagation (le point jaune finit par avancer avec l'onde).",
+  correct: false,
+  explanation: "Faux : le point jaune oscille sur place, de haut en bas — il ne se déplace jamais horizontalement. L'onde transporte de l'énergie, pas de matière."
 });
 
 initQCM({
-  containerId: "actMicroFluid", chapterId: "ch6-1ere", activityId: "qcm-micro-fluid",
-  prompt: "Sur l'animation microscopique, si on augmente la température sans changer la masse volumique, qu'est-ce qui augmente ?",
+  containerId: "actDoublePeriod", chapterId: "ch6-1ere", activityId: "qcm-double-period",
+  prompt: "Si on double la période T sans changer la longueur d'onde λ, que devient la célérité v = λ/T ?",
   options: [
-    { text: "La fréquence des chocs sur la paroi (donc la pression)", correct: true },
-    { text: "La masse volumique du fluide", correct: false },
-    { text: "La taille des particules", correct: false }
+    { text: "Elle double", correct: false },
+    { text: "Elle est divisée par 2", correct: true },
+    { text: "Elle reste la même", correct: false }
   ],
-  explanation: "Une température plus élevée signifie une agitation plus grande des entités : elles se déplacent plus vite, donc heurtent la paroi plus souvent — la pression augmente."
+  explanation: "v = λ/T : si T double (dénominateur ×2) et λ ne change pas, v est divisée par 2."
 });
 
-initVraiFaux({
-  containerId: "actMariotte", chapterId: "ch6-1ere", activityId: "vf-mariotte",
-  prompt: "D'après la loi de Mariotte, si la pression P d'un gaz double (à T et n constantes), son volume V double aussi.",
-  correct: false,
-  explanation: "Faux : P × V = constante. Si P double, V est divisé par 2 pour que le produit reste inchangé."
+initEstimation({
+  containerId: "actWaveDelay", chapterId: "ch6-1ere", activityId: "est-wave-delay",
+  prompt: "Avec d = 150 (unités) et v = 80 (unités/s), quel est le retard Δt = d/v entre le passage en A et en B ?",
+  answer: 1.875, tolerance: 0.1, unit: "s",
+  explanation: "Δt = d/v = 150/80 = 1,875 s."
 });
 
 /* ---------- Onglets + barre de progression ---------- */

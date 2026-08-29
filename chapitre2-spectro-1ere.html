@@ -6,7 +6,7 @@
 <title>Chapitre 2 — Spectrophotométrie UV-visible colorées — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
 <script src="animations-common.js"></script>
-<script src="animations-ch2.js"></script>
+<script src="animations-spectro-1ere.js"></script>
 <script src="modules-common.js"></script>
 </head>
 <body>
@@ -28,10 +28,10 @@
 <div class="progress-wrap">
   <div class="progress-label">
     <span>Progression du chapitre</span>
-    <span id="progressLabel_ch2-1ere">0 / 0 activités réussies</span>
+    <span id="progressLabel_spectro-1ere">0 / 0 activités réussies</span>
   </div>
   <div class="progress-bar-track">
-    <div class="progress-bar-fill" id="progressFill_ch2-1ere"></div>
+    <div class="progress-bar-fill" id="progressFill_spectro-1ere"></div>
   </div>
 </div>
 
@@ -279,7 +279,7 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
     }
   });
   document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
-  if (correct === blanks.length) ProgressStore.record("ch2-1ere", "trous-complet", true);
+  if (correct === blanks.length) ProgressStore.record("spectro-1ere", "trous-complet", true);
 });
 
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
@@ -292,14 +292,14 @@ initCalibrationCurve({ svgId: "calibSvg", sliderId: "calibA", readoutId: "calibR
 
 /* ---------- Activités liées à chaque animation ---------- */
 initEstimation({
-  containerId: "actBeer", chapterId: "ch2-1ere", activityId: "est-beer",
+  containerId: "actBeer", chapterId: "spectro-1ere", activityId: "est-beer",
   prompt: "Pour une solution de concentration C = 4 × 10⁻⁴ mol/L, avec ε = 1700 L·mol⁻¹·cm⁻¹ et ℓ = 1 cm, quelle est l'absorbance A ?",
   answer: 0.68, tolerance: 0.05, unit: "(sans unité)",
   explanation: "A = ε × ℓ × C = 1700 × 1 × 4×10⁻⁴ = 0,68."
 });
 
 initQCM({
-  containerId: "actCalib", chapterId: "ch2-1ere", activityId: "qcm-calib",
+  containerId: "actCalib", chapterId: "spectro-1ere", activityId: "qcm-calib",
   prompt: "Pourquoi la droite d'étalonnage A = f(C) passe-t-elle par l'origine ?",
   options: [
     { text: "Car A = k × C : quand C = 0 (pas de soluté), A = 0", correct: true },
@@ -310,8 +310,8 @@ initQCM({
 });
 
 /* ---------- Onglets + barre de progression ---------- */
-initModeTabs("ch2-1ere");
-initProgressBar("ch2-1ere", 3); // texte à trous complet + 2 activités liées aux animations
+initModeTabs("spectro-1ere");
+initProgressBar("spectro-1ere", 3); // texte à trous complet + 2 activités liées aux animations
 </script>
 </body>
 </html>

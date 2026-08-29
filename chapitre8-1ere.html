@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapitre 8 — Lentilles minces convergentes — 1ère spé PC</title>
+<title>Chapitre 8 — Couleurs — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
 <script src="animations-common.js"></script>
 <script src="animations-ch8.js"></script>
@@ -21,7 +21,7 @@
 
 <header class="page-head">
   <div class="badge-inline physique">Physique</div>
-  <h1>Chapitre 8 — Lentilles minces convergentes</h1>
+  <h1>Chapitre 8 — Couleurs</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
 </header>
 
@@ -52,120 +52,121 @@
     <div class="objectifs-box">
       <span class="box-label">🎯 Objectifs du chapitre</span>
       <ul>
-        <li>Savoir construire l'image d'un objet à l'aide des trois rayons caractéristiques</li>
-        <li>Savoir utiliser les relations de conjugaison et de grandissement</li>
-        <li>Comprendre la mise au point et les différents cas de figure (image réelle/virtuelle, effet loupe)</li>
+        <li>Distinguer synthèse additive (lumières) et synthèse soustractive (filtres/pigments)</li>
+        <li>Connaître les trois interactions lumière-objet : absorption, diffusion, transmission</li>
+        <li>Savoir prévoir la couleur perçue d'un objet selon la lumière qui l'éclaire</li>
       </ul>
     </div>
   </section>
 
   <section>
-    <h2>a. Position de l'image</h2>
+    <h2>1a. Addition de lumières colorées</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      La position de l'image d'un objet est obtenue en utilisant les trois <strong>rayons</strong> caractéristiques.
-    </div>
-    <p class="course-text">
-      On choisit un repère dont l'origine est le centre <strong>optique</strong> O de la lentille. L'axe optique Δ est l'axe des <strong>abscisses</strong> x. Les abscisses x<sub>A</sub> et x<sub>A'</sub>, la distance focale f' de la lentille, sont reliées par une relation appelée relation de <strong>conjugaison</strong>.
-    </p>
-    <div class="formula">
-      <span class="frac"><span class="num">1</span><span class="den">x<sub>A'</sub></span></span>
-      −
-      <span class="frac"><span class="num">1</span><span class="den">x<sub>A</sub></span></span>
-      =
-      <span class="frac"><span class="num">1</span><span class="den">f'</span></span>
-    </div>
-    <div class="warning-box">
-      <span class="box-label">⚠️ Attention</span>
-      x<sub>A</sub>, x<sub>A'</sub> et f' doivent être exprimées avec la même <strong>unité</strong> de longueur.
-    </div>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Rappel de 2nde : avance rayon par rayon pour construire l'image.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="lmSvgCours" viewBox="0 0 300 150"></svg>
-      </div>
-      <div class="anim-controls" style="min-width:280px;">
-        <div class="anim-readout" id="lmExplainCours" style="min-height:4.5em;"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
-          <button id="lmPrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
-          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="lmStepCours"></span>
-          <button id="lmNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>b. Grandissement</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      La relation de <strong>grandissement</strong> permet de comparer la taille de l'image et celle de l'objet.
-    </div>
-    <div class="formula">
-      γ = <span class="frac"><span class="num">y<sub>B'</sub></span><span class="den">y<sub>B</sub></span></span>
-      = <span class="frac"><span class="num">x<sub>A'</sub></span><span class="den">x<sub>A</sub></span></span>
+      La synthèse additive est la <strong>superposition</strong> de lumières colorées. On obtient une infinité de couleurs en superposant trois lumières colorées rouge, verte et bleue, d'intensité réglable : on parle de <strong>trichromie</strong>.
     </div>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      γ n'a pas d'<strong>unité</strong>. Si γ &lt; 0, l'image est <strong>renversée</strong>. Si γ &gt; 0, l'image est <strong>droite</strong>. Si |γ| &gt; 1, l'image est plus <strong>grande</strong> que l'objet ; si |γ| &lt; 1, l'image est plus <strong>petite</strong>.
+      La synthèse additive de deux lumières colorées de couleurs <strong>complémentaires</strong> donne du <strong>blanc</strong>.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 La compétence attendue en 1ère : utiliser les relations sans forcément refaire le tracé.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Trois projecteurs colorés qui se superposent — règle leur intensité.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="lcSvgCours" viewBox="0 0 300 160"></svg>
-      </div>
-      <div class="anim-controls" style="min-width:280px;">
-        <div class="formula" id="lcEqCours" style="font-size:1.1rem;"></div>
-        <div class="anim-readout" id="lcExplainCours" style="min-height:3em;"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
-          <button id="lcPrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
-          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="lcStepCours"></span>
-          <button id="lcNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>c. Caractéristiques de l'image</h2>
-    <p class="course-text">
-      La position, la taille et le sens de l'image sont les caractéristiques de l'image. Elles dépendent de la lentille utilisée et des caractéristiques de l'<strong>objet</strong>.
-    </p>
-    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
-      Remarque : lorsque l'objet est très éloigné de la lentille (1/x<sub>A</sub> tend vers zéro), la relation de conjugaison devient 1/x<sub>A'</sub> = 1/f'. La distance entre la lentille et l'image est alors égale à la distance <strong>focale</strong>.
-    </p>
-  </section>
-
-  <section>
-    <h2>d. Mise au point</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      Pour que l'image se forme sur la rétine ou sur le capteur, il est nécessaire de réaliser une <strong>mise au point</strong>. Pour cela, on peut soit modifier la distance <strong>focale</strong> de la lentille, soit modifier la géométrie du montage optique.
-    </div>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Déplace l'écran : l'image n'est nette qu'à un seul endroit précis.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="fsSvgCours" viewBox="0 0 300 150"></svg>
+        <svg id="asSvgCours" viewBox="0 0 220 180"></svg>
       </div>
       <div class="anim-controls">
-        <label>Position de l'écran</label>
-        <input type="range" id="fsScreenCours" min="2" max="18" value="14" step="0.5">
-        <div class="anim-readout" id="fsReadoutCours"></div>
+        <label>Rouge</label>
+        <input type="range" id="asRCours" min="0" max="100" value="100" step="5">
+        <label>Vert</label>
+        <input type="range" id="asGCours" min="0" max="100" value="100" step="5">
+        <label>Bleu</label>
+        <input type="range" id="asBCours" min="0" max="100" value="100" step="5">
+        <div class="anim-readout" id="asReadoutCours"></div>
       </div>
     </div>
   </section>
 
   <section>
-    <h2>e. Position de l'objet et caractéristiques de l'image</h2>
+    <h2>1b. Couleur perçue</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La couleur perçue est l'impression visuelle des différentes radiations constituant la lumière visible qui atteint notre œil ; elle s'explique par la synthèse <strong>additive</strong> des couleurs.
+    </div>
     <p class="course-text">
-      Si l'objet AB est situé avant le foyer objet F, l'image est <strong>réelle</strong> (x<sub>A'</sub> &gt; 0) et <strong>renversée</strong> (γ &lt; 0).
+      Deux types de cellules photoréceptrices : les <strong>bâtonnets</strong> (très sensibles à l'intensité, pas aux couleurs) et les <strong>cônes</strong> (qui détectent les couleurs, il en existe <strong>trois</strong> types).
     </p>
+  </section>
+
+  <section>
+    <h2>2a. Interaction lumière-objet</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Il y a <strong>absorption</strong> lorsqu'un objet absorbe une partie de la lumière incidente. Il y a <strong>diffusion</strong> lorsqu'un objet renvoie dans toutes les directions une partie de la lumière incidente. Il y a <strong>transmission</strong> lorsqu'un objet est traversé par une partie de la lumière incidente.
+    </div>
+  </section>
+
+  <section>
+    <h2>2b. Absorption de lumières colorées (synthèse soustractive)</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La synthèse soustractive est l'<strong>absorption</strong> de lumières colorées.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      La synthèse soustractive de deux lumières colorées de couleurs complémentaires donne du <strong>noir</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Trois filtres colorés superposés sur fond blanc — règle leur intensité.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ssSvgCours" viewBox="0 0 220 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Cyan</label>
+        <input type="range" id="ssCCours" min="0" max="100" value="100" step="5">
+        <label>Magenta</label>
+        <input type="range" id="ssMCours" min="0" max="100" value="100" step="5">
+        <label>Jaune</label>
+        <input type="range" id="ssYCours" min="0" max="100" value="100" step="5">
+        <div class="anim-readout" id="ssReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2c. Couleur perçue d'un objet</h2>
     <p class="course-text">
-      Si l'objet AB est situé entre le foyer objet F et le centre optique O, l'image est <strong>virtuelle</strong> (x<sub>A'</sub> &lt; 0), <strong>droite</strong> (γ &gt; 0), et plus grande que l'objet — c'est un cas d'« effet <strong>loupe</strong> ».
+      La couleur perçue d'un objet dépend de la lumière <strong>incidente</strong> qui l'éclaire, et des lumières colorées qu'il <strong>absorbe</strong>, diffuse et transmet.
     </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis un objet et une lumière : la couleur perçue dépend des deux.</p>
+    <p style="color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Lumière incidente</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pcBlancheCours">Blanche</button>
+      <button class="toggle-btn" id="pcRougeCours">Rouge</button>
+      <button class="toggle-btn" id="pcVerteCours">Verte</button>
+      <button class="toggle-btn" id="pcBleueCours">Bleue</button>
+    </div>
+    <p style="color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Couleur de l'objet</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pcObjBlancCours">Blanc</button>
+      <button class="toggle-btn" id="pcObjNoirCours">Noir</button>
+      <button class="toggle-btn" id="pcObjRougeCours">Rouge</button>
+      <button class="toggle-btn" id="pcObjVertCours">Vert</button>
+      <button class="toggle-btn" id="pcObjBleuCours">Bleu</button>
+      <button class="toggle-btn" id="pcObjJauneCours">Jaune</button>
+      <button class="toggle-btn" id="pcObjCyanCours">Cyan</button>
+      <button class="toggle-btn" id="pcObjMagentaCours">Magenta</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="pcSvgCours" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="pcReadoutCours"></div>
+      </div>
+    </div>
   </section>
 
 </div>
@@ -179,53 +180,29 @@
     <h2>Cours à trous</h2>
     <div class="course-text" id="courseText">
 
-      <h3>a. Position de l'image</h3>
+      <h3>1a. Addition de lumières colorées</h3>
       <p>
-        La position de l'image d'un objet est obtenue en utilisant les trois <input class="blank" data-answer="rayons" size="12"> caractéristiques.
-      </p>
-      <p>
-        On choisit un repère dont l'origine est le centre <input class="blank" data-answer="optique" size="12"> O de la lentille. L'axe optique Δ est l'axe des <input class="blank" data-answer="abscisses" size="14"> x. Les abscisses x<sub>A</sub> et x<sub>A'</sub>, la distance focale f' de la lentille, sont reliées par une relation appelée relation de <input class="blank" data-answer="conjugaison" size="16">.
-      </p>
-      <div class="formula">
-        <span class="frac"><span class="num">1</span><span class="den">x<sub>A'</sub></span></span>
-        −
-        <span class="frac"><span class="num">1</span><span class="den">x<sub>A</sub></span></span>
-        =
-        <span class="frac"><span class="num">1</span><span class="den">f'</span></span>
-      </div>
-      <p>
-        x<sub>A</sub>, x<sub>A'</sub> et f' doivent être exprimées avec la même <input class="blank" data-answer="unité|unite" size="12"> de longueur.
+        La synthèse additive est la <input class="blank" data-answer="superposition" size="18"> de lumières colorées. On obtient une infinité de couleurs en superposant trois lumières colorées rouge, verte et bleue, d'intensité réglable : on parle de <input class="blank" data-answer="trichromie" size="16">. La synthèse additive de deux lumières colorées de couleurs <input class="blank" data-answer="complémentaires|complementaires" size="18"> donne du <input class="blank" data-answer="blanc" size="10">.
       </p>
 
-      <h3>b. Grandissement</h3>
+      <h3>1b. Couleur perçue</h3>
       <p>
-        La relation de <input class="blank" data-answer="grandissement" size="18"> permet de comparer la taille de l'image et celle de l'objet.
-      </p>
-      <div class="formula">
-        γ = <span class="frac"><span class="num">y<sub>B'</sub></span><span class="den">y<sub>B</sub></span></span>
-        = <span class="frac"><span class="num">x<sub>A'</sub></span><span class="den">x<sub>A</sub></span></span>
-      </div>
-      <p>
-        γ n'a pas d'<input class="blank" data-answer="unité|unite" size="12">. Si γ &lt; 0, l'image est <input class="blank" data-answer="renversée|renversee" size="14">. Si γ &gt; 0, l'image est <input class="blank" data-answer="droite" size="12">. Si |γ| &gt; 1, l'image est plus <input class="blank" data-answer="grande" size="12"> que l'objet ; si |γ| &lt; 1, l'image est plus <input class="blank" data-answer="petite" size="12"> que l'objet.
+        La couleur perçue est l'impression visuelle des différentes radiations constituant la lumière visible qui atteint notre œil ; elle s'explique par la synthèse <input class="blank" data-answer="additive" size="14"> des couleurs. Deux types de cellules photoréceptrices : les <input class="blank" data-answer="bâtonnets|batonnets" size="16"> (très sensibles à l'intensité, pas aux couleurs) et les <input class="blank" data-answer="cônes|cones" size="12"> (qui détectent les couleurs, il en existe <input class="blank" data-answer="trois" size="10"> types).
       </p>
 
-      <h3>c. Caractéristiques de l'image</h3>
+      <h3>2a. Interaction lumière-objet</h3>
       <p>
-        La position, la taille et le sens de l'image sont les caractéristiques de l'image. Elles dépendent de la lentille utilisée et des caractéristiques de l'<input class="blank" data-answer="objet" size="12">.
-      </p>
-      <em class="note">Remarque : lorsque l'objet est très éloigné de la lentille (1/x<sub>A</sub> tend vers zéro), la relation de conjugaison devient 1/x<sub>A'</sub> = 1/f'. La distance entre la lentille et l'image est alors égale à la distance <input class="blank" data-answer="focale" size="12">.</em>
-
-      <h3>d. Mise au point</h3>
-      <p>
-        Pour que l'image se forme sur la rétine ou sur le capteur, il est nécessaire de réaliser une mise au <input class="blank" data-answer="point" size="12">. Pour cela, on peut soit modifier la distance <input class="blank" data-answer="focale" size="12"> de la lentille, soit modifier la géométrie du montage optique.
+        Il y a <input class="blank" data-answer="absorption" size="16"> lorsqu'un objet absorbe une partie de la lumière incidente. Il y a <input class="blank" data-answer="diffusion" size="16"> lorsqu'un objet renvoie dans toutes les directions une partie de la lumière incidente. Il y a <input class="blank" data-answer="transmission" size="18"> lorsqu'un objet est traversé par une partie de la lumière incidente.
       </p>
 
-      <h3>e. Position de l'objet et caractéristiques de l'image</h3>
+      <h3>2b. Absorption de lumières colorées (synthèse soustractive)</h3>
       <p>
-        Si l'objet AB est situé avant le foyer objet F, l'image est <input class="blank" data-answer="réelle|reelle" size="14"> (x<sub>A'</sub> &gt; 0) et <input class="blank" data-answer="renversée|renversee" size="14"> (γ &lt; 0).
+        La synthèse soustractive est l'<input class="blank" data-answer="absorption" size="16"> de lumières colorées. La synthèse soustractive de deux lumières colorées de couleurs complémentaires donne du <input class="blank" data-answer="noir" size="10">.
       </p>
+
+      <h3>2c. Couleur perçue d'un objet</h3>
       <p>
-        Si l'objet AB est situé entre le foyer objet F et le centre optique O, l'image est <input class="blank" data-answer="virtuelle" size="14"> (x<sub>A'</sub> &lt; 0), <input class="blank" data-answer="droite" size="12"> (γ &gt; 0), et plus grande que l'objet — c'est un cas d'« effet <input class="blank" data-answer="loupe" size="12"> ».
+        La couleur perçue d'un objet dépend de la lumière <input class="blank" data-answer="incidente" size="16"> qui l'éclaire, et des lumières colorées qu'il <input class="blank" data-answer="absorbe" size="14">, diffuse et transmet.
       </p>
 
     </div>
@@ -235,58 +212,75 @@
   </section>
 
   <section>
-    <h2>Méthode de construction des 3 rayons <span style="color:var(--chalk-dim); font-size:0.7rem; font-family:var(--font-body); font-weight:400;">(rappel de 2nde)</span></h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Exemple fixe : objet AB d'abscisse x<sub>A</sub> = −7,5 cm, lentille de distance focale f' = 5,0 cm. Avance rayon par rayon.</p>
+    <h2>Simulateur de synthèse additive (RVB)</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Trois projecteurs colorés qui se superposent — règle leur intensité.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="lmSvg" viewBox="0 0 300 150"></svg>
-      </div>
-      <div class="anim-controls" style="min-width:280px;">
-        <div class="anim-readout" id="lmExplain" style="min-height:4.5em;"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
-          <button id="lmPrev" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
-          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="lmStep"></span>
-          <button id="lmNext" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
-        </div>
-      </div>
-    </div>
-    <div class="activity-block"><div id="actLensMethod"></div></div>
-  </section>
-
-  <section>
-    <h2>Exploiter les relations : déterminer position et taille</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Même exemple fixe. C'est la compétence attendue en 1ère : utiliser les relations sans forcément refaire le tracé.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="lcSvg" viewBox="0 0 300 160"></svg>
-      </div>
-      <div class="anim-controls" style="min-width:280px;">
-        <div class="formula" id="lcEq" style="font-size:1.1rem;"></div>
-        <div class="anim-readout" id="lcExplain" style="min-height:3em;"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
-          <button id="lcPrev" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
-          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="lcStep"></span>
-          <button id="lcNext" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
-        </div>
-      </div>
-    </div>
-    <div class="activity-block"><div id="actLensCalc"></div></div>
-  </section>
-
-  <section>
-    <h2>Mise au point</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Déplace l'écran : l'image n'est nette qu'à un seul endroit précis.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="fsSvg" viewBox="0 0 300 150"></svg>
+        <svg id="asSvg" viewBox="0 0 220 180"></svg>
       </div>
       <div class="anim-controls">
-        <label>Position de l'écran</label>
-        <input type="range" id="fsScreen" min="2" max="18" value="14" step="0.5">
-        <div class="anim-readout" id="fsReadout"></div>
+        <label>Rouge</label>
+        <input type="range" id="asR" min="0" max="100" value="100" step="5">
+        <label>Vert</label>
+        <input type="range" id="asG" min="0" max="100" value="100" step="5">
+        <label>Bleu</label>
+        <input type="range" id="asB" min="0" max="100" value="100" step="5">
+        <div class="anim-readout" id="asReadout"></div>
       </div>
     </div>
-    <div class="activity-block"><div id="actFocusSharpness"></div></div>
+    <div class="activity-block"><div id="actAdditive"></div></div>
+  </section>
+
+  <section>
+    <h2>Simulateur de synthèse soustractive (CMJ)</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Trois filtres colorés superposés sur fond blanc — règle leur intensité.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ssSvg" viewBox="0 0 220 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Cyan</label>
+        <input type="range" id="ssC" min="0" max="100" value="100" step="5">
+        <label>Magenta</label>
+        <input type="range" id="ssM" min="0" max="100" value="100" step="5">
+        <label>Jaune</label>
+        <input type="range" id="ssY" min="0" max="100" value="100" step="5">
+        <div class="anim-readout" id="ssReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSubtractive"></div></div>
+  </section>
+
+  <section>
+    <h2>Couleur perçue selon la lumière incidente</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis un objet et une lumière : la couleur perçue dépend des deux.</p>
+    <p style="color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Lumière incidente</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pcBlanche">Blanche</button>
+      <button class="toggle-btn" id="pcRouge">Rouge</button>
+      <button class="toggle-btn" id="pcVerte">Verte</button>
+      <button class="toggle-btn" id="pcBleue">Bleue</button>
+    </div>
+    <p style="color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Couleur de l'objet</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pcObjBlanc">Blanc</button>
+      <button class="toggle-btn" id="pcObjNoir">Noir</button>
+      <button class="toggle-btn" id="pcObjRouge">Rouge</button>
+      <button class="toggle-btn" id="pcObjVert">Vert</button>
+      <button class="toggle-btn" id="pcObjBleu">Bleu</button>
+      <button class="toggle-btn" id="pcObjJaune">Jaune</button>
+      <button class="toggle-btn" id="pcObjCyan">Cyan</button>
+      <button class="toggle-btn" id="pcObjMagenta">Magenta</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="pcSvg" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="pcReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actPerceivedColor"></div></div>
   </section>
 
 </div>
@@ -301,27 +295,39 @@
       <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
         <thead>
           <tr style="border-bottom:2px solid var(--line);">
-            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
-            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Formule</th>
-            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;"> </th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1.05rem;">Synthèse additive</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--coral); font-family:var(--font-display); font-size:1.05rem;">Synthèse soustractive</th>
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Relation de conjugaison</td><td style="padding:10px 8px; color:var(--yellow);">1/x<sub>A'</sub> − 1/x<sub>A</sub> = 1/f'</td><td style="padding:10px 8px; color:var(--chalk-dim);">même unité pour x<sub>A</sub>, x<sub>A'</sub>, f'</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Grandissement</td><td style="padding:10px 8px; color:var(--yellow);">γ = y<sub>B'</sub>/y<sub>B</sub> = x<sub>A'</sub>/x<sub>A</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">sans unité</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Signe de γ</td><td style="padding:10px 8px; color:var(--yellow);">γ &lt; 0 / γ &gt; 0</td><td style="padding:10px 8px; color:var(--chalk-dim);">renversée / droite</td></tr>
-          <tr><td style="padding:10px 8px;">Objet avant F / entre F et O</td><td style="padding:10px 8px; color:var(--yellow);">x<sub>A'</sub> &gt; 0 / x<sub>A'</sub> &lt; 0</td><td style="padding:10px 8px; color:var(--chalk-dim);">image réelle renversée / virtuelle droite (effet loupe)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);">
+            <td style="padding:10px 8px; color:var(--chalk-dim);">Principe</td>
+            <td style="padding:10px 8px;"><strong>superposition</strong> de lumières</td>
+            <td style="padding:10px 8px;"><strong>absorption</strong> de lumières (filtres/pigments)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--line);">
+            <td style="padding:10px 8px; color:var(--chalk-dim);">Couleurs primaires</td>
+            <td style="padding:10px 8px;">Rouge, Vert, Bleu (trichromie)</td>
+            <td style="padding:10px 8px;">Cyan, Magenta, Jaune</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 8px; color:var(--chalk-dim);">2 complémentaires superposées</td>
+            <td style="padding:10px 8px;"><strong style="color:var(--chalk);">Blanc</strong></td>
+            <td style="padding:10px 8px;"><strong style="color:var(--chalk);">Noir</strong></td>
+          </tr>
         </tbody>
       </table>
     </div>
 
     <div class="method-box" style="margin-top:20px;">
-      <span class="box-label">🔧 La méthode des 3 rayons</span>
+      <span class="box-label">🔧 Interaction lumière-objet et perception</span>
       <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li>Le rayon qui passe par le centre optique O n'est <strong>pas dévié</strong></li>
-        <li>Le rayon parallèle à l'axe ressort en passant par le foyer image <strong>F'</strong></li>
-        <li>Le rayon qui passe par le foyer objet F ressort <strong>parallèle</strong> à l'axe</li>
-        <li>L'image se forme là où les trois rayons se croisent</li>
+        <li><strong>Absorption</strong> : l'objet absorbe une partie de la lumière incidente</li>
+        <li><strong>Diffusion</strong> : l'objet renvoie une partie de la lumière dans toutes les directions</li>
+        <li><strong>Transmission</strong> : l'objet est traversé par une partie de la lumière</li>
+        <li>La couleur perçue dépend à la fois de la lumière incidente ET de l'objet</li>
+        <li>Bâtonnets (intensité) et cônes (3 types, couleurs) : les deux photorécepteurs de l'œil</li>
       </ul>
     </div>
   </section>
@@ -329,7 +335,7 @@
 
 </main>
 
-<footer>Chapitre 8 — Lentilles minces convergentes (1ère spé PC).</footer>
+<footer>Chapitre 8 — Couleurs (1ère spé PC).</footer>
 
 <script>
 /* ---------- Correction du texte à trous (mode entraînement) ---------- */
@@ -361,39 +367,51 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 });
 
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initLensMethod({ explainId: "lmExplainCours", prevBtnId: "lmPrevCours", nextBtnId: "lmNextCours", stepId: "lmStepCours", svgId: "lmSvgCours" });
-initLensCalc({ eqId: "lcEqCours", explainId: "lcExplainCours", prevBtnId: "lcPrevCours", nextBtnId: "lcNextCours", stepId: "lcStepCours", svgId: "lcSvgCours" });
-initFocusSharpness({ svgId: "fsSvgCours", screenRangeId: "fsScreenCours", readoutId: "fsReadoutCours" });
+initAdditiveSynthesis({ svgId: "asSvgCours", rRangeId: "asRCours", gRangeId: "asGCours", bRangeId: "asBCours", readoutId: "asReadoutCours" });
+initSubtractiveSynthesis({ svgId: "ssSvgCours", cRangeId: "ssCCours", mRangeId: "ssMCours", yRangeId: "ssYCours", readoutId: "ssReadoutCours" });
+initPerceivedColor({
+  svgId: "pcSvgCours", readoutId: "pcReadoutCours",
+  lightButtonIds: ["pcBlancheCours", "pcRougeCours", "pcVerteCours", "pcBleueCours"],
+  objectButtonIds: ["pcObjBlancCours", "pcObjNoirCours", "pcObjRougeCours", "pcObjVertCours", "pcObjBleuCours", "pcObjJauneCours", "pcObjCyanCours", "pcObjMagentaCours"]
+});
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initLensMethod({ explainId: "lmExplain", prevBtnId: "lmPrev", nextBtnId: "lmNext", stepId: "lmStep", svgId: "lmSvg" });
-initLensCalc({ eqId: "lcEq", explainId: "lcExplain", prevBtnId: "lcPrev", nextBtnId: "lcNext", stepId: "lcStep", svgId: "lcSvg" });
-initFocusSharpness({ svgId: "fsSvg", screenRangeId: "fsScreen", readoutId: "fsReadout" });
+initAdditiveSynthesis({ svgId: "asSvg", rRangeId: "asR", gRangeId: "asG", bRangeId: "asB", readoutId: "asReadout" });
+initSubtractiveSynthesis({ svgId: "ssSvg", cRangeId: "ssC", mRangeId: "ssM", yRangeId: "ssY", readoutId: "ssReadout" });
+initPerceivedColor({
+  svgId: "pcSvg", readoutId: "pcReadout",
+  lightButtonIds: ["pcBlanche", "pcRouge", "pcVerte", "pcBleue"],
+  objectButtonIds: ["pcObjBlanc", "pcObjNoir", "pcObjRouge", "pcObjVert", "pcObjBleu", "pcObjJaune", "pcObjCyan", "pcObjMagenta"]
+});
 
 /* ---------- Activités liées à chaque animation ---------- */
 initQCM({
-  containerId: "actLensMethod", chapterId: "ch8-1ere", activityId: "qcm-lens-method",
-  prompt: "Le rayon qui passe par le centre optique O de la lentille…",
+  containerId: "actAdditive", chapterId: "ch8-1ere", activityId: "qcm-additive",
+  prompt: "Sur le simulateur, quelle couleur obtient-on en superposant les 3 lumières (rouge, vert, bleu) à intensité maximale ?",
   options: [
-    { text: "n'est pas dévié, il continue tout droit", correct: true },
-    { text: "converge vers le foyer image F'", correct: false },
-    { text: "ressort parallèle à l'axe optique", correct: false }
+    { text: "Blanc", correct: true },
+    { text: "Noir", correct: false },
+    { text: "Gris", correct: false }
   ],
-  explanation: "C'est l'une des propriétés des 3 rayons caractéristiques : celui qui passe par le centre optique traverse la lentille sans être dévié."
-});
-
-initEstimation({
-  containerId: "actLensCalc", chapterId: "ch8-1ere", activityId: "est-lens-calc",
-  prompt: "Avec x_A = −7,5 cm et f' = 5,0 cm (relation de conjugaison donnant x_A' = 15 cm), quelle est la valeur du grandissement γ = x_A'/x_A ?",
-  answer: -2, tolerance: 0.1, unit: "(sans unité)",
-  explanation: "γ = x_A'/x_A = 15 / (−7,5) = −2,0."
+  explanation: "C'est le principe de la trichromie : superposer les trois lumières colorées primaires à pleine intensité donne du blanc."
 });
 
 initVraiFaux({
-  containerId: "actFocusSharpness", chapterId: "ch8-1ere", activityId: "vf-focus-sharpness",
-  prompt: "Sur l'animation ci-dessus, il existe plusieurs positions d'écran où l'image est nette.",
+  containerId: "actSubtractive", chapterId: "ch8-1ere", activityId: "vf-subtractive",
+  prompt: "La synthèse soustractive de deux lumières colorées complémentaires donne du blanc.",
   correct: false,
-  explanation: "Faux : pour un objet et une lentille donnés, l'image ne se forme nettement qu'à une seule position précise de l'écran — ailleurs, elle est floue."
+  explanation: "Faux : en synthèse soustractive (absorption), deux couleurs complémentaires superposées absorbent toutes les composantes de la lumière incidente, donnant du noir."
+});
+
+initQCM({
+  containerId: "actPerceivedColor", chapterId: "ch8-1ere", activityId: "qcm-perceived-color",
+  prompt: "Un objet qui ne diffuse que le rouge est éclairé par une lumière bleue pure. Quelle couleur perçoit-on ?",
+  options: [
+    { text: "Noir", correct: true },
+    { text: "Rouge", correct: false },
+    { text: "Bleu", correct: false }
+  ],
+  explanation: "L'objet ne peut diffuser que le rouge, mais la lumière incidente (bleue pure) ne contient aucune composante rouge à diffuser : l'objet apparaît noir."
 });
 
 /* ---------- Onglets + barre de progression ---------- */

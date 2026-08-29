@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 7 — De l'atome à l'élément chimique — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch7-2nde.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 7 — De l'atome à l'élément chimique</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch7-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch7-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Connaître la constitution d'un atome et savoir écrire un noyau ᴬZX</li>
+        <li>Savoir comment se forme un ion monoatomique (cation, anion)</li>
+        <li>Comprendre la notion d'élément chimique et distinguer entité et espèce chimique</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1a. Constitution d'un atome</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un <strong>atome</strong> est constitué d'un <strong>noyau</strong> chargé positivement et d'<strong>électrons</strong> chargés négativement en mouvement désordonné autour de ce noyau. Le noyau contient les <strong>nucléons</strong> : les <strong>protons</strong> (chargés +e) et les <strong>neutrons</strong> (électriquement neutres).
+    </div>
+    <p class="course-text">
+      La charge électrique e, de valeur e = 1,60×10⁻¹⁹ C, est appelée <strong>charge élémentaire</strong>. Les charges électriques du proton (+e) et de l'électron (−e) sont opposées.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Un atome est <strong>électriquement neutre</strong> car il possède autant de protons que d'électrons.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier le nombre de protons/neutrons/électrons (toujours égaux dans un atome neutre).</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="amSvgCours" viewBox="0 0 220 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre de protons (= neutrons = électrons)</label>
+        <input type="range" id="amZCours" min="1" max="12" value="6" step="1">
+        <div class="anim-readout" id="amReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>1b. Dimension d'un atome</h2>
+    <p class="course-text">
+      L'ordre de grandeur du <strong>rayon d'un atome</strong> est de 10⁻¹⁰ m. L'ordre de grandeur du rayon du noyau est d'environ 10⁻¹⁵ m. Le rayon d'un atome est donc environ 10⁵ fois plus grand que celui de son noyau.
+    </p>
+    <div class="formula">
+      <span class="frac"><span class="num">r<sub>atome</sub></span><span class="den">r<sub>noyau</sub></span></span> = <span class="frac"><span class="num">10⁻¹⁰</span><span class="den">10⁻¹⁵</span></span> = 10⁵
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      L'espace existant entre les électrons, ainsi qu'entre les électrons et le noyau, est vide. On dit que l'atome a une <strong>structure lacunaire</strong>. (Si le noyau avait la taille d'une tête d'épingle de 1 mm, l'atome aurait la taille d'un terrain de football de 100 m !)
+    </div>
+  </section>
+
+  <section>
+    <h2>1c. Noyau d'un atome</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'écriture conventionnelle du noyau d'un atome de symbole X est <strong>ᴬZX</strong>, où <em>A</em> est le nombre de nucléons (protons + neutrons), ou <strong>nombre de masse</strong>, et <em>Z</em> est le nombre de protons, ou <strong>numéro atomique</strong>.
+    </div>
+    <p class="course-text">
+      Le nombre de neutrons est donc égal à <strong>A − Z</strong>.
+    </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : le noyau de cuivre ⁶³₂₉Cu possède 29 protons et 63 − 29 = 34 neutrons.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      La masse d'un neutron est environ égale à celle d'un proton. La masse d'un électron est négligeable devant celle d'un nucléon (m<sub>électron</sub> ≪ m<sub>nucléon</sub>). La masse d'un atome est donc proche de celle de son noyau : m<sub>atome</sub> ≈ A × m<sub>nucléon</sub>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle A et Z : observe le nombre de neutrons se calculer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="ncSvgCours" viewBox="0 0 200 110"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre de nucléons A</label>
+        <input type="range" id="ncACours" min="1" max="80" value="63" step="1">
+        <label>Numéro atomique Z</label>
+        <input type="range" id="ncZCours" min="1" max="80" value="29" step="1">
+        <div class="anim-readout" id="ncReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>1d. Ions monoatomiques</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un <strong>ion monoatomique</strong> se forme lorsqu'un atome gagne ou perd un ou plusieurs électrons. Un <strong>anion</strong> est un ion de charge négative (gain d'électron(s)). Un <strong>cation</strong> est un ion de charge positive (perte d'électron(s)).
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Lors de la formation d'un ion, le <strong>noyau reste inchangé</strong> — seul le nombre d'électrons varie.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : lorsqu'un atome de lithium Li (3 protons) perd un électron, l'ion formé Li⁺ porte une charge électrique positive +e car il possède 3 protons et seulement 2 électrons.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis perte ou gain d'électrons, puis règle combien.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ifLoseCours">Perte d'électrons (cation)</button>
+      <button class="toggle-btn" id="ifGainCours">Gain d'électrons (anion)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ifSvgCours" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre d'électrons échangés</label>
+        <input type="range" id="ifNCours" min="1" max="2" value="1" step="1">
+        <div class="anim-readout" id="ifReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. L'élément chimique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Les atomes ou les ions monoatomiques ayant le <strong>même nombre de protons</strong> dans leur noyau correspondent au <strong>même élément chimique</strong>. Un élément chimique est caractérisé par son numéro atomique <strong>Z</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre 3 entités : elles ont toutes le même Z, donc le même élément chimique.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="seAtom1Cours">Atome de cuivre Cu</button>
+      <button class="toggle-btn" id="seIonCours">Ion cuivre (II) Cu²⁺</button>
+      <button class="toggle-btn" id="seAtom2Cours">Autre atome de cuivre Cu</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:400px;">
+        <div class="anim-readout" id="seReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Du microscopique au macroscopique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>entité chimique</strong> peut désigner un atome, une molécule, un ion (ou un ensemble d'ions) qui constitue la matière à l'échelle microscopique. Une <strong>espèce chimique</strong> est une collection d'un nombre très grand d'entités chimiques identiques.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      La matière est <strong>électriquement neutre</strong>. Les espèces chimiques ioniques sont donc constituées d'au minimum deux types d'entités (anions et cations) dans des proportions qui rendent l'ensemble électriquement neutre.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 3 types d'espèces chimiques.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="mmAtomicCours">Fer (atomique)</button>
+      <button class="toggle-btn" id="mmMolecularCours">Eau (moléculaire)</button>
+      <button class="toggle-btn" id="mmIonicCours">Chlorure de sodium (ionique)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="mmSvgCours" viewBox="0 0 220 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="mmReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>1a. Constitution d'un atome</h3>
+      <p>
+        Un atome est constitué d'un <input class="blank" data-answer="noyau" size="12"> chargé positivement et d'<input class="blank" data-answer="électrons|electrons" size="14"> chargés négativement en mouvement désordonné autour de ce noyau. Le noyau contient les <input class="blank" data-answer="nucléons|nucleons" size="14"> : les <input class="blank" data-answer="protons" size="12"> (chargés +e) et les <input class="blank" data-answer="neutrons" size="12"> (électriquement neutres).
+      </p>
+      <p>
+        La charge électrique e est appelée charge <input class="blank" data-answer="élémentaire|elementaire" size="16">, et vaut 1,60×10⁻¹⁹ C.
+      </p>
+      <p>
+        Un atome est électriquement <input class="blank" data-answer="neutre" size="12"> car il possède autant de protons que d'électrons.
+      </p>
+
+      <h3>1b. Dimension d'un atome</h3>
+      <p>
+        L'ordre de grandeur du rayon d'un atome est de <input class="blank" data-answer="10⁻¹⁰|10-10" size="10"> m. Le rayon d'un atome est environ <input class="blank" data-answer="10⁵|100000|10^5" size="10"> fois plus grand que celui de son noyau.
+      </p>
+      <p>
+        L'espace entre les électrons et le noyau est vide : on dit que l'atome a une structure <input class="blank" data-answer="lacunaire" size="16">.
+      </p>
+
+      <h3>1c. Noyau d'un atome</h3>
+      <p>
+        L'écriture conventionnelle du noyau d'un atome de symbole X est ᴬZX, où A est le nombre de <input class="blank" data-answer="nucléons|nucleons" size="14"> (ou nombre de masse), et Z est le nombre de <input class="blank" data-answer="protons" size="12"> (ou numéro atomique).
+      </p>
+      <p>
+        Le nombre de neutrons est donc égal à <input class="blank" data-answer="A − Z|A-Z|A - Z" size="10">.
+      </p>
+      <p>
+        La masse d'un électron est <input class="blank" data-answer="négligeable|negligeable" size="16"> devant celle d'un nucléon. La masse d'un atome est donc proche de celle de son noyau : m<sub>atome</sub> ≈ A × m<sub>nucléon</sub>.
+      </p>
+
+      <h3>1d. Ions monoatomiques</h3>
+      <p>
+        Un ion monoatomique se forme lorsqu'un atome gagne ou perd un ou plusieurs <input class="blank" data-answer="électrons|electrons" size="14">. Un <input class="blank" data-answer="anion" size="12"> est un ion de charge négative. Un <input class="blank" data-answer="cation" size="12"> est un ion de charge positive.
+      </p>
+      <p>
+        Lors de la formation d'un ion, le <input class="blank" data-answer="noyau" size="12"> reste inchangé.
+      </p>
+
+      <h3>2. L'élément chimique</h3>
+      <p>
+        Les atomes ou les ions monoatomiques ayant le même nombre de <input class="blank" data-answer="protons" size="12"> dans leur noyau correspondent au même <input class="blank" data-answer="élément chimique|element chimique" size="18">.
+      </p>
+      <p>
+        Un élément chimique est caractérisé par son numéro atomique <input class="blank" data-answer="Z" size="6">.
+      </p>
+
+      <h3>3. Du microscopique au macroscopique</h3>
+      <p>
+        Une <input class="blank" data-answer="entité chimique|entite chimique" size="18"> peut désigner un atome, une molécule, un ion qui constitue la matière à l'échelle microscopique. Une espèce chimique est une collection d'un nombre très grand d'entités chimiques <input class="blank" data-answer="identiques" size="14">.
+      </p>
+      <p>
+        La matière est électriquement <input class="blank" data-answer="neutre" size="12">. Les espèces chimiques ioniques sont donc constituées d'au minimum <input class="blank" data-answer="deux" size="8"> types d'entités.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Modèle de l'atome : neutralité électrique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier le nombre de protons/neutrons/électrons (toujours égaux dans un atome neutre).</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="amSvg" viewBox="0 0 220 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre de protons (= neutrons = électrons)</label>
+        <input type="range" id="amZ" min="1" max="12" value="6" step="1">
+        <div class="anim-readout" id="amReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actAtomModel"></div></div>
+  </section>
+
+  <section>
+    <h2>Écriture du noyau : A, Z → neutrons</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle A et Z : observe le nombre de neutrons se calculer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="ncSvg" viewBox="0 0 200 110"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre de nucléons A</label>
+        <input type="range" id="ncA" min="1" max="80" value="63" step="1">
+        <label>Numéro atomique Z</label>
+        <input type="range" id="ncZ" min="1" max="80" value="29" step="1">
+        <div class="anim-readout" id="ncReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actNucleusCalc"></div></div>
+  </section>
+
+  <section>
+    <h2>Formation d'un ion monoatomique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis perte ou gain d'électrons, puis règle combien.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ifLose">Perte d'électrons (cation)</button>
+      <button class="toggle-btn" id="ifGain">Gain d'électrons (anion)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ifSvg" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre d'électrons échangés</label>
+        <input type="range" id="ifN" min="1" max="2" value="1" step="1">
+        <div class="anim-readout" id="ifReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actIonFormation"></div></div>
+  </section>
+
+  <section>
+    <h2>Le même élément chimique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre 3 entités : elles ont toutes le même Z, donc le même élément chimique.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="seAtom1">Atome de cuivre Cu</button>
+      <button class="toggle-btn" id="seIon">Ion cuivre (II) Cu²⁺</button>
+      <button class="toggle-btn" id="seAtom2">Autre atome de cuivre Cu</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:400px;">
+        <div class="anim-readout" id="seReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSameElement"></div></div>
+  </section>
+
+  <section>
+    <h2>Du microscopique au macroscopique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 types d'espèces chimiques.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="mmAtomic">Fer (atomique)</button>
+      <button class="toggle-btn" id="mmMolecular">Eau (moléculaire)</button>
+      <button class="toggle-btn" id="mmIonic">Chlorure de sodium (ionique)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="mmSvg" viewBox="0 0 220 180"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="mmReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMicroMacro"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Définition / formule</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Atome</td><td style="padding:10px 8px;">noyau (protons+neutrons) + électrons</td><td style="padding:10px 8px; color:var(--chalk-dim);">électriquement neutre</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Écriture du noyau</td><td style="padding:10px 8px;">ᴬZX</td><td style="padding:10px 8px; color:var(--chalk-dim);">A = nucléons, Z = protons, N = A−Z</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Ion monoatomique</td><td style="padding:10px 8px;">cation (perd e⁻) / anion (gagne e⁻)</td><td style="padding:10px 8px; color:var(--chalk-dim);">le noyau ne change jamais</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Élément chimique</td><td style="padding:10px 8px;">caractérisé par Z</td><td style="padding:10px 8px; color:var(--chalk-dim);">même Z = même élément</td></tr>
+          <tr><td style="padding:10px 8px;">Entité / espèce chimique</td><td style="padding:10px 8px;">atomique, moléculaire, ou ionique</td><td style="padding:10px 8px; color:var(--chalk-dim);">un solide ionique est électriquement neutre</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Ordres de grandeur et masse</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li>Rayon d'un atome ≈ 10⁻¹⁰ m ; rayon d'un noyau ≈ 10⁻¹⁵ m (rapport 10⁵)</li>
+        <li>L'atome a une structure <strong>lacunaire</strong> (essentiellement du vide)</li>
+        <li>m<sub>électron</sub> ≪ m<sub>nucléon</sub> ⟹ m<sub>atome</sub> ≈ A × m<sub>nucléon</sub></li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 7 — De l'atome à l'élément chimique (2nde).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch7-2nde", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initAtomModel({ svgId: "amSvgCours", zRangeId: "amZCours", readoutId: "amReadoutCours" });
+initNucleusCalculator({ svgId: "ncSvgCours", aRangeId: "ncACours", zRangeId: "ncZCours", readoutId: "ncReadoutCours" });
+initIonFormation({ svgId: "ifSvgCours", nRangeId: "ifNCours", readoutId: "ifReadoutCours", btnLoseId: "ifLoseCours", btnGainId: "ifGainCours" });
+initSameElement({ readoutId: "seReadoutCours", btnAtom1Id: "seAtom1Cours", btnIonId: "seIonCours", btnAtom2Id: "seAtom2Cours" });
+initMicroMacro({ svgId: "mmSvgCours", readoutId: "mmReadoutCours", btnAtomicId: "mmAtomicCours", btnMolecularId: "mmMolecularCours", btnIonicId: "mmIonicCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initAtomModel({ svgId: "amSvg", zRangeId: "amZ", readoutId: "amReadout" });
+initNucleusCalculator({ svgId: "ncSvg", aRangeId: "ncA", zRangeId: "ncZ", readoutId: "ncReadout" });
+initIonFormation({ svgId: "ifSvg", nRangeId: "ifN", readoutId: "ifReadout", btnLoseId: "ifLose", btnGainId: "ifGain" });
+initSameElement({ readoutId: "seReadout", btnAtom1Id: "seAtom1", btnIonId: "seIon", btnAtom2Id: "seAtom2" });
+initMicroMacro({ svgId: "mmSvg", readoutId: "mmReadout", btnAtomicId: "mmAtomic", btnMolecularId: "mmMolecular", btnIonicId: "mmIonic" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actAtomModel", chapterId: "ch7-2nde", activityId: "qcm-atom-model",
+  prompt: "Un atome possède toujours autant de protons que d'électrons. Sa charge électrique totale est donc…",
+  options: [
+    { text: "Nulle : l'atome est électriquement neutre", correct: true },
+    { text: "Positive", correct: false },
+    { text: "Négative", correct: false }
+  ],
+  explanation: "Les charges +e (protons) et −e (électrons) se compensent exactement puisqu'il y en a autant : la charge totale est nulle."
+});
+
+initEstimation({
+  containerId: "actNucleusCalc", chapterId: "ch7-2nde", activityId: "est-nucleus-calc",
+  prompt: "Le noyau de cuivre ⁶³₂₉Cu (A = 63, Z = 29) possède combien de neutrons ?",
+  answer: 34, tolerance: 0, unit: "neutrons",
+  explanation: "N = A − Z = 63 − 29 = 34."
+});
+
+initEstimation({
+  containerId: "actIonFormation", chapterId: "ch7-2nde", activityId: "est-ion-formation",
+  prompt: "L'atome de lithium Li (3 protons, 3 électrons) perd un électron pour former l'ion Li⁺. Combien d'électrons possède l'ion Li⁺ ?",
+  answer: 2, tolerance: 0, unit: "électrons",
+  explanation: "En perdant 1 électron, il en reste 3 − 1 = 2. Le noyau (3 protons) ne change pas."
+});
+
+initQCM({
+  containerId: "actSameElement", chapterId: "ch7-2nde", activityId: "qcm-same-element",
+  prompt: "Un atome de cuivre Cu et un ion cuivre (II) Cu²⁺ ont le même numéro atomique Z = 29. Qu'ont-ils en commun ?",
+  options: [
+    { text: "Le même nombre de protons", correct: true },
+    { text: "Le même nombre d'électrons", correct: false },
+    { text: "La même charge électrique", correct: false }
+  ],
+  explanation: "Le numéro atomique Z compte les protons, qui ne changent jamais lors de la formation d'un ion. Le nombre d'électrons et la charge, eux, diffèrent."
+});
+
+initVraiFaux({
+  containerId: "actMicroMacro", chapterId: "ch7-2nde", activityId: "vf-micro-macro",
+  prompt: "Un solide ionique comme le chlorure de sodium est constitué d'un seul type d'entité chimique.",
+  correct: false,
+  explanation: "Faux : la matière étant électriquement neutre, un solide ionique est constitué d'au moins deux types d'entités (anions et cations), en proportions qui assurent la neutralité globale."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch7-2nde");
+initProgressBar("ch7-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+</script>
+</body>
+</html>

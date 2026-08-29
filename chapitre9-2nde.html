@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 9 — Transformation chimique — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch9-2nde.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 9 — Transformation chimique</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch9-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch9-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Savoir écrire et équilibrer une équation de réaction</li>
+        <li>Savoir déterminer le réactif limitant d'une transformation</li>
+        <li>Connaître les 4 étapes d'une synthèse chimique au laboratoire</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1a. Définition de la transformation chimique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>transformation chimique</strong> est le passage d'un système chimique d'un <strong>état initial</strong> à un <strong>état final</strong> avec formation de nouvelles espèces chimiques.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : lors de la combustion complète du méthane dans le dioxygène de l'air, CH₄(g) et O₂(g) sont consommés ; il se forme du CO₂(g) et de l'H₂O(g). Le diazote N₂(g) de l'air, présent dans l'état initial, est une espèce spectatrice : il reste présent dans l'état final.
+    </p>
+  </section>
+
+  <section>
+    <h2>1b. Réaction chimique et équation de réaction</h2>
+    <p class="course-text">
+      Au cours d'une transformation chimique, les <strong>réactifs</strong> sont les espèces chimiques consommées, et les <strong>produits</strong> sont les espèces chimiques formées. Seuls les réactifs et les produits figurent dans l'équation de la réaction ; les espèces spectatrices ne sont pas indiquées.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      L'équation de la réaction traduit la <strong>conservation des éléments</strong> et de la <strong>charge électrique</strong> entre les réactifs et les produits. Des <strong>nombres stœchiométriques</strong> sont placés devant les formules chimiques (le nombre 1 n'est jamais écrit).
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre deux équations : vérifie la conservation des éléments (et de la charge).</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="beMethaneCours">Combustion du méthane</button>
+      <button class="toggle-btn" id="beMgCours">Magnésium + ions H⁺</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="beSvgCours" viewBox="0 0 220 155"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="beReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>1c. Bilan de matière et réactif limitant</h2>
+    <p class="course-text">
+      Une équation de réaction traduit un <strong>bilan de quantités de matière</strong>. Par exemple, pour CH₄(g) + 2 O₂(g) → CO₂(g) + 2 H₂O(g), la quantité de méthane qui réagit est égale à la moitié de la quantité de dioxygène qui réagit : n(CH₄)/1 = n(O₂)/2.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Lors d'une transformation chimique totale, l'un au moins des réactifs est entièrement consommé : il est appelé <strong>réactif limitant</strong>. Si les deux réactifs sont entièrement consommés, le mélange est dit <strong>stœchiométrique</strong>.
+    </div>
+    <p class="course-text">
+      La transformation s'arrête lorsque l'un, au moins, des réactifs est entièrement consommé.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle les quantités initiales : observe le réactif limitant et l'état final se déterminer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:220px;">
+        <svg id="lrSvgCours" viewBox="0 0 220 175"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>n₀(CH₄) initial (mol)</label>
+        <input type="range" id="lrN1Cours" min="0.5" max="5" value="2" step="0.5">
+        <label>n₀(O₂) initial (mol)</label>
+        <input type="range" id="lrN2Cours" min="0.5" max="8" value="3" step="0.5">
+        <div class="anim-readout" id="lrReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>1d. Transformation exothermique et endothermique</h2>
+    <p class="course-text">
+      Certaines transformations s'accompagnent d'un transfert d'énergie.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Une transformation est <strong>exothermique</strong> si le système chimique <strong>libère</strong> de l'énergie vers le milieu extérieur, dont la température augmente. Elle est <strong>endothermique</strong> si le système chimique <strong>reçoit</strong> de l'énergie du milieu extérieur, dont la température diminue.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux cas.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ttExoCours">Exothermique</button>
+      <button class="toggle-btn" id="ttEndoCours">Endothermique</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ttSvgCours" viewBox="0 0 220 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="ttReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2a. Espèces naturelle et synthétique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une espèce chimique <strong>naturelle</strong> est issue de la nature. Une espèce chimique <strong>synthétique</strong> est fabriquée par l'homme.
+    </div>
+    <p class="course-text">
+      La chimie de synthèse permet de reproduire des espèces naturelles à moindre coût sans épuiser les ressources naturelles. Elle permet aussi de créer de nouvelles espèces chimiques qui n'existent pas dans la nature : on parle alors d'espèces chimiques <strong>artificielles</strong>.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux origines.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="nsNaturalCours">Naturelle</button>
+      <button class="toggle-btn" id="nsSyntheticCours">Synthétique</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="nsSvgCours" viewBox="0 0 220 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="nsReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2b. Synthèse chimique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>synthèse</strong> est la fabrication d'une espèce chimique au laboratoire. Elle s'effectue généralement en <strong>quatre étapes</strong> : prélèvement des réactifs, transformation chimique, isolement du produit brut, analyse du produit brut.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      La <strong>chromatographie sur couche mince (CCM)</strong> permet la séparation et l'identification des espèces chimiques présentes dans un mélange. Pour un éluant donné, une espèce chimique migre de la même façon, qu'elle soit pure ou dans un mélange.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Parcours les 4 étapes d'une synthèse au laboratoire.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ssSvgCours" viewBox="0 0 200 160"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:280px;">
+        <div class="anim-readout" id="ssExplainCours" style="min-height:5em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="ssPrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="ssStepCours"></span>
+          <button id="ssNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>1a. Définition de la transformation chimique</h3>
+      <p>
+        Une transformation chimique est le passage d'un système chimique d'un état <input class="blank" data-answer="initial" size="14"> à un état <input class="blank" data-answer="final" size="12"> avec formation de nouvelles espèces chimiques.
+      </p>
+
+      <h3>1b. Réaction chimique et équation de réaction</h3>
+      <p>
+        Les <input class="blank" data-answer="réactifs|reactifs" size="14"> sont les espèces chimiques consommées ; les <input class="blank" data-answer="produits" size="14"> sont les espèces chimiques formées.
+      </p>
+      <p>
+        L'équation de la réaction traduit la conservation des <input class="blank" data-answer="éléments|elements" size="14"> et de la <input class="blank" data-answer="charge électrique|charge electrique" size="18">.
+      </p>
+
+      <h3>1c. Bilan de matière et réactif limitant</h3>
+      <p>
+        Lors d'une transformation totale, l'un au moins des réactifs est entièrement consommé : c'est le réactif <input class="blank" data-answer="limitant" size="16">.
+      </p>
+      <p>
+        Si les deux réactifs sont entièrement consommés, le mélange est dit <input class="blank" data-answer="stœchiométrique|stoechiometrique" size="20">.
+      </p>
+
+      <h3>1d. Transformation exothermique et endothermique</h3>
+      <p>
+        Une transformation est <input class="blank" data-answer="exothermique" size="18"> si le système libère de l'énergie vers le milieu extérieur. Elle est <input class="blank" data-answer="endothermique" size="18"> si le système reçoit de l'énergie du milieu extérieur.
+      </p>
+
+      <h3>2a. Espèces naturelle et synthétique</h3>
+      <p>
+        Une espèce chimique <input class="blank" data-answer="naturelle" size="14"> est issue de la nature. Une espèce chimique <input class="blank" data-answer="synthétique|synthetique" size="16"> est fabriquée par l'homme.
+      </p>
+
+      <h3>2b. Synthèse chimique</h3>
+      <p>
+        Une synthèse s'effectue en quatre étapes : prélèvement des réactifs, <input class="blank" data-answer="transformation" size="16"> chimique, isolement du produit brut, <input class="blank" data-answer="analyse" size="14"> du produit brut.
+      </p>
+      <p>
+        La <input class="blank" data-answer="chromatographie sur couche mince|CCM" size="24"> permet la séparation et l'identification des espèces chimiques d'un mélange.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Équation de réaction équilibrée</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre deux équations : vérifie la conservation des éléments (et de la charge).</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="beMethane">Combustion du méthane</button>
+      <button class="toggle-btn" id="beMg">Magnésium + ions H⁺</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="beSvg" viewBox="0 0 220 155"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="beReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actBalancedEquation"></div></div>
+  </section>
+
+  <section>
+    <h2>Réactif limitant</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle les quantités initiales : observe le réactif limitant et l'état final se déterminer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:220px;">
+        <svg id="lrSvg" viewBox="0 0 220 175"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>n₀(CH₄) initial (mol)</label>
+        <input type="range" id="lrN1" min="0.5" max="5" value="2" step="0.5">
+        <label>n₀(O₂) initial (mol)</label>
+        <input type="range" id="lrN2" min="0.5" max="8" value="3" step="0.5">
+        <div class="anim-readout" id="lrReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actLimitingReagent"></div></div>
+  </section>
+
+  <section>
+    <h2>Transformation exothermique / endothermique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux cas.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ttExo">Exothermique</button>
+      <button class="toggle-btn" id="ttEndo">Endothermique</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ttSvg" viewBox="0 0 220 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="ttReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actThermal"></div></div>
+  </section>
+
+  <section>
+    <h2>Espèce naturelle ou synthétique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux origines.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="nsNatural">Naturelle</button>
+      <button class="toggle-btn" id="nsSynthetic">Synthétique</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="nsSvg" viewBox="0 0 220 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="nsReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actNaturalSynthetic"></div></div>
+  </section>
+
+  <section>
+    <h2>Les 4 étapes d'une synthèse</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Parcours les 4 étapes d'une synthèse au laboratoire.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ssSvg" viewBox="0 0 200 160"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:280px;">
+        <div class="anim-readout" id="ssExplain" style="min-height:5em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="ssPrev" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="ssStep"></span>
+          <button id="ssNext" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSynthesisSteps"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Définition</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Équation de réaction</td><td style="padding:10px 8px;">réactifs → produits</td><td style="padding:10px 8px; color:var(--chalk-dim);">conserve éléments et charge ; spectatrices absentes</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réactif limitant</td><td style="padding:10px 8px;">entièrement consommé le premier</td><td style="padding:10px 8px; color:var(--chalk-dim);">comparer n₀/coefficient stœchiométrique</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Exo/endothermique</td><td style="padding:10px 8px;">transfert d'énergie</td><td style="padding:10px 8px; color:var(--chalk-dim);">exo : libère (T↑) ; endo : reçoit (T↓)</td></tr>
+          <tr><td style="padding:10px 8px;">Synthèse (4 étapes)</td><td style="padding:10px 8px;">prélèvement, transformation, isolement, analyse</td><td style="padding:10px 8px; color:var(--chalk-dim);">CCM pour identifier une espèce</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Déterminer le réactif limitant</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li>Pour chaque réactif, calculer n₀(réactif) / coefficient stœchiométrique</li>
+        <li>Le réactif ayant le <strong>rapport le plus petit</strong> est le réactif limitant</li>
+        <li>Si les deux rapports sont égaux, le mélange est stœchiométrique (les deux réactifs sont limitants)</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 9 — Transformation chimique (2nde).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch9-2nde", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initBalancedEquation({ svgId: "beSvgCours", readoutId: "beReadoutCours", btnMethaneId: "beMethaneCours", btnMgId: "beMgCours" });
+initLimitingReagent({ svgId: "lrSvgCours", n1RangeId: "lrN1Cours", n2RangeId: "lrN2Cours", readoutId: "lrReadoutCours" });
+initThermalTransformation({ svgId: "ttSvgCours", readoutId: "ttReadoutCours", btnExoId: "ttExoCours", btnEndoId: "ttEndoCours" });
+initNaturalSynthetic({ svgId: "nsSvgCours", readoutId: "nsReadoutCours", btnNaturalId: "nsNaturalCours", btnSyntheticId: "nsSyntheticCours" });
+initSynthesisSteps4({ svgId: "ssSvgCours", explainId: "ssExplainCours", prevBtnId: "ssPrevCours", nextBtnId: "ssNextCours", stepId: "ssStepCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initBalancedEquation({ svgId: "beSvg", readoutId: "beReadout", btnMethaneId: "beMethane", btnMgId: "beMg" });
+initLimitingReagent({ svgId: "lrSvg", n1RangeId: "lrN1", n2RangeId: "lrN2", readoutId: "lrReadout" });
+initThermalTransformation({ svgId: "ttSvg", readoutId: "ttReadout", btnExoId: "ttExo", btnEndoId: "ttEndo" });
+initNaturalSynthetic({ svgId: "nsSvg", readoutId: "nsReadout", btnNaturalId: "nsNatural", btnSyntheticId: "nsSynthetic" });
+initSynthesisSteps4({ svgId: "ssSvg", explainId: "ssExplain", prevBtnId: "ssPrev", nextBtnId: "ssNext", stepId: "ssStep" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actBalancedEquation", chapterId: "ch9-2nde", activityId: "qcm-balanced-equation",
+  prompt: "Dans l'équation CH₄(g) + 2 O₂(g) → CO₂(g) + 2 H₂O(g), quel est le nombre stœchiométrique du dioxygène ?",
+  options: [
+    { text: "2", correct: true },
+    { text: "1", correct: false },
+    { text: "4", correct: false }
+  ],
+  explanation: "Le nombre stœchiométrique placé devant O₂ est 2 : il faut 2 moles de dioxygène pour 1 mole de méthane."
+});
+
+initEstimation({
+  containerId: "actLimitingReagent", chapterId: "ch9-2nde", activityId: "est-limiting-reagent",
+  prompt: "Avec n₀(CH₄) = 2 mol et n₀(O₂) = 3 mol, quelle est la quantité maximale de dioxyde de carbone formée x_max (en mol) ?",
+  answer: 1.5, tolerance: 0.1, unit: "mol",
+  explanation: "n₀(CH₄)/1 = 2 et n₀(O₂)/2 = 1,5 : O₂ est limitant. x_max = n₀(O₂)/2 = 1,5 mol (autant de CO₂ formé que de CH₄ consommé, dans le rapport 1:1)."
+});
+
+initVraiFaux({
+  containerId: "actThermal", chapterId: "ch9-2nde", activityId: "vf-thermal",
+  prompt: "Une transformation exothermique reçoit de l'énergie du milieu extérieur.",
+  correct: false,
+  explanation: "Faux : une transformation exothermique LIBÈRE de l'énergie vers le milieu extérieur (dont la température augmente). C'est la transformation endothermique qui reçoit de l'énergie."
+});
+
+initQCM({
+  containerId: "actNaturalSynthetic", chapterId: "ch9-2nde", activityId: "qcm-natural-synthetic",
+  prompt: "La caféine extraite du café est qualifiée d'espèce chimique…",
+  options: [
+    { text: "Naturelle", correct: true },
+    { text: "Synthétique", correct: false },
+    { text: "Artificielle", correct: false }
+  ],
+  explanation: "Elle est qualifiée de naturelle car elle est extraite directement d'une plante. La même caféine fabriquée en laboratoire serait dite synthétique."
+});
+
+initQCM({
+  containerId: "actSynthesisSteps", chapterId: "ch9-2nde", activityId: "qcm-synthesis-steps",
+  prompt: "Quelle étape de la synthèse permet d'identifier le produit obtenu et de contrôler sa pureté ?",
+  options: [
+    { text: "L'analyse", correct: true },
+    { text: "Le prélèvement des réactifs", correct: false },
+    { text: "L'isolement", correct: false }
+  ],
+  explanation: "C'est la dernière étape (étape 4) : l'analyse du produit brut permet son identification et le contrôle de sa pureté."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch9-2nde");
+initProgressBar("ch9-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+</script>
+</body>
+</html>

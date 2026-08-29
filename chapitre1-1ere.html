@@ -3,11 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapitre 1 — Quantité de matière — 1ère spé PC</title>
+<title>Chapitre 1 — Détermination de la composition d'un système chimique — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
 <script src="animations-common.js"></script>
 <script src="animations-ch1.js"></script>
 <script src="modules-common.js"></script>
+<style>
+  /* Tableau périodique (repris du chapitre 9) */
+  .ptable-wrap{ overflow-x:auto; padding-bottom:6px; }
+  .ptable-grid{
+    display:grid; grid-template-columns:repeat(18, minmax(26px,1fr));
+    gap:3px; min-width:560px; margin-bottom:10px;
+  }
+  .ptable-cell.empty{ visibility:hidden; }
+  .ptable-slot{
+    aspect-ratio:1/1; border:1.5px dashed var(--line); border-radius:5px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-size:0.95rem; color:var(--chalk-dim);
+    cursor:pointer; transition:all .15s ease;
+  }
+  .ptable-slot:hover{ border-color:var(--yellow); }
+  .ptable-slot.cat-metal{ background:rgba(217,122,99,0.10); }
+  .ptable-slot.cat-nonmetal{ background:rgba(107,191,171,0.10); }
+  .ptable-slot.cat-noble{ background:rgba(232,196,104,0.10); }
+  .ptable-slot.cat-h{ background:rgba(242,237,225,0.06); }
+  .ptable-slot.selected{ border-style:solid; border-color:var(--yellow); background:var(--yellow); color:var(--board); font-weight:700; }
+</style>
 </head>
 <body>
 
@@ -21,7 +42,7 @@
 
 <header class="page-head">
   <div class="badge-inline chimie">Chimie</div>
-  <h1>Chapitre 1 — La quantité de matière</h1>
+  <h1>Chapitre 1 — Détermination de la composition d'un système chimique</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
 </header>
 
@@ -52,9 +73,9 @@
     <div class="objectifs-box">
       <span class="box-label">🎯 Objectifs du chapitre</span>
       <ul>
-        <li>Savoir manipuler la quantité de matière n, et la relier au nombre d'entités, à la masse, au volume (gaz) et à la concentration</li>
+        <li>Savoir manipuler la quantité de matière n, et la relier au nombre d'entités, à la masse et au volume (gaz)</li>
+        <li>Savoir calculer une concentration en quantité de matière</li>
         <li>Comprendre le principe d'une dilution et savoir calculer un facteur de dilution</li>
-        <li>Connaître la loi de Beer-Lambert et savoir exploiter une courbe d'étalonnage pour déterminer une concentration inconnue</li>
       </ul>
     </div>
   </section>
@@ -82,6 +103,7 @@
     </div>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Manipule le curseur pour observer comment le nombre d'entités augmente avec n.</p>
+    <div style="text-align:center; font-family:var(--font-display); color:var(--yellow); font-size:0.95rem; margin-bottom:4px;">🎒 La pochette d'une mole</div>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="bagSvgCours" viewBox="0 0 200 220"></svg>
@@ -102,12 +124,23 @@
       La <strong>masse molaire atomique</strong> d'un élément, notée <em>M</em>, est la masse d'une mole d'atomes de cet élément. Elle s'exprime en <strong>g/mol</strong> (ou g·mol⁻¹).
     </div>
     <p class="course-text">
-      Chaque élément chimique a sa propre masse molaire atomique : elle dépend de la masse de ses atomes. Ces valeurs ont été mesurées une fois pour toutes et sont rassemblées dans le tableau périodique — pas besoin de les retenir par cœur, juste de savoir où les trouver et comment les utiliser.
+      Chaque élément chimique a sa propre masse molaire atomique : elle dépend de la masse de ses atomes. Ces valeurs ont été mesurées une fois pour toutes et sont rassemblées dans le tableau périodique.
     </p>
-    <div class="recall-box">
-      <span class="box-label">📌 À retenir</span>
-      Les valeurs des masses molaires atomiques se trouvent dans le tableau périodique, en général juste sous le symbole de l'élément.
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique sur un élément pour afficher sa masse molaire atomique.</p>
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px; flex-wrap:wrap;">
+      <div class="ptable-slot cat-nonmetal" style="width:64px; height:64px; flex:none; flex-direction:column; gap:2px; cursor:default;">
+        <span style="font-family:var(--font-display); font-size:1.3rem;">O</span>
+        <span style="font-family:var(--font-body); font-size:0.62rem; color:var(--yellow); font-weight:700;">16,0</span>
+      </div>
+      <div style="font-size:0.85rem; color:var(--chalk-dim); max-width:280px;">
+        Sur un tableau périodique, la masse molaire atomique est écrite <strong style="color:var(--chalk);">sous le symbole</strong> de l'élément — ici, M(O) = 16,0 g/mol.
+      </div>
     </div>
+    <div class="ptable-wrap">
+      <div class="ptable-grid" id="atomTableCours"></div>
+    </div>
+    <div class="anim-readout" id="atomReadoutCours" style="text-align:center; font-size:1.1rem;"></div>
   </section>
 
   <section>
@@ -116,12 +149,23 @@
       <span class="box-label">📘 Définition</span>
       La <strong>masse molaire moléculaire</strong> d'une molécule est égale à la <strong>somme</strong> des masses molaires atomiques de tous les atomes qui la composent.
     </div>
-    <div class="formula">
-      Exemple, méthanal CH₂O : M = M(C) + 2 × M(H) + M(O) = 30,0 g·mol⁻¹
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre plusieurs molécules : la masse molaire se recalcule par addition.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="molCO2Cours">CO₂</button>
+      <button class="toggle-btn" id="molCH4Cours">CH₄</button>
+      <button class="toggle-btn" id="molCH3OHCours">CH₃OH</button>
+      <button class="toggle-btn" id="molAl2O3Cours">Al₂O₃</button>
     </div>
-    <p class="course-text">
-      Il suffit d'additionner la masse molaire de chaque atome, en comptant bien chaque atome autant de fois qu'il apparaît dans la formule brute de la molécule.
-    </p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="molSvgCours" viewBox="0 0 220 150"></svg>
+        <div id="molFormulaCours" style="text-align:center; font-family:var(--font-display); font-size:1.4rem; margin-top:4px;"></div>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="molReadoutCours"></div>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -158,6 +202,24 @@
       <span class="box-label">📌 À retenir</span>
       Le volume molaire ne dépend pas de la nature du gaz : à conditions égales, 1 mole de dihydrogène occupe le même volume que 1 mole de dioxygène.
     </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis un gaz et fais varier n : le volume ne dépend jamais du gaz choisi, seulement de n.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="gasN2Cours">N₂</button>
+      <button class="toggle-btn" id="gasO2Cours">O₂</button>
+      <button class="toggle-btn" id="gasArCours">Ar</button>
+      <button class="toggle-btn" id="gasCH4Cours">CH₄</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="gasSvgCours" viewBox="0 0 220 190"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Quantité de matière n (mol)</label>
+        <input type="range" id="gasNCours" min="1" max="30" value="10" step="1">
+        <div class="anim-readout" id="gasReadoutCours"></div>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -167,6 +229,20 @@
       La <strong>concentration en quantité de matière</strong> d'une espèce en solution, notée <em>C</em>, est le quotient de la quantité de matière <em>n</em> de soluté par le volume de la solution. Elle s'exprime en <strong>mol/L</strong>.
     </div>
     <div class="formula">C = <span class="frac"><span class="num">n</span><span class="den">V<sub>solution</sub></span></span></div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier n et V indépendamment : observe comment la concentration évolue.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="concSvgCours" viewBox="0 0 200 220"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Quantité de matière n (mol)</label>
+        <input type="range" id="concNCours" min="10" max="300" value="100" step="5">
+        <label>Volume de la solution V (L)</label>
+        <input type="range" id="concVCours" min="10" max="300" value="100" step="5">
+        <div class="anim-readout" id="concReadoutCours"></div>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -189,91 +265,24 @@
       Diluer ne change pas la quantité de matière de soluté présente — seulement sa <strong>concentration</strong>, qui diminue parce que le volume, lui, augmente.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier n et V : observe comment la densité de particules (donc la concentration) évolue.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis la quantité de matière, puis dilue : le volume augmente, les particules s'éloignent, n ne change pas.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="diluSvgCours" viewBox="0 0 200 220"></svg>
       </div>
       <div class="anim-controls">
-        <label>Quantité de matière n (mol)</label>
-        <input type="range" id="diluNCours" min="10" max="300" value="100" step="5">
-        <label>Volume de la solution V (L)</label>
-        <input type="range" id="diluVCours" min="10" max="300" value="100" step="5">
+        <label>Quantité de matière n (mol) — solution mère V = 1,0 L</label>
+        <input type="range" id="diluNCours" min="10" max="100" value="50" step="5">
+        <div class="actions" style="justify-content:flex-start; margin:10px 0;">
+          <button id="diluLockCours">✅ Sélectionner</button>
+          <button id="diluGoCours" style="display:none;">💧 Diluer !</button>
+          <button id="diluResetCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim);">↺ Recommencer</button>
+        </div>
+        <div id="diluFRowCours" style="display:none;">
+          <label>Facteur de dilution F</label>
+          <input type="range" id="diluFCours" min="10" max="50" value="10" step="1">
+        </div>
         <div class="anim-readout" id="diluReadoutCours"></div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>h. L'absorbance et la loi de Beer-Lambert</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      L'<strong>absorbance</strong> <em>A</em> d'une solution est une grandeur sans unité liée à la proportion de lumière absorbée par la solution, pour une longueur d'onde λ donnée. Elle se mesure à l'aide d'un <strong>spectrophotomètre</strong>.
-    </div>
-    <p class="course-text">Pour une longueur d'onde fixée, l'absorbance d'une solution diluée est donnée par la loi de Beer-Lambert :</p>
-    <div class="formula">A = ε × ℓ × C</div>
-    <p class="course-text">
-      où ℓ est l'épaisseur de solution traversée par la lumière (en cm) et ε est le <strong>coefficient d'absorption molaire</strong> (en L·mol⁻¹·cm⁻¹).
-    </p>
-    <div class="recall-box">
-      <span class="box-label">📌 À retenir</span>
-      Pour une solution donnée (ℓ et λ fixées), l'absorbance est <strong>proportionnelle</strong> à la concentration : A = k × C.
-    </div>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier la concentration : observe le faisceau qui ressort atténué, et la valeur de A qui évolue.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="beerSvgCours" viewBox="0 0 260 180"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Concentration C (× 10⁻⁴ mol/L)</label>
-        <input type="range" id="beerCCours" min="0" max="70" value="30" step="1">
-        <div class="anim-readout" id="beerReadoutCours"></div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>i. La spectroscopie UV-visible</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      Le spectrophotomètre permet de tracer le <strong>spectre d'absorption</strong> d'une solution, c'est-à-dire le graphe de l'absorbance en fonction de la longueur d'onde.
-    </div>
-    <p class="course-text">
-      Un maximum d'absorption dans le domaine visible indique la présence d'une espèce colorée dans la solution. La couleur perçue est la couleur <strong>complémentaire</strong> de celle qui est absorbée — on la détermine à l'aide du cercle chromatique.
-    </p>
-  </section>
-
-  <section>
-    <h2>j. Le dosage par étalonnage</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      Un <strong>dosage par étalonnage</strong> consiste à déterminer la concentration d'une espèce chimique dans une solution en comparant une grandeur physique (par exemple l'absorbance) à celles de solutions étalons de concentration connue.
-    </div>
-    <div class="method-box">
-      <span class="box-label">🔧 Méthode</span>
-      <ol style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li>Préparer une gamme de solutions étalons par dilution à partir d'une solution mère</li>
-        <li>Mesurer l'absorbance de chaque solution étalon</li>
-        <li>Tracer la courbe d'étalonnage A = f(C) — une droite qui passe par l'origine</li>
-        <li>Mesurer l'absorbance de la solution inconnue</li>
-        <li>Lire graphiquement sa concentration sur la courbe</li>
-      </ol>
-    </div>
-    <div class="warning-box">
-      <span class="box-label">⚠️ Attention — limite du modèle</span>
-      Pour des solutions trop concentrées, la loi de Beer-Lambert ne s'applique plus : A et C ne sont plus proportionnelles (on sort du domaine de linéarité).
-    </div>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Déplace le curseur "A mesurée" : observe comment on lit graphiquement la concentration inconnue.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap" style="width:280px;">
-        <svg id="calibSvgCours" viewBox="0 0 260 205"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Absorbance mesurée A</label>
-        <input type="range" id="calibACours" min="0" max="130" value="70" step="1">
-        <div class="anim-readout" id="calibReadoutCours"></div>
       </div>
     </div>
   </section>
@@ -347,36 +356,6 @@
         &nbsp; (avec F &gt; 1)
       </div>
 
-      <h3>h. L'absorbance et la loi de Beer-Lambert</h3>
-      <p>
-        L'absorbance <em>A</em> d'une solution est une grandeur sans unité liée à la proportion de lumière absorbée par la solution, pour une longueur d'onde λ donnée. Elle se mesure à l'aide d'un <input class="blank" data-answer="spectrophotomètre|spectrophotometre" size="16">.
-      </p>
-      <p>
-        Pour une longueur d'onde fixée, l'absorbance d'une solution diluée est donnée par la loi de <input class="blank" data-answer="beer-lambert|beer lambert" size="14"> : A = ε × ℓ × C, où ℓ est <input class="blank" data-answer="l'épaisseur|epaisseur|l'epaisseur" size="12"> de solution traversée par la lumière (en cm) et ε est le <input class="blank" data-answer="coefficient d'absorption molaire|coefficient d'absorption molaire" size="22"> (en L·mol⁻¹·cm⁻¹).
-      </p>
-      <p>
-        Pour une solution donnée (ℓ et λ fixées), l'absorbance est <input class="blank" data-answer="proportionnelle" size="14"> à la concentration : A = k × C.
-      </p>
-
-      <h3>i. La spectroscopie UV-visible</h3>
-      <p>
-        Le spectrophotomètre permet de tracer le <input class="blank" data-answer="spectre d'absorption|spectre d absorption" size="18">  d'une solution, c'est-à-dire le graphe de <input class="blank" data-answer="l'absorbance|absorbance" size="12"> en fonction de la <input class="blank" data-answer="longueur d'onde|longueur d onde" size="16">.
-      </p>
-      <p>
-        Un maximum d'absorption dans le domaine visible indique la présence d'une espèce colorée dans la solution. La couleur observée de la solution est la couleur <input class="blank" data-answer="complémentaire|complementaire" size="14"> de celle qui est absorbée. On la détermine à l'aide du cercle chromatique.
-      </p>
-
-      <h3>j. Le dosage par étalonnage</h3>
-      <p>
-        Un dosage par étalonnage consiste à déterminer la concentration d'une espèce chimique dans une solution en comparant une grandeur physique (par exemple l'absorbance) à celles de solutions <input class="blank" data-answer="étalons|etalons" size="10"> de concentration <input class="blank" data-answer="connue" size="10">.
-      </p>
-      <p>
-        Étapes : on prépare une gamme de solutions étalons par <input class="blank" data-answer="dilution" size="10"> à partir d'une solution mère, on mesure leurs absorbances, puis on trace la courbe d'étalonnage A = f(C). C'est une <input class="blank" data-answer="droite" size="10"> qui passe par l'<input class="blank" data-answer="origine" size="10">. On mesure ensuite l'absorbance de la solution inconnue et on lit graphiquement sa concentration sur cette courbe.
-      </p>
-      <p>
-        Limite du modèle : pour des solutions trop concentrées, la loi de Beer-Lambert ne s'applique plus. A et C ne sont plus proportionnelles (on sort du domaine de linéarité).
-      </p>
-
     </div>
 
     <div class="score-line" id="scoreLine"></div>
@@ -387,6 +366,7 @@
     <h2>Le sac de la mole</h2>
     <p style="color:var(--chalk-dim); margin-bottom:6px;">La mole est une <strong style="color:var(--chalk);">quantité de matière</strong> : un nombre fixe d'entités, tout comme "une douzaine" veut toujours dire 12.</p>
     <p style="color:var(--yellow); font-family:var(--font-display); font-size:1.1rem; margin-bottom:14px;">1 mole = 6,02 × 10²³ entités (nombre d'Avogadro)</p>
+    <div style="text-align:center; font-family:var(--font-display); color:var(--yellow); font-size:0.95rem; margin-bottom:4px;">🎒 La pochette d'une mole</div>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="bagSvg" viewBox="0 0 200 220"></svg>
@@ -400,6 +380,46 @@
     </div>
     <p style="color:var(--chalk-dim); font-size:0.78rem; margin-top:10px; text-align:center;">⚠️ Chaque tas est symbolique (impossible de dessiner 6,02 × 10²³ points) — seul le nombre en texte est exact.</p>
     <div class="activity-block"><div id="actMoleBag"></div></div>
+  </section>
+
+  <section>
+    <h2>Masse molaire atomique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Clique sur un élément pour afficher sa masse molaire atomique.</p>
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px; flex-wrap:wrap;">
+      <div class="ptable-slot cat-nonmetal" style="width:64px; height:64px; flex:none; flex-direction:column; gap:2px; cursor:default;">
+        <span style="font-family:var(--font-display); font-size:1.3rem;">O</span>
+        <span style="font-family:var(--font-body); font-size:0.62rem; color:var(--yellow); font-weight:700;">16,0</span>
+      </div>
+      <div style="font-size:0.85rem; color:var(--chalk-dim); max-width:280px;">
+        Sur un tableau périodique, la masse molaire atomique est écrite <strong style="color:var(--chalk);">sous le symbole</strong> de l'élément — ici, M(O) = 16,0 g/mol.
+      </div>
+    </div>
+    <div class="ptable-wrap">
+      <div class="ptable-grid" id="atomTable"></div>
+    </div>
+    <div class="anim-readout" id="atomReadout" style="text-align:center; font-size:1.1rem; margin-bottom:14px;"></div>
+    <div class="activity-block"><div id="actAtomicMass"></div></div>
+  </section>
+
+  <section>
+    <h2>Masse molaire moléculaire</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre plusieurs molécules : la masse molaire se recalcule par addition.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="molCO2">CO₂</button>
+      <button class="toggle-btn" id="molCH4">CH₄</button>
+      <button class="toggle-btn" id="molCH3OH">CH₃OH</button>
+      <button class="toggle-btn" id="molAl2O3">Al₂O₃</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="molSvg" viewBox="0 0 220 150"></svg>
+        <div id="molFormula" style="text-align:center; font-family:var(--font-display); font-size:1.4rem; margin-top:4px;"></div>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="molReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMolecularMass"></div></div>
   </section>
 
   <section>
@@ -421,53 +441,68 @@
   </section>
 
   <section>
-    <h2>Dilution animée</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier la quantité de matière et le volume : observe comment la concentration (donc la densité de particules) évolue.</p>
+    <h2>Quantité de matière d'un gaz</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis un gaz et fais varier n : le volume ne dépend jamais du gaz choisi, seulement de n.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="gasN2">N₂</button>
+      <button class="toggle-btn" id="gasO2">O₂</button>
+      <button class="toggle-btn" id="gasAr">Ar</button>
+      <button class="toggle-btn" id="gasCH4">CH₄</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="gasSvg" viewBox="0 0 220 190"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Quantité de matière n (mol)</label>
+        <input type="range" id="gasN" min="1" max="30" value="10" step="1">
+        <div class="anim-readout" id="gasReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actGasVolume"></div></div>
+  </section>
+
+  <section>
+    <h2>Concentration en quantité de matière</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier n et V indépendamment : observe comment la concentration évolue.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="concSvg" viewBox="0 0 200 220"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Quantité de matière n (mol)</label>
+        <input type="range" id="concN" min="10" max="300" value="100" step="5">
+        <label>Volume de la solution V (L)</label>
+        <input type="range" id="concV" min="10" max="300" value="100" step="5">
+        <div class="anim-readout" id="concReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actConcentration"></div></div>
+  </section>
+
+  <section>
+    <h2>La dilution</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis la quantité de matière, puis dilue : le volume augmente, les particules s'éloignent, n ne change pas.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="diluSvg" viewBox="0 0 200 220"></svg>
       </div>
       <div class="anim-controls">
-        <label>Quantité de matière n (mol)</label>
-        <input type="range" id="diluN" min="10" max="300" value="100" step="5">
-        <label>Volume de la solution V (L)</label>
-        <input type="range" id="diluV" min="10" max="300" value="100" step="5">
+        <label>Quantité de matière n (mol) — solution mère V = 1,0 L</label>
+        <input type="range" id="diluN" min="10" max="100" value="50" step="5">
+        <div class="actions" style="justify-content:flex-start; margin:10px 0;">
+          <button id="diluLock">✅ Sélectionner</button>
+          <button id="diluGo" style="display:none;">💧 Diluer !</button>
+          <button id="diluReset" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim);">↺ Recommencer</button>
+        </div>
+        <div id="diluFRow" style="display:none;">
+          <label>Facteur de dilution F</label>
+          <input type="range" id="diluF" min="10" max="50" value="10" step="1">
+        </div>
         <div class="anim-readout" id="diluReadout"></div>
       </div>
     </div>
     <div class="activity-block"><div id="actDilution"></div></div>
-  </section>
-
-  <section>
-    <h2>Cuve interactive — loi de Beer-Lambert</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier la concentration : observe le faisceau qui ressort atténué, et la valeur de A qui évolue.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="beerSvg" viewBox="0 0 260 180"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Concentration C (× 10⁻⁴ mol/L)</label>
-        <input type="range" id="beerC" min="0" max="70" value="30" step="1">
-        <div class="anim-readout" id="beerReadout"></div>
-      </div>
-    </div>
-    <div class="activity-block"><div id="actBeer"></div></div>
-  </section>
-
-  <section>
-    <h2>Courbe d'étalonnage — lecture graphique</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Déplace le curseur "A mesurée" : les pointillés montrent comment on lit la concentration inconnue sur la droite d'étalonnage.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap" style="width:280px;">
-        <svg id="calibSvg" viewBox="0 0 260 205"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Absorbance mesurée A</label>
-        <input type="range" id="calibA" min="0" max="130" value="70" step="1">
-        <div class="anim-readout" id="calibReadout"></div>
-      </div>
-    </div>
-    <div class="activity-block"><div id="actCalib"></div></div>
   </section>
 
 </div>
@@ -493,29 +528,16 @@
           <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Masse ↔ quantité de matière</td><td style="padding:10px 8px; color:var(--yellow);">n = m / M</td><td style="padding:10px 8px; color:var(--chalk-dim);">m (g) • M (g/mol)</td></tr>
           <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Quantité de matière d'un gaz</td><td style="padding:10px 8px; color:var(--yellow);">n = V / V<sub>m</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">V (L) • V<sub>m</sub> ≈ 24,0 L/mol</td></tr>
           <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Concentration</td><td style="padding:10px 8px; color:var(--yellow);">C = n / V<sub>solution</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">C (mol/L)</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Dilution</td><td style="padding:10px 8px; color:var(--yellow);">C<sub>m</sub>V<sub>m</sub> = C<sub>f</sub>V<sub>f</sub> ; F = C<sub>m</sub>/C<sub>f</sub> = V<sub>f</sub>/V<sub>m</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">F : facteur de dilution (F &gt; 1)</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Loi de Beer-Lambert</td><td style="padding:10px 8px; color:var(--yellow);">A = ε × ℓ × C</td><td style="padding:10px 8px; color:var(--chalk-dim);">ε (L·mol⁻¹·cm⁻¹) • ℓ (cm)</td></tr>
-          <tr><td style="padding:10px 8px;">Dosage par étalonnage</td><td style="padding:10px 8px; color:var(--yellow);">A = k × C (droite par l'origine)</td><td style="padding:10px 8px; color:var(--chalk-dim);">lecture graphique de C inconnue</td></tr>
+          <tr><td style="padding:10px 8px;">Dilution</td><td style="padding:10px 8px; color:var(--yellow);">C<sub>m</sub>V<sub>m</sub> = C<sub>f</sub>V<sub>f</sub> ; F = C<sub>m</sub>/C<sub>f</sub> = V<sub>f</sub>/V<sub>m</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">F : facteur de dilution (F &gt; 1)</td></tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="method-box" style="margin-top:20px;">
-      <span class="box-label">🔧 La méthode du dosage par étalonnage, en 5 étapes</span>
-      <ol style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li>Préparer une gamme de solutions étalons par dilution</li>
-        <li>Mesurer l'absorbance de chaque solution étalon</li>
-        <li>Tracer la courbe A = f(C) (droite par l'origine)</li>
-        <li>Mesurer l'absorbance de la solution inconnue</li>
-        <li>Lire graphiquement sa concentration</li>
-      </ol>
     </div>
   </section>
 </div>
 
 </main>
 
-<footer>Chapitre 1 — Quantité de matière (1ère spé PC).</footer>
+<footer>Chapitre 1 — Détermination de la composition d'un système chimique (1ère spé PC).</footer>
 
 <script>
 /* ---------- Correction du texte à trous (mode entraînement) ---------- */
@@ -546,17 +568,23 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   if (correct === blanks.length) ProgressStore.record("ch1-1ere", "trous-complet", true);
 });
 
-/* ---------- Animations (inchangées) ---------- */
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
 initMoleBag({ svgId: "bagSvgCours", rangeId: "bagRangeCours", readoutId: "bagReadoutCours", countId: "bagCountCours", warnId: "bagWarnCours" });
+initAtomicMolarMass({ tableId: "atomTableCours", readoutId: "atomReadoutCours" });
+initMolecularMolarMass({ svgId: "molSvgCours", formulaId: "molFormulaCours", readoutId: "molReadoutCours", buttonIds: ["molCO2Cours", "molCH4Cours", "molCH3OHCours", "molAl2O3Cours"] });
 initMassScale({ svgId: "scaleSvgCours", nRangeId: "scaleNCours", molarRangeId: "scaleMCours", readoutId: "scaleReadoutCours" });
-initDilution({ svgId: "diluSvgCours", nRangeId: "diluNCours", vRangeId: "diluVCours", readoutId: "diluReadoutCours" });
-initBeerLambert({ svgId: "beerSvgCours", cRangeId: "beerCCours", readoutId: "beerReadoutCours" });
-initCalibrationCurve({ svgId: "calibSvgCours", sliderId: "calibACours", readoutId: "calibReadoutCours" });
+initGasMolarVolume({ svgId: "gasSvgCours", nRangeId: "gasNCours", readoutId: "gasReadoutCours", buttonIds: ["gasN2Cours", "gasO2Cours", "gasArCours", "gasCH4Cours"] });
+initConcentration({ svgId: "concSvgCours", nRangeId: "concNCours", vRangeId: "concVCours", readoutId: "concReadoutCours" });
+initDilutionProcess({ svgId: "diluSvgCours", nRangeId: "diluNCours", fRangeId: "diluFCours", lockBtnId: "diluLockCours", diluteBtnId: "diluGoCours", resetBtnId: "diluResetCours", readoutId: "diluReadoutCours", fRowId: "diluFRowCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
 initMoleBag({ svgId: "bagSvg", rangeId: "bagRange", readoutId: "bagReadout", countId: "bagCount", warnId: "bagWarn" });
+initAtomicMolarMass({ tableId: "atomTable", readoutId: "atomReadout" });
+initMolecularMolarMass({ svgId: "molSvg", formulaId: "molFormula", readoutId: "molReadout", buttonIds: ["molCO2", "molCH4", "molCH3OH", "molAl2O3"] });
 initMassScale({ svgId: "scaleSvg", nRangeId: "scaleN", molarRangeId: "scaleM", readoutId: "scaleReadout" });
-initDilution({ svgId: "diluSvg", nRangeId: "diluN", vRangeId: "diluV", readoutId: "diluReadout" });
-initBeerLambert({ svgId: "beerSvg", cRangeId: "beerC", readoutId: "beerReadout" });
-initCalibrationCurve({ svgId: "calibSvg", sliderId: "calibA", readoutId: "calibReadout" });
+initGasMolarVolume({ svgId: "gasSvg", nRangeId: "gasN", readoutId: "gasReadout", buttonIds: ["gasN2", "gasO2", "gasAr", "gasCH4"] });
+initConcentration({ svgId: "concSvg", nRangeId: "concN", vRangeId: "concV", readoutId: "concReadout" });
+initDilutionProcess({ svgId: "diluSvg", nRangeId: "diluN", fRangeId: "diluF", lockBtnId: "diluLock", diluteBtnId: "diluGo", resetBtnId: "diluReset", readoutId: "diluReadout", fRowId: "diluFRow" });
 
 /* ---------- Activités liées à chaque animation ---------- */
 initQCM({
@@ -571,10 +599,38 @@ initQCM({
 });
 
 initEstimation({
+  containerId: "actAtomicMass", chapterId: "ch1-1ere", activityId: "est-atomic-mass",
+  prompt: "D'après le tableau périodique, quelle est la masse molaire atomique de l'azote N (en g/mol) ?",
+  answer: 14.0, tolerance: 0.2, unit: "g/mol",
+  explanation: "M(N) = 14,0 g/mol (période 2, colonne 15)."
+});
+
+initEstimation({
+  containerId: "actMolecularMass", chapterId: "ch1-1ere", activityId: "est-molecular-mass",
+  prompt: "Avec M(C) = 12,0 g/mol, M(H) = 1,0 g/mol et M(O) = 16,0 g/mol, quelle est la masse molaire du méthanol CH₃OH (en g/mol) ?",
+  answer: 32.0, tolerance: 0.5, unit: "g/mol",
+  explanation: "M(CH₃OH) = M(C) + 4×M(H) + M(O) = 12,0 + 4×1,0 + 16,0 = 32,0 g/mol."
+});
+
+initEstimation({
   containerId: "actScale", chapterId: "ch1-1ere", activityId: "est-scale",
   prompt: "Avec n = 5 mol et une masse molaire M = 40 g/mol, quelle masse (en g) la balance doit-elle indiquer ?",
   answer: 200, tolerance: 5, unit: "g",
   explanation: "n = m/M, donc m = n × M = 5 × 40 = 200 g."
+});
+
+initEstimation({
+  containerId: "actGasVolume", chapterId: "ch1-1ere", activityId: "est-gas-volume",
+  prompt: "Avec V_m = 24,0 L/mol, quel volume (en L) occupe n = 2,0 mol de méthane CH₄ ? (même réponse pour n'importe quel autre gaz à cette quantité de matière)",
+  answer: 48.0, tolerance: 1, unit: "L",
+  explanation: "V = n × V_m = 2,0 × 24,0 = 48,0 L — ce volume serait le même pour 2,0 mol de N₂, O₂ ou Ar."
+});
+
+initEstimation({
+  containerId: "actConcentration", chapterId: "ch1-1ere", activityId: "est-concentration",
+  prompt: "Une solution contient n = 0,40 mol de soluté dans un volume V = 2,0 L. Quelle est sa concentration C (en mol/L) ?",
+  answer: 0.20, tolerance: 0.02, unit: "mol/L",
+  explanation: "C = n / V = 0,40 / 2,0 = 0,20 mol/L."
 });
 
 initVraiFaux({
@@ -584,27 +640,9 @@ initVraiFaux({
   explanation: "Faux : la quantité de matière de soluté ne change pas pendant une dilution (n<sub>m</sub> = n<sub>f</sub>). C'est la concentration qui diminue, car le volume, lui, augmente."
 });
 
-initEstimation({
-  containerId: "actBeer", chapterId: "ch1-1ere", activityId: "est-beer",
-  prompt: "Pour une solution de concentration C = 4 × 10⁻⁴ mol/L, avec ε = 1700 L·mol⁻¹·cm⁻¹ et ℓ = 1 cm, quelle est l'absorbance A ?",
-  answer: 0.68, tolerance: 0.05, unit: "(sans unité)",
-  explanation: "A = ε × ℓ × C = 1700 × 1 × 4×10⁻⁴ = 0,68."
-});
-
-initQCM({
-  containerId: "actCalib", chapterId: "ch1-1ere", activityId: "qcm-calib",
-  prompt: "Pourquoi la droite d'étalonnage A = f(C) passe-t-elle par l'origine ?",
-  options: [
-    { text: "Car A = k × C : quand C = 0 (pas de soluté), A = 0", correct: true },
-    { text: "Par convention, toutes les droites d'étalonnage passent par l'origine", correct: false },
-    { text: "Uniquement parce qu'on règle le zéro avec un blanc avant de mesurer", correct: false }
-  ],
-  explanation: "La proportionnalité A = k×C impose A(0) = 0 : sans soluté, il n'y a rien à absorber."
-});
-
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch1-1ere");
-initProgressBar("ch1-1ere", 6); // texte à trous complet + 5 activités liées aux animations
+initProgressBar("ch1-1ere", 7); // texte à trous complet + 6 activités liées aux animations
 </script>
 </body>
 </html>

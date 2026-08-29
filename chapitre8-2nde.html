@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 8 — Vers des entités plus stables — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch8-2nde.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 8 — Vers des entités plus stables</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch8-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch8-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Savoir établir la configuration électronique d'un atome (Z ≤ 18)</li>
+        <li>Savoir situer un élément dans le tableau périodique (période, colonne/famille)</li>
+        <li>Comprendre la règle de stabilité et son rôle dans la formation des ions et des molécules</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1. La configuration électronique d'un atome</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Les Z électrons d'un atome se répartissent en <strong>couches électroniques</strong> (notées n = 1, 2, 3...), elles-mêmes composées d'une ou plusieurs <strong>sous-couches</strong> (notées s, p...).
+    </div>
+    <p class="course-text">
+      La sous-couche s contient au maximum <strong>2 électrons</strong>. La sous-couche p contient au maximum <strong>6 électrons</strong>. Les électrons se répartissent selon l'ordre 1s → 2s → 2p → 3s → 3p... Lorsqu'une sous-couche est saturée, les électrons restants occupent la suivante.
+    </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : la configuration électronique du silicium (Z = 14) est 1s² 2s² 2p⁶ 3s² 3p² (2+2+6+2+2 = 14).
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Pour Z ≤ 18, les <strong>électrons de valence</strong> sont ceux qui occupent la couche électronique de nombre n le plus élevé — c'est la <strong>couche de valence</strong>. Ils sont responsables de la réactivité chimique de l'atome.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle Z : observe la configuration se construire, sous-couche par sous-couche (électrons de valence en jaune).</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:280px;">
+        <svg id="ecSvgCours" viewBox="0 0 260 70"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Numéro atomique Z</label>
+        <input type="range" id="ecZCours" min="1" max="18" value="14" step="1">
+        <div class="anim-readout" id="ecReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2a. Le tableau périodique — structure</h2>
+    <p class="course-text">
+      Le tableau périodique actuel est formé de <strong>7 lignes</strong>, appelées <strong>périodes</strong>, et de <strong>18 colonnes</strong>, nommées <strong>familles</strong>. Les éléments y sont rangés par numéro atomique Z croissant. Une nouvelle période est utilisée à chaque fois que la configuration électronique fait intervenir une nouvelle valeur de n.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Les atomes des éléments d'une même colonne possèdent le <strong>même nombre d'électrons de valence</strong> : ils forment une même <strong>famille chimique</strong>, aux propriétés chimiques communes. La colonne 18 est la famille des <strong>gaz nobles</strong>.
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      L'hélium (1s²) est une exception : il est placé dans le bloc p (colonne 18) car ses propriétés sont celles d'un gaz noble, malgré sa configuration électronique de type bloc s.
+    </div>
+  </section>
+
+  <section>
+    <h2>2b. Position d'un élément dans le tableau périodique</h2>
+    <p class="course-text">
+      Pour déterminer la ligne (période) et la colonne (famille) d'un élément, il faut repérer le numéro de la couche de valence et le nombre d'électrons de valence.
+    </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : le phosphore P (Z = 15) a pour configuration 1s² 2s² 2p⁶ 3s² 3p³. Le nombre n le plus grand est 3 → 3ᵉ période. Il est dans la 3ᵉ colonne du bloc p (qui commence à la colonne 13) → 15ᵉ colonne.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle Z : observe la case correspondante s'allumer dans le tableau simplifié.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="ppSvgCours" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Numéro atomique Z</label>
+        <input type="range" id="ppZCours" min="1" max="18" value="15" step="1">
+        <div class="anim-readout" id="ppReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3a. Les entités stables chimiquement — règle de stabilité</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Les <strong>gaz nobles</strong> (hélium, néon...) possèdent une stabilité énergétique remarquable et réagissent très rarement. Leur configuration électronique de valence est de la forme ns²np⁶ (duet 1s² pour l'hélium, octet pour les autres).
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 Règle de stabilité</span>
+      Au cours des transformations chimiques, les atomes tendent à obtenir la même configuration électronique que celle d'un <strong>gaz noble</strong>, c'est-à-dire une configuration électronique de valence en <strong>duet</strong> ou en <strong>octet</strong>. Pour cela, ils forment des <strong>ions</strong> ou des <strong>molécules</strong>.
+    </div>
+  </section>
+
+  <section>
+    <h2>3b. Formation d'ions monoatomiques</h2>
+    <p class="course-text">
+      Pour obtenir la configuration électronique du gaz noble le plus proche, les atomes peuvent perdre ou gagner un ou plusieurs électrons pour former des <strong>ions monoatomiques stables</strong>.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Les atomes des éléments d'une même colonne du tableau périodique forment des ions monoatomiques de <strong>même charge</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre l'aluminium et le soufre.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="siAlCours">Aluminium Al</button>
+      <button class="toggle-btn" id="siSCours">Soufre S</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="siSvgCours" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="siReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3c. Formation des molécules</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le <strong>schéma de Lewis</strong> d'une molécule modélise l'enchaînement des atomes : chaque atome est représenté par son symbole, et les électrons de valence sont regroupés en <strong>doublets liants</strong> ou <strong>doublets non liants</strong> (représentés par des tirets, un doublet = 2 électrons).
+    </div>
+    <p class="course-text">
+      Les atomes se lient par des <strong>liaisons covalentes</strong>, obtenues par mise en commun de 2 électrons (doublet liant). Les électrons des liaisons appartiennent aux deux atomes ; les électrons des doublets non liants appartiennent uniquement à l'atome sur lequel ils sont situés.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Une liaison covalente peut être simple ou multiple (double, triple). Dans une liaison double, 4 électrons sont mis en commun ; dans une triple, 6 électrons.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre une liaison simple (eau) et une liaison double (C=C).</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="lsSimpleCours">Liaison simple (H₂O)</button>
+      <button class="toggle-btn" id="lsDoubleCours">Liaison double (C=C)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="lsSvgCours" viewBox="0 0 220 140"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="lsReadoutCours"></div>
+      </div>
+    </div>
+
+    <p class="course-text" style="margin-top:20px;">
+      L'<strong>énergie de liaison</strong> d'une liaison covalente A−B correspond à l'énergie nécessaire pour <strong>rompre</strong> la liaison et reformer les atomes isolés A et B. Plus l'énergie de liaison est grande, plus la liaison est stable.
+    </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : pour rompre toutes les liaisons de la molécule de méthane CH₄ (4 liaisons C−H, chacune 413 USI), il faut fournir E = 4 × 413 = 1652 USI.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis un type de liaison et un nombre : observe l'énergie totale se calculer.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="beCHCours">C−H (413 USI)</button>
+      <button class="toggle-btn" id="beCCCours">C−C (348 USI)</button>
+      <button class="toggle-btn" id="beCCdCours">C=C (614 USI)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="beSvgCours" viewBox="0 0 160 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre de liaisons</label>
+        <input type="range" id="beNCours" min="1" max="6" value="4" step="1">
+        <div class="anim-readout" id="beReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>1. La configuration électronique d'un atome</h3>
+      <p>
+        Les Z électrons d'un atome se répartissent en <input class="blank" data-answer="couches électroniques|couches electroniques" size="20">, elles-mêmes composées d'une ou plusieurs <input class="blank" data-answer="sous-couches" size="16">.
+      </p>
+      <p>
+        La sous-couche s contient au maximum <input class="blank" data-answer="2" size="4"> électrons. La sous-couche p contient au maximum <input class="blank" data-answer="6" size="4"> électrons.
+      </p>
+      <p>
+        Pour Z ≤ 18, les électrons de <input class="blank" data-answer="valence" size="12"> sont ceux qui occupent la couche électronique de nombre n le plus élevé.
+      </p>
+
+      <h3>2a. Le tableau périodique — structure</h3>
+      <p>
+        Le tableau périodique actuel est formé de 7 lignes, appelées <input class="blank" data-answer="périodes|periodes" size="14">, et de 18 colonnes, nommées <input class="blank" data-answer="familles" size="14">.
+      </p>
+      <p>
+        Les atomes des éléments d'une même colonne possèdent le même nombre d'électrons de valence : ils forment une même famille <input class="blank" data-answer="chimique" size="14">. La colonne 18 est la famille des gaz <input class="blank" data-answer="nobles" size="12">.
+      </p>
+
+      <h3>2b. Position d'un élément dans le tableau périodique</h3>
+      <p>
+        Pour déterminer la période et la colonne d'un élément, il faut repérer le numéro de la couche de <input class="blank" data-answer="valence" size="12"> et le nombre d'électrons de valence.
+      </p>
+
+      <h3>3a. Règle de stabilité</h3>
+      <p>
+        Les gaz nobles possèdent une stabilité <input class="blank" data-answer="énergétique|energetique" size="16"> remarquable.
+      </p>
+      <p>
+        Au cours des transformations chimiques, les atomes tendent à obtenir la même configuration électronique que celle d'un <input class="blank" data-answer="gaz noble" size="14">, c'est-à-dire une configuration en <input class="blank" data-answer="duet" size="10"> ou en <input class="blank" data-answer="octet" size="10">.
+      </p>
+
+      <h3>3b. Formation d'ions monoatomiques</h3>
+      <p>
+        Pour obtenir la configuration électronique du gaz noble le plus proche, les atomes peuvent perdre ou <input class="blank" data-answer="gagner" size="12"> des électrons.
+      </p>
+      <p>
+        Les atomes des éléments d'une même colonne forment des ions monoatomiques de même <input class="blank" data-answer="charge" size="12">.
+      </p>
+
+      <h3>3c. Formation des molécules</h3>
+      <p>
+        Le <input class="blank" data-answer="schéma de Lewis|schema de lewis" size="20"> d'une molécule modélise l'enchaînement des atomes. Les électrons de valence sont regroupés en doublets <input class="blank" data-answer="liants" size="12"> ou doublets <input class="blank" data-answer="non liants" size="14">.
+      </p>
+      <p>
+        Les atomes se lient par des liaisons <input class="blank" data-answer="covalentes" size="16">, obtenues par mise en commun de 2 électrons.
+      </p>
+      <p>
+        L'<input class="blank" data-answer="énergie de liaison|energie de liaison" size="20"> correspond à l'énergie nécessaire pour rompre la liaison. Plus elle est grande, plus la liaison est <input class="blank" data-answer="stable" size="12">.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Configuration électronique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle Z : observe la configuration se construire (électrons de valence en jaune).</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:280px;">
+        <svg id="ecSvg" viewBox="0 0 260 70"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Numéro atomique Z</label>
+        <input type="range" id="ecZ" min="1" max="18" value="14" step="1">
+        <div class="anim-readout" id="ecReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actElectronConfig"></div></div>
+  </section>
+
+  <section>
+    <h2>Position dans le tableau périodique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle Z : observe la case correspondante s'allumer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="ppSvg" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Numéro atomique Z</label>
+        <input type="range" id="ppZ" min="1" max="18" value="15" step="1">
+        <div class="anim-readout" id="ppReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actPeriodicPosition"></div></div>
+  </section>
+
+  <section>
+    <h2>Formation d'un ion monoatomique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre l'aluminium et le soufre.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="siAl">Aluminium Al</button>
+      <button class="toggle-btn" id="siS">Soufre S</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="siSvg" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="siReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actStableIon"></div></div>
+  </section>
+
+  <section>
+    <h2>Schéma de Lewis</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre une liaison simple (eau) et une liaison double (C=C).</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="lsSimple">Liaison simple (H₂O)</button>
+      <button class="toggle-btn" id="lsDouble">Liaison double (C=C)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="lsSvg" viewBox="0 0 220 140"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="lsReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actLewisSchema"></div></div>
+  </section>
+
+  <section>
+    <h2>Calculateur d'énergie de liaison</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis un type de liaison et un nombre : observe l'énergie totale se calculer.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="beCH">C−H (413 USI)</button>
+      <button class="toggle-btn" id="beCC">C−C (348 USI)</button>
+      <button class="toggle-btn" id="beCCd">C=C (614 USI)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="beSvg" viewBox="0 0 160 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre de liaisons</label>
+        <input type="range" id="beN" min="1" max="6" value="4" step="1">
+        <div class="anim-readout" id="beReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actBondEnergy"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Définition</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Configuration électronique</td><td style="padding:10px 8px;">répartition des électrons en sous-couches</td><td style="padding:10px 8px; color:var(--chalk-dim);">ordre 1s→2s→2p→3s→3p ; s max 2, p max 6</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Tableau périodique</td><td style="padding:10px 8px;">7 périodes (n), 18 colonnes (familles)</td><td style="padding:10px 8px; color:var(--chalk-dim);">même colonne = même nb d'électrons de valence</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Règle de stabilité</td><td style="padding:10px 8px;">tendre vers la config. d'un gaz noble</td><td style="padding:10px 8px; color:var(--chalk-dim);">duet (He) ou octet</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Ion monoatomique</td><td style="padding:10px 8px;">perte/gain d'électrons</td><td style="padding:10px 8px; color:var(--chalk-dim);">même colonne = même charge d'ion</td></tr>
+          <tr><td style="padding:10px 8px;">Énergie de liaison</td><td style="padding:10px 8px;">énergie pour rompre une liaison A−B</td><td style="padding:10px 8px; color:var(--chalk-dim);">plus grande = liaison plus stable</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Trouver la position d'un élément (période, colonne)</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li>Écrire la configuration électronique de l'atome</li>
+        <li>Le <strong>n le plus grand</strong> donne le numéro de la <strong>période</strong></li>
+        <li>Si les électrons de valence sont uniquement en ns : colonne = nombre d'électrons en s (1 ou 2)</li>
+        <li>Si des électrons de valence sont en np : colonne = 12 + nombre d'électrons en p (colonnes 13 à 18)</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 8 — Vers des entités plus stables (2nde).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch8-2nde", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initElectronConfig({ svgId: "ecSvgCours", zRangeId: "ecZCours", readoutId: "ecReadoutCours" });
+initPeriodicPosition({ svgId: "ppSvgCours", zRangeId: "ppZCours", readoutId: "ppReadoutCours" });
+initStableIon({ svgId: "siSvgCours", readoutId: "siReadoutCours", btnAlId: "siAlCours", btnSId: "siSCours" });
+initLewisSchema({ svgId: "lsSvgCours", readoutId: "lsReadoutCours", btnSimpleId: "lsSimpleCours", btnDoubleId: "lsDoubleCours" });
+initBondEnergy({ svgId: "beSvgCours", nRangeId: "beNCours", readoutId: "beReadoutCours", btnCHId: "beCHCours", btnCCId: "beCCCours", btnCCdoubleId: "beCCdCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initElectronConfig({ svgId: "ecSvg", zRangeId: "ecZ", readoutId: "ecReadout" });
+initPeriodicPosition({ svgId: "ppSvg", zRangeId: "ppZ", readoutId: "ppReadout" });
+initStableIon({ svgId: "siSvg", readoutId: "siReadout", btnAlId: "siAl", btnSId: "siS" });
+initLewisSchema({ svgId: "lsSvg", readoutId: "lsReadout", btnSimpleId: "lsSimple", btnDoubleId: "lsDouble" });
+initBondEnergy({ svgId: "beSvg", nRangeId: "beN", readoutId: "beReadout", btnCHId: "beCH", btnCCId: "beCC", btnCCdoubleId: "beCCd" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initEstimation({
+  containerId: "actElectronConfig", chapterId: "ch8-2nde", activityId: "est-electron-config",
+  prompt: "Quelle est la configuration électronique du silicium (Z = 14) ? Combien d'électrons de valence possède-t-il ?",
+  answer: 4, tolerance: 0, unit: "électrons de valence",
+  explanation: "Config. : 1s² 2s² 2p⁶ 3s² 3p². La couche de valence est n=3 (3s²3p²), soit 2+2 = 4 électrons de valence."
+});
+
+initEstimation({
+  containerId: "actPeriodicPosition", chapterId: "ch8-2nde", activityId: "est-periodic-position",
+  prompt: "L'élément phosphore P (Z = 15) est dans quelle colonne du tableau périodique ?",
+  answer: 15, tolerance: 0, unit: "",
+  explanation: "Config. 3s²3p³ : n=3 le plus grand (3ᵉ période), 3 électrons dans le bloc p qui commence à la colonne 13 → colonne 12+3 = 15."
+});
+
+initQCM({
+  containerId: "actStableIon", chapterId: "ch8-2nde", activityId: "qcm-stable-ion",
+  prompt: "Un atome de soufre S gagne 2 électrons pour former un ion stable, de configuration identique à l'argon. Quelle est la charge de cet ion ?",
+  options: [
+    { text: "2−", correct: true },
+    { text: "2+", correct: false },
+    { text: "Neutre", correct: false }
+  ],
+  explanation: "En gagnant 2 électrons supplémentaires (charges négatives), l'atome initialement neutre acquiert une charge globale de 2−."
+});
+
+initVraiFaux({
+  containerId: "actLewisSchema", chapterId: "ch8-2nde", activityId: "vf-lewis-schema",
+  prompt: "Dans une liaison covalente, les 2 électrons du doublet liant appartiennent uniquement à l'un des deux atomes.",
+  correct: false,
+  explanation: "Faux : les électrons d'un doublet liant sont mis en commun et appartiennent aux deux atomes. Seuls les doublets non liants appartiennent à un seul atome."
+});
+
+initEstimation({
+  containerId: "actBondEnergy", chapterId: "ch8-2nde", activityId: "est-bond-energy",
+  prompt: "Pour rompre toutes les liaisons de la molécule CH₄ (4 liaisons C−H, chacune 413 USI), quelle énergie totale (en USI) faut-il fournir ?",
+  answer: 1652, tolerance: 20, unit: "USI",
+  explanation: "E = 4 × 413 = 1652 USI."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch8-2nde");
+initProgressBar("ch8-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+</script>
+</body>
+</html>
