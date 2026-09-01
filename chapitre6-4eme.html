@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 6 — L'énergie — 4ème</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch6-4eme.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique</div>
+  <h1>Chapitre 6 — L'énergie</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch6-4eme">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch6-4eme"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Connaître les principales formes d'énergie</li>
+        <li>Distinguer source d'énergie renouvelable et non renouvelable</li>
+        <li>Comprendre transfert, conversion et conservation de l'énergie via une chaîne énergétique</li>
+        <li>Savoir ce qu'est la puissance d'un convertisseur</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Les formes d'énergie</h2>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Parcours les 6 formes d'énergie.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="efSvgCours" viewBox="0 0 220 105"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:260px;">
+        <div class="anim-readout" id="efExplainCours" style="min-height:4em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="efPrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="efStepCours"></span>
+          <button id="efNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Les sources d'énergie</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une source <strong>non renouvelable</strong> disparaîtra un jour à cause de l'exploitation humaine (stocks limités ou renouvellement trop lent). Une source <strong>renouvelable</strong> est exploitable sans limite de durée à l'échelle humaine.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux catégories de sources.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="esNonRenouvCours">Non renouvelable</button>
+      <button class="toggle-btn" id="esRenouvCours">Renouvelable</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="esSvgCours" viewBox="0 0 220 90"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="esReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>c. Transferts et conversions d'énergie</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un <strong>transfert</strong> d'énergie échange la même forme d'énergie entre deux corps. Une <strong>conversion</strong> transforme l'énergie d'une forme en une autre, schématisée par une <strong>chaîne énergétique</strong>.
+    </div>
+    <div class="formula">E<sub>exploitée</sub> = E<sub>utile</sub> + E<sub>dissipée</sub></div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      L'énergie ne peut être ni créée, ni détruite : c'est le principe de conservation de l'énergie.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle l'énergie exploitée et bascule entre les deux exemples.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ecPileCours">Pile</button>
+      <button class="toggle-btn" id="ecCentraleCours">Centrale nucléaire</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="ecSvgCours" viewBox="0 0 220 105"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Énergie exploitée (J)</label>
+        <input type="range" id="ecECours" min="100" max="1000" value="500" step="50">
+        <div class="anim-readout" id="ecReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. La puissance</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>puissance</strong> d'un convertisseur caractérise son aptitude à convertir l'énergie rapidement. Elle s'exprime en <strong>watt (W)</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la puissance de la pompe : observe le temps nécessaire pour vider la cave.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="pcSvgCours" viewBox="0 0 220 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Puissance P (W)</label>
+        <input type="range" id="pcPCours" min="100" max="1500" value="250" step="50">
+        <div class="anim-readout" id="pcReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. Les formes d'énergie</h3>
+      <p>
+        Un objet en mouvement possède de l'énergie <input class="blank" data-answer="cinétique|cinetique" size="14">. Un objet en hauteur possède de l'énergie potentielle de <input class="blank" data-answer="position" size="12">.
+      </p>
+
+      <h3>b. Les sources d'énergie</h3>
+      <p>
+        Une source non renouvelable <input class="blank" data-answer="disparaîtra|disparaitra" size="16"> un jour à cause de l'exploitation humaine. Une source renouvelable est exploitable sans limite de durée à l'échelle <input class="blank" data-answer="humaine" size="12">.
+      </p>
+
+      <h3>c. Transferts et conversions</h3>
+      <div class="formula">E<sub>exploitée</sub> = E<sub>utile</sub> + E<sub>dissipée</sub></div>
+      <p>
+        L'énergie ne peut être ni créée, ni <input class="blank" data-answer="détruite|detruite" size="14">. On schématise une conversion d'énergie à l'aide d'une chaîne <input class="blank" data-answer="énergétique|energetique" size="16">.
+      </p>
+
+      <h3>d. La puissance</h3>
+      <p>
+        La puissance caractérise l'aptitude d'un convertisseur à convertir l'énergie <input class="blank" data-answer="rapidement" size="16">. Elle s'exprime en <input class="blank" data-answer="watt" size="10">.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Les formes d'énergie</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Parcours les 6 formes d'énergie.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="efSvg" viewBox="0 0 220 105"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:260px;">
+        <div class="anim-readout" id="efExplain" style="min-height:4em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="efPrev" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="efStep"></span>
+          <button id="efNext" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actEnergyForms"></div></div>
+  </section>
+
+  <section>
+    <h2>Les sources d'énergie</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux catégories de sources.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="esNonRenouv">Non renouvelable</button>
+      <button class="toggle-btn" id="esRenouv">Renouvelable</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="esSvg" viewBox="0 0 220 90"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="esReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actEnergySources"></div></div>
+  </section>
+
+  <section>
+    <h2>Transferts et conversions d'énergie</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle l'énergie exploitée et bascule entre les deux exemples.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ecPile">Pile</button>
+      <button class="toggle-btn" id="ecCentrale">Centrale nucléaire</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="ecSvg" viewBox="0 0 220 105"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Énergie exploitée (J)</label>
+        <input type="range" id="ecE" min="100" max="1000" value="500" step="50">
+        <div class="anim-readout" id="ecReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actEnergyChain"></div></div>
+  </section>
+
+  <section>
+    <h2>La puissance</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la puissance de la pompe : observe le temps nécessaire pour vider la cave.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="pcSvg" viewBox="0 0 220 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Puissance P (W)</label>
+        <input type="range" id="pcP" min="100" max="1500" value="250" step="50">
+        <div class="anim-readout" id="pcReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actPowerComparison"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Formes d'énergie</td><td style="padding:10px 8px; color:var(--chalk-dim);">cinétique, potentielle, chimique, thermique, lumineuse, nucléaire</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Sources d'énergie</td><td style="padding:10px 8px; color:var(--chalk-dim);">renouvelable (illimitée) ou non renouvelable (stocks limités)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Transfert / conversion</td><td style="padding:10px 8px; color:var(--chalk-dim);">E_exploitée = E_utile + E_dissipée ; l'énergie n'est ni créée ni détruite</td></tr>
+          <tr><td style="padding:10px 8px;">Puissance</td><td style="padding:10px 8px; color:var(--chalk-dim);">aptitude à convertir l'énergie rapidement, en watt (W)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 6 — L'énergie (4ème).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch6-4eme", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initEnergyForms({ svgId: "efSvgCours", explainId: "efExplainCours", prevBtnId: "efPrevCours", nextBtnId: "efNextCours", stepId: "efStepCours" });
+initEnergySources({ svgId: "esSvgCours", readoutId: "esReadoutCours", btnNonRenouvId: "esNonRenouvCours", btnRenouvId: "esRenouvCours" });
+initEnergyChain({ svgId: "ecSvgCours", eRangeId: "ecECours", readoutId: "ecReadoutCours", btnPileId: "ecPileCours", btnCentraleId: "ecCentraleCours" });
+initPowerComparison({ svgId: "pcSvgCours", pRangeId: "pcPCours", readoutId: "pcReadoutCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initEnergyForms({ svgId: "efSvg", explainId: "efExplain", prevBtnId: "efPrev", nextBtnId: "efNext", stepId: "efStep" });
+initEnergySources({ svgId: "esSvg", readoutId: "esReadout", btnNonRenouvId: "esNonRenouv", btnRenouvId: "esRenouv" });
+initEnergyChain({ svgId: "ecSvg", eRangeId: "ecE", readoutId: "ecReadout", btnPileId: "ecPile", btnCentraleId: "ecCentrale" });
+initPowerComparison({ svgId: "pcSvg", pRangeId: "pcP", readoutId: "pcReadout" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actEnergyForms", chapterId: "ch6-4eme", activityId: "qcm-energy-forms",
+  prompt: "Une pomme contient de l'énergie...",
+  options: [
+    { text: "Chimique", correct: true },
+    { text: "Cinétique", correct: false },
+    { text: "Nucléaire", correct: false }
+  ],
+  explanation: "Les aliments contiennent de l'énergie chimique, comme le pétrole, le charbon ou le gaz."
+});
+
+initQCM({
+  containerId: "actEnergySources", chapterId: "ch6-4eme", activityId: "qcm-energy-sources",
+  prompt: "Laquelle de ces sources d'énergie est renouvelable ?",
+  options: [
+    { text: "L'énergie solaire", correct: true },
+    { text: "Le pétrole", correct: false },
+    { text: "Le charbon", correct: false }
+  ],
+  explanation: "L'énergie solaire est exploitable sans limite de durée à l'échelle humaine : c'est une source renouvelable, contrairement au pétrole et au charbon (sources fossiles, non renouvelables)."
+});
+
+initEstimation({
+  containerId: "actEnergyChain", chapterId: "ch6-4eme", activityId: "est-energy-chain",
+  prompt: "Une centrale convertit 900 J d'énergie exploitée. Elle dissipe 600 J. Quelle est l'énergie utile E_utile (en J) ?",
+  answer: 300, tolerance: 5, unit: "J",
+  explanation: "E_exploitée = E_utile + E_dissipée, donc E_utile = 900 - 600 = 300 J."
+});
+
+initQCM({
+  containerId: "actPowerComparison", chapterId: "ch6-4eme", activityId: "qcm-power-comparison",
+  prompt: "Entre une pompe de 1000 W et une pompe de 250 W, laquelle vide une cave le plus rapidement ?",
+  options: [
+    { text: "La pompe de 1000 W", correct: true },
+    { text: "La pompe de 250 W", correct: false },
+    { text: "Les deux mettent le même temps", correct: false }
+  ],
+  explanation: "Plus la puissance est grande, plus le convertisseur agit vite : la pompe de 1000 W vide la cave plus rapidement."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch6-4eme");
+initProgressBar("ch6-4eme", 5); // texte à trous complet + 4 activités liées aux animations
+</script>
+</body>
+</html>

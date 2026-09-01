@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 4 — Les mouvements — 4ème</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch4-4eme.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique</div>
+  <h1>Chapitre 4 — Les mouvements</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch4-4eme">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch4-4eme"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Comprendre que le mouvement d'un objet est relatif au référentiel choisi</li>
+        <li>Reconnaître les trois types de trajectoire</li>
+        <li>Savoir calculer une vitesse et décrire sa direction et son sens</li>
+        <li>Distinguer un mouvement accéléré, décéléré et uniforme</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. La relativité du mouvement</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le mouvement d'un objet se décrit toujours par rapport à un autre objet de référence, appelé <strong>référentiel</strong>. Le mouvement est <strong>relatif</strong> : sa description dépend du référentiel choisi.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux référentiels : observe si le parachutiste A est en mouvement ou immobile.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="rmSolCours">Référentiel sol</button>
+      <button class="toggle-btn" id="rmParachutisteCours">Référentiel parachutiste B</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="rmSvgCours" viewBox="0 0 220 165"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="rmReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Les trajectoires</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Dans un référentiel donné, la <strong>trajectoire</strong> d'un objet est l'ensemble des positions successives qu'il occupe au cours de son mouvement.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Droite → mouvement <strong>rectiligne</strong>. Cercle (ou portion) → mouvement <strong>circulaire</strong>. Portion de courbe → mouvement <strong>curviligne</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 3 types de trajectoire.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="trRectiligneCours">Rectiligne</button>
+      <button class="toggle-btn" id="trCirculaireCours">Circulaire</button>
+      <button class="toggle-btn" id="trCurviligneCours">Curviligne</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="trSvgCours" viewBox="0 0 220 155"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="trReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>c. La vitesse : valeur, direction et sens</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un objet qui parcourt la distance d pendant la durée t possède, sur l'ensemble du parcours, une vitesse v.
+    </div>
+    <div class="formula">v = <span class="frac"><span class="num">d</span><span class="den">t</span></span> (m/s, avec d en m et t en s)</div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      La direction et le sens sont des propriétés de la vitesse. Pour une trajectoire rectiligne, la direction est fixe. Pour une trajectoire non rectiligne, la direction change au cours du temps.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle d et t, et bascule entre les deux types de trajectoire.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="svRectiligneCours">Trajectoire rectiligne</button>
+      <button class="toggle-btn" id="svNonRectiligneCours">Trajectoire non rectiligne</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="svSvgCours" viewBox="0 0 220 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Distance d (m)</label>
+        <input type="range" id="svDCours" min="10" max="200" value="50" step="5">
+        <label>Durée t (s)</label>
+        <input type="range" id="svTCours" min="1" max="20" value="10" step="1">
+        <div class="anim-readout" id="svReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Les mouvements : accéléré, décéléré, uniforme</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Le mouvement d'un objet est <strong style="color:var(--coral)">accéléré</strong> si la valeur de sa vitesse augmente, <strong>décéléré (ou ralenti)</strong> si elle diminue, et <strong>uniforme</strong> si elle est constante.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 3 types de mouvement : observe l'espacement des positions (même durée entre deux points).</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="mtAccelCours">Accéléré</button>
+      <button class="toggle-btn" id="mtDecelCours">Décéléré</button>
+      <button class="toggle-btn" id="mtUniformCours">Uniforme</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="mtSvgCours" viewBox="0 0 215 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="mtReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. La relativité du mouvement</h3>
+      <p>
+        Le mouvement d'un objet se décrit par rapport à un objet de référence appelé <input class="blank" data-answer="référentiel|referentiel" size="14">. Le mouvement est <input class="blank" data-answer="relatif" size="12"> : sa description dépend du référentiel choisi.
+      </p>
+
+      <h3>b. Les trajectoires</h3>
+      <p>
+        Si la trajectoire est une portion de droite, le mouvement est <input class="blank" data-answer="rectiligne" size="14">. Si elle est un cercle, le mouvement est <input class="blank" data-answer="circulaire" size="14">. Sinon, le mouvement est <input class="blank" data-answer="curviligne" size="14">.
+      </p>
+
+      <h3>c. La vitesse</h3>
+      <div class="formula">v = <span class="frac"><span class="num">d</span><span class="den">t</span></span></div>
+      <p>
+        La <input class="blank" data-answer="direction" size="12"> et le <input class="blank" data-answer="sens" size="8"> sont des propriétés de la vitesse.
+      </p>
+
+      <h3>d. Les mouvements</h3>
+      <p>
+        Un mouvement est accéléré si la valeur de la vitesse <input class="blank" data-answer="augmente" size="14">, décéléré si elle <input class="blank" data-answer="diminue" size="14">, et uniforme si elle est <input class="blank" data-answer="constante" size="14">.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>La relativité du mouvement</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux référentiels : observe si le parachutiste A est en mouvement ou immobile.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="rmSol">Référentiel sol</button>
+      <button class="toggle-btn" id="rmParachutiste">Référentiel parachutiste B</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="rmSvg" viewBox="0 0 220 165"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="rmReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actRelativityOfMotion"></div></div>
+  </section>
+
+  <section>
+    <h2>Les trajectoires</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 types de trajectoire.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="trRectiligne">Rectiligne</button>
+      <button class="toggle-btn" id="trCirculaire">Circulaire</button>
+      <button class="toggle-btn" id="trCurviligne">Curviligne</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="trSvg" viewBox="0 0 220 155"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="trReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actTrajectoryShapes"></div></div>
+  </section>
+
+  <section>
+    <h2>La vitesse : valeur, direction et sens</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle d et t, et bascule entre les deux types de trajectoire.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="svRectiligne">Trajectoire rectiligne</button>
+      <button class="toggle-btn" id="svNonRectiligne">Trajectoire non rectiligne</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="svSvg" viewBox="0 0 220 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Distance d (m)</label>
+        <input type="range" id="svD" min="10" max="200" value="50" step="5">
+        <label>Durée t (s)</label>
+        <input type="range" id="svT" min="1" max="20" value="10" step="1">
+        <div class="anim-readout" id="svReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSpeedValueAndDirection"></div></div>
+  </section>
+
+  <section>
+    <h2>Les mouvements : accéléré, décéléré, uniforme</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 types de mouvement : observe l'espacement des positions.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="mtAccel">Accéléré</button>
+      <button class="toggle-btn" id="mtDecel">Décéléré</button>
+      <button class="toggle-btn" id="mtUniform">Uniforme</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="mtSvg" viewBox="0 0 215 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="mtReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMotionType"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Relativité du mouvement</td><td style="padding:10px 8px; color:var(--chalk-dim);">le mouvement se décrit par rapport à un référentiel ; il est relatif</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Trajectoires</td><td style="padding:10px 8px; color:var(--chalk-dim);">droite → rectiligne • cercle → circulaire • courbe → curviligne</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Vitesse</td><td style="padding:10px 8px; color:var(--chalk-dim);">v = d/t (m/s) ; direction et sens sont des propriétés de la vitesse</td></tr>
+          <tr><td style="padding:10px 8px;">Types de mouvement</td><td style="padding:10px 8px; color:var(--chalk-dim);">accéléré (v augmente), décéléré (v diminue), uniforme (v constante)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 4 — Les mouvements (4ème).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch4-4eme", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initRelativityOfMotion({ svgId: "rmSvgCours", readoutId: "rmReadoutCours", btnSolId: "rmSolCours", btnParachutisteId: "rmParachutisteCours" });
+initTrajectoryShapes({ svgId: "trSvgCours", readoutId: "trReadoutCours", buttonIds: ["trRectiligneCours", "trCirculaireCours", "trCurviligneCours"] });
+initSpeedValueAndDirection({ svgId: "svSvgCours", dRangeId: "svDCours", tRangeId: "svTCours", readoutId: "svReadoutCours", btnRectiligneId: "svRectiligneCours", btnNonRectiligneId: "svNonRectiligneCours" });
+initMotionType({ svgId: "mtSvgCours", readoutId: "mtReadoutCours", btnAccelId: "mtAccelCours", btnDecelId: "mtDecelCours", btnUniformId: "mtUniformCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initRelativityOfMotion({ svgId: "rmSvg", readoutId: "rmReadout", btnSolId: "rmSol", btnParachutisteId: "rmParachutiste" });
+initTrajectoryShapes({ svgId: "trSvg", readoutId: "trReadout", buttonIds: ["trRectiligne", "trCirculaire", "trCurviligne"] });
+initSpeedValueAndDirection({ svgId: "svSvg", dRangeId: "svD", tRangeId: "svT", readoutId: "svReadout", btnRectiligneId: "svRectiligne", btnNonRectiligneId: "svNonRectiligne" });
+initMotionType({ svgId: "mtSvg", readoutId: "mtReadout", btnAccelId: "mtAccel", btnDecelId: "mtDecel", btnUniformId: "mtUniform" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actRelativityOfMotion", chapterId: "ch4-4eme", activityId: "qcm-relativity-of-motion",
+  prompt: "Un passager assis dans un train qui roule est-il en mouvement par rapport au train ?",
+  options: [
+    { text: "Non, il est immobile par rapport au train", correct: true },
+    { text: "Oui, il est toujours en mouvement", correct: false },
+    { text: "Cela dépend de la vitesse du train", correct: false }
+  ],
+  explanation: "Le passager reste à la même place dans le référentiel train : il y est immobile, même s'il est en mouvement par rapport au sol."
+});
+
+initQCM({
+  containerId: "actTrajectoryShapes", chapterId: "ch4-4eme", activityId: "qcm-trajectory-shapes",
+  prompt: "Une balançoire décrit un arc de cercle. Quel est le type de son mouvement ?",
+  options: [
+    { text: "Circulaire", correct: true },
+    { text: "Rectiligne", correct: false },
+    { text: "Curviligne", correct: false }
+  ],
+  explanation: "La trajectoire est une portion de cercle : le mouvement est circulaire."
+});
+
+initEstimation({
+  containerId: "actSpeedValueAndDirection", chapterId: "ch4-4eme", activityId: "est-speed-value",
+  prompt: "Une voiture parcourt 120 m en 8 s. Quelle est sa vitesse v (en m/s) ?",
+  answer: 15, tolerance: 0.5, unit: "m/s",
+  explanation: "v = d/t = 120/8 = 15 m/s."
+});
+
+initQCM({
+  containerId: "actMotionType", chapterId: "ch4-4eme", activityId: "qcm-motion-type",
+  prompt: "Sur un schéma, la distance entre les positions successives d'un objet diminue au cours du temps. Que peut-on dire du mouvement ?",
+  options: [
+    { text: "Il est décéléré (la vitesse diminue)", correct: true },
+    { text: "Il est accéléré (la vitesse augmente)", correct: false },
+    { text: "Il est uniforme (la vitesse est constante)", correct: false }
+  ],
+  explanation: "Si les positions se rapprochent au fil du temps (à durée égale entre chaque point), l'objet parcourt une distance de plus en plus petite : sa vitesse diminue, le mouvement est décéléré."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch4-4eme");
+initProgressBar("ch4-4eme", 5); // texte à trous complet + 4 activités liées aux animations
+</script>
+</body>
+</html>

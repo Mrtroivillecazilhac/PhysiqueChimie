@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 2 — Transformations chimiques — 4ème</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch2-4eme.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 2 — Transformations chimiques</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch2-4eme">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch2-4eme"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Distinguer transformation chimique et transformation physique</li>
+        <li>Connaître les signes d'une transformation chimique et la conservation de la masse</li>
+        <li>Reconnaître les espèces chimiques (atomes, molécules) et écrire une équation de réaction équilibrée</li>
+        <li>Savoir situer une solution sur l'échelle de pH</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Transformation chimique ou transformation physique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>espèce chimique</strong> est constituée de particules identiques. Au cours d'une <strong>transformation chimique</strong>, des espèces chimiques disparaissent et de nouvelles apparaissent. Au cours d'une <strong>transformation physique</strong>, les espèces chimiques restent les mêmes.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux types de transformation.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="cpPhysiqueCours">Transformation physique</button>
+      <button class="toggle-btn" id="cpChimiqueCours">Transformation chimique</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="cpSvgCours" viewBox="0 0 200 155"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="cpReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Les signes d'une transformation chimique et la conservation de la masse</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Certains indices signalent une transformation chimique : formation d'un gaz, changement de couleur, variation de température ou de pH. Lors d'une transformation chimique, il y a <strong>conservation de la masse</strong> : la masse des produits formés est égale à la masse des réactifs consommés.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre avant et pendant la réaction : observe la masse.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="mcBeforeCours">Avant</button>
+      <button class="toggle-btn" id="mcAfterCours">Pendant la réaction</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="mcSvgCours" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="mcReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>c. Les espèces chimiques</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une espèce chimique peut être constituée d'<strong>atomes</strong> ou de <strong>molécules</strong>. Les molécules sont elles-mêmes constituées d'atomes. La <strong>formule chimique</strong> indique la nature et le nombre des atomes de la molécule.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 5 espèces chimiques courantes.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="csO2Cours">Dioxygène</button>
+      <button class="toggle-btn" id="csH2Cours">Dihydrogène</button>
+      <button class="toggle-btn" id="csN2Cours">Diazote</button>
+      <button class="toggle-btn" id="csH2OCours">Eau</button>
+      <button class="toggle-btn" id="csCO2Cours">Dioxyde de carbone</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="csSvgCours" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="csReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Les équations de réaction</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une transformation chimique s'interprète, au niveau microscopique, comme une <strong>redistribution des atomes</strong>. L'équation d'une réaction chimique traduit la conservation et la redistribution des atomes : on doit avoir le <strong>même nombre d'atomes</strong> de chaque sorte du côté des réactifs et du côté des produits.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre l'exemple simple et l'exemple du méthane.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="reSimpleCours">C + O₂ → CO₂</button>
+      <button class="toggle-btn" id="reMethaneCours">Combustion du méthane</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="reSvgCours" viewBox="0 0 230 140"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="reReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>e. Les propriétés acidobasiques</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le <strong>pH</strong> évalue l'acidité ou la basicité d'une solution. Sa valeur est comprise entre 0 et 14. Il se mesure avec un <strong>pH-mètre</strong> ou s'estime avec un <strong>papier indicateur</strong>.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      À 25 °C : pH &lt; 7 → solution acide. pH = 7 → solution neutre. pH &gt; 7 → solution basique.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle le pH : observe la couleur et la nature de la solution changer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="phSvgCours" viewBox="0 0 220 140"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>pH</label>
+        <input type="range" id="phRangeCours" min="0" max="14" value="7" step="0.5">
+        <div class="anim-readout" id="phReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. Transformation chimique ou physique</h3>
+      <p>
+        Une espèce chimique est constituée de particules <input class="blank" data-answer="identiques" size="14">.
+      </p>
+      <p>
+        Au cours d'une transformation <input class="blank" data-answer="chimique" size="12">, des espèces chimiques disparaissent et de nouvelles apparaissent. Au cours d'une transformation <input class="blank" data-answer="physique" size="12">, les espèces restent les mêmes.
+      </p>
+
+      <h3>b. Signes et conservation de la masse</h3>
+      <p>
+        Le signe d'une transformation chimique peut être la formation d'un <input class="blank" data-answer="gaz" size="8">, un changement de <input class="blank" data-answer="couleur" size="12">, ou une variation de température ou de pH.
+      </p>
+      <p>
+        Lors d'une transformation chimique, il y a conservation de la <input class="blank" data-answer="masse" size="10"> : la masse des produits formés est égale à la masse des réactifs <input class="blank" data-answer="consommés|consommes" size="14">.
+      </p>
+
+      <h3>c. Les espèces chimiques</h3>
+      <p>
+        Une espèce chimique peut être constituée d'atomes ou de <input class="blank" data-answer="molécules|molecules" size="14">. La <input class="blank" data-answer="formule chimique" size="18"> indique la nature et le nombre des atomes d'une molécule.
+      </p>
+
+      <h3>d. Les équations de réaction</h3>
+      <p>
+        Une transformation chimique s'interprète comme une <input class="blank" data-answer="redistribution" size="18"> des atomes. Dans l'équation d'une réaction, on doit avoir le même <input class="blank" data-answer="nombre" size="10"> d'atomes de chaque sorte des deux côtés.
+      </p>
+
+      <h3>e. Les propriétés acidobasiques</h3>
+      <p>
+        À 25 °C, une solution de pH inférieur à 7 est <input class="blank" data-answer="acide" size="10">, une solution de pH supérieur à 7 est <input class="blank" data-answer="basique" size="12">, et une solution de pH égal à 7 est <input class="blank" data-answer="neutre" size="10">.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Transformation chimique ou physique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux types de transformation.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="cpPhysique">Transformation physique</button>
+      <button class="toggle-btn" id="cpChimique">Transformation chimique</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="cpSvg" viewBox="0 0 200 155"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="cpReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actChemicalOrPhysical"></div></div>
+  </section>
+
+  <section>
+    <h2>Signes et conservation de la masse</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre avant et pendant la réaction : observe la masse.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="mcBefore">Avant</button>
+      <button class="toggle-btn" id="mcAfter">Pendant la réaction</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="mcSvg" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="mcReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSignsAndMassConservation"></div></div>
+  </section>
+
+  <section>
+    <h2>Les espèces chimiques</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 5 espèces chimiques courantes.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="csO2">Dioxygène</button>
+      <button class="toggle-btn" id="csH2">Dihydrogène</button>
+      <button class="toggle-btn" id="csN2">Diazote</button>
+      <button class="toggle-btn" id="csH2O">Eau</button>
+      <button class="toggle-btn" id="csCO2">Dioxyde de carbone</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="csSvg" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="csReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actChemicalSpecies"></div></div>
+  </section>
+
+  <section>
+    <h2>Les équations de réaction</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre l'exemple simple et l'exemple du méthane.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="reSimple">C + O₂ → CO₂</button>
+      <button class="toggle-btn" id="reMethane">Combustion du méthane</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="reSvg" viewBox="0 0 230 140"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="reReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actReactionEquation"></div></div>
+  </section>
+
+  <section>
+    <h2>Les propriétés acidobasiques</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle le pH : observe la couleur et la nature de la solution changer.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="phSvg" viewBox="0 0 220 140"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>pH</label>
+        <input type="range" id="phRange" min="0" max="14" value="7" step="0.5">
+        <div class="anim-readout" id="phReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actPhScale"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Chimique / physique</td><td style="padding:10px 8px; color:var(--chalk-dim);">chimique : nouvelles espèces apparaissent • physique : les espèces restent les mêmes</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Signes & conservation</td><td style="padding:10px 8px; color:var(--chalk-dim);">gaz, couleur, T°, pH ; masse des produits = masse des réactifs</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Espèces chimiques</td><td style="padding:10px 8px; color:var(--chalk-dim);">atomes ou molécules ; formule chimique = nature + nombre d'atomes</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Équation de réaction</td><td style="padding:10px 8px; color:var(--chalk-dim);">réactifs → produits ; même nombre d'atomes de chaque sorte des deux côtés</td></tr>
+          <tr><td style="padding:10px 8px;">pH</td><td style="padding:10px 8px; color:var(--chalk-dim);">0 à 14 ; &lt;7 acide, =7 neutre, &gt;7 basique (à 25°C)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 2 — Transformations chimiques (4ème).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch2-4eme", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initChemicalOrPhysical({ svgId: "cpSvgCours", readoutId: "cpReadoutCours", btnPhysiqueId: "cpPhysiqueCours", btnChimiqueId: "cpChimiqueCours" });
+initSignsAndMassConservation({ svgId: "mcSvgCours", readoutId: "mcReadoutCours", btnBeforeId: "mcBeforeCours", btnAfterId: "mcAfterCours" });
+initChemicalSpecies({ svgId: "csSvgCours", readoutId: "csReadoutCours", buttonIds: ["csO2Cours", "csH2Cours", "csN2Cours", "csH2OCours", "csCO2Cours"] });
+initReactionEquation({ svgId: "reSvgCours", readoutId: "reReadoutCours", btnSimpleId: "reSimpleCours", btnMethaneId: "reMethaneCours" });
+initPhScale({ svgId: "phSvgCours", phRangeId: "phRangeCours", readoutId: "phReadoutCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initChemicalOrPhysical({ svgId: "cpSvg", readoutId: "cpReadout", btnPhysiqueId: "cpPhysique", btnChimiqueId: "cpChimique" });
+initSignsAndMassConservation({ svgId: "mcSvg", readoutId: "mcReadout", btnBeforeId: "mcBefore", btnAfterId: "mcAfter" });
+initChemicalSpecies({ svgId: "csSvg", readoutId: "csReadout", buttonIds: ["csO2", "csH2", "csN2", "csH2O", "csCO2"] });
+initReactionEquation({ svgId: "reSvg", readoutId: "reReadout", btnSimpleId: "reSimple", btnMethaneId: "reMethane" });
+initPhScale({ svgId: "phSvg", phRangeId: "phRange", readoutId: "phReadout" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actChemicalOrPhysical", chapterId: "ch2-4eme", activityId: "qcm-chemical-or-physical",
+  prompt: "Un glaçon qui fond dans un verre d'eau : de quel type de transformation s'agit-il ?",
+  options: [
+    { text: "Une transformation physique (l'espèce chimique H₂O reste la même)", correct: true },
+    { text: "Une transformation chimique (une nouvelle espèce apparaît)", correct: false },
+    { text: "Ni l'un ni l'autre", correct: false }
+  ],
+  explanation: "L'eau reste de l'eau (H₂O), qu'elle soit solide ou liquide : c'est une transformation physique, pas chimique."
+});
+
+initVraiFaux({
+  containerId: "actSignsAndMassConservation", chapterId: "ch2-4eme", activityId: "vf-signs-mass-conservation",
+  prompt: "Lors d'une transformation chimique, la masse des produits formés est toujours égale à la masse des réactifs consommés.",
+  correct: true,
+  explanation: "Vrai : c'est la conservation de la masse lors d'une transformation chimique."
+});
+
+initQCM({
+  containerId: "actChemicalSpecies", chapterId: "ch2-4eme", activityId: "qcm-chemical-species",
+  prompt: "Quelle est la formule chimique de l'eau ?",
+  options: [
+    { text: "H₂O", correct: true },
+    { text: "O₂H", correct: false },
+    { text: "H₂O₂", correct: false }
+  ],
+  explanation: "L'eau est constituée de molécules formées de 2 atomes d'hydrogène et 1 atome d'oxygène : H₂O."
+});
+
+initQCM({
+  containerId: "actReactionEquation", chapterId: "ch2-4eme", activityId: "qcm-reaction-equation",
+  prompt: "Dans l'équation C + O₂ → CO₂, que représente C + O₂ ?",
+  options: [
+    { text: "Les réactifs", correct: true },
+    { text: "Les produits", correct: false },
+    { text: "Le catalyseur", correct: false }
+  ],
+  explanation: "Les réactifs (à gauche de la flèche) sont les espèces chimiques qui disparaissent ; les produits (à droite) sont celles qui apparaissent."
+});
+
+initEstimation({
+  containerId: "actPhScale", chapterId: "ch2-4eme", activityId: "est-ph-scale",
+  prompt: "Une solution a un pH de 3. Est-elle acide, neutre ou basique ? (réponds par le pH à partir duquel une solution devient neutre)",
+  answer: 7, tolerance: 0, unit: "",
+  explanation: "Une solution de pH égal à 7 est neutre ; en dessous (comme pH = 3), elle est acide."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch2-4eme");
+initProgressBar("ch2-4eme", 6); // texte à trous complet + 5 activités liées aux animations
+</script>
+</body>
+</html>

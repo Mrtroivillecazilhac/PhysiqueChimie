@@ -9,6 +9,16 @@ function roundToSig(x, n) {
   const magnitude = Math.pow(10, power);
   return Math.round(x * magnitude) / magnitude;
 }
+// Un nombre JS ne conserve jamais un zéro final (4.3211 et 4.32110 sont la
+// même valeur numérique) : pour AFFICHER le bon nombre de CS, il faut
+// formater en chaîne de caractères avec le bon nombre de décimales.
+function formatSig(x, n) {
+  const rounded = roundToSig(x, n);
+  if (rounded === 0) return (0).toFixed(Math.max(0, n - 1));
+  const d = Math.ceil(Math.log10(Math.abs(rounded)));
+  const decimals = Math.max(0, n - d);
+  return rounded.toFixed(decimals);
+}
 
 /* ---------- a1. Incertitude implicite (vie quotidienne) vs explicite (physicien) ---------- */
 function initImplicitExplicit(cfg) {
@@ -212,33 +222,35 @@ function initSigFigOperations(cfg) {
   const cs2Range = document.getElementById(cfg.cs2RangeId);
   const readout = document.getElementById(cfg.readoutId);
 
-  // valeurs avec beaucoup de décimales, pour bien voir l'effet de l'arrondi
-  const A_TRUE = 15.6789, B_TRUE = 4.32109;
+  // valeurs neutres, vérifiées sur toutes les combinaisons de CS (2 à 6)
+  // pour ne jamais tomber sur un résultat qui ferait rire une classe de lycée
+  const A_TRUE = 8.234567, B_TRUE = 5.671234;
 
   function draw() {
     const cs1 = Number(cs1Range.value);
     const cs2 = Number(cs2Range.value);
-    const a = roundToSig(A_TRUE, cs1);
-    const b = roundToSig(B_TRUE, cs2);
-    const cRaw = a * b;
+    const a = formatSig(A_TRUE, cs1);   // chaîne, ex: "4.32110" (garde le zéro final)
+    const b = formatSig(B_TRUE, cs2);
+    const aNum = Number(a), bNum = Number(b);
+    const cRaw = aNum * bNum;
     const minCS = Math.min(cs1, cs2);
-    const cRounded = roundToSig(cRaw, minCS);
+    const c = formatSig(cRaw, minCS);
     const sameCS = cs1 === cs2;
 
     // exemple générique d'abord : a × b = c (s'applique à n'importe quelle opération)
-    let s = `<text x="110" y="22" font-size="10" fill="var(--chalk-dim)" text-anchor="middle">Exemple : <tspan fill="var(--teal)">a</tspan> × <tspan fill="#5a96d2">b</tspan> = <tspan fill="var(--yellow)">c</tspan></text>`;
-    s += `<text x="110" y="50" font-size="16" text-anchor="middle"><tspan fill="var(--teal)" font-weight="700">${a}</tspan><tspan fill="var(--chalk)"> × </tspan><tspan fill="#5a96d2" font-weight="700">${b}</tspan><tspan fill="var(--chalk)"> = </tspan><tspan fill="var(--yellow)" font-weight="700">${cRaw.toFixed(4)}</tspan></text>`;
-    s += `<line x1="30" y1="70" x2="190" y2="70" stroke="var(--chalk-dim)" stroke-width="1" stroke-dasharray="3,3"/>`;
-    const explainLine = sameCS
-      ? `a et b ont la même précision (${cs1} CS) → c est arrondi à ${minCS} CS`
-      : `a a ${cs1} CS, b a ${cs2} CS (précisions différentes) → c est arrondi au plus petit : ${minCS} CS`;
-    s += `<text x="110" y="95" font-size="9.5" fill="var(--chalk-dim)" text-anchor="middle">${explainLine}</text>`;
-    s += `<text x="110" y="130" font-size="20" fill="var(--yellow)" text-anchor="middle" font-weight="700">c ≈ ${cRounded}</text>`;
+    let s = `<text x="110" y="20" font-size="10" fill="var(--chalk-dim)" text-anchor="middle">Exemple : <tspan fill="var(--teal)">a</tspan> × <tspan fill="#5a96d2">b</tspan> = <tspan fill="var(--yellow)">c</tspan></text>`;
+    s += `<text x="110" y="46" font-size="16" text-anchor="middle"><tspan fill="var(--teal)" font-weight="700">${a}</tspan><tspan fill="var(--chalk)"> × </tspan><tspan fill="#5a96d2" font-weight="700">${b}</tspan><tspan fill="var(--chalk)"> = </tspan><tspan fill="var(--yellow)" font-weight="700">${cRaw.toFixed(4)}</tspan></text>`;
+    s += `<line x1="30" y1="64" x2="190" y2="64" stroke="var(--chalk-dim)" stroke-width="1" stroke-dasharray="3,3"/>`;
+    const line1 = sameCS ? `a et b ont la même précision (${cs1} CS)` : `a a ${cs1} CS, b a ${cs2} CS`;
+    const line2 = sameCS ? `→ c est arrondi à ${minCS} CS` : `→ c arrondi au plus petit : ${minCS} CS`;
+    s += `<text x="110" y="82" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">${line1}</text>`;
+    s += `<text x="110" y="96" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">${line2}</text>`;
+    s += `<text x="110" y="128" font-size="20" fill="var(--yellow)" text-anchor="middle" font-weight="700">c ≈ ${c}</text>`;
     svg.innerHTML = s;
 
     readout.innerHTML = sameCS
-      ? `a = <strong style="color:var(--teal)">${a}</strong> et b = <strong style="color:#5a96d2">${b}</strong> ont la même précision (${cs1} CS). Résultat brut : a × b = <strong style="color:var(--yellow)">${cRaw.toFixed(4)}</strong>, arrondi à cette même précision : <strong style="color:var(--yellow)">${cRounded}</strong> (${minCS} CS).`
-      : `a = <strong style="color:var(--teal)">${a}</strong> (${cs1} CS) et b = <strong style="color:#5a96d2">${b}</strong> (${cs2} CS) n'ont pas la même précision. Résultat brut : a × b = <strong style="color:var(--yellow)">${cRaw.toFixed(4)}</strong>, arrondi au plus petit nombre de CS des deux : <strong style="color:var(--yellow)">${cRounded}</strong> (${minCS} CS).`;
+      ? `a = <strong style="color:var(--teal)">${a}</strong> et b = <strong style="color:#5a96d2">${b}</strong> ont la même précision (${cs1} CS). Résultat brut : a × b = <strong style="color:var(--yellow)">${cRaw.toFixed(4)}</strong>, arrondi à cette même précision : <strong style="color:var(--yellow)">${c}</strong> (${minCS} CS).`
+      : `a = <strong style="color:var(--teal)">${a}</strong> (${cs1} CS) et b = <strong style="color:#5a96d2">${b}</strong> (${cs2} CS) n'ont pas la même précision. Résultat brut : a × b = <strong style="color:var(--yellow)">${cRaw.toFixed(4)}</strong>, arrondi au plus petit nombre de CS des deux : <strong style="color:var(--yellow)">${c}</strong> (${minCS} CS).`;
   }
   cs1Range.addEventListener("input", draw);
   cs2Range.addEventListener("input", draw);
@@ -248,39 +260,68 @@ function initSigFigOperations(cfg) {
 /* ---------- e. Incertitude de mesure ---------- */
 function initMeasurementUncertainty(cfg) {
   const svg = document.getElementById(cfg.svgId);
-  const gradRange = document.getElementById(cfg.gradRangeId);
   const readout = document.getElementById(cfg.readoutId);
+  const buttons = cfg.buttonIds.map(id => document.getElementById(id));
 
   const MEASURED = 15.3; // cm, valeur fixe lue sur la règle
 
+  // Chaque échelle correspond à une vraie règle différente : plus la
+  // graduation est fine, plus on doit zoomer pour voir les traits.
+  const SCALES = {
+    s10: { grad: 10, windowMin: 10, windowMax: 40, decimals: 0 },
+    s1: { grad: 1, windowMin: 12, windowMax: 18, decimals: 0 },
+    s01: { grad: 0.1, windowMin: 14.5, windowMax: 15.5, decimals: 1 },
+    s001: { grad: 0.01, windowMin: 15.20, windowMax: 15.30, decimals: 2 }
+  };
+  const keys = ["s10", "s1", "s01", "s001"];
+  let current = "s1";
+
   function draw() {
-    const grad = Number(gradRange.value) / 100; // cm, plus petite graduation
+    const sc = SCALES[current];
+    const grad = sc.grad;
     const U = grad / 2;
     const rel = (U / MEASURED) * 100;
 
-    // 7 graduations réelles, espacées de "grad", centrées sur la valeur mesurée
-    const x0 = 20, x1 = 200, y = 70;
-    const nSide = 3;
-    const pxPerGrad = (x1 - x0) / (2 * nSide);
-    let s = `<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-    for (let k = -nSide; k <= nSide; k++) {
-      const x = x0 + (k + nSide) * pxPerGrad;
-      const val = MEASURED + k * grad;
-      s += `<line x1="${x}" y1="${y - 8}" x2="${x}" y2="${y + 8}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
-      s += `<text x="${x}" y="${y + 20}" font-size="7" fill="var(--chalk-dim)" text-anchor="middle">${val.toFixed(2)}</text>`;
+    const x0 = 20, x1 = 200, yRuler = 45;
+    function toPx(v) { return x0 + ((v - sc.windowMin) / (sc.windowMax - sc.windowMin)) * (x1 - x0); }
+
+    // repère de la valeur lue, AU-DESSUS de la règle (rien ne masque la valeur)
+    const mx = toPx(MEASURED);
+    let s = `<text x="${mx}" y="18" font-size="9" fill="var(--yellow)" text-anchor="middle">on lit ici : 15,3 cm</text>`;
+    s += `<line x1="${mx}" y1="22" x2="${mx}" y2="${yRuler - 10}" stroke="var(--yellow)" stroke-width="1.5"/>`;
+    s += `<polygon points="${mx - 3},${yRuler - 10} ${mx + 3},${yRuler - 10} ${mx},${yRuler - 4}" fill="var(--yellow)"/>`;
+
+    // la règle et ses graduations
+    s += `<line x1="${x0}" y1="${yRuler}" x2="${x1}" y2="${yRuler}" stroke="var(--chalk-dim)" stroke-width="2"/>`;
+    const nTicks = Math.round((sc.windowMax - sc.windowMin) / grad);
+    for (let i = 0; i <= nTicks; i++) {
+      const val = sc.windowMin + i * grad;
+      const x = toPx(val);
+      s += `<line x1="${x}" y1="${yRuler - 9}" x2="${x}" y2="${yRuler + 9}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
+      s += `<text x="${x}" y="${yRuler + 21}" font-size="7" fill="var(--chalk-dim)" text-anchor="middle">${val.toFixed(sc.decimals)}</text>`;
     }
-    // bande d'incertitude : largeur = 1 graduation entière = 2 x U(x), centrée sur la valeur mesurée
-    const mx = x0 + nSide * pxPerGrad;
-    const bandHalfPx = pxPerGrad / 2;
-    s += `<rect x="${mx - bandHalfPx}" y="${y - 18}" width="${bandHalfPx * 2}" height="36" fill="rgba(232,196,104,0.25)" stroke="var(--yellow)" stroke-width="1.5"/>`;
-    s += `<line x1="${mx}" y1="${y - 24}" x2="${mx}" y2="${y + 24}" stroke="var(--yellow)" stroke-width="2"/>`;
-    s += `<text x="${mx}" y="${y - 30}" font-size="9" fill="var(--yellow)" text-anchor="middle">x = ${MEASURED} cm</text>`;
-    s += `<text x="${mx}" y="${y + 42}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">la bande = 1 graduation = 2 × U(x)</text>`;
+
+    // bracket montrant UNE graduation entière — indépendant de la position
+    // exacte de la valeur lue : ce n'est pas une boîte posée sur la valeur,
+    // c'est la largeur d'un intervalle entre deux traits quelconques.
+    let lowerTick = sc.windowMin + Math.floor((MEASURED - sc.windowMin) / grad + 1e-9) * grad;
+    let upperTick = lowerTick + grad;
+    if (upperTick > sc.windowMax + 1e-9) { upperTick = lowerTick; lowerTick = lowerTick - grad; }
+    const bx0 = toPx(lowerTick), bx1 = toPx(upperTick);
+    const yBracket = yRuler + 40;
+    s += `<line x1="${bx0}" y1="${yBracket}" x2="${bx1}" y2="${yBracket}" stroke="var(--teal)" stroke-width="1.5"/>`;
+    s += `<line x1="${bx0}" y1="${yBracket - 5}" x2="${bx0}" y2="${yBracket + 5}" stroke="var(--teal)" stroke-width="1.5"/>`;
+    s += `<line x1="${bx1}" y1="${yBracket - 5}" x2="${bx1}" y2="${yBracket + 5}" stroke="var(--teal)" stroke-width="1.5"/>`;
+    s += `<text x="${(bx0 + bx1) / 2}" y="${yBracket + 16}" font-size="8" fill="var(--teal)" text-anchor="middle">1 graduation = 2 × U(x)</text>`;
+
     svg.innerHTML = s;
 
-    readout.innerHTML = `La plus petite graduation de la règle vaut ${grad.toFixed(2)} cm : entre deux graduations, on ne peut qu'estimer. Par convention, on prend :<br>U(x) = graduation / 2 = ${grad.toFixed(2)} / 2 = <strong style="color:var(--yellow)">${U.toFixed(3)} cm</strong> (incertitude absolue)<br>incertitude relative = U(x)/x = ${U.toFixed(3)}/${MEASURED} = <strong style="color:var(--teal)">${rel.toFixed(2)} %</strong>`;
+    readout.innerHTML = `Sur cette règle, la plus petite graduation vaut ${grad} cm. Entre deux graduations, on ne peut qu'estimer. Par convention, on prend :<br>U(x) = graduation / 2 = ${grad} / 2 = <strong style="color:var(--yellow)">${U.toFixed(3)} cm</strong> (incertitude absolue)<br>incertitude relative = U(x)/x = ${U.toFixed(3)}/${MEASURED} = <strong style="color:var(--teal)">${rel.toFixed(2)} %</strong>`;
   }
-  gradRange.addEventListener("input", draw);
+
+  buttons.forEach((btn, i) => {
+    btn.addEventListener("click", () => { current = keys[i]; draw(); });
+  });
   draw();
 }
 
@@ -312,7 +353,7 @@ function initConfidenceInterval(cfg) {
     s += `<text x="${pxMid}" y="${y - 28}" font-size="9" fill="var(--yellow)" text-anchor="middle">x = ${X_MEASURED} cm</text>`;
     svg.innerHTML = s;
 
-    readout.innerHTML = `On écrit : L = ${X_MEASURED.toFixed(1)} ± ${U.toFixed(2)} cm.<br>Cela signifie que la longueur vraie a de bonnes chances de se trouver dans l'intervalle <strong style="color:var(--teal)">[${xMin.toFixed(2)} ; ${xMax.toFixed(2)}]</strong> — c'est-à-dire l'ensemble des nombres compris entre ${xMin.toFixed(2)} et ${xMax.toFixed(2)} cm.`;
+    readout.innerHTML = `On écrit : L = ${X_MEASURED.toFixed(1)} ± ${U.toFixed(2)} cm.<br>Cela signifie que la longueur vraie a de bonnes chances d'être <strong style="color:var(--teal)">comprise entre ${xMin.toFixed(2)} et ${xMax.toFixed(2)} cm</strong>.`;
   }
   uRange.addEventListener("input", draw);
   draw();

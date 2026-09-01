@@ -273,6 +273,7 @@ a.spin-btn{ display:inline-block; text-decoration:none; }
   transition: border-color .15s ease, background .15s ease, transform .1s ease;
 }
 .glass-tile svg{ width:70%; height:70%; }
+.glass-tile img{ width:70%; height:70%; object-fit:contain; }
 .glass-tile:hover{ border-color:var(--yellow); transform:translateY(-2px); }
 .glass-tile.correct{ border-color:var(--teal); background:rgba(107,191,171,0.3); }
 .glass-tile.wrong{ border-color:var(--coral); background:rgba(217,122,99,0.3); }

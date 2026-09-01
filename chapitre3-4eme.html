@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 3 — Organisation de la matière dans l'Univers — 4ème</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch3-4eme.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 3 — Organisation de la matière dans l'Univers</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch3-4eme">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch3-4eme"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Distinguer rotation et révolution, pour la Terre et pour la Lune</li>
+        <li>Comprendre l'origine des phases de la Lune</li>
+        <li>Connaître l'organisation du Système solaire et de l'Univers</li>
+        <li>Savoir utiliser les unités de distance adaptées à l'astronomie (ua, al)</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. La Terre : rotation et révolution</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La Terre tourne <strong>sur elle-même</strong> (rotation, en 24 h) et tourne <strong>autour du Soleil</strong> (révolution, en 1 an), sur une orbite quasi circulaire, à environ 150 000 000 km du Soleil.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre rotation et révolution, et fais avancer le temps.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="emRotationCours">Rotation (jour)</button>
+      <button class="toggle-btn" id="emRevolutionCours">Révolution (année)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="emSvgCours" viewBox="0 0 220 165"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Temps écoulé</label>
+        <input type="range" id="emTimeCours" min="0" max="100" value="0" step="1">
+        <div class="anim-readout" id="emReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>b. La Lune : révolution, rotation et phases</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La Lune, satellite de la Terre, en fait le tour en environ un mois (révolution). Sa <strong>période de rotation est égale à sa période de révolution</strong> : on ne voit donc depuis la Terre toujours que la même face. Distance Terre-Lune : environ 400 000 km.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Les phases de la Lune s'expliquent par les positions relatives de la Lune, de la Terre et du Soleil — pas par une ombre de la Terre !
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais tourner la Lune sur son orbite : observe la phase vue depuis la Terre.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="mpSvgCours" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Position sur l'orbite (°)</label>
+        <input type="range" id="mpAngleCours" min="0" max="360" value="0" step="5">
+        <div class="anim-readout" id="mpReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>c. Le Système solaire</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le Système solaire est composé d'une étoile, le <strong>Soleil</strong>, et de tous les objets célestes qui gravitent autour de lui : les planètes, les comètes, les astéroïdes. Les planètes tournent sur elles-mêmes ainsi qu'autour du Soleil ; elles ne sont jamais toutes alignées.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Parcours les 8 planètes, dans l'ordre depuis le Soleil.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ssSvgCours" viewBox="0 0 220 110"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:260px;">
+        <div class="anim-readout" id="ssExplainCours" style="min-height:4em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="ssPrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="ssStepCours"></span>
+          <button id="ssNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. L'Univers</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'Univers est constitué d'un très grand nombre de <strong>galaxies</strong>. Une galaxie est le regroupement d'un très grand nombre d'étoiles, de gaz et de poussières. Le Soleil est une étoile de notre galaxie, la <strong>Voie lactée</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 3 échelles, du Système solaire à l'Univers.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="usSystemeCours">Système solaire</button>
+      <button class="toggle-btn" id="usGalaxieCours">Notre galaxie</button>
+      <button class="toggle-btn" id="usUniversCours">L'Univers</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="usSvgCours" viewBox="0 0 220 110"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="usReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>e. Les unités de distance en astronomie</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le kilomètre n'étant pas adapté aux mesures de distances en astronomie, on utilise l'<strong>unité astronomique (ua)</strong> (distance Terre-Soleil) et l'<strong>année-lumière (al)</strong> (distance parcourue par la lumière en un an).
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 3 exemples : quelle unité est la plus adaptée ?</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="auLuneCours">Terre ↔ Lune</button>
+      <button class="toggle-btn" id="auSoleilCours">Terre ↔ Soleil</button>
+      <button class="toggle-btn" id="auEtoileCours">Étoile lointaine</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="auSvgCours" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="auReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. La Terre : rotation et révolution</h3>
+      <p>
+        La Terre tourne sur elle-même en 24h : c'est sa période de <input class="blank" data-answer="rotation" size="12">. Elle tourne autour du Soleil en 1 an : c'est sa période de <input class="blank" data-answer="révolution|revolution" size="14">.
+      </p>
+
+      <h3>b. La Lune</h3>
+      <p>
+        La période de rotation de la Lune est <input class="blank" data-answer="égale|egale" size="10"> à sa période de révolution : on voit donc toujours la même <input class="blank" data-answer="face" size="8"> depuis la Terre.
+      </p>
+      <p>
+        Les phases de la Lune s'expliquent par les positions relatives de la Lune, de la Terre et du <input class="blank" data-answer="Soleil|soleil" size="12">.
+      </p>
+
+      <h3>c. Le Système solaire</h3>
+      <p>
+        Le Système solaire est composé du Soleil et de tous les objets célestes qui <input class="blank" data-answer="gravitent" size="14"> autour de lui. Les planètes ne sont jamais toutes <input class="blank" data-answer="alignées|alignees" size="14">.
+      </p>
+
+      <h3>d. L'Univers</h3>
+      <p>
+        Une <input class="blank" data-answer="galaxie" size="12"> est le regroupement d'un très grand nombre d'étoiles, de gaz et de poussières. Notre galaxie s'appelle la <input class="blank" data-answer="Voie lactée|voie lactee" size="16">.
+      </p>
+
+      <h3>e. Les unités de distance</h3>
+      <p>
+        L'unité astronomique est la distance entre la <input class="blank" data-answer="Terre|terre" size="10"> et le <input class="blank" data-answer="Soleil|soleil" size="12">. L'année-lumière est la distance parcourue par la <input class="blank" data-answer="lumière|lumiere" size="14"> en un an.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>La Terre : rotation et révolution</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre rotation et révolution, et fais avancer le temps.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="emRotation">Rotation (jour)</button>
+      <button class="toggle-btn" id="emRevolution">Révolution (année)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="emSvg" viewBox="0 0 220 165"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Temps écoulé</label>
+        <input type="range" id="emTime" min="0" max="100" value="0" step="1">
+        <div class="anim-readout" id="emReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actEarthMotion"></div></div>
+  </section>
+
+  <section>
+    <h2>La Lune : révolution, rotation et phases</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais tourner la Lune sur son orbite : observe la phase vue depuis la Terre.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="mpSvg" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Position sur l'orbite (°)</label>
+        <input type="range" id="mpAngle" min="0" max="360" value="0" step="5">
+        <div class="anim-readout" id="mpReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMoonPhases"></div></div>
+  </section>
+
+  <section>
+    <h2>Le Système solaire</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Parcours les 8 planètes, dans l'ordre depuis le Soleil.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="ssSvg" viewBox="0 0 220 110"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:260px;">
+        <div class="anim-readout" id="ssExplain" style="min-height:4em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="ssPrev" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="ssStep"></span>
+          <button id="ssNext" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSolarSystem"></div></div>
+  </section>
+
+  <section>
+    <h2>L'Univers</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 échelles, du Système solaire à l'Univers.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="usSysteme">Système solaire</button>
+      <button class="toggle-btn" id="usGalaxie">Notre galaxie</button>
+      <button class="toggle-btn" id="usUnivers">L'Univers</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="usSvg" viewBox="0 0 220 110"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="usReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actUniverseScales"></div></div>
+  </section>
+
+  <section>
+    <h2>Les unités de distance en astronomie</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 exemples : quelle unité est la plus adaptée ?</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="auLune">Terre ↔ Lune</button>
+      <button class="toggle-btn" id="auSoleil">Terre ↔ Soleil</button>
+      <button class="toggle-btn" id="auEtoile">Étoile lointaine</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="auSvg" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="auReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actAstronomicalUnits"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">La Terre</td><td style="padding:10px 8px; color:var(--chalk-dim);">rotation 24h, révolution 1 an, 150 000 000 km du Soleil</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">La Lune</td><td style="padding:10px 8px; color:var(--chalk-dim);">révolution ≈ rotation (1 mois) → même face visible ; phases dues aux positions relatives Terre/Lune/Soleil</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Système solaire</td><td style="padding:10px 8px; color:var(--chalk-dim);">Soleil + planètes, comètes, astéroïdes ; formé il y a 4,6 milliards d'années</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">L'Univers</td><td style="padding:10px 8px; color:var(--chalk-dim);">très grand nombre de galaxies ; notre galaxie = la Voie lactée</td></tr>
+          <tr><td style="padding:10px 8px;">Unités de distance</td><td style="padding:10px 8px; color:var(--chalk-dim);">ua = distance Terre-Soleil (Système solaire) ; al = distance parcourue par la lumière en 1 an (étoiles, galaxies)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 3 — Organisation de la matière dans l'Univers (4ème).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch3-4eme", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initEarthMotion({ svgId: "emSvgCours", readoutId: "emReadoutCours", btnRotationId: "emRotationCours", btnRevolutionId: "emRevolutionCours", timeRangeId: "emTimeCours" });
+initMoonPhases({ svgId: "mpSvgCours", readoutId: "mpReadoutCours", angleRangeId: "mpAngleCours" });
+initSolarSystem({ svgId: "ssSvgCours", explainId: "ssExplainCours", prevBtnId: "ssPrevCours", nextBtnId: "ssNextCours", stepId: "ssStepCours" });
+initUniverseScales({ svgId: "usSvgCours", readoutId: "usReadoutCours", buttonIds: ["usSystemeCours", "usGalaxieCours", "usUniversCours"] });
+initAstronomicalUnits({ svgId: "auSvgCours", readoutId: "auReadoutCours", buttonIds: ["auLuneCours", "auSoleilCours", "auEtoileCours"] });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initEarthMotion({ svgId: "emSvg", readoutId: "emReadout", btnRotationId: "emRotation", btnRevolutionId: "emRevolution", timeRangeId: "emTime" });
+initMoonPhases({ svgId: "mpSvg", readoutId: "mpReadout", angleRangeId: "mpAngle" });
+initSolarSystem({ svgId: "ssSvg", explainId: "ssExplain", prevBtnId: "ssPrev", nextBtnId: "ssNext", stepId: "ssStep" });
+initUniverseScales({ svgId: "usSvg", readoutId: "usReadout", buttonIds: ["usSysteme", "usGalaxie", "usUnivers"] });
+initAstronomicalUnits({ svgId: "auSvg", readoutId: "auReadout", buttonIds: ["auLune", "auSoleil", "auEtoile"] });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actEarthMotion", chapterId: "ch3-4eme", activityId: "qcm-earth-motion",
+  prompt: "Quelle est la durée de la période de révolution de la Terre autour du Soleil ?",
+  options: [
+    { text: "1 an", correct: true },
+    { text: "24 heures", correct: false },
+    { text: "1 mois", correct: false }
+  ],
+  explanation: "La Terre met 1 an pour faire le tour du Soleil (révolution) ; elle tourne sur elle-même en 24h (rotation)."
+});
+
+initQCM({
+  containerId: "actMoonPhases", chapterId: "ch3-4eme", activityId: "qcm-moon-phases",
+  prompt: "Pourquoi voit-on toujours la même face de la Lune depuis la Terre ?",
+  options: [
+    { text: "Parce que sa période de rotation est égale à sa période de révolution", correct: true },
+    { text: "Parce que la Lune ne tourne pas sur elle-même", correct: false },
+    { text: "Parce que la Terre ne tourne pas", correct: false }
+  ],
+  explanation: "La Lune tourne bien sur elle-même, mais à la même vitesse qu'elle tourne autour de la Terre : elle nous montre donc toujours la même face."
+});
+
+initEstimation({
+  containerId: "actSolarSystem", chapterId: "ch3-4eme", activityId: "est-solar-system",
+  prompt: "Il y a combien de milliards d'années le Système solaire s'est-il formé (valeur arrondie) ?",
+  answer: 4.6, tolerance: 0.1, unit: "milliards d'années",
+  explanation: "Le Système solaire s'est formé il y a environ 4,6 milliards d'années."
+});
+
+initVraiFaux({
+  containerId: "actUniverseScales", chapterId: "ch3-4eme", activityId: "vf-universe-scales",
+  prompt: "Le Soleil est une étoile parmi tant d'autres dans la Voie lactée.",
+  correct: true,
+  explanation: "Vrai : la Voie lactée regroupe un très grand nombre d'étoiles, dont le Soleil."
+});
+
+initQCM({
+  containerId: "actAstronomicalUnits", chapterId: "ch3-4eme", activityId: "qcm-astronomical-units",
+  prompt: "Quelle unité est la mieux adaptée pour exprimer la distance entre deux galaxies ?",
+  options: [
+    { text: "L'année-lumière", correct: true },
+    { text: "Le kilomètre", correct: false },
+    { text: "L'unité astronomique", correct: false }
+  ],
+  explanation: "L'année-lumière est adaptée aux très grandes distances, comme celles entre étoiles ou entre galaxies."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch3-4eme");
+initProgressBar("ch3-4eme", 6); // texte à trous complet + 5 activités liées aux animations
+</script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 5 — Les interactions — 4ème</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch5-4eme.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique</div>
+  <h1>Chapitre 5 — Les interactions</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch5-4eme">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch5-4eme"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Distinguer action mécanique de contact et à distance, et comprendre la réciprocité des actions</li>
+        <li>Savoir modéliser une force (direction, sens, point d'application)</li>
+        <li>Connaître l'interaction gravitationnelle</li>
+        <li>Savoir calculer le poids d'un objet</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Actions et interactions</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>action mécanique</strong> désigne toute cause susceptible de déformer un objet ou de modifier son mouvement. Elle est toujours exercée par un objet sur un autre objet.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Lorsqu'un objet A exerce une action mécanique sur un objet B, alors B exerce une action opposée (réciproque) sur A : on dit que A et B sont <strong>en interaction</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux types d'action mécanique.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="aiContactCours">Action de contact</button>
+      <button class="toggle-btn" id="aiDistanceCours">Action à distance</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="aiSvgCours" viewBox="0 0 220 145"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="aiReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Modéliser une force : localisée ou répartie</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>force</strong> modélise l'action d'un objet (acteur) sur un autre objet (receveur). Elle est représentée par une flèche avec une <strong>direction</strong> et un <strong>point d'application</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre une action localisée et une action répartie.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="fmLocaliseeCours">Action localisée</button>
+      <button class="toggle-btn" id="fmRepartieCours">Action répartie</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="fmSvgCours" viewBox="0 0 220 145"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="fmReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>c. L'interaction gravitationnelle</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Dans le Système solaire, les planètes et le Soleil s'attirent mutuellement : c'est l'<strong>interaction gravitationnelle</strong>. Tout objet à proximité de la Terre est en interaction gravitationnelle avec elle.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux échelles.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="giSystemeCours">Soleil ↔ Terre</button>
+      <button class="toggle-btn" id="giTerreCours">Terre ↔ objet</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="giSvgCours" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="giReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Le poids (force de pesanteur)</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>force de pesanteur</strong> (ou poids) est la force d'attraction que la Terre exerce sur tout objet à son voisinage. Direction : la verticale du lieu. Sens : vers le centre de la Terre. Point d'application : le centre de l'objet.
+    </div>
+    <div class="formula">P = m × g (N, avec m en kg et g en N/kg)</div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      L'intensité de la pesanteur g dépend du lieu (astre).
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la masse et choisis l'astre : observe le poids se calculer.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="wfTerreCours">Terre</button>
+      <button class="toggle-btn" id="wfLuneCours">Lune</button>
+      <button class="toggle-btn" id="wfMarsCours">Mars</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="wfSvgCours" viewBox="0 0 220 140"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse m (kg)</label>
+        <input type="range" id="wfMCours" min="1" max="100" value="70" step="1">
+        <div class="anim-readout" id="wfReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. Actions et interactions</h3>
+      <p>
+        Une action mécanique désigne toute cause susceptible de <input class="blank" data-answer="déformer|deformer" size="14"> un objet ou de modifier son mouvement.
+      </p>
+      <p>
+        Lorsqu'un objet A exerce une action sur un objet B, B exerce une action <input class="blank" data-answer="opposée|opposee" size="14"> sur A : A et B sont en <input class="blank" data-answer="interaction" size="16">.
+      </p>
+
+      <h3>b. Modéliser une force</h3>
+      <p>
+        Une force est représentée par une <input class="blank" data-answer="flèche|fleche" size="12"> avec une direction et un point d'<input class="blank" data-answer="application" size="16">.
+      </p>
+
+      <h3>c. Interaction gravitationnelle</h3>
+      <p>
+        Dans le Système solaire, les planètes et le Soleil s'<input class="blank" data-answer="attirent" size="14"> mutuellement.
+      </p>
+
+      <h3>d. Le poids</h3>
+      <div class="formula">P = m × g</div>
+      <p>
+        Le poids est dirigé vers le <input class="blank" data-answer="centre" size="10"> de la Terre. L'intensité de la pesanteur g dépend du <input class="blank" data-answer="lieu" size="10">.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Actions et interactions</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux types d'action mécanique.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="aiContact">Action de contact</button>
+      <button class="toggle-btn" id="aiDistance">Action à distance</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="aiSvg" viewBox="0 0 220 145"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="aiReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actActionsAndInteractions"></div></div>
+  </section>
+
+  <section>
+    <h2>Modéliser une force</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre une action localisée et une action répartie.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="fmLocalisee">Action localisée</button>
+      <button class="toggle-btn" id="fmRepartie">Action répartie</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="fmSvg" viewBox="0 0 220 145"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="fmReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actForceModelling"></div></div>
+  </section>
+
+  <section>
+    <h2>L'interaction gravitationnelle</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux échelles.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="giSysteme">Soleil ↔ Terre</button>
+      <button class="toggle-btn" id="giTerre">Terre ↔ objet</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="giSvg" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="giReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actGravitationalInteraction"></div></div>
+  </section>
+
+  <section>
+    <h2>Le poids (force de pesanteur)</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la masse et choisis l'astre : observe le poids se calculer.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="wfTerre">Terre</button>
+      <button class="toggle-btn" id="wfLune">Lune</button>
+      <button class="toggle-btn" id="wfMars">Mars</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="wfSvg" viewBox="0 0 220 140"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse m (kg)</label>
+        <input type="range" id="wfM" min="1" max="100" value="70" step="1">
+        <div class="anim-readout" id="wfReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actWeightForce"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Actions et interactions</td><td style="padding:10px 8px; color:var(--chalk-dim);">contact ou à distance ; toute action a une action réciproque opposée</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Modéliser une force</td><td style="padding:10px 8px; color:var(--chalk-dim);">flèche = direction + point d'application ; localisée (petite zone) ou répartie (surface/volume)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Interaction gravitationnelle</td><td style="padding:10px 8px; color:var(--chalk-dim);">deux objets s'attirent mutuellement ; les deux forces sont opposées</td></tr>
+          <tr><td style="padding:10px 8px;">Le poids</td><td style="padding:10px 8px; color:var(--chalk-dim);">P = m × g (N) ; direction verticale, sens vers le centre de la Terre ; g dépend du lieu</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 5 — Les interactions (4ème).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch5-4eme", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initActionsAndInteractions({ svgId: "aiSvgCours", readoutId: "aiReadoutCours", btnContactId: "aiContactCours", btnDistanceId: "aiDistanceCours" });
+initForceModelling({ svgId: "fmSvgCours", readoutId: "fmReadoutCours", btnLocaliseeId: "fmLocaliseeCours", btnRepartieId: "fmRepartieCours" });
+initGravitationalInteraction({ svgId: "giSvgCours", readoutId: "giReadoutCours", btnSystemeId: "giSystemeCours", btnTerreId: "giTerreCours" });
+initWeightForce({ svgId: "wfSvgCours", mRangeId: "wfMCours", readoutId: "wfReadoutCours", buttonIds: ["wfTerreCours", "wfLuneCours", "wfMarsCours"] });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initActionsAndInteractions({ svgId: "aiSvg", readoutId: "aiReadout", btnContactId: "aiContact", btnDistanceId: "aiDistance" });
+initForceModelling({ svgId: "fmSvg", readoutId: "fmReadout", btnLocaliseeId: "fmLocalisee", btnRepartieId: "fmRepartie" });
+initGravitationalInteraction({ svgId: "giSvg", readoutId: "giReadout", btnSystemeId: "giSysteme", btnTerreId: "giTerre" });
+initWeightForce({ svgId: "wfSvg", mRangeId: "wfM", readoutId: "wfReadout", buttonIds: ["wfTerre", "wfLune", "wfMars"] });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actActionsAndInteractions", chapterId: "ch5-4eme", activityId: "qcm-actions-interactions",
+  prompt: "Un aimant attire un trombone à distance. Que peut-on dire du trombone ?",
+  options: [
+    { text: "Il attire aussi l'aimant (action réciproque)", correct: true },
+    { text: "Il n'exerce aucune action sur l'aimant", correct: false },
+    { text: "Il repousse l'aimant", correct: false }
+  ],
+  explanation: "Toute action mécanique a une action réciproque opposée : le trombone attire aussi l'aimant, même si c'est moins visible."
+});
+
+initQCM({
+  containerId: "actForceModelling", chapterId: "ch5-4eme", activityId: "qcm-force-modelling",
+  prompt: "Une force est représentée par...",
+  options: [
+    { text: "Une flèche, avec une direction et un point d'application", correct: true },
+    { text: "Un simple point", correct: false },
+    { text: "Un nombre seul", correct: false }
+  ],
+  explanation: "Une force est modélisée par une flèche (vecteur), caractérisée notamment par sa direction et son point d'application."
+});
+
+initVraiFaux({
+  containerId: "actGravitationalInteraction", chapterId: "ch5-4eme", activityId: "vf-gravitational-interaction",
+  prompt: "Seule la Terre attire les objets ; les objets n'attirent pas la Terre.",
+  correct: false,
+  explanation: "Faux : l'interaction gravitationnelle est réciproque. La Terre attire un objet, et l'objet attire aussi (très faiblement) la Terre."
+});
+
+initEstimation({
+  containerId: "actWeightForce", chapterId: "ch5-4eme", activityId: "est-weight-force",
+  prompt: "Quel est le poids P (en N) d'un objet de masse 50 kg sur Terre (g = 9,8 N/kg) ?",
+  answer: 490, tolerance: 5, unit: "N",
+  explanation: "P = m × g = 50 × 9,8 = 490 N."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch5-4eme");
+initProgressBar("ch5-4eme", 5); // texte à trous complet + 4 activités liées aux animations
+</script>
+</body>
+</html>

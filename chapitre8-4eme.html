@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 8 — Les signaux lumineux et les signaux sonores — 4ème</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch8-4eme.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique</div>
+  <h1>Chapitre 8 — Les signaux lumineux et les signaux sonores</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch8-4eme">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch8-4eme"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Comprendre les sources de lumière et la vision des objets</li>
+        <li>Connaître la propagation rectiligne de la lumière et l'année-lumière</li>
+        <li>Distinguer rayonnements visibles et invisibles</li>
+        <li>Comprendre la propagation du son et ses caractéristiques (vitesse, fréquence)</li>
+        <li>Comprendre une chaîne de transmission d'informations</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Sources de lumière et vision des objets</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Voir un objet, c'est recevoir dans les yeux de la lumière provenant de cet objet. Les <strong>sources primaires</strong> émettent leur propre lumière. Les <strong>objets diffusants</strong> renvoient dans toutes les directions une partie de la lumière qu'ils reçoivent.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre source primaire et objet diffusant.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="lsPrimaireCours">Source primaire</button>
+      <button class="toggle-btn" id="lsDiffusantCours">Objet diffusant</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="lsSvgCours" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="lsReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Propagation de la lumière et année-lumière</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La lumière se propage en <strong>ligne droite</strong> dans un milieu transparent (propagation rectiligne). L'<strong>année-lumière (al)</strong> est la distance parcourue par la lumière en un an.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la distance de l'étoile (en années-lumière).</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="lpSvgCours" viewBox="0 0 220 95"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Distance (années-lumière)</label>
+        <input type="range" id="lpDCours" min="1" max="20" value="4" step="1">
+        <div class="anim-readout" id="lpReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>c. Rayonnements visibles et invisibles</h2>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Certains rayonnements lumineux ne sont pas visibles par l'œil humain (infrarouges, ultraviolets). Une exposition prolongée à certains de ces rayonnements est dangereuse.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 3 types de rayonnement.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="rtVisibleCours">Visible</button>
+      <button class="toggle-btn" id="rtIrCours">Infrarouge (IR)</button>
+      <button class="toggle-btn" id="rtUvCours">Ultraviolet (UV)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="rtSvgCours" viewBox="0 0 220 80"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="rtReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Signaux sonores : propagation et vitesse</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un signal sonore est une <strong>vibration</strong> qui a besoin d'un milieu matériel (gazeux, liquide ou solide) pour se propager. Le son ne se propage pas dans le vide.
+    </div>
+    <div class="formula">v = <span class="frac"><span class="num">d</span><span class="den">t</span></span> (m/s, avec d en m et t en s)</div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre milieu matériel et vide ; règle d et t.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="spMilieuCours">Milieu matériel</button>
+      <button class="toggle-btn" id="spVideCours">Le vide</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="spSvgCours" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Distance d (m)</label>
+        <input type="range" id="spDCours" min="10" max="500" value="340" step="10">
+        <label>Durée t (s)</label>
+        <input type="range" id="spTCours" min="1" max="10" value="1" step="1">
+        <div class="anim-readout" id="spReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>e. La fréquence et les sons audibles</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>fréquence</strong> d'un son est le nombre de fois par seconde que la vibration se reproduit. Elle s'exprime en <strong>hertz (Hz)</strong>.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      La fréquence des sons graves est plus faible que celle des sons aigus.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la fréquence : observe si le son est plutôt grave ou aigu.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="sfSvgCours" viewBox="0 0 220 90"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Fréquence (Hz)</label>
+        <input type="range" id="sfFCours" min="20" max="20000" value="440" step="10">
+        <div class="anim-readout" id="sfReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>f. La transmission d'informations</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'information est toujours transmise depuis un <strong>émetteur</strong> vers un <strong>récepteur</strong> par l'intermédiaire d'un <strong>milieu de transmission</strong>. L'ensemble constitue une chaîne de transmission.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre transmission par le son et par la lumière.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="itSonCours">Signal sonore</button>
+      <button class="toggle-btn" id="itLumiereCours">Signal lumineux</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="itSvgCours" viewBox="0 0 220 80"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="itReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. Sources de lumière et vision</h3>
+      <p>
+        Voir un objet, c'est <input class="blank" data-answer="recevoir" size="12"> dans les yeux de la lumière provenant de cet objet.
+      </p>
+
+      <h3>b. Propagation de la lumière</h3>
+      <p>
+        La lumière se propage en ligne <input class="blank" data-answer="droite" size="10"> dans un milieu transparent. L'année-lumière est la distance parcourue par la <input class="blank" data-answer="lumière|lumiere" size="14"> en un an.
+      </p>
+
+      <h3>c. Rayonnements</h3>
+      <p>
+        Les rayonnements <input class="blank" data-answer="infrarouges" size="16"> et <input class="blank" data-answer="ultraviolets" size="16"> ne sont pas visibles par l'œil humain.
+      </p>
+
+      <h3>d. Signaux sonores</h3>
+      <p>
+        Un signal sonore a besoin d'un milieu <input class="blank" data-answer="matériel|materiel" size="14"> pour se propager ; il ne se propage pas dans le <input class="blank" data-answer="vide" size="10">.
+      </p>
+
+      <h3>e. Fréquence</h3>
+      <p>
+        La fréquence s'exprime en <input class="blank" data-answer="hertz" size="10">. La fréquence des sons graves est plus <input class="blank" data-answer="faible" size="10"> que celle des sons aigus.
+      </p>
+
+      <h3>f. Transmission d'informations</h3>
+      <p>
+        L'information est transmise depuis un <input class="blank" data-answer="émetteur|emetteur" size="14"> vers un <input class="blank" data-answer="récepteur|recepteur" size="14">.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Sources de lumière et vision des objets</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre source primaire et objet diffusant.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="lsPrimaire">Source primaire</button>
+      <button class="toggle-btn" id="lsDiffusant">Objet diffusant</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="lsSvg" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="lsReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actLightSourcesAndVision"></div></div>
+  </section>
+
+  <section>
+    <h2>Propagation de la lumière et année-lumière</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la distance de l'étoile.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="lpSvg" viewBox="0 0 220 95"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Distance (années-lumière)</label>
+        <input type="range" id="lpD" min="1" max="20" value="4" step="1">
+        <div class="anim-readout" id="lpReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actLightPropagation"></div></div>
+  </section>
+
+  <section>
+    <h2>Rayonnements visibles et invisibles</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 types de rayonnement.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="rtVisible">Visible</button>
+      <button class="toggle-btn" id="rtIr">Infrarouge (IR)</button>
+      <button class="toggle-btn" id="rtUv">Ultraviolet (UV)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="rtSvg" viewBox="0 0 220 80"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="rtReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actRadiationTypes"></div></div>
+  </section>
+
+  <section>
+    <h2>Signaux sonores : propagation et vitesse</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre milieu matériel et vide ; règle d et t.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="spMilieu">Milieu matériel</button>
+      <button class="toggle-btn" id="spVide">Le vide</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="spSvg" viewBox="0 0 220 100"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Distance d (m)</label>
+        <input type="range" id="spD" min="10" max="500" value="340" step="10">
+        <label>Durée t (s)</label>
+        <input type="range" id="spT" min="1" max="10" value="1" step="1">
+        <div class="anim-readout" id="spReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSoundPropagation"></div></div>
+  </section>
+
+  <section>
+    <h2>La fréquence et les sons audibles</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la fréquence : observe si le son est plutôt grave ou aigu.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="sfSvg" viewBox="0 0 220 90"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Fréquence (Hz)</label>
+        <input type="range" id="sfF" min="20" max="20000" value="440" step="10">
+        <div class="anim-readout" id="sfReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSoundFrequency"></div></div>
+  </section>
+
+  <section>
+    <h2>La transmission d'informations</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre transmission par le son et par la lumière.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="itSon">Signal sonore</button>
+      <button class="toggle-btn" id="itLumiere">Signal lumineux</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="itSvg" viewBox="0 0 220 80"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="itReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actInformationTransmission"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Sources et vision</td><td style="padding:10px 8px; color:var(--chalk-dim);">source primaire (émet) ou objet diffusant (renvoie) ; voir = recevoir de la lumière</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Propagation</td><td style="padding:10px 8px; color:var(--chalk-dim);">ligne droite (rectiligne) ; année-lumière = distance parcourue par la lumière en 1 an</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Rayonnements</td><td style="padding:10px 8px; color:var(--chalk-dim);">visible, IR, UV (invisibles) ; exposition prolongée dangereuse</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Signaux sonores</td><td style="padding:10px 8px; color:var(--chalk-dim);">vibration, besoin d'un milieu matériel ; v = d/t (m/s)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Fréquence</td><td style="padding:10px 8px; color:var(--chalk-dim);">en hertz (Hz) ; graves = fréquence faible, aigus = fréquence élevée</td></tr>
+          <tr><td style="padding:10px 8px;">Transmission</td><td style="padding:10px 8px; color:var(--chalk-dim);">émetteur → milieu de transmission → récepteur ; la lumière transmet plus vite et plus loin que le son</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 8 — Les signaux lumineux et les signaux sonores (4ème).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch8-4eme", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initLightSourcesAndVision({ svgId: "lsSvgCours", readoutId: "lsReadoutCours", btnPrimaireId: "lsPrimaireCours", btnDiffusantId: "lsDiffusantCours" });
+initLightPropagation({ svgId: "lpSvgCours", dRangeId: "lpDCours", readoutId: "lpReadoutCours" });
+initRadiationTypes({ svgId: "rtSvgCours", readoutId: "rtReadoutCours", buttonIds: ["rtVisibleCours", "rtIrCours", "rtUvCours"] });
+initSoundPropagation({ svgId: "spSvgCours", dRangeId: "spDCours", tRangeId: "spTCours", readoutId: "spReadoutCours", btnMilieuId: "spMilieuCours", btnVideId: "spVideCours" });
+initSoundFrequency({ svgId: "sfSvgCours", fRangeId: "sfFCours", readoutId: "sfReadoutCours" });
+initInformationTransmission({ svgId: "itSvgCours", readoutId: "itReadoutCours", btnSonId: "itSonCours", btnLumiereId: "itLumiereCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initLightSourcesAndVision({ svgId: "lsSvg", readoutId: "lsReadout", btnPrimaireId: "lsPrimaire", btnDiffusantId: "lsDiffusant" });
+initLightPropagation({ svgId: "lpSvg", dRangeId: "lpD", readoutId: "lpReadout" });
+initRadiationTypes({ svgId: "rtSvg", readoutId: "rtReadout", buttonIds: ["rtVisible", "rtIr", "rtUv"] });
+initSoundPropagation({ svgId: "spSvg", dRangeId: "spD", tRangeId: "spT", readoutId: "spReadout", btnMilieuId: "spMilieu", btnVideId: "spVide" });
+initSoundFrequency({ svgId: "sfSvg", fRangeId: "sfF", readoutId: "sfReadout" });
+initInformationTransmission({ svgId: "itSvg", readoutId: "itReadout", btnSonId: "itSon", btnLumiereId: "itLumiere" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actLightSourcesAndVision", chapterId: "ch8-4eme", activityId: "qcm-light-sources-vision",
+  prompt: "La Lune émet-elle sa propre lumière ?",
+  options: [
+    { text: "Non, elle diffuse la lumière du Soleil qu'elle reçoit", correct: true },
+    { text: "Oui, comme le Soleil", correct: false },
+    { text: "Non, elle ne renvoie aucune lumière", correct: false }
+  ],
+  explanation: "La Lune est un objet diffusant : elle ne produit pas sa propre lumière, mais renvoie une partie de celle du Soleil."
+});
+
+initEstimation({
+  containerId: "actLightPropagation", chapterId: "ch8-4eme", activityId: "est-light-propagation",
+  prompt: "Proxima du Centaure est à 4 années-lumière. Combien d'années met sa lumière pour nous parvenir ?",
+  answer: 4, tolerance: 0, unit: "ans",
+  explanation: "Par définition, une année-lumière est la distance parcourue par la lumière en un an : à 4 al, la lumière met donc 4 ans."
+});
+
+initQCM({
+  containerId: "actRadiationTypes", chapterId: "ch8-4eme", activityId: "qcm-radiation-types",
+  prompt: "Quel rayonnement une télécommande de télévision utilise-t-elle ?",
+  options: [
+    { text: "Les infrarouges (IR)", correct: true },
+    { text: "Les ultraviolets (UV)", correct: false },
+    { text: "La lumière visible uniquement", correct: false }
+  ],
+  explanation: "Une télécommande utilise des rayonnements infrarouges, invisibles pour l'œil humain."
+});
+
+initVraiFaux({
+  containerId: "actSoundPropagation", chapterId: "ch8-4eme", activityId: "vf-sound-propagation",
+  prompt: "Un astronaute dans l'espace peut entendre le bruit de ses instruments.",
+  correct: false,
+  explanation: "Faux : le son ne se propage pas dans le vide, faute de milieu matériel. L'astronaute n'entend rien."
+});
+
+initQCM({
+  containerId: "actSoundFrequency", chapterId: "ch8-4eme", activityId: "qcm-sound-frequency",
+  prompt: "Un son de fréquence très basse (quelques dizaines de Hz) est plutôt...",
+  options: [
+    { text: "Grave", correct: true },
+    { text: "Aigu", correct: false },
+    { text: "Inaudible dans tous les cas", correct: false }
+  ],
+  explanation: "La fréquence des sons graves est plus faible que celle des sons aigus."
+});
+
+initQCM({
+  containerId: "actInformationTransmission", chapterId: "ch8-4eme", activityId: "qcm-information-transmission",
+  prompt: "Pourquoi préfère-t-on souvent la lumière (ondes) au son pour transmettre une information sur une longue distance ?",
+  options: [
+    { text: "Car elle est plus rapide et porte plus loin sans intermédiaires", correct: true },
+    { text: "Car le son ne peut transmettre aucune information", correct: false },
+    { text: "Car la lumière ne nécessite aucun émetteur", correct: false }
+  ],
+  explanation: "Des ondes comme la lumière permettent de transmettre une information sur de longues distances et beaucoup plus rapidement que le son."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch8-4eme");
+initProgressBar("ch8-4eme", 7); // texte à trous complet + 6 activités liées aux animations
+</script>
+</body>
+</html>

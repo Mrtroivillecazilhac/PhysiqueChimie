@@ -33,71 +33,513 @@ function ch1IsValidSlot(period, col) {
 // code couleur des atomes, réutilisé dans le schéma, la formule brute et le calcul
 const CH1_ATOM_COLOR = { C: "var(--chalk)", H: "var(--yellow)", O: "var(--coral)", Al: "var(--teal)" };
 
-/* ---------- a. Le sac de la mole (pochette à cordon, plus reconnaissable) ---------- */
-function initMoleBag(cfg) {
-  const svg = document.getElementById(cfg.svgId);
-  const range = document.getElementById(cfg.rangeId);
-  const readout = document.getElementById(cfg.readoutId);
-  const countEl = document.getElementById(cfg.countId);
-  const warnEl = document.getElementById(cfg.warnId);
+/* ---------- a. Le zoom interactif multiniveau sur la mole ---------- */
+/* Construction inductive : 1) éprouvette graduée (échelle labo)
+   2) nuée de molécules H2O individuelles en forte agitation (échelle atomique)
+   3) sacs à cordon scellés contenant des molécules H2O animées (paquetage en moles).
+   Widget autonome : chaque instance construit toute son interface dans un
+   unique conteneur (cfg.containerId), pour la double instanciation Cours / Entraînement. */
 
-  const BODY_PATH = "M38 92 Q26 200 55 213 L145 213 Q174 200 162 92 Z";
-  const NECK_RUFFLE = "M62 92 Q72 74 82 92 Q92 74 100 92 Q108 74 118 92 Q128 74 138 92";
-  const SLOTS = [[65, 130], [100, 130], [135, 130], [65, 175], [100, 175], [135, 175]];
-  const DOT_PATTERN = generateDotsInEllipse(7, 0, 0, 1, 1);
+function injectMoleZoomStyles() {
+  if (document.getElementById("moleZoomStyles")) return;
+  const style = document.createElement("style");
+  style.id = "moleZoomStyles";
+  style.textContent = `
+    .mole-zoom-widget{ font-family:var(--font-body); }
+    .mz-stepper{ display:flex; align-items:center; justify-content:center; gap:6px; margin-bottom:14px; }
+    .mz-step{ display:flex; flex-direction:column; align-items:center; gap:4px; background:none; border:none; cursor:pointer; padding:4px 6px; }
+    .mz-step-num{ width:30px; height:30px; border-radius:50%; border:2px solid var(--line); color:var(--chalk-dim); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:1rem; transition:all .2s ease; }
+    .mz-step-label{ font-size:0.68rem; color:var(--chalk-dim); text-transform:uppercase; letter-spacing:0.03em; }
+    .mz-step.active .mz-step-num{ border-color:var(--yellow); background:var(--yellow); color:var(--board); }
+    .mz-step.active .mz-step-label{ color:var(--yellow); }
+    .mz-step-line{ width:34px; height:2px; background:var(--line); margin-bottom:16px; }
+    .mz-level{ display:none; border:1px solid var(--line); border-radius:12px; padding:16px; background:rgba(255,255,255,0.015); }
+    .mz-level.mz-visible{ display:block; animation:mzFadeIn .35s ease; }
+    @keyframes mzFadeIn{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:translateY(0);} }
+    .mz-level-title{ font-family:var(--font-display); color:var(--yellow); font-size:1rem; margin-bottom:10px; text-align:center; }
+    .mz-level-body{ display:flex; gap:20px; align-items:center; flex-wrap:wrap; justify-content:center; }
+    .mz-svg-wrap{ flex:none; width:190px; }
+    .mz-svg-wrap svg{ width:100%; height:auto; display:block; animation:mzPop .4s ease; }
+    @keyframes mzPop{ from{ opacity:0; transform:scale(0.85);} to{ opacity:1; transform:scale(1);} }
+    .mz-side{ flex:1; min-width:220px; text-align:center; }
+    .mz-control-bar{ text-align:center; margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+    .mz-readout-n{ font-family:var(--font-display); font-size:1.25rem; color:var(--yellow); margin-bottom:8px; }
+    .mz-range{ width:100%; max-width:280px; }
+    .mz-control-hint{ color:var(--chalk-dim); font-size:0.78rem; margin-top:6px; }
+    .mz-tube-caption{ color:var(--chalk-dim); font-size:0.82rem; margin:10px 0 8px; }
+    .mz-hint{ color:var(--coral); font-size:0.82rem; margin-bottom:14px; line-height:1.4; }
+    .mz-action-btn{ font-family:var(--font-display); font-size:0.95rem; background:var(--yellow); color:var(--board); border:none; border-radius:8px; padding:10px 18px; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease; box-shadow:0 2px 0 rgba(0,0,0,0.25); }
+    .mz-action-btn:hover{ transform:translateY(-1px); box-shadow:0 3px 0 rgba(0,0,0,0.3); }
+    .mz-action-btn:active{ transform:translateY(1px); box-shadow:0 1px 0 rgba(0,0,0,0.3); }
+    .mz-micro-count{ font-family:var(--font-display); font-size:1.35rem; color:var(--chalk); margin-bottom:8px; min-height:1.6em; }
+    .mz-count-sci{ font-family:var(--font-display); font-size:1.35rem; }
+    .mz-count-full{ font-family:monospace; font-size:0.68rem; color:var(--chalk-dim); word-break:break-all; line-height:1.5; margin:6px 0 2px; }
+    .mz-count-words{ font-style:italic; color:var(--coral); font-size:0.85rem; margin-top:2px; }
+    .mz-micro-msg{ color:var(--coral); font-size:0.85rem; margin-bottom:14px; min-height:2.6em; line-height:1.4; }
+    .mz-level-3-body{ flex-direction:column; }
+    .mz-sacks-wrap{ display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-bottom:14px; }
+    .mz-sack{ text-align:center; }
+    .mz-sack svg{ width:100px; height:auto; display:block; animation:mzPackIn .35s ease backwards; }
+    @keyframes mzPackIn{ from{ opacity:0; transform:translateY(8px) scale(0.85);} to{ opacity:1; transform:translateY(0) scale(1);} }
+    .mz-sack-label{ font-family:var(--font-display); color:var(--yellow); font-size:0.88rem; margin-top:2px; }
+    .mz-sack-count{ font-size:0.6rem; color:var(--chalk-dim); }
+    .mz-formula-eq{ text-align:center; font-family:var(--font-display); font-size:1.02rem; color:var(--chalk); border-top:1px solid var(--line); padding-top:12px; }
+    @media (max-width:640px){ .mz-svg-wrap{ width:150px; } .mz-sack svg{ width:82px; } }
+  `;
+  document.head.appendChild(style);
+}
 
-  function moundPath(cx, cy) {
-    return `M${cx - 13} ${cy + 11} Q${cx - 13} ${cy - 9} ${cx} ${cy - 12} Q${cx + 13} ${cy - 9} ${cx + 13} ${cy + 11} Z`;
+/* Molécule d'eau H2O stylisée : O corail au centre, 2 H chalk, angle ~104,5°.
+   Réutilisée à l'échelle atomique (grande, isolée) et dans les sacs (petite, en nuée). */
+function mzWaterMolecule(cx, cy, scale, angleDeg) {
+  const bondLen = 6.5 * scale;
+  const half = (52.25 * Math.PI) / 180;
+  const a0 = (angleDeg * Math.PI) / 180;
+  const a1 = a0 - half, a2 = a0 + half;
+  const h1x = cx + Math.cos(a1) * bondLen, h1y = cy + Math.sin(a1) * bondLen;
+  const h2x = cx + Math.cos(a2) * bondLen, h2y = cy + Math.sin(a2) * bondLen;
+  const rO = 3.4 * scale, rH = 1.8 * scale;
+  return `<line x1="${cx.toFixed(1)}" y1="${cy.toFixed(1)}" x2="${h1x.toFixed(1)}" y2="${h1y.toFixed(1)}" stroke="var(--chalk-dim)" stroke-width="${(0.9 * scale).toFixed(2)}"/>` +
+    `<line x1="${cx.toFixed(1)}" y1="${cy.toFixed(1)}" x2="${h2x.toFixed(1)}" y2="${h2y.toFixed(1)}" stroke="var(--chalk-dim)" stroke-width="${(0.9 * scale).toFixed(2)}"/>` +
+    `<circle cx="${h1x.toFixed(1)}" cy="${h1y.toFixed(1)}" r="${rH.toFixed(2)}" fill="var(--chalk)"/>` +
+    `<circle cx="${h2x.toFixed(1)}" cy="${h2y.toFixed(1)}" r="${rH.toFixed(2)}" fill="var(--chalk)"/>` +
+    `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${rO.toFixed(2)}" fill="var(--coral)"/>`;
+}
+
+const MZ_SVG_NS = "http://www.w3.org/2000/svg";
+
+/* Crée un groupe SVG persistant pour une molécule H2O (5 nœuds), à réutiliser
+   d'une frame à l'autre en ne modifiant que ses attributs — évite de reconstruire
+   le HTML (et donc de relancer les animations CSS d'entrée) à chaque frame. */
+function mzCreateMoleculeEl(scale) {
+  const g = document.createElementNS(MZ_SVG_NS, "g");
+  const line1 = document.createElementNS(MZ_SVG_NS, "line");
+  const line2 = document.createElementNS(MZ_SVG_NS, "line");
+  const hC1 = document.createElementNS(MZ_SVG_NS, "circle");
+  const hC2 = document.createElementNS(MZ_SVG_NS, "circle");
+  const oC = document.createElementNS(MZ_SVG_NS, "circle");
+  [line1, line2].forEach(l => { l.setAttribute("stroke", "var(--chalk-dim)"); l.setAttribute("stroke-width", (0.9 * scale).toFixed(2)); });
+  [hC1, hC2].forEach(c => { c.setAttribute("r", (1.8 * scale).toFixed(2)); c.setAttribute("fill", "var(--chalk)"); });
+  oC.setAttribute("r", (3.4 * scale).toFixed(2));
+  oC.setAttribute("fill", "var(--coral)");
+  g.appendChild(line1); g.appendChild(line2); g.appendChild(hC1); g.appendChild(hC2); g.appendChild(oC);
+  return { g, line1, line2, hC1, hC2, oC };
+}
+function mzUpdateMoleculeEl(els, cx, cy, scale, angleDeg) {
+  const bondLen = 6.5 * scale;
+  const half = (52.25 * Math.PI) / 180;
+  const a0 = (angleDeg * Math.PI) / 180;
+  const a1 = a0 - half, a2 = a0 + half;
+  const h1x = cx + Math.cos(a1) * bondLen, h1y = cy + Math.sin(a1) * bondLen;
+  const h2x = cx + Math.cos(a2) * bondLen, h2y = cy + Math.sin(a2) * bondLen;
+  els.line1.setAttribute("x1", cx); els.line1.setAttribute("y1", cy); els.line1.setAttribute("x2", h1x); els.line1.setAttribute("y2", h1y);
+  els.line2.setAttribute("x1", cx); els.line2.setAttribute("y1", cy); els.line2.setAttribute("x2", h2x); els.line2.setAttribute("y2", h2y);
+  els.hC1.setAttribute("cx", h1x); els.hC1.setAttribute("cy", h1y);
+  els.hC2.setAttribute("cx", h2x); els.hC2.setAttribute("cy", h2y);
+  els.oC.setAttribute("cx", cx); els.oC.setAttribute("cy", cy);
+}
+
+/* Décompose un grand nombre en 3 chiffres significatifs (cohérent avec les
+   3 c.s. de N_A = 6,02×10²³) + son exposant. Réutilisé pour l'écriture décimale
+   complète et pour la formulation en toutes lettres. */
+function mzDecompose3SF(N) {
+  let exp = Math.floor(Math.log10(N) + 1e-9);
+  let mantissa = N / Math.pow(10, exp);
+  let digits3 = Math.round(mantissa * 100);
+  if (digits3 >= 1000) { digits3 = Math.round(digits3 / 10); exp += 1; }
+  return { digits3, exp };
+}
+function mzGroupDigits(str) {
+  return str.replace(/\B(?=(\d{3})+(?!\d))/g, "\u00A0");
+}
+/* Écriture décimale complète, sans notation scientifique, avec tous les zéros. */
+function mzFullDigitsString(N) {
+  if (N < 1) return "0";
+  const { digits3, exp } = mzDecompose3SF(N);
+  const totalDigits = exp + 1;
+  const zerosToAdd = Math.max(0, totalDigits - 3);
+  const fullDigits = String(digits3) + "0".repeat(zerosToAdd);
+  return mzGroupDigits(fullDigits);
+}
+/* Formulation en toutes lettres par paliers de milliards (échelle familière,
+   plus parlante pour des lycéens que "trilliard" etc.) : ex. "602 000 milliards
+   de milliards de molécules". */
+function mzWordsPhrase(N, unitLabel) {
+  const unit = unitLabel || "molécules";
+  if (N < 1e6) return `${mzGroupDigits(String(Math.round(N)))} ${unit}`;
+  const { digits3, exp } = mzDecompose3SF(N);
+  const k = Math.floor(exp / 9);
+  const r = exp - 9 * k; // reste, 0..8
+  const leftover = Math.round(digits3 * Math.pow(10, r - 2));
+  const leftoverStr = mzGroupDigits(String(leftover));
+  if (k === 0) return `${leftoverStr} ${unit}`;
+  const chain = Array(k).fill("milliards").join(" de ");
+  return `${leftoverStr} ${chain} de ${unit}`;
+}
+
+/* Forme du sac à cordon (pochette scellée), réutilisée pour chaque paquet de mole */
+const MZ_BAG_BODY = "M38 92 Q26 200 55 213 L145 213 Q174 200 162 92 Z";
+const MZ_BAG_NECK_RUFFLE = "M62 92 Q72 74 82 92 Q92 74 100 92 Q108 74 118 92 Q128 74 138 92";
+
+function mzBagShell(half) {
+  const dash = half ? ' stroke-dasharray="5,4"' : "";
+  const bodyOpacity = half ? 0.03 : 0.06;
+  let s = `<path d="${MZ_BAG_BODY}" fill="rgba(107,191,171,${bodyOpacity})" stroke="var(--chalk-dim)" stroke-width="3"${dash}/>`;
+  s += `<path d="${MZ_BAG_NECK_RUFFLE}" fill="none" stroke="var(--chalk-dim)" stroke-width="2"/>`;
+  s += `<path d="M55 88 Q100 78 145 88" fill="none" stroke="var(--yellow)" stroke-width="3"/>`;
+  s += `<path d="M58 96 Q100 87 142 96" fill="none" stroke="var(--yellow)" stroke-width="2.2"/>`;
+  s += `<path d="M92 82 Q78 68 90 60 Q98 68 92 82" fill="none" stroke="var(--yellow)" stroke-width="2.5"/>`;
+  s += `<path d="M108 82 Q122 68 110 60 Q102 68 108 82" fill="none" stroke="var(--yellow)" stroke-width="2.5"/>`;
+  s += `<circle cx="100" cy="80" r="4" fill="var(--yellow)"/>`;
+  return s;
+}
+
+function initMoleZoom(cfg) {
+  const root = document.getElementById(cfg.containerId);
+  if (!root) return;
+  injectMoleZoomStyles();
+
+  const MIN_VOL = 9, MAX_VOL = 54;
+  const VM_WATER = 18; // mL/mol — repère : 1 mol d'eau ≈ 18 mL (densité 1 g/mL, M = 18 g/mol)
+  const uid = cfg.containerId;
+
+  let volume = 18; // mL
+  let level = 1;
+  let nanoRAF = null, sackRAF = null, countRAF = null;
+  let nanoMols = [];
+  let sackBags = [];
+  let sackDom = []; // références DOM persistantes { bag, moleculeEls } — construites une seule fois par entrée dans l'étape 3
+
+  root.innerHTML = `
+    <div class="mz-stepper">
+      <button class="mz-step active" data-step="1"><span class="mz-step-num">1</span><span class="mz-step-label">Labo</span></button>
+      <div class="mz-step-line"></div>
+      <button class="mz-step" data-step="2"><span class="mz-step-num">2</span><span class="mz-step-label">Atomique</span></button>
+      <div class="mz-step-line"></div>
+      <button class="mz-step" data-step="3"><span class="mz-step-num">3</span><span class="mz-step-label">Paquets</span></button>
+    </div>
+
+    <div class="mz-control-bar">
+      <div class="mz-readout-n"></div>
+      <input type="range" class="mz-range" min="9" max="54" value="18" step="9">
+      <div class="mz-control-hint">Volume d'eau prélevé — règle n ici, à n'importe quelle étape : les 3 échelles se mettent à jour ensemble.</div>
+    </div>
+
+    <div class="mz-level mz-visible" data-level="1">
+      <div class="mz-level-title">🧪 Étape 1 — Au laboratoire (échelle macroscopique)</div>
+      <div class="mz-level-body">
+        <div class="mz-svg-wrap"><svg class="mz-tube-svg" viewBox="0 0 120 220"></svg></div>
+        <div class="mz-side">
+          <div class="mz-tube-caption"></div>
+          <div class="mz-hint">On mesure facilement un volume ou une masse au laboratoire, mais comment savoir combien de molécules cela représente ?</div>
+          <button class="mz-action-btn mz-zoom-btn">Plonger à l'échelle atomique 🔬</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mz-level" data-level="2">
+      <div class="mz-level-title">🔬 Étape 2 — Le vertige du nombre (échelle atomique)</div>
+      <div class="mz-level-body">
+        <div class="mz-svg-wrap"><svg class="mz-micro-svg" viewBox="0 0 220 220"></svg></div>
+        <div class="mz-side">
+          <div class="mz-micro-count"></div>
+          <div class="mz-micro-msg"></div>
+          <button class="mz-action-btn mz-pack-btn">Regrouper par paquets (La mole) 📦</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mz-level" data-level="3">
+      <div class="mz-level-title">📦 Étape 3 — L'outil du chimiste : le paquetage en moles</div>
+      <div class="mz-level-body mz-level-3-body">
+        <div class="mz-sacks-wrap"></div>
+        <div class="mz-formula"></div>
+      </div>
+    </div>
+  `;
+
+  const stepBtns = root.querySelectorAll(".mz-step");
+  const levelEls = {
+    1: root.querySelector('.mz-level[data-level="1"]'),
+    2: root.querySelector('.mz-level[data-level="2"]'),
+    3: root.querySelector('.mz-level[data-level="3"]')
+  };
+  const rangeEl = root.querySelector(".mz-range");
+  const readoutN = root.querySelector(".mz-readout-n");
+  const tubeSvg = root.querySelector(".mz-tube-svg");
+  const tubeCaption = root.querySelector(".mz-tube-caption");
+  const zoomBtn = root.querySelector(".mz-zoom-btn");
+  const microSvg = root.querySelector(".mz-micro-svg");
+  const microCount = root.querySelector(".mz-micro-count");
+  const microMsg = root.querySelector(".mz-micro-msg");
+  const packBtn = root.querySelector(".mz-pack-btn");
+  const sacksWrap = root.querySelector(".mz-sacks-wrap");
+  const formulaWrap = root.querySelector(".mz-formula");
+
+  function easeOutCubic(x) { return 1 - Math.pow(1 - x, 3); }
+  function currentN() { return volume / VM_WATER; }
+
+  /* ----- Étape 1 : éprouvette graduée ----- */
+  function drawTube() {
+    const n = currentN();
+    readoutN.textContent = `V = ${volume} mL → n = ${n.toFixed(1).replace(".", ",")} mol`;
+
+    const tubeTop = 18, tubeBottom = 198, tubeLeft = 42, tubeRight = 78;
+    const usableHeight = tubeBottom - tubeTop - 12;
+    const liquidTop = tubeBottom - (volume / MAX_VOL) * usableHeight;
+
+    let s = `<path d="M${tubeLeft} ${tubeTop} L${tubeLeft} ${tubeBottom - 10} Q${tubeLeft} ${tubeBottom} ${tubeLeft + 8} ${tubeBottom} L${tubeRight - 8} ${tubeBottom} Q${tubeRight} ${tubeBottom} ${tubeRight} ${tubeBottom - 10} L${tubeRight} ${tubeTop}" fill="none" stroke="var(--chalk-dim)" stroke-width="3"/>`;
+
+    for (let v = 9; v <= 54; v += 9) {
+      const y = tubeBottom - (v / MAX_VOL) * usableHeight;
+      s += `<line x1="${tubeLeft - 6}" y1="${y}" x2="${tubeLeft}" y2="${y}" stroke="var(--chalk-dim)" stroke-width="1.4"/>`;
+      s += `<text x="${tubeLeft - 9}" y="${y + 3}" font-size="7" fill="var(--chalk-dim)" text-anchor="end">${v}</text>`;
+    }
+
+    const clipId = `mzTubeClip-${uid}`;
+    s += `<clipPath id="${clipId}"><path d="M${tubeLeft} ${tubeTop} L${tubeLeft} ${tubeBottom - 10} Q${tubeLeft} ${tubeBottom} ${tubeLeft + 8} ${tubeBottom} L${tubeRight - 8} ${tubeBottom} Q${tubeRight} ${tubeBottom} ${tubeRight} ${tubeBottom - 10} L${tubeRight} ${tubeTop} Z"/></clipPath>`;
+    s += `<g clip-path="url(#${clipId})">`;
+    s += `<rect x="${tubeLeft}" y="${liquidTop}" width="${tubeRight - tubeLeft}" height="${tubeBottom - liquidTop}" fill="rgba(107,191,171,0.35)"/>`;
+    s += `<line x1="${tubeLeft}" y1="${liquidTop}" x2="${tubeRight}" y2="${liquidTop}" stroke="var(--teal)" stroke-width="2"/>`;
+    s += `</g>`;
+    s += `<text x="60" y="212" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">eau pure</text>`;
+    tubeSvg.innerHTML = s;
+
+    tubeCaption.innerHTML = `Éprouvette graduée : <strong style="color:var(--chalk);">${volume} mL</strong> d'eau pure prélevés.`;
   }
-  function drawMound(cx, cy) {
-    let s = `<path d="${moundPath(cx, cy)}" fill="rgba(232,196,104,0.15)" stroke="var(--yellow)" stroke-width="1.8"/>`;
-    DOT_PATTERN.forEach(([u, v]) => {
-      s += `<circle cx="${cx + u * 8}" cy="${cy - 1 + v * 8}" r="1.5" fill="var(--yellow)" opacity="0.85"/>`;
+
+  /* ----- Étape 2 : nuée de molécules H2O, agitation rapide ----- */
+  const NANO_COUNT = 24, NANO_R = 90, NANO_CX = 110, NANO_CY = 110;
+  const NANO_MAX_SPEED = 4.2, NANO_JITTER = 0.5, NANO_MARGIN = 8;
+
+  function initNanoMolecules() {
+    nanoMols = [];
+    for (let i = 0; i < NANO_COUNT; i++) {
+      const ang = Math.random() * 2 * Math.PI;
+      const rad = Math.sqrt(Math.random()) * NANO_R * 0.85;
+      nanoMols.push({
+        x: NANO_CX + Math.cos(ang) * rad,
+        y: NANO_CY + Math.sin(ang) * rad,
+        vx: (Math.random() - 0.5) * 3.4,
+        vy: (Math.random() - 0.5) * 3.4,
+        angle: Math.random() * 360,
+        vAngle: (Math.random() - 0.5) * 12
+      });
+    }
+  }
+  function stepNanoMolecules() {
+    nanoMols.forEach(m => {
+      m.x += m.vx; m.y += m.vy; m.angle += m.vAngle;
+      const dx = m.x - NANO_CX, dy = m.y - NANO_CY;
+      const dist = Math.hypot(dx, dy);
+      if (dist > NANO_R - NANO_MARGIN) {
+        const nx = dx / dist, ny = dy / dist;
+        const dot = m.vx * nx + m.vy * ny;
+        m.vx -= 2 * dot * nx; m.vy -= 2 * dot * ny;
+        m.x = NANO_CX + nx * (NANO_R - NANO_MARGIN);
+        m.y = NANO_CY + ny * (NANO_R - NANO_MARGIN);
+      }
+      m.vx += (Math.random() - 0.5) * NANO_JITTER;
+      m.vy += (Math.random() - 0.5) * NANO_JITTER;
+      const speed = Math.hypot(m.vx, m.vy);
+      if (speed > NANO_MAX_SPEED) { m.vx *= NANO_MAX_SPEED / speed; m.vy *= NANO_MAX_SPEED / speed; }
     });
-    return s;
+  }
+  function renderNanoMolecules() {
+    let s = `<circle cx="${NANO_CX}" cy="${NANO_CY}" r="${NANO_R}" fill="rgba(255,255,255,0.03)" stroke="var(--chalk-dim)" stroke-width="2"/>`;
+    nanoMols.forEach(m => { s += mzWaterMolecule(m.x, m.y, 1, m.angle); });
+    microSvg.innerHTML = s;
+  }
+  function startNanoAnim() {
+    stopNanoAnim();
+    initNanoMolecules();
+    function frame() {
+      stepNanoMolecules();
+      renderNanoMolecules();
+      nanoRAF = requestAnimationFrame(frame);
+    }
+    nanoRAF = requestAnimationFrame(frame);
+  }
+  function stopNanoAnim() {
+    if (nanoRAF) cancelAnimationFrame(nanoRAF);
+    nanoRAF = null;
   }
 
-  function drawBagShell() {
-    let s = "";
-    s += `<path d="${BODY_PATH}" fill="rgba(107,191,171,0.05)" stroke="var(--chalk-dim)" stroke-width="3"/>`;
-    s += `<path d="${NECK_RUFFLE}" fill="none" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-    s += `<path d="M55 88 Q100 78 145 88" fill="none" stroke="var(--yellow)" stroke-width="3"/>`;
-    s += `<path d="M58 96 Q100 87 142 96" fill="none" stroke="var(--yellow)" stroke-width="2.2"/>`;
-    s += `<path d="M92 82 Q78 68 90 60 Q98 68 92 82" fill="none" stroke="var(--yellow)" stroke-width="2.5"/>`;
-    s += `<path d="M108 82 Q122 68 110 60 Q102 68 108 82" fill="none" stroke="var(--yellow)" stroke-width="2.5"/>`;
-    s += `<circle cx="100" cy="80" r="4" fill="var(--yellow)"/>`;
-    return s;
+  function runCountAnimation() {
+    cancelAnimationFrame(countRAF);
+    const N = currentN() * NA;
+    const start = performance.now();
+    microMsg.textContent = "À l'échelle atomique, les molécules sont identiques mais beaucoup trop nombreuses pour être comptées une par une.";
+    microCount.innerHTML = `<div class="mz-count-sci">N ≈ <strong style="color:var(--yellow)"></strong></div>`;
+    const sciEl = microCount.querySelector("strong");
+    function frame(now) {
+      const t = now - start;
+      let display;
+      if (t < 900) {
+        const p = t / 900;
+        display = String(Math.floor(Math.pow(p, 0.55) * 999));
+      } else if (t < 2200) {
+        const p = (t - 900) / 1300;
+        const logVal = Math.log10(999) + (Math.log10(N) - Math.log10(999)) * easeOutCubic(p);
+        display = formatSci(Math.pow(10, logVal));
+      } else {
+        showFinalCount();
+        return;
+      }
+      sciEl.textContent = display;
+      countRAF = requestAnimationFrame(frame);
+    }
+    countRAF = requestAnimationFrame(frame);
+  }
+  function showFinalCount() {
+    const N = currentN() * NA;
+    microMsg.textContent = "À l'échelle atomique, les molécules sont identiques mais beaucoup trop nombreuses pour être comptées une par une.";
+    microCount.innerHTML = `
+      <div class="mz-count-sci">N ≈ <strong style="color:var(--yellow)">${formatSci(N)}</strong></div>
+      <div class="mz-count-full">soit <strong style="color:var(--chalk)">${mzFullDigitsString(N)}</strong> molécules d'eau</div>
+      <div class="mz-count-words">— autrement dit environ <strong>${mzWordsPhrase(N)}</strong> !</div>
+    `;
   }
 
-  function draw() {
-    const n = Number(range.value) / 10;
+  /* ----- Étape 3 : sacs à cordon avec molécules H2O animées à l'intérieur ----- */
+  function makeBagParticles(half) {
+    const count = half ? 5 : 9;
+    const arr = [];
+    for (let i = 0; i < count; i++) {
+      const x = half ? 55 + Math.random() * 90 : 45 + Math.random() * 110;
+      const y = half ? 162 + Math.random() * 40 : 115 + Math.random() * 85;
+      arr.push({
+        x, y,
+        vx: (Math.random() - 0.5) * 0.7,
+        vy: (Math.random() - 0.5) * 0.7,
+        angle: Math.random() * 360,
+        vAngle: (Math.random() - 0.5) * 3
+      });
+    }
+    return arr;
+  }
+  function stepBagParticles(bag) {
+    const minX = 42, maxX = 158;
+    const minY = bag.half ? 155 : 108, maxY = 208;
+    bag.particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.angle += p.vAngle;
+      if (p.x < minX || p.x > maxX) { p.vx *= -1; p.x = Math.max(minX, Math.min(maxX, p.x)); }
+      if (p.y < minY || p.y > maxY) { p.vy *= -1; p.y = Math.max(minY, Math.min(maxY, p.y)); }
+      p.vx += (Math.random() - 0.5) * 0.12;
+      p.vy += (Math.random() - 0.5) * 0.12;
+      const speed = Math.hypot(p.vx, p.vy), maxSpeed = 0.9;
+      if (speed > maxSpeed) { p.vx *= maxSpeed / speed; p.vy *= maxSpeed / speed; }
+    });
+  }
+  function buildSacks() {
+    const n = currentN();
+    const fullBags = Math.floor(n + 1e-9);
+    const hasHalf = Math.abs(n - fullBags - 0.5) < 1e-9;
+    sackBags = [];
+    for (let i = 0; i < fullBags; i++) sackBags.push({ half: false, particles: makeBagParticles(false) });
+    if (hasHalf) sackBags.push({ half: true, particles: makeBagParticles(true) });
+
     const N = n * NA;
-    const fullPiles = Math.floor(n + 1e-9);
-    const hasHalf = Math.abs(n - fullPiles - 0.5) < 1e-9;
-
-    let svgContent = drawBagShell();
-    for (let i = 0; i < fullPiles && i < SLOTS.length; i++) {
-      const [cx, cy] = SLOTS[i];
-      svgContent += drawMound(cx, cy);
-    }
-    if (hasHalf && fullPiles < SLOTS.length) {
-      const [cx, cy] = SLOTS[fullPiles];
-      const clipId = "halfClip-" + cfg.svgId;
-      svgContent += `<clipPath id="${clipId}"><rect x="${cx - 13}" y="${cy - 13}" width="13" height="26"/></clipPath>`;
-      svgContent += `<g clip-path="url(#${clipId})">${drawMound(cx, cy)}</g>`;
-      svgContent += `<line x1="${cx}" y1="${cy - 13}" x2="${cx}" y2="${cy + 13}" stroke="var(--coral)" stroke-width="1.3" stroke-dasharray="2,2"/>`;
-    }
-    svg.innerHTML = svgContent;
-
-    const pilesLabel = hasHalf
-      ? `${fullPiles} tas plein${fullPiles > 1 ? "s" : ""} + 1 demi-tas`
-      : `${fullPiles} tas plein${fullPiles > 1 ? "s" : ""}`;
-    readout.textContent = `n = ${n.toString().replace(".", ",")} mol`;
-    warnEl.textContent = `→ ${pilesLabel} dans la pochette`;
-    countEl.innerHTML = `Nombre total d'entités : N = n × N<sub>A</sub> ≈ <strong style="color:var(--yellow)">${formatSci(N)}</strong>`;
+    formulaWrap.innerHTML = `<div class="mz-formula-eq">n = ${n.toFixed(1).replace(".", ",")} mol &nbsp;·&nbsp; N = n × N<sub>A</sub> = ${n.toFixed(1).replace(".", ",")} × 6,02×10²³ ≈ <strong style="color:var(--yellow)">${formatSci(N)}</strong></div>`;
   }
-  range.addEventListener("input", draw);
-  draw();
+  function renderSacks() {
+    // Ne touche plus au DOM (pas d'innerHTML) : met seulement à jour les
+    // attributs des molécules déjà créées par buildSacksDOM(). Voir la note
+    // dans buildSacksDOM() pour la raison de ce choix.
+    sackDom.forEach(({ bag, moleculeEls }) => {
+      bag.particles.forEach((p, idx) => {
+        mzUpdateMoleculeEl(moleculeEls[idx], p.x, p.y, 0.85, p.angle);
+      });
+    });
+  }
+  function buildSacksDOM() {
+    // Construit le DOM des sacs une seule fois (à l'entrée de l'étape 3, ou
+    // quand n change) plutôt qu'à chaque frame. Reconstruire un <svg> complet
+    // (avec son animation CSS d'entrée) 60x/s empêchait l'animation de se
+    // terminer et laissait les sacs bloqués à opacity:0 — c'était la cause du
+    // bug "aucune image pour les sacs".
+    sacksWrap.innerHTML = "";
+    sackDom = [];
+    sackBags.forEach(bag => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "mz-sack";
+
+      const svg = document.createElementNS(MZ_SVG_NS, "svg");
+      svg.setAttribute("viewBox", "0 0 200 220");
+      svg.innerHTML = mzBagShell(bag.half); // statique : construit une fois, jamais reconstruit ensuite
+
+      const molGroup = document.createElementNS(MZ_SVG_NS, "g");
+      const moleculeEls = bag.particles.map(() => {
+        const els = mzCreateMoleculeEl(0.85);
+        molGroup.appendChild(els.g);
+        return els;
+      });
+      svg.appendChild(molGroup);
+      wrapper.appendChild(svg);
+
+      const label = document.createElement("div");
+      label.className = "mz-sack-label";
+      label.textContent = bag.half ? "0,5 mol" : "1 mol";
+      wrapper.appendChild(label);
+
+      const count = document.createElement("div");
+      count.className = "mz-sack-count";
+      count.textContent = bag.half ? "3,01×10²³ H₂O" : "6,02×10²³ H₂O";
+      wrapper.appendChild(count);
+
+      sacksWrap.appendChild(wrapper);
+      sackDom.push({ bag, moleculeEls });
+    });
+    renderSacks(); // positionne les molécules dès la construction, avant la 1ère frame d'animation
+  }
+  function startSackAnim() {
+    stopSackAnim();
+    function frame() {
+      sackBags.forEach(stepBagParticles);
+      renderSacks();
+      sackRAF = requestAnimationFrame(frame);
+    }
+    sackRAF = requestAnimationFrame(frame);
+  }
+  function stopSackAnim() {
+    if (sackRAF) cancelAnimationFrame(sackRAF);
+    sackRAF = null;
+  }
+
+  /* ----- Navigation entre étapes ----- */
+  function goLevel(target, opts) {
+    opts = opts || {};
+    level = target;
+    stepBtns.forEach(b => b.classList.toggle("active", Number(b.dataset.step) === target));
+    Object.keys(levelEls).forEach(k => levelEls[k].classList.toggle("mz-visible", Number(k) === target));
+
+    if (target !== 2) stopNanoAnim();
+    if (target !== 3) stopSackAnim();
+
+    if (target === 1) drawTube();
+    if (target === 2) {
+      startNanoAnim();
+      if (opts.animateCount) runCountAnimation();
+      else showFinalCount();
+    }
+    if (target === 3) {
+      buildSacks();
+      buildSacksDOM();
+      startSackAnim();
+    }
+  }
+
+  stepBtns.forEach(b => b.addEventListener("click", () => goLevel(Number(b.dataset.step), { animateCount: false })));
+  rangeEl.addEventListener("input", () => {
+    volume = Number(rangeEl.value);
+    drawTube(); // toujours à jour, même si l'étape 1 n'est pas affichée
+    if (level === 2) showFinalCount(); // pas de replay de l'animation vertigineuse à chaque glissement
+    if (level === 3) { buildSacks(); buildSacksDOM(); } // nouveau nombre de sacs → on reconstruit le DOM (boucle déjà active)
+  });
+  zoomBtn.addEventListener("click", () => goLevel(2, { animateCount: true }));
+  packBtn.addEventListener("click", () => goLevel(3));
+
+  drawTube();
 }
 
 /* ---------- b. Masse molaire atomique (tableau périodique interactif) ---------- */

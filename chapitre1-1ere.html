@@ -102,19 +102,8 @@
       Ne confonds pas <strong>quantité de matière</strong> (<em>n</em>, en mol — un nombre d'entités) et <strong>masse</strong> (<em>m</em>, en g — combien ça pèse). La relation entre les deux arrive juste après.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Manipule le curseur pour observer comment le nombre d'entités augmente avec n.</p>
-    <div style="text-align:center; font-family:var(--font-display); color:var(--yellow); font-size:0.95rem; margin-bottom:4px;">🎒 La pochette d'une mole</div>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="bagSvgCours" viewBox="0 0 200 220"></svg>
-      </div>
-      <div class="anim-controls">
-        <div style="font-family:var(--font-display); font-size:1.3rem; color:var(--yellow); margin:10px 0;" id="bagReadoutCours">n = 0,5 mol</div>
-        <input type="range" id="bagRangeCours" min="5" max="60" value="10" step="5">
-        <div style="color:var(--chalk-dim); font-size:0.85rem;" id="bagWarnCours"></div>
-        <div class="anim-readout" id="bagCountCours"></div>
-      </div>
-    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Explore les 3 échelles : prélève un volume d'eau à l'éprouvette, plonge au cœur de la matière, puis regroupe les molécules en sacs d'une mole.</p>
+    <div id="moleZoomCours" class="mole-zoom-widget"></div>
   </section>
 
   <section>
@@ -363,22 +352,11 @@
   </section>
 
   <section>
-    <h2>Le sac de la mole</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:6px;">La mole est une <strong style="color:var(--chalk);">quantité de matière</strong> : un nombre fixe d'entités, tout comme "une douzaine" veut toujours dire 12.</p>
+    <h2>Le zoom sur la mole</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:6px;">La mole est une <strong style="color:var(--chalk);">quantité de matière</strong> : un nombre fixe d'entités, tout comme "une douzaine" veut toujours dire 12. Parcours les 3 étapes, du volume d'eau mesuré à l'éprouvette jusqu'aux sacs de molécules.</p>
     <p style="color:var(--yellow); font-family:var(--font-display); font-size:1.1rem; margin-bottom:14px;">1 mole = 6,02 × 10²³ entités (nombre d'Avogadro)</p>
-    <div style="text-align:center; font-family:var(--font-display); color:var(--yellow); font-size:0.95rem; margin-bottom:4px;">🎒 La pochette d'une mole</div>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="bagSvg" viewBox="0 0 200 220"></svg>
-      </div>
-      <div class="anim-controls">
-        <div style="font-family:var(--font-display); font-size:1.3rem; color:var(--yellow); margin:10px 0;" id="bagReadout">n = 0,5 mol</div>
-        <input type="range" id="bagRange" min="5" max="60" value="10" step="5">
-        <div style="color:var(--chalk-dim); font-size:0.85rem;" id="bagWarn"></div>
-        <div class="anim-readout" id="bagCount"></div>
-      </div>
-    </div>
-    <p style="color:var(--chalk-dim); font-size:0.78rem; margin-top:10px; text-align:center;">⚠️ Chaque tas est symbolique (impossible de dessiner 6,02 × 10²³ points) — seul le nombre en texte est exact.</p>
+    <div id="moleZoom" class="mole-zoom-widget"></div>
+    <p style="color:var(--chalk-dim); font-size:0.78rem; margin-top:10px; text-align:center;">⚠️ Le nuage de molécules et le contenu des sacs sont des représentations symboliques (impossible de dessiner 6,02 × 10²³ molécules) — seul le nombre affiché en texte est exact.</p>
     <div class="activity-block"><div id="actMoleBag"></div></div>
   </section>
 
@@ -569,7 +547,7 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 });
 
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initMoleBag({ svgId: "bagSvgCours", rangeId: "bagRangeCours", readoutId: "bagReadoutCours", countId: "bagCountCours", warnId: "bagWarnCours" });
+initMoleZoom({ containerId: "moleZoomCours" });
 initAtomicMolarMass({ tableId: "atomTableCours", readoutId: "atomReadoutCours" });
 initMolecularMolarMass({ svgId: "molSvgCours", formulaId: "molFormulaCours", readoutId: "molReadoutCours", buttonIds: ["molCO2Cours", "molCH4Cours", "molCH3OHCours", "molAl2O3Cours"] });
 initMassScale({ svgId: "scaleSvgCours", nRangeId: "scaleNCours", molarRangeId: "scaleMCours", readoutId: "scaleReadoutCours" });
@@ -578,7 +556,7 @@ initConcentration({ svgId: "concSvgCours", nRangeId: "concNCours", vRangeId: "co
 initDilutionProcess({ svgId: "diluSvgCours", nRangeId: "diluNCours", fRangeId: "diluFCours", lockBtnId: "diluLockCours", diluteBtnId: "diluGoCours", resetBtnId: "diluResetCours", readoutId: "diluReadoutCours", fRowId: "diluFRowCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initMoleBag({ svgId: "bagSvg", rangeId: "bagRange", readoutId: "bagReadout", countId: "bagCount", warnId: "bagWarn" });
+initMoleZoom({ containerId: "moleZoom" });
 initAtomicMolarMass({ tableId: "atomTable", readoutId: "atomReadout" });
 initMolecularMolarMass({ svgId: "molSvg", formulaId: "molFormula", readoutId: "molReadout", buttonIds: ["molCO2", "molCH4", "molCH3OH", "molAl2O3"] });
 initMassScale({ svgId: "scaleSvg", nRangeId: "scaleN", molarRangeId: "scaleM", readoutId: "scaleReadout" });
@@ -589,7 +567,7 @@ initDilutionProcess({ svgId: "diluSvg", nRangeId: "diluN", fRangeId: "diluF", lo
 /* ---------- Activités liées à chaque animation ---------- */
 initQCM({
   containerId: "actMoleBag", chapterId: "ch1-1ere", activityId: "qcm-mole-bag",
-  prompt: "Sur l'animation ci-dessus, si tu doubles n (par exemple de 1 à 2 mol), que devient le nombre d'entités N ?",
+  prompt: "Dans le zoom interactif ci-dessus, si tu doubles n (par exemple de 1 à 2 mol), que devient le nombre d'entités N ?",
   options: [
     { text: "N double aussi", correct: true },
     { text: "N reste le même", correct: false },

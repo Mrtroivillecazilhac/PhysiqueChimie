@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 1 — Constitution de la matière — 4ème</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch1-4eme.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 1 — Constitution de la matière</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch1-4eme">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch1-4eme"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Décrire les états de la matière aux échelles macroscopique et microscopique</li>
+        <li>Distinguer corps pur et mélange, et comprendre les changements d'état</li>
+        <li>Savoir calculer une masse volumique et une solubilité</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Les états de la matière</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La matière existe sous trois états : <strong>solide</strong>, <strong>liquide</strong> et <strong>gaz</strong>. Ils se distinguent par la disposition et le mouvement de leurs particules.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 3 états : compare l'échelle macroscopique et l'échelle microscopique.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="smSolideCours">Solide</button>
+      <button class="toggle-btn" id="smLiquideCours">Liquide</button>
+      <button class="toggle-btn" id="smGazCours">Gaz</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="smSvgCours" viewBox="0 0 235 105"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="smReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Les corps purs et les mélanges</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un <strong>corps pur</strong> est constitué d'une seule espèce chimique. Un <strong>mélange</strong> est constitué de plusieurs espèces chimiques différentes.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      À l'échelle microscopique, les particules d'un corps pur sont toutes identiques ; celles d'un mélange sont différentes. On ne distingue plus les constituants d'un mélange à l'œil nu, mais on peut les identifier par des tests caractéristiques.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre corps pur et mélange.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pmPureCours">Corps pur</button>
+      <button class="toggle-btn" id="pmMixCours">Mélange</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="pmSvgCours" viewBox="0 0 220 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="pmReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>c. Les changements d'état : masse et volume</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Lors d'un changement d'état, la <strong>masse est conservée</strong> (le nombre de particules ne change pas), mais le <strong>volume peut varier</strong> (la distance entre les particules peut changer).
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais avancer la fusion : observe la masse (fixe) et le volume (qui change).</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="cvSvgCours" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Avancement de la fusion</label>
+        <input type="range" id="cvProgressCours" min="0" max="100" value="0" step="5">
+        <div class="anim-readout" id="cvReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Les changements d'état et la température</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Lors du changement d'état d'un <strong>corps pur</strong>, la température reste <strong>constante</strong> (palier). Ce n'est pas le cas lors du changement d'état d'un <strong>mélange</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Compare l'allure de la courbe pour un corps pur et pour un mélange.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ctPureCours">Corps pur</button>
+      <button class="toggle-btn" id="ctMixCours">Mélange</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="ctSvgCours" viewBox="0 0 235 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="ctReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>e. La composition de l'air</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'air est un <strong>mélange</strong> : environ 78 % de diazote, 21 % de dioxygène, et 1 % d'autres gaz. Seul le dioxygène est indispensable à la respiration.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique sur chaque gaz pour afficher sa proportion.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="acN2Cours">Diazote</button>
+      <button class="toggle-btn" id="acO2Cours">Dioxygène</button>
+      <button class="toggle-btn" id="acAutresCours">Autres gaz</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="acSvgCours" viewBox="0 0 160 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="acReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>f. La masse volumique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>masse volumique</strong> ρ d'une matière de masse m et de volume V s'exprime par ρ = m/V. Elle est caractéristique d'une matière.
+    </div>
+    <div class="formula">ρ = <span class="frac"><span class="num">m</span><span class="den">V</span></span> (kg/L, avec m en kg et V en L)</div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Un corps de masse volumique inférieure à celle de l'eau (1,00 kg/L) flotte sur l'eau. Un corps de masse volumique supérieure coule dans l'eau.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis une matière et règle la masse : observe si l'objet flotte ou coule.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="vmBoisCours">Bois</button>
+      <button class="toggle-btn" id="vmHuileCours">Huile</button>
+      <button class="toggle-btn" id="vmAluCours">Aluminium</button>
+      <button class="toggle-btn" id="vmFerCours">Fer</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="vmSvgCours" viewBox="0 0 200 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse m (g)</label>
+        <input type="range" id="vmMCours" min="50" max="1000" value="300" step="10">
+        <div class="anim-readout" id="vmReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>g. La solubilité</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>solubilité</strong> s d'une espèce chimique est la masse maximale m<sub>max</sub> que l'on peut dissoudre dans un litre de mélange. Lorsque cette limite est atteinte, la solution est dite <strong>saturée</strong>.
+    </div>
+    <div class="formula">s = <span class="frac"><span class="num">m<sub>max</sub></span><span class="den">V</span></span> (g/L)</div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      La solubilité dépend de la température.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Ajoute du soluté petit à petit dans 1 L d'eau : observe la saturation apparaître.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="slSvgCours" viewBox="0 0 220 165"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="actions" style="justify-content:flex-start; margin-bottom:10px;">
+          <button id="slAddCours">+ Ajouter 40 g</button>
+          <button id="slResetCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim);">↺ Recommencer</button>
+        </div>
+        <div class="anim-readout" id="slReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. Les états de la matière</h3>
+      <p>
+        Dans un solide, les particules sont <input class="blank" data-answer="fixes" size="10"> les unes par rapport aux autres. Dans un liquide et un gaz, elles peuvent se <input class="blank" data-answer="déplacer|deplacer" size="12">.
+      </p>
+      <p>
+        Un solide et un liquide ont un volume <input class="blank" data-answer="propre" size="10">. Un gaz n'a pas de volume propre : il est <input class="blank" data-answer="compressible" size="16">.
+      </p>
+
+      <h3>b. Corps purs et mélanges</h3>
+      <p>
+        Un <input class="blank" data-answer="corps pur" size="12"> est constitué d'une seule espèce chimique. Un <input class="blank" data-answer="mélange|melange" size="12"> est constitué de plusieurs espèces différentes.
+      </p>
+
+      <h3>c. Changements d'état : masse et volume</h3>
+      <p>
+        Lors d'un changement d'état, la <input class="blank" data-answer="masse" size="10"> est conservée, mais le <input class="blank" data-answer="volume" size="10"> peut varier.
+      </p>
+
+      <h3>d. Changements d'état et température</h3>
+      <p>
+        Lors du changement d'état d'un corps pur, la température reste <input class="blank" data-answer="constante" size="14"> (un palier apparaît sur la courbe). Ce n'est pas le cas pour un <input class="blank" data-answer="mélange|melange" size="12">.
+      </p>
+
+      <h3>e. La composition de l'air</h3>
+      <p>
+        L'air contient environ <input class="blank" data-answer="78" size="6">% de diazote et <input class="blank" data-answer="21" size="6">% de dioxygène. Seul le <input class="blank" data-answer="dioxygène|dioxygene" size="14"> est indispensable à la respiration.
+      </p>
+
+      <h3>f. La masse volumique</h3>
+      <div class="formula">ρ = <span class="frac"><span class="num">m</span><span class="den">V</span></span></div>
+      <p>
+        Un corps de masse volumique inférieure à celle de l'eau <input class="blank" data-answer="flotte" size="10"> sur l'eau. Un corps de masse volumique supérieure <input class="blank" data-answer="coule" size="10"> dans l'eau.
+      </p>
+
+      <h3>g. La solubilité</h3>
+      <div class="formula">s = <span class="frac"><span class="num">m<sub>max</sub></span><span class="den">V</span></span></div>
+      <p>
+        Quand la limite de dissolution est atteinte, on dit que la solution est <input class="blank" data-answer="saturée|saturee" size="14">. La solubilité dépend de la <input class="blank" data-answer="température|temperature" size="16">.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Les états de la matière</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 états : compare l'échelle macroscopique et l'échelle microscopique.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="smSolide">Solide</button>
+      <button class="toggle-btn" id="smLiquide">Liquide</button>
+      <button class="toggle-btn" id="smGaz">Gaz</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="smSvg" viewBox="0 0 235 105"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="smReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actStatesOfMatter"></div></div>
+  </section>
+
+  <section>
+    <h2>Corps purs et mélanges</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre corps pur et mélange.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pmPure">Corps pur</button>
+      <button class="toggle-btn" id="pmMix">Mélange</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="pmSvg" viewBox="0 0 220 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="pmReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actPureOrMixture"></div></div>
+  </section>
+
+  <section>
+    <h2>Changements d'état : masse et volume</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais avancer la fusion : observe la masse (fixe) et le volume (qui change).</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="cvSvg" viewBox="0 0 220 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Avancement de la fusion</label>
+        <input type="range" id="cvProgress" min="0" max="100" value="0" step="5">
+        <div class="anim-readout" id="cvReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actStateChangeMassVolume"></div></div>
+  </section>
+
+  <section>
+    <h2>Changements d'état et température</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Compare l'allure de la courbe pour un corps pur et pour un mélange.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ctPure">Corps pur</button>
+      <button class="toggle-btn" id="ctMix">Mélange</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="ctSvg" viewBox="0 0 235 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="ctReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actStateChangeTemperature"></div></div>
+  </section>
+
+  <section>
+    <h2>La composition de l'air</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Clique sur chaque gaz pour afficher sa proportion.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="acN2">Diazote</button>
+      <button class="toggle-btn" id="acO2">Dioxygène</button>
+      <button class="toggle-btn" id="acAutres">Autres gaz</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="acSvg" viewBox="0 0 160 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="acReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actAirComposition"></div></div>
+  </section>
+
+  <section>
+    <h2>La masse volumique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis une matière et règle la masse : observe si l'objet flotte ou coule.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="vmBois">Bois</button>
+      <button class="toggle-btn" id="vmHuile">Huile</button>
+      <button class="toggle-btn" id="vmAlu">Aluminium</button>
+      <button class="toggle-btn" id="vmFer">Fer</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="vmSvg" viewBox="0 0 200 170"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Masse m (g)</label>
+        <input type="range" id="vmM" min="50" max="1000" value="300" step="10">
+        <div class="anim-readout" id="vmReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actVolumicMass"></div></div>
+  </section>
+
+  <section>
+    <h2>La solubilité</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Ajoute du soluté petit à petit dans 1 L d'eau : observe la saturation apparaître.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="slSvg" viewBox="0 0 220 165"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="actions" style="justify-content:flex-start; margin-bottom:10px;">
+          <button id="slAdd">+ Ajouter 40 g</button>
+          <button id="slReset" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim);">↺ Recommencer</button>
+        </div>
+        <div class="anim-readout" id="slReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSolubility"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">États de la matière</td><td style="padding:10px 8px; color:var(--chalk-dim);">solide : forme et volume propres • liquide : volume propre seulement • gaz : ni l'un ni l'autre, compressible</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Corps pur / mélange</td><td style="padding:10px 8px; color:var(--chalk-dim);">particules identiques (corps pur) ou différentes (mélange)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Changement d'état</td><td style="padding:10px 8px; color:var(--chalk-dim);">masse conservée, volume peut varier ; température constante pour un corps pur</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Composition de l'air</td><td style="padding:10px 8px; color:var(--chalk-dim);">78 % N₂, 21 % O₂, 1 % autres — seul O₂ utile à la respiration</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Masse volumique</td><td style="padding:10px 8px; color:var(--chalk-dim);">ρ = m/V (kg/L) ; ρ &lt; 1,00 → flotte ; ρ &gt; 1,00 → coule</td></tr>
+          <tr><td style="padding:10px 8px;">Solubilité</td><td style="padding:10px 8px; color:var(--chalk-dim);">s = m<sub>max</sub>/V (g/L) ; dépend de la température</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 1 — Constitution de la matière (4ème).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch1-4eme", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initStatesOfMatter({ svgId: "smSvgCours", readoutId: "smReadoutCours", buttonIds: ["smSolideCours", "smLiquideCours", "smGazCours"] });
+initPureOrMixtureParticles({ svgId: "pmSvgCours", readoutId: "pmReadoutCours", btnPureId: "pmPureCours", btnMixId: "pmMixCours" });
+initStateChangeMassVolume({ svgId: "cvSvgCours", progressRangeId: "cvProgressCours", readoutId: "cvReadoutCours" });
+initStateChangeTemperature({ svgId: "ctSvgCours", readoutId: "ctReadoutCours", btnPureId: "ctPureCours", btnMixId: "ctMixCours" });
+initAirComposition({ svgId: "acSvgCours", readoutId: "acReadoutCours", buttonIds: ["acN2Cours", "acO2Cours", "acAutresCours"] });
+initVolumicMass({ svgId: "vmSvgCours", mRangeId: "vmMCours", readoutId: "vmReadoutCours", buttonIds: ["vmBoisCours", "vmHuileCours", "vmAluCours", "vmFerCours"] });
+initSolubility({ svgId: "slSvgCours", readoutId: "slReadoutCours", addBtnId: "slAddCours", resetBtnId: "slResetCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initStatesOfMatter({ svgId: "smSvg", readoutId: "smReadout", buttonIds: ["smSolide", "smLiquide", "smGaz"] });
+initPureOrMixtureParticles({ svgId: "pmSvg", readoutId: "pmReadout", btnPureId: "pmPure", btnMixId: "pmMix" });
+initStateChangeMassVolume({ svgId: "cvSvg", progressRangeId: "cvProgress", readoutId: "cvReadout" });
+initStateChangeTemperature({ svgId: "ctSvg", readoutId: "ctReadout", btnPureId: "ctPure", btnMixId: "ctMix" });
+initAirComposition({ svgId: "acSvg", readoutId: "acReadout", buttonIds: ["acN2", "acO2", "acAutres"] });
+initVolumicMass({ svgId: "vmSvg", mRangeId: "vmM", readoutId: "vmReadout", buttonIds: ["vmBois", "vmHuile", "vmAlu", "vmFer"] });
+initSolubility({ svgId: "slSvg", readoutId: "slReadout", addBtnId: "slAdd", resetBtnId: "slReset" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actStatesOfMatter", chapterId: "ch1-4eme", activityId: "qcm-states-of-matter",
+  prompt: "Dans quel état la matière est-elle compressible ?",
+  options: [
+    { text: "Le gaz", correct: true },
+    { text: "Le liquide", correct: false },
+    { text: "Le solide", correct: false }
+  ],
+  explanation: "Seul le gaz est compressible : ses particules, très éloignées les unes des autres, peuvent se rapprocher."
+});
+
+initQCM({
+  containerId: "actPureOrMixture", chapterId: "ch1-4eme", activityId: "qcm-pure-or-mixture",
+  prompt: "L'air que nous respirons est-il un corps pur ou un mélange ?",
+  options: [
+    { text: "Un mélange (diazote, dioxygène, autres gaz)", correct: true },
+    { text: "Un corps pur", correct: false },
+    { text: "Ni l'un ni l'autre", correct: false }
+  ],
+  explanation: "L'air contient plusieurs espèces chimiques différentes (diazote, dioxygène...) : c'est un mélange."
+});
+
+initVraiFaux({
+  containerId: "actStateChangeMassVolume", chapterId: "ch1-4eme", activityId: "vf-state-change-mass-volume",
+  prompt: "Lorsque la glace fond, la masse de l'eau diminue.",
+  correct: false,
+  explanation: "Faux : la masse est conservée lors d'un changement d'état (le nombre de particules ne change pas). C'est le volume qui peut varier."
+});
+
+initQCM({
+  containerId: "actStateChangeTemperature", chapterId: "ch1-4eme", activityId: "qcm-state-change-temperature",
+  prompt: "Lors de la fusion d'un corps pur, que fait la température ?",
+  options: [
+    { text: "Elle reste constante (palier)", correct: true },
+    { text: "Elle augmente sans s'arrêter", correct: false },
+    { text: "Elle diminue puis augmente", correct: false }
+  ],
+  explanation: "Pendant tout le changement d'état d'un corps pur, la température reste constante : c'est un palier sur la courbe."
+});
+
+initEstimation({
+  containerId: "actAirComposition", chapterId: "ch1-4eme", activityId: "est-air-composition",
+  prompt: "Quel est le pourcentage de dioxygène dans l'air (en %) ?",
+  answer: 21, tolerance: 1, unit: "%",
+  explanation: "L'air contient environ 21 % de dioxygène (78 % de diazote et 1 % d'autres gaz)."
+});
+
+initVraiFaux({
+  containerId: "actVolumicMass", chapterId: "ch1-4eme", activityId: "vf-volumic-mass",
+  prompt: "Un morceau de bois (ρ ≈ 0,60 kg/L) coule dans l'eau.",
+  correct: false,
+  explanation: "Faux : la masse volumique du bois (0,60 kg/L) est inférieure à celle de l'eau (1,00 kg/L) : le bois flotte."
+});
+
+initEstimation({
+  containerId: "actSolubility", chapterId: "ch1-4eme", activityId: "est-solubility",
+  prompt: "Dans 1 L d'eau, on peut dissoudre au maximum 360 g d'un sel avant saturation. Quelle est la solubilité s de ce sel (en g/L) ?",
+  answer: 360, tolerance: 5, unit: "g/L",
+  explanation: "s = m_max/V = 360/1 = 360 g/L."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch1-4eme");
+initProgressBar("ch1-4eme", 8); // texte à trous complet + 7 activités liées aux animations
+</script>
+</body>
+</html>

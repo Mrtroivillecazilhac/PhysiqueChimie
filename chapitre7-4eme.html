@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 7 — Circuit électrique — 4ème</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch7-4eme.js"></script>
+<script src="modules-common.js"></script>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique</div>
+  <h1>Chapitre 7 — Circuit électrique</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch7-4eme">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch7-4eme"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Comprendre le rôle d'un circuit électrique et la notion de boucle fermée</li>
+        <li>Distinguer circuit série et circuit en dérivation</li>
+        <li>Connaître les risques électriques et le rôle du disjoncteur</li>
+        <li>Savoir utiliser les lois d'unicité et d'additivité de l'intensité</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Le circuit électrique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un circuit électrique permet le transfert de l'énergie électrique issue d'un générateur vers un récepteur. Il doit former une <strong>boucle fermée</strong>, constituée d'une suite ininterrompue de conducteurs.
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Certains dipôles (diode, DEL) ont un sens de branchement : ils ne laissent passer le courant que dans un sens.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Observe le circuit fermé, puis clique sur "Diode" pour basculer son sens de branchement.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ecFermeCours">Boucle fermée</button>
+      <button class="toggle-btn" id="ecDiodeCours">Diode (cliquer pour basculer)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="ecSvgCours" viewBox="0 0 220 115"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="ecReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Les différents types de circuit</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Dipôles en <strong>série</strong> : sur une seule boucle. Si un dipôle ne fonctionne plus, il ouvre la boucle : le courant ne circule plus. Dipôles en <strong>dérivation</strong> : sur plusieurs boucles, qui fonctionnent indépendamment.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre série et dérivation, puis clique sur "Griller une lampe".</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ctSerieCours">Série</button>
+      <button class="toggle-btn" id="ctDerivationCours">Dérivation</button>
+    </div>
+    <div class="actions" style="justify-content:flex-start; margin:10px 0;">
+      <button id="ctCasserCours">💡 Griller une lampe</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="ctSvgCours" viewBox="0 0 220 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="ctReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>c. La sécurité électrique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un générateur est en <strong>court-circuit</strong> lorsqu'on relie ses bornes par un très bon conducteur. Le corps humain, conducteur, présente un risque d'<strong>électrocution</strong>. Les <strong>disjoncteurs</strong> protègent contre les surintensités.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 3 risques électriques.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="esCourtCircuitCours">Court-circuit</button>
+      <button class="toggle-btn" id="esElectrocutionCours">Électrocution</button>
+      <button class="toggle-btn" id="esSurintensiteCours">Surintensité</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="esSvgCours" viewBox="0 0 220 115"></svg>
+      </div>
+      <div class="anim-controls">
+        <div id="esIRowCours">
+          <label>Intensité I (A)</label>
+          <input type="range" id="esICours" min="0" max="35" value="10" step="1">
+        </div>
+        <div class="anim-readout" id="esReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>d. L'intensité du courant électrique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'intensité du courant électrique se mesure avec un <strong>ampèremètre</strong> branché en série. Elle s'exprime en <strong>ampère (A)</strong>.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      En série : <strong>loi d'unicité</strong>, I₁ = I₂. En dérivation : <strong>loi d'additivité</strong>, I = I₁ + I₂.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle les intensités et bascule entre série et dérivation.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ciSerieCours">Série</button>
+      <button class="toggle-btn" id="ciDerivationCours">Dérivation</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="ciSvgCours" viewBox="0 0 220 125"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>I₁ (A)</label>
+        <input type="range" id="ciI1Cours" min="0" max="10" value="3" step="1">
+        <label>I₂ (A) — utilisé seulement en dérivation</label>
+        <input type="range" id="ciI2Cours" min="0" max="10" value="2" step="1">
+        <div class="anim-readout" id="ciReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. Le circuit électrique</h3>
+      <p>
+        Un circuit électrique doit former une boucle <input class="blank" data-answer="fermée|fermee" size="14">, constituée d'une suite ininterrompue de <input class="blank" data-answer="conducteurs" size="16">.
+      </p>
+
+      <h3>b. Types de circuit</h3>
+      <p>
+        En série, si un dipôle ne fonctionne plus, il <input class="blank" data-answer="ouvre" size="10"> la boucle. En dérivation, les dipôles fonctionnent <input class="blank" data-answer="indépendamment|independamment" size="18">.
+      </p>
+
+      <h3>c. Sécurité électrique</h3>
+      <p>
+        Un générateur est en <input class="blank" data-answer="court-circuit" size="16"> lorsqu'on relie ses bornes par un très bon conducteur. Un disjoncteur ouvre le circuit en cas de <input class="blank" data-answer="surintensité|surintensite" size="16">.
+      </p>
+
+      <h3>d. L'intensité du courant</h3>
+      <p>
+        En série : I₁ <input class="blank" data-answer="=" size="4"> I₂. En dérivation : I = I₁ <input class="blank" data-answer="+" size="4"> I₂.
+      </p>
+      <p>
+        L'intensité se mesure avec un <input class="blank" data-answer="ampèremètre|amperemetre" size="16"> branché en <input class="blank" data-answer="série|serie" size="12">.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Le circuit électrique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Observe le circuit fermé, puis clique sur "Diode" pour basculer son sens de branchement.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ecFerme">Boucle fermée</button>
+      <button class="toggle-btn" id="ecDiode">Diode (cliquer pour basculer)</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="ecSvg" viewBox="0 0 220 115"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="ecReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actElectricCircuit"></div></div>
+  </section>
+
+  <section>
+    <h2>Les différents types de circuit</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre série et dérivation, puis clique sur "Griller une lampe".</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ctSerie">Série</button>
+      <button class="toggle-btn" id="ctDerivation">Dérivation</button>
+    </div>
+    <div class="actions" style="justify-content:flex-start; margin:10px 0;">
+      <button id="ctCasser">💡 Griller une lampe</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="ctSvg" viewBox="0 0 220 130"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="ctReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actCircuitTypes"></div></div>
+  </section>
+
+  <section>
+    <h2>La sécurité électrique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 risques électriques.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="esCourtCircuit">Court-circuit</button>
+      <button class="toggle-btn" id="esElectrocution">Électrocution</button>
+      <button class="toggle-btn" id="esSurintensite">Surintensité</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="esSvg" viewBox="0 0 220 115"></svg>
+      </div>
+      <div class="anim-controls">
+        <div id="esIRow">
+          <label>Intensité I (A)</label>
+          <input type="range" id="esI" min="0" max="35" value="10" step="1">
+        </div>
+        <div class="anim-readout" id="esReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actElectricalSafety"></div></div>
+  </section>
+
+  <section>
+    <h2>L'intensité du courant électrique</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle les intensités et bascule entre série et dérivation.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ciSerie">Série</button>
+      <button class="toggle-btn" id="ciDerivation">Dérivation</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:230px;">
+        <svg id="ciSvg" viewBox="0 0 220 125"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>I₁ (A)</label>
+        <input type="range" id="ciI1" min="0" max="10" value="3" step="1">
+        <label>I₂ (A) — utilisé seulement en dérivation</label>
+        <input type="range" id="ciI2" min="0" max="10" value="2" step="1">
+        <div class="anim-readout" id="ciReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actCurrentIntensity"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Notion</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">À retenir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Circuit électrique</td><td style="padding:10px 8px; color:var(--chalk-dim);">boucle fermée ; certains dipôles ont un sens de branchement</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Types de circuit</td><td style="padding:10px 8px; color:var(--chalk-dim);">série (une boucle, dépendants) ou dérivation (plusieurs boucles, indépendants)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Sécurité électrique</td><td style="padding:10px 8px; color:var(--chalk-dim);">court-circuit, électrocution, disjoncteur (surintensité)</td></tr>
+          <tr><td style="padding:10px 8px;">Intensité</td><td style="padding:10px 8px; color:var(--chalk-dim);">ampèremètre en série, en ampère (A) ; série : I₁=I₂ ; dérivation : I=I₁+I₂</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 7 — Circuit électrique (4ème).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch7-4eme", "trous-complet", true);
+});
+
+/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initElectricCircuit({ svgId: "ecSvgCours", readoutId: "ecReadoutCours", btnFermeId: "ecFermeCours", btnDiodeId: "ecDiodeCours" });
+initCircuitTypes({ svgId: "ctSvgCours", readoutId: "ctReadoutCours", btnSerieId: "ctSerieCours", btnDerivationId: "ctDerivationCours", btnCasserId: "ctCasserCours" });
+initElectricalSafety({ svgId: "esSvgCours", readoutId: "esReadoutCours", buttonIds: ["esCourtCircuitCours", "esElectrocutionCours", "esSurintensiteCours"], iRangeId: "esICours", iRowId: "esIRowCours" });
+initCurrentIntensity({ svgId: "ciSvgCours", i1RangeId: "ciI1Cours", i2RangeId: "ciI2Cours", readoutId: "ciReadoutCours", btnSerieId: "ciSerieCours", btnDerivationId: "ciDerivationCours" });
+
+/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initElectricCircuit({ svgId: "ecSvg", readoutId: "ecReadout", btnFermeId: "ecFerme", btnDiodeId: "ecDiode" });
+initCircuitTypes({ svgId: "ctSvg", readoutId: "ctReadout", btnSerieId: "ctSerie", btnDerivationId: "ctDerivation", btnCasserId: "ctCasser" });
+initElectricalSafety({ svgId: "esSvg", readoutId: "esReadout", buttonIds: ["esCourtCircuit", "esElectrocution", "esSurintensite"], iRangeId: "esI", iRowId: "esIRow" });
+initCurrentIntensity({ svgId: "ciSvg", i1RangeId: "ciI1", i2RangeId: "ciI2", readoutId: "ciReadout", btnSerieId: "ciSerie", btnDerivationId: "ciDerivation" });
+
+/* ---------- Activités liées à chaque animation ---------- */
+initVraiFaux({
+  containerId: "actElectricCircuit", chapterId: "ch7-4eme", activityId: "vf-electric-circuit",
+  prompt: "Une diode branchée dans le mauvais sens laisse quand même passer le courant.",
+  correct: false,
+  explanation: "Faux : la diode (comme la DEL) ne laisse passer le courant que dans un seul sens."
+});
+
+initQCM({
+  containerId: "actCircuitTypes", chapterId: "ch7-4eme", activityId: "qcm-circuit-types",
+  prompt: "Dans une guirlande de Noël en série, une ampoule grille. Que se passe-t-il ?",
+  options: [
+    { text: "Toute la guirlande s'éteint", correct: true },
+    { text: "Seule cette ampoule s'éteint, les autres restent allumées", correct: false },
+    { text: "Rien ne change", correct: false }
+  ],
+  explanation: "En série, une ampoule grillée ouvre la boucle : le courant ne circule plus du tout, toutes les ampoules s'éteignent."
+});
+
+initQCM({
+  containerId: "actElectricalSafety", chapterId: "ch7-4eme", activityId: "qcm-electrical-safety",
+  prompt: "Quel est le rôle d'un disjoncteur ?",
+  options: [
+    { text: "Ouvrir le circuit en cas de surintensité, pour éviter un incendie", correct: true },
+    { text: "Augmenter la tension du circuit", correct: false },
+    { text: "Empêcher tout court-circuit de se produire physiquement", correct: false }
+  ],
+  explanation: "Le disjoncteur protège l'installation en ouvrant le circuit dès que l'intensité dépasse un certain seuil (souvent 20 A pour une installation domestique)."
+});
+
+initEstimation({
+  containerId: "actCurrentIntensity", chapterId: "ch7-4eme", activityId: "est-current-intensity",
+  prompt: "Deux lampes sont associées en dérivation. I₁ = 4 A et I₂ = 3 A. Quelle est l'intensité I dans la branche principale (en A) ?",
+  answer: 7, tolerance: 0.5, unit: "A",
+  explanation: "En dérivation, I = I₁ + I₂ = 4 + 3 = 7 A (loi d'additivité des intensités)."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch7-4eme");
+initProgressBar("ch7-4eme", 5); // texte à trous complet + 4 activités liées aux animations
+</script>
+</body>
+</html>

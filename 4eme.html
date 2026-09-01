@@ -24,6 +24,43 @@
 
 <main>
   <section>
+    <h2>Chapitres</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:14px; font-size:0.9rem;">Chapitre 0 (introduction, démarche scientifique, sécurité au labo) : séance de présentation, pas de page dédiée.</p>
+    <a href="chapitre1-4eme.html" class="chapter-card">
+      <span class="ch-title">Chapitre 1 — Constitution de la matière</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+    <a href="chapitre2-4eme.html" class="chapter-card">
+      <span class="ch-title">Chapitre 2 — Transformations chimiques</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+    <a href="chapitre3-4eme.html" class="chapter-card">
+      <span class="ch-title">Chapitre 3 — Organisation de la matière dans l'univers</span>
+      <span class="badge badge-chimie">Chimie</span>
+    </a>
+    <a href="chapitre4-4eme.html" class="chapter-card">
+      <span class="ch-title">Chapitre 4 — Mouvements</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre5-4eme.html" class="chapter-card">
+      <span class="ch-title">Chapitre 5 — Interactions</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre6-4eme.html" class="chapter-card">
+      <span class="ch-title">Chapitre 6 — Énergie</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre7-4eme.html" class="chapter-card">
+      <span class="ch-title">Chapitre 7 — Circuit électrique</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+    <a href="chapitre8-4eme.html" class="chapter-card">
+      <span class="ch-title">Chapitre 8 — Les signaux lumineux et les signaux sonores</span>
+      <span class="badge badge-physique">Physique</span>
+    </a>
+  </section>
+
+  <section>
     <h2>Roue de chimie</h2>
     <div class="wheel-zone">
       <div class="wheel-wrap">
@@ -77,6 +114,24 @@
     </div>
     <div class="win-msg" id="speedWin"></div>
   </section>
+
+  <section>
+    <h2>Chrono-pictogrammes</h2>
+    <div class="speed-toolbar">
+      <div class="speed-prompt-wrap">
+        <span class="speed-instr">Trouve :</span>
+        <span class="speed-prompt" id="pictoPrompt">—</span>
+      </div>
+      <div class="timer" id="pictoTimer">⏱ 0:00</div>
+    </div>
+    <div class="glass-grid" id="pictoGrid"></div>
+    <div class="memo-toolbar">
+      <div class="memo-stats" id="pictoStats">0/9 trouvés · 0 erreur</div>
+      <button class="spin-btn" id="startPicto">▶ Démarrer</button>
+      <button class="reset-btn" id="resetPicto" style="display:none;">Recommencer</button>
+    </div>
+    <div class="win-msg" id="pictoWin"></div>
+  </section>
 </main>
 
 <footer>Site pédagogique — physique-chimie.</footer>
@@ -125,6 +180,158 @@
     { id: "burette", name: "Burette graduée" },
     { id: "pipette", name: "Pipette jaugée" }
   ]);
+
+
+</script>
+
+<script>
+/* ==========================================================================
+   Chrono-pictogrammes — jeu d'identification chronométré (même mécanique
+   que Chrono-verrerie : un nom à trouver, une grille de tuiles, un chrono).
+   👉 Les chemins d'images sont ceux passés à initPictoSpeed() ci-dessus.
+   ========================================================================== */
+function initPictoSpeed(items){
+  const grid = document.getElementById("pictoGrid");
+  const promptEl = document.getElementById("pictoPrompt");
+  const timerEl = document.getElementById("pictoTimer");
+  const statsEl = document.getElementById("pictoStats");
+  const winEl = document.getElementById("pictoWin");
+  const startBtn = document.getElementById("startPicto");
+  const resetBtn = document.getElementById("resetPicto");
+
+  if (!grid) return;
+
+  const total = items.length;
+  let order = [];       // ordre d'affichage des tuiles (mélangé)
+  let remaining = [];   // ids restant à trouver
+  let currentTarget = null;
+  let found = 0;
+  let errors = 0;
+  let startTime = null;
+  let tickHandle = null;
+
+  function shuffle(arr){
+    for (let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function formatTime(ms){
+    const s = Math.floor(ms / 1000);
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    return `⏱ ${m}:${String(r).padStart(2, "0")}`;
+  }
+
+  function startTimer(){
+    stopTimer();
+    startTime = Date.now();
+    timerEl.textContent = formatTime(0);
+    tickHandle = setInterval(() => {
+      timerEl.textContent = formatTime(Date.now() - startTime);
+    }, 1000);
+  }
+
+  function stopTimer(){
+    if (tickHandle) clearInterval(tickHandle);
+    tickHandle = null;
+  }
+
+  function updateStats(){
+    statsEl.textContent = `${found}/${total} trouvés · ${errors} erreur${errors > 1 ? "s" : ""}`;
+  }
+
+  function pickNextPrompt(){
+    if (remaining.length === 0){
+      promptEl.textContent = "—";
+      stopTimer();
+      winEl.textContent = `🎉 Terminé en ${formatTime(Date.now() - startTime)} avec ${errors} erreur${errors > 1 ? "s" : ""} !`;
+      return;
+    }
+    const idx = Math.floor(Math.random() * remaining.length);
+    currentTarget = remaining[idx];
+    promptEl.textContent = currentTarget.name;
+  }
+
+  function render(){
+    grid.innerHTML = "";
+    order.forEach(item => {
+      const tile = document.createElement("div");
+      tile.className = "glass-tile";
+      tile.dataset.id = item.id;
+      tile.innerHTML = `<img src="${item.image}" alt="${item.name}">`;
+      tile.addEventListener("click", () => handleClick(item, tile));
+      grid.appendChild(tile);
+    });
+  }
+
+  function handleClick(item, tileEl){
+    if (tileEl.classList.contains("correct")) return; // déjà trouvée
+
+    if (currentTarget && item.id === currentTarget.id){
+      tileEl.classList.add("correct");
+      found++;
+      remaining = remaining.filter(r => r.id !== item.id);
+      updateStats();
+      pickNextPrompt();
+    } else {
+      tileEl.classList.add("wrong");
+      errors++;
+      updateStats();
+      setTimeout(() => tileEl.classList.remove("wrong"), 500);
+    }
+  }
+
+  function newGame(){
+    order = shuffle(items.slice());
+    remaining = items.slice();
+    found = 0;
+    errors = 0;
+    winEl.textContent = "";
+    updateStats();
+    render();
+    startTimer();
+    pickNextPrompt();
+  }
+
+  // état initial : jeu en attente, rien ne démarre tant qu'on ne clique pas
+  function resetToIdle(){
+    stopTimer();
+    grid.innerHTML = "";
+    promptEl.textContent = "—";
+    timerEl.textContent = "⏱ 0:00";
+    found = 0;
+    errors = 0;
+    updateStats();
+    winEl.textContent = "";
+    startBtn.style.display = "inline-block";
+    resetBtn.style.display = "none";
+  }
+
+  startBtn.addEventListener("click", () => {
+    startBtn.style.display = "none";
+    resetBtn.style.display = "inline-block";
+    newGame();
+  });
+
+  resetBtn.addEventListener("click", newGame);
+
+  resetToIdle();
+}
+
+initPictoSpeed([
+  { id: "explosif", name: "Explosif", image: "images/explosif.jpg" },
+  { id: "inflammable", name: "Inflammable", image: "images/inflammable.jpg" },
+  { id: "comburant", name: "Comburant", image: "images/comburant.jpg" },
+  { id: "gaz", name: "Gaz sous pression", image: "images/gaz_sous_pression.jpg" },
+  { id: "corrosif", name: "Corrosif", image: "images/corrosif.jpg" },
+  { id: "toxicite", name: "Toxicité aiguë", image: "images/toxicite_aigue.jpg" },
+  { id: "nocif", name: "Nocif / irritant", image: "images/nocif_irritant.jpg" },
+  { id: "sante", name: "Danger pour la santé", image: "images/danger_sante.jpg" },
+  { id: "environnement", name: "Danger pour l'environnement", image: "images/danger_environnement.jpg" }
+]);
 </script>
 </body>
 </html>

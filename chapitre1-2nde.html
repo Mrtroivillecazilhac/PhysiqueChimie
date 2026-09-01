@@ -54,7 +54,7 @@
       <ul>
         <li>Savoir compter les chiffres significatifs d'une mesure et écrire un nombre en notation scientifique</li>
         <li>Savoir arrondir un résultat de calcul au bon nombre de chiffres significatifs</li>
-        <li>Comprendre ce qu'est une incertitude de mesure et savoir écrire un résultat avec son intervalle de confiance</li>
+        <li>Comprendre ce qu'est une incertitude de mesure et savoir écrire un résultat avec les valeurs entre lesquelles il se trouve probablement</li>
       </ul>
     </div>
   </section>
@@ -175,10 +175,10 @@
         <svg id="soSvgCours" viewBox="0 0 220 160"></svg>
       </div>
       <div class="anim-controls">
-        <label>Nombre de CS de v1</label>
-        <input type="range" id="soCS1Cours" min="2" max="4" value="2" step="1">
-        <label>Nombre de CS de v2</label>
-        <input type="range" id="soCS2Cours" min="2" max="4" value="3" step="1">
+        <label>Nombre de CS de a</label>
+        <input type="range" id="soCS1Cours" min="2" max="6" value="2" step="1">
+        <label>Nombre de CS de b</label>
+        <input type="range" id="soCS2Cours" min="2" max="6" value="3" step="1">
         <div class="anim-readout" id="soReadoutCours"></div>
       </div>
     </div>
@@ -192,35 +192,35 @@
     </div>
     <div class="formula">incertitude relative = <span class="frac"><span class="num">U(x)</span><span class="den">x</span></span> (souvent exprimée en %)</div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la plus petite graduation de l'instrument : observe l'incertitude se recalculer.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis l'échelle de graduation de l'instrument : observe la règle se redessiner, avec la lecture à 15,3 cm.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="muS10Cours">Échelle 10</button>
+      <button class="toggle-btn" id="muS1Cours">Échelle 1</button>
+      <button class="toggle-btn" id="muS01Cours">Échelle 0,1</button>
+      <button class="toggle-btn" id="muS001Cours">Échelle 0,01</button>
+    </div>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="muSvgCours" viewBox="0 0 220 120"></svg>
       </div>
       <div class="anim-controls">
-        <label>Plus petite graduation (cm)</label>
-        <input type="range" id="muGradCours" min="1" max="100" value="100" step="1">
         <div class="anim-readout" id="muReadoutCours"></div>
       </div>
     </div>
   </section>
 
   <section>
-    <h2>f. Donner un résultat de mesure : l'intervalle de confiance</h2>
-    <div class="recall-box">
-      <span class="box-label">📌 Rappel — notation intervalle</span>
-      [a ; b] désigne l'ensemble de tous les nombres compris entre a et b (bornes incluses). Par exemple, [2 ; 5] contient 2, puis tous les nombres comme 3, 4,2 ou 4,99, jusqu'à 5.
-    </div>
+    <h2>f. Donner un résultat de mesure : entre quelles valeurs ?</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Un résultat de mesure s'écrit x = x<sub>mesuré</sub> ± U(x). Cela signifie que la valeur vraie de la grandeur a de bonnes chances de se trouver dans l'<strong>intervalle de confiance</strong> [x<sub>mesuré</sub> − U(x) ; x<sub>mesuré</sub> + U(x)].
+      Un résultat de mesure s'écrit x = x<sub>mesuré</sub> ± U(x). Cela signifie que la valeur vraie de la grandeur a de bonnes chances d'être <strong>comprise entre x<sub>mesuré</sub> − U(x) et x<sub>mesuré</sub> + U(x)</strong>.
     </div>
     <div class="warning-box">
       <span class="box-label">⚠️ Attention</span>
-      Une incertitude plus petite signifie un intervalle de confiance plus étroit, donc une mesure plus précise — mais jamais une certitude absolue sur la valeur vraie.
+      Une incertitude plus petite signifie que les deux valeurs limites sont plus proches l'une de l'autre, donc une mesure plus précise — mais jamais une certitude absolue sur la valeur vraie.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Même règle qu'à la section précédente (longueur mesurée : 15,3 cm). Règle l'incertitude U : observe l'intervalle de confiance se resserrer ou s'élargir.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Même règle qu'à la section précédente (longueur mesurée : 15,3 cm). Règle l'incertitude U : observe les deux valeurs limites se resserrer ou s'élargir.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="ciSvgCours" viewBox="0 0 220 120"></svg>
@@ -286,7 +286,7 @@
         Un résultat de mesure s'écrit x = x<sub>mesuré</sub> ± <input class="blank" data-answer="U(x)|U" size="10">.
       </p>
       <p>
-        La valeur vraie a de bonnes chances de se trouver dans l'intervalle de <input class="blank" data-answer="confiance" size="14">.
+        La valeur vraie a de bonnes chances d'être <input class="blank" data-answer="comprise|comprise entre" size="14"> entre ces deux valeurs.
       </p>
 
     </div>
@@ -379,10 +379,10 @@
         <svg id="soSvg" viewBox="0 0 220 160"></svg>
       </div>
       <div class="anim-controls">
-        <label>Nombre de CS de v1</label>
-        <input type="range" id="soCS1" min="2" max="4" value="2" step="1">
-        <label>Nombre de CS de v2</label>
-        <input type="range" id="soCS2" min="2" max="4" value="3" step="1">
+        <label>Nombre de CS de a</label>
+        <input type="range" id="soCS1" min="2" max="6" value="2" step="1">
+        <label>Nombre de CS de b</label>
+        <input type="range" id="soCS2" min="2" max="6" value="3" step="1">
         <div class="anim-readout" id="soReadout"></div>
       </div>
     </div>
@@ -391,14 +391,18 @@
 
   <section>
     <h2>Incertitude de mesure</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la plus petite graduation de l'instrument : observe l'incertitude se recalculer.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis l'échelle de graduation de l'instrument : observe la règle se redessiner, avec la lecture à 15,3 cm.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="muS10">Échelle 10</button>
+      <button class="toggle-btn" id="muS1">Échelle 1</button>
+      <button class="toggle-btn" id="muS01">Échelle 0,1</button>
+      <button class="toggle-btn" id="muS001">Échelle 0,01</button>
+    </div>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="muSvg" viewBox="0 0 220 120"></svg>
       </div>
       <div class="anim-controls">
-        <label>Plus petite graduation (cm)</label>
-        <input type="range" id="muGrad" min="1" max="100" value="100" step="1">
         <div class="anim-readout" id="muReadout"></div>
       </div>
     </div>
@@ -407,7 +411,7 @@
 
   <section>
     <h2>Intervalle de confiance</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Même règle qu'à la section précédente (longueur mesurée : 15,3 cm). Règle l'incertitude U : observe l'intervalle de confiance se resserrer ou s'élargir.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Même règle qu'à la section précédente (longueur mesurée : 15,3 cm). Règle l'incertitude U : observe les deux valeurs limites se resserrer ou s'élargir.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="ciSvg" viewBox="0 0 220 120"></svg>
@@ -490,7 +494,7 @@ initErrorTypes({ svgId: "etSvgCours", explainId: "etExplainCours", prevBtnId: "e
 initSignificantFigures({ svgId: "sfSvgCours", readoutId: "sfReadoutCours", buttonIds: ["sfACours", "sfBCours", "sfCCours", "sfDCours"] });
 initScientificNotation({ svgId: "snSvgCours", readoutId: "snReadoutCours", buttonIds: ["snACours", "snBCours", "snCCours"] });
 initSigFigOperations({ svgId: "soSvgCours", cs1RangeId: "soCS1Cours", cs2RangeId: "soCS2Cours", readoutId: "soReadoutCours" });
-initMeasurementUncertainty({ svgId: "muSvgCours", gradRangeId: "muGradCours", readoutId: "muReadoutCours" });
+initMeasurementUncertainty({ svgId: "muSvgCours", readoutId: "muReadoutCours", buttonIds: ["muS10Cours", "muS1Cours", "muS01Cours", "muS001Cours"] });
 initConfidenceInterval({ svgId: "ciSvgCours", uRangeId: "ciUCours", readoutId: "ciReadoutCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
@@ -499,7 +503,7 @@ initErrorTypes({ svgId: "etSvg", explainId: "etExplain", prevBtnId: "etPrev", ne
 initSignificantFigures({ svgId: "sfSvg", readoutId: "sfReadout", buttonIds: ["sfA", "sfB", "sfC", "sfD"] });
 initScientificNotation({ svgId: "snSvg", readoutId: "snReadout", buttonIds: ["snA", "snB", "snC"] });
 initSigFigOperations({ svgId: "soSvg", cs1RangeId: "soCS1", cs2RangeId: "soCS2", readoutId: "soReadout" });
-initMeasurementUncertainty({ svgId: "muSvg", gradRangeId: "muGrad", readoutId: "muReadout" });
+initMeasurementUncertainty({ svgId: "muSvg", readoutId: "muReadout", buttonIds: ["muS10", "muS1", "muS01", "muS001"] });
 initConfidenceInterval({ svgId: "ciSvg", uRangeId: "ciU", readoutId: "ciReadout" });
 
 /* ---------- Activités liées à chaque animation ---------- */
@@ -557,7 +561,7 @@ initVraiFaux({
   containerId: "actConfidenceInterval", chapterId: "ch1-2nde", activityId: "vf-confidence-interval",
   prompt: "Écrire L = 15,3 ± 0,3 cm signifie que l'on est certain à 100 % que la longueur vraie vaut exactement 15,3 cm.",
   correct: false,
-  explanation: "Faux : cela signifie que la valeur vraie a de bonnes chances de se trouver dans l'intervalle [15,0 ; 15,6] cm — ce n'est jamais une certitude absolue."
+  explanation: "Faux : cela signifie que la valeur vraie a de bonnes chances d'être comprise entre 15,0 et 15,6 cm — ce n'est jamais une certitude absolue."
 });
 
 /* ---------- Onglets + barre de progression ---------- */
