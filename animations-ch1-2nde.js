@@ -153,10 +153,9 @@ function initSignificantFigures(cfg) {
   const EXAMPLES = {
     a: { display: "3,20", digits: [{ c: "3", sig: true }, { c: ",", sig: null }, { c: "2", sig: true }, { c: "0", sig: true }], count: "3", rule: "Tous les chiffres sont significatifs, y compris le zéro après la virgule." },
     b: { display: "0,0450", digits: [{ c: "0", sig: false }, { c: ",", sig: null }, { c: "0", sig: false }, { c: "4", sig: true }, { c: "5", sig: true }, { c: "0", sig: true }], count: "3", rule: "Les zéros de tête (avant le premier chiffre non nul) ne sont pas significatifs ; le zéro final après la virgule l'est." },
-    c: { display: "205", digits: [{ c: "2", sig: true }, { c: "0", sig: true }, { c: "5", sig: true }], count: "3", rule: "Un zéro encadré par deux chiffres non nuls est toujours significatif." },
-    d: { display: "1200", digits: [{ c: "1", sig: true }, { c: "2", sig: true }, { c: "0", sig: null }, { c: "0", sig: null }], count: "2, 3 ou 4 ?", rule: "Ambigu : sans information supplémentaire, on ne sait pas si les zéros finaux sont significatifs. D'où l'intérêt de l'écriture scientifique (section c)." }
+    c: { display: "205", digits: [{ c: "2", sig: true }, { c: "0", sig: true }, { c: "5", sig: true }], count: "3", rule: "Un zéro encadré par deux chiffres non nuls est toujours significatif." }
   };
-  const keys = ["a", "b", "c", "d"];
+  const keys = ["a", "b", "c"];
   let current = "a";
 
   function draw() {
@@ -215,7 +214,49 @@ function initScientificNotation(cfg) {
   draw();
 }
 
-/* ---------- d. Chiffres significatifs et opérations ---------- */
+/* ---------- d1. Chiffres significatifs et opérations : somme/différence ---------- */
+function initSigFigAddition(cfg) {
+  const svg = document.getElementById(cfg.svgId);
+  const dec1Range = document.getElementById(cfg.dec1RangeId);
+  const dec2Range = document.getElementById(cfg.dec2RangeId);
+  const readout = document.getElementById(cfg.readoutId);
+
+  // valeurs neutres, vérifiées sur toutes les combinaisons de décimales (0 à 4)
+  const A_TRUE = 12.34567, B_TRUE = 4.78912;
+
+  function draw() {
+    const dec1 = Number(dec1Range.value);
+    const dec2 = Number(dec2Range.value);
+    const a = A_TRUE.toFixed(dec1);   // chaîne, ex: "12.3"
+    const b = B_TRUE.toFixed(dec2);
+    const aNum = Number(a), bNum = Number(b);
+    const cRaw = aNum + bNum;
+    const minDec = Math.min(dec1, dec2);
+    const c = cRaw.toFixed(minDec);
+    const sameDec = dec1 === dec2;
+    const dLabel = (n) => `${n} décimale${n > 1 ? "s" : ""}`;
+
+    // exemple générique d'abord : a + b = c (s'applique aussi à une différence)
+    let s = `<text x="110" y="20" font-size="10" fill="var(--chalk-dim)" text-anchor="middle">Exemple : <tspan fill="var(--teal)">a</tspan> + <tspan fill="#5a96d2">b</tspan> = <tspan fill="var(--yellow)">c</tspan></text>`;
+    s += `<text x="110" y="46" font-size="16" text-anchor="middle"><tspan fill="var(--teal)" font-weight="700">${a}</tspan><tspan fill="var(--chalk)"> + </tspan><tspan fill="#5a96d2" font-weight="700">${b}</tspan><tspan fill="var(--chalk)"> = </tspan><tspan fill="var(--yellow)" font-weight="700">${cRaw.toFixed(4)}</tspan></text>`;
+    s += `<line x1="30" y1="64" x2="190" y2="64" stroke="var(--chalk-dim)" stroke-width="1" stroke-dasharray="3,3"/>`;
+    const line1 = sameDec ? `a et b ont la même précision (${dLabel(dec1)})` : `a a ${dLabel(dec1)}, b a ${dLabel(dec2)}`;
+    const line2 = sameDec ? `→ c est arrondi à ${dLabel(minDec)}` : `→ c arrondi à la moins précise : ${dLabel(minDec)}`;
+    s += `<text x="110" y="82" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">${line1}</text>`;
+    s += `<text x="110" y="96" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">${line2}</text>`;
+    s += `<text x="110" y="128" font-size="20" fill="var(--yellow)" text-anchor="middle" font-weight="700">c ≈ ${c}</text>`;
+    svg.innerHTML = s;
+
+    readout.innerHTML = sameDec
+      ? `a = <strong style="color:var(--teal)">${a}</strong> et b = <strong style="color:#5a96d2">${b}</strong> ont la même précision (${dLabel(dec1)} après la virgule). Résultat brut : a + b = <strong style="color:var(--yellow)">${cRaw.toFixed(4)}</strong>, arrondi à cette même précision : <strong style="color:var(--yellow)">${c}</strong>.`
+      : `a = <strong style="color:var(--teal)">${a}</strong> (${dLabel(dec1)}) et b = <strong style="color:#5a96d2">${b}</strong> (${dLabel(dec2)}) n'ont pas la même précision. Résultat brut : a + b = <strong style="color:var(--yellow)">${cRaw.toFixed(4)}</strong>, arrondi à la précision la moins bonne des deux : <strong style="color:var(--yellow)">${c}</strong>.`;
+  }
+  dec1Range.addEventListener("input", draw);
+  dec2Range.addEventListener("input", draw);
+  draw();
+}
+
+/* ---------- d2. Chiffres significatifs et opérations : produit/quotient ---------- */
 function initSigFigOperations(cfg) {
   const svg = document.getElementById(cfg.svgId);
   const cs1Range = document.getElementById(cfg.cs1RangeId);
@@ -255,6 +296,100 @@ function initSigFigOperations(cfg) {
   cs1Range.addEventListener("input", draw);
   cs2Range.addEventListener("input", draw);
   draw();
+}
+
+/* ---------- d3. Chiffres significatifs et opérations : calcul mixte (produit/quotient + somme) ---------- */
+function initMixedCalculation(cfg) {
+  const svg = document.getElementById(cfg.svgId);
+  const explainEl = document.getElementById(cfg.explainId);
+  const prevBtn = document.getElementById(cfg.prevBtnId);
+  const nextBtn = document.getElementById(cfg.nextBtnId);
+  const stepEl = document.getElementById(cfg.stepId);
+
+  // d1/v1 et d2/v2 : deux quotients à 2 CS chacun, choisis pour que l'arrondi
+  // prématuré aurait changé le résultat final (7,3 s au lieu de 7,4 s)
+  const D1 = 5.0, V1 = 1.1, D2 = 8.5, V2 = 3.0;
+  const t1Raw = D1 / V1;                       // 4,545454... s
+  const t2Raw = D2 / V2;                       // 2,833333... s
+  const t1RawStr = t1Raw.toFixed(3).replace(".", ",") + "...";
+  const t2RawStr = t2Raw.toFixed(3).replace(".", ",") + "...";
+  const sumRawStr = (t1Raw + t2Raw).toFixed(3).replace(".", ",") + "...";
+  const finalResult = (t1Raw + t2Raw).toFixed(1).replace(".", ",");
+
+  // précision que chaque quotient aurait une fois arrondi à son bon nombre de CS
+  const t1Rounded = formatSig(t1Raw, 2);       // "4.5" -> 1 décimale
+  const t2Rounded = formatSig(t2Raw, 2);       // "2.8" -> 1 décimale
+
+  // dessin cumulatif : chaque étape ajoute une couche au diagramme précédent
+  function drawFractions({ showPrecision, showSum, showFinal }) {
+    let s = "";
+
+    // fraction 1 : 5,0 / 1,1 (juste les nombres, les unités sont données dans le texte)
+    s += `<text x="55" y="22" font-size="14" text-anchor="middle" fill="var(--chalk)">5,0</text>`;
+    s += `<line x1="20" y1="30" x2="90" y2="30" stroke="var(--chalk)" stroke-width="1.4"/>`;
+    s += `<text x="55" y="46" font-size="14" text-anchor="middle" fill="var(--chalk)">1,1</text>`;
+
+    s += `<text x="110" y="36" font-size="18" text-anchor="middle" fill="var(--chalk-dim)">+</text>`;
+
+    // fraction 2 : 8,5 / 3,0
+    s += `<text x="165" y="22" font-size="14" text-anchor="middle" fill="var(--chalk)">8,5</text>`;
+    s += `<line x1="130" y1="30" x2="200" y2="30" stroke="var(--chalk)" stroke-width="1.4"/>`;
+    s += `<text x="165" y="46" font-size="14" text-anchor="middle" fill="var(--chalk)">3,0</text>`;
+
+    s += `<text x="55" y="66" font-size="10" text-anchor="middle" fill="var(--teal)">t₁ = ${t1RawStr} s</text>`;
+    s += `<text x="165" y="66" font-size="10" text-anchor="middle" fill="var(--teal)">t₂ = ${t2RawStr} s</text>`;
+
+    if (showPrecision) {
+      s += `<text x="55" y="80" font-size="8" text-anchor="middle" fill="var(--yellow)">≈ ${t1Rounded} s à 2 CS</text>`;
+      s += `<text x="165" y="80" font-size="8" text-anchor="middle" fill="var(--yellow)">≈ ${t2Rounded} s à 2 CS</text>`;
+    }
+
+    if (showSum) {
+      s += `<line x1="10" y1="92" x2="210" y2="92" stroke="var(--chalk-dim)" stroke-width="1" stroke-dasharray="3,3"/>`;
+      s += `<text x="110" y="108" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">t = ${t1RawStr} + ${t2RawStr} = ${sumRawStr} s</text>`;
+    }
+
+    if (showFinal) {
+      s += `<text x="110" y="126" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">arrondi une seule fois, à la fin, à 1 décimale</text>`;
+      s += `<text x="110" y="158" font-size="20" font-weight="700" fill="var(--yellow)" text-anchor="middle">t ≈ ${finalResult} s</text>`;
+    }
+    return s;
+  }
+
+  const STEPS = [
+    {
+      title: "Étape 1 — calculer chaque durée séparément, sans arrondir",
+      text: `t₁ = d₁ / v₁ = 5,0 / 1,1 = ${t1RawStr} s ; t₂ = d₂ / v₂ = 8,5 / 3,0 = ${t2RawStr} s. On garde toute la précision affichée par la calculatrice, on n'arrondit rien pour l'instant.`,
+      draw: () => drawFractions({ showPrecision: false, showSum: false, showFinal: false })
+    },
+    {
+      title: "Étape 2 — repérer la précision visée pour le résultat final",
+      text: `On regarde quelle précision aurait chaque quotient s'il était arrondi seul : t₁ arrondi à 2 CS donnerait ${t1Rounded} s (1 décimale), t₂ arrondi à 2 CS donnerait ${t2Rounded} s (1 décimale). Le résultat final devra donc être donné à 1 décimale — mais on n'arrondit toujours pas les valeurs utilisées dans le calcul.`,
+      draw: () => drawFractions({ showPrecision: true, showSum: false, showFinal: false })
+    },
+    {
+      title: "Étape 3 — additionner les valeurs complètes, non arrondies",
+      text: `t = t₁ + t₂ = ${t1RawStr} + ${t2RawStr} = ${sumRawStr} s. On additionne les valeurs entières telles que la calculatrice les donne, pas des valeurs déjà arrondies.`,
+      draw: () => drawFractions({ showPrecision: true, showSum: true, showFinal: false })
+    },
+    {
+      title: "Étape 4 — arrondir une seule fois, à la fin",
+      text: `On arrondit le résultat à la précision fixée à l'étape 2 (1 décimale) : t ≈ ${finalResult} s. C'est le seul arrondi de tout le calcul.`,
+      draw: () => drawFractions({ showPrecision: true, showSum: true, showFinal: true })
+    }
+  ];
+
+  let step = 1;
+  function render() {
+    svg.innerHTML = STEPS[step - 1].draw();
+    explainEl.innerHTML = `<strong style="color:var(--yellow)">${STEPS[step - 1].title}</strong><br>${STEPS[step - 1].text}`;
+    stepEl.textContent = `${step} / ${STEPS.length}`;
+    prevBtn.disabled = step === 1;
+    nextBtn.disabled = step === STEPS.length;
+  }
+  prevBtn.addEventListener("click", () => { if (step > 1) { step--; render(); } });
+  nextBtn.addEventListener("click", () => { if (step < STEPS.length) { step++; render(); } });
+  render();
 }
 
 /* ---------- e. Incertitude de mesure ---------- */

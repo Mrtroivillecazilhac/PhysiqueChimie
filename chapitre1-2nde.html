@@ -124,7 +124,6 @@
       <button class="toggle-btn" id="sfACours">3,20</button>
       <button class="toggle-btn" id="sfBCours">0,0450</button>
       <button class="toggle-btn" id="sfCCours">205</button>
-      <button class="toggle-btn" id="sfDCours">1200</button>
     </div>
     <div class="anim-zone">
       <div class="anim-wrap">
@@ -143,7 +142,7 @@
       L'<strong>écriture scientifique</strong> d'un nombre s'écrit sous la forme a × 10ⁿ, où 1 ≤ a &lt; 10 et n est un entier relatif.
     </div>
     <p class="course-text">
-      Cette écriture lève l'ambiguïté des zéros finaux : le nombre de chiffres écrits dans la mantisse a correspond exactement au nombre de chiffres significatifs voulu — aucune ambiguïté possible, contrairement à l'écriture décimale (voir l'exemple « 1200 » plus haut).
+      Cette écriture lève l'ambiguïté des zéros finaux : le nombre de chiffres écrits dans la mantisse a correspond exactement au nombre de chiffres significatifs voulu — aucune ambiguïté possible, contrairement à certaines écritures décimales.
     </p>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les exemples de conversion.</p>
@@ -164,6 +163,26 @@
 
   <section>
     <h2>d. Chiffres significatifs et opérations</h2>
+
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Lors d'une somme ou d'une différence de grandeurs mesurées, le résultat ne peut pas avoir plus de décimales (chiffres après la virgule) que la donnée la moins précise.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle le nombre de décimales de chaque mesure : observe le résultat s'arrondir automatiquement.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="saSvgCours" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre de décimales de a</label>
+        <input type="range" id="saDec1Cours" min="0" max="4" value="1" step="1">
+        <label>Nombre de décimales de b</label>
+        <input type="range" id="saDec2Cours" min="0" max="4" value="2" step="1">
+        <div class="anim-readout" id="saReadoutCours"></div>
+      </div>
+    </div>
+
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
       Lors d'un produit ou d'un quotient de grandeurs mesurées, le résultat ne peut pas avoir plus de chiffres significatifs que la donnée la moins précise.
@@ -180,6 +199,26 @@
         <label>Nombre de CS de b</label>
         <input type="range" id="soCS2Cours" min="2" max="6" value="3" step="1">
         <div class="anim-readout" id="soReadoutCours"></div>
+      </div>
+    </div>
+
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Lorsqu'un même calcul enchaîne plusieurs opérations (produits/quotients <em>et</em> sommes/différences), on n'arrondit qu'à la toute fin : arrondir un résultat intermédiaire fait perdre en précision pour la suite du calcul. C'est la dernière opération effectuée qui fixe la règle d'arrondi du résultat final.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Un cycliste parcourt d₁ = 5,0 m à la vitesse v₁ = 1,1 m/s, puis d₂ = 8,5 m à la vitesse v₂ = 3,0 m/s. Parcours les 4 étapes du calcul de la durée totale t = t₁ + t₂.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="mcSvgCours" viewBox="0 0 220 175"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:280px;">
+        <div class="anim-readout" id="mcExplainCours" style="min-height:5em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="mcPrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="mcStepCours"></span>
+          <button id="mcNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
       </div>
     </div>
   </section>
@@ -270,7 +309,13 @@
 
       <h3>d. Chiffres significatifs et opérations</h3>
       <p>
+        Lors d'une somme ou d'une différence, le résultat ne peut pas avoir plus de <input class="blank" data-answer="décimales|decimales" size="14"> que la donnée la moins précise.
+      </p>
+      <p>
         Lors d'un produit ou d'un quotient, le résultat ne peut pas avoir plus de chiffres significatifs que la donnée la <input class="blank" data-answer="moins" size="10"> précise.
+      </p>
+      <p>
+        Dans un calcul qui mélange les deux types d'opérations, on n'arrondit qu'à la <input class="blank" data-answer="fin" size="8">, jamais lors des étapes intermédiaires.
       </p>
 
       <h3>e. Incertitude de mesure</h3>
@@ -339,7 +384,6 @@
       <button class="toggle-btn" id="sfA">3,20</button>
       <button class="toggle-btn" id="sfB">0,0450</button>
       <button class="toggle-btn" id="sfC">205</button>
-      <button class="toggle-btn" id="sfD">1200</button>
     </div>
     <div class="anim-zone">
       <div class="anim-wrap">
@@ -373,7 +417,22 @@
 
   <section>
     <h2>Chiffres significatifs et opérations</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle le nombre de CS de chaque mesure : observe le résultat s'arrondir automatiquement.</p>
+
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Somme/différence — règle le nombre de décimales de chaque mesure : observe le résultat s'arrondir automatiquement.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="saSvg" viewBox="0 0 220 160"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Nombre de décimales de a</label>
+        <input type="range" id="saDec1" min="0" max="4" value="1" step="1">
+        <label>Nombre de décimales de b</label>
+        <input type="range" id="saDec2" min="0" max="4" value="2" step="1">
+        <div class="anim-readout" id="saReadout"></div>
+      </div>
+    </div>
+
+    <p style="color:var(--chalk-dim); margin:18px 0 10px;">Produit/quotient — règle le nombre de CS de chaque mesure : observe le résultat s'arrondir automatiquement.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="soSvg" viewBox="0 0 220 160"></svg>
@@ -387,6 +446,21 @@
       </div>
     </div>
     <div class="activity-block"><div id="actSigFigOperations"></div></div>
+
+    <p style="color:var(--chalk-dim); margin:18px 0 10px;">Calcul mixte — un cycliste parcourt d₁ = 5,0 m à la vitesse v₁ = 1,1 m/s, puis d₂ = 8,5 m à la vitesse v₂ = 3,0 m/s. Parcours les 4 étapes du calcul de la durée totale t = t₁ + t₂.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap">
+        <svg id="mcSvg" viewBox="0 0 220 175"></svg>
+      </div>
+      <div class="anim-controls" style="min-width:280px;">
+        <div class="anim-readout" id="mcExplain" style="min-height:5em;"></div>
+        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+          <button id="mcPrev" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
+          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="mcStep"></span>
+          <button id="mcNext" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -491,18 +565,22 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
 initImplicitExplicit({ svgId: "ieSvgCours", readoutId: "ieReadoutCours", buttonIds: ["ieTrajetCours", "ieTemperatureCours"] });
 initErrorTypes({ svgId: "etSvgCours", explainId: "etExplainCours", prevBtnId: "etPrevCours", nextBtnId: "etNextCours", stepId: "etStepCours" });
-initSignificantFigures({ svgId: "sfSvgCours", readoutId: "sfReadoutCours", buttonIds: ["sfACours", "sfBCours", "sfCCours", "sfDCours"] });
+initSignificantFigures({ svgId: "sfSvgCours", readoutId: "sfReadoutCours", buttonIds: ["sfACours", "sfBCours", "sfCCours"] });
 initScientificNotation({ svgId: "snSvgCours", readoutId: "snReadoutCours", buttonIds: ["snACours", "snBCours", "snCCours"] });
+initSigFigAddition({ svgId: "saSvgCours", dec1RangeId: "saDec1Cours", dec2RangeId: "saDec2Cours", readoutId: "saReadoutCours" });
 initSigFigOperations({ svgId: "soSvgCours", cs1RangeId: "soCS1Cours", cs2RangeId: "soCS2Cours", readoutId: "soReadoutCours" });
+initMixedCalculation({ svgId: "mcSvgCours", explainId: "mcExplainCours", prevBtnId: "mcPrevCours", nextBtnId: "mcNextCours", stepId: "mcStepCours" });
 initMeasurementUncertainty({ svgId: "muSvgCours", readoutId: "muReadoutCours", buttonIds: ["muS10Cours", "muS1Cours", "muS01Cours", "muS001Cours"] });
 initConfidenceInterval({ svgId: "ciSvgCours", uRangeId: "ciUCours", readoutId: "ciReadoutCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
 initImplicitExplicit({ svgId: "ieSvg", readoutId: "ieReadout", buttonIds: ["ieTrajet", "ieTemperature"] });
 initErrorTypes({ svgId: "etSvg", explainId: "etExplain", prevBtnId: "etPrev", nextBtnId: "etNext", stepId: "etStep" });
-initSignificantFigures({ svgId: "sfSvg", readoutId: "sfReadout", buttonIds: ["sfA", "sfB", "sfC", "sfD"] });
+initSignificantFigures({ svgId: "sfSvg", readoutId: "sfReadout", buttonIds: ["sfA", "sfB", "sfC"] });
 initScientificNotation({ svgId: "snSvg", readoutId: "snReadout", buttonIds: ["snA", "snB", "snC"] });
+initSigFigAddition({ svgId: "saSvg", dec1RangeId: "saDec1", dec2RangeId: "saDec2", readoutId: "saReadout" });
 initSigFigOperations({ svgId: "soSvg", cs1RangeId: "soCS1", cs2RangeId: "soCS2", readoutId: "soReadout" });
+initMixedCalculation({ svgId: "mcSvg", explainId: "mcExplain", prevBtnId: "mcPrev", nextBtnId: "mcNext", stepId: "mcStep" });
 initMeasurementUncertainty({ svgId: "muSvg", readoutId: "muReadout", buttonIds: ["muS10", "muS1", "muS01", "muS001"] });
 initConfidenceInterval({ svgId: "ciSvg", uRangeId: "ciU", readoutId: "ciReadout" });
 
