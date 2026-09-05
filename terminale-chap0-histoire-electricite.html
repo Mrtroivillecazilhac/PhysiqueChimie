@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 0 — Une brève histoire de l'électricité — Terminale ES</title>
+<link rel="stylesheet" href="styles.css">
+<script src="modules-common.js"></script>
+<style>
+  /* Tableaux (comparaison villes/campagnes, tableau-bilan) — pas de tableau
+     générique dans styles.css, donc défini ici avec les variables du thème,
+     comme les autres blocs de style locaux à un chapitre. */
+  .bilan-table{ width:100%; border-collapse:collapse; margin:16px 0 8px; font-size:0.92rem; }
+  .bilan-table th, .bilan-table td{ border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top; }
+  .bilan-table th{ background:rgba(107,191,171,0.12); color:var(--teal); font-family:var(--font-display); font-weight:700; font-size:0.95rem; }
+  .bilan-table tr:nth-child(even) td{ background:rgba(255,255,255,0.02); }
+  @media (max-width:700px){
+    .bilan-table{ font-size:0.82rem; }
+    .bilan-table th, .bilan-table td{ padding:8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique-Chimie</div>
+  <h1>Chapitre 0 — Une brève histoire de l'électricité</h1>
+  <p class="sub">De l'ambre frotté de Thalès aux campagnes électrifiées du XX<sup>e</sup> siècle. Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch0-terminale">0 / 7 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch0-terminale"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- ================================================================ -->
+<!-- MODE_COURS                                                        -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Comprendre que l'électricité est une conquête scientifique progressive, pas une découverte instantanée</li>
+        <li>Identifier les grandes étapes qui mènent de l'observation antique à un réseau mondial</li>
+        <li>Percevoir la dimension sociale et politique de l'électrification (villes/campagnes, colonisation, rivalités industrielles)</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Thalès (~600 av. J.-C.) — l'ambre qui attire</h2>
+    <p class="course-text">
+      Dans la Grèce antique, Thalès de Milet — l'un des tout premiers penseurs à chercher des explications naturelles plutôt que mythologiques — remarque un phénomène curieux. Quand on frotte un morceau d'ambre jaune (une résine d'arbre fossilisée, utilisée à l'époque pour faire des bijoux) avec un tissu de laine, celui-ci se met à attirer de petits objets légers : des brins de paille, des plumes, de la poussière.
+    </p>
+    <p class="course-text">
+      Thalès n'a aucun moyen d'expliquer ce qu'il observe. Il se contente de le noter comme une curiosité de la nature, presque magique. Mais ce simple détail va avoir une conséquence extrêmement durable.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Des siècles plus tard, c'est le mot grec désignant l'ambre, <em>elektron</em>, qui servira de racine au mot « électricité ». L'humanité a donné un nom à ce phénomène bien avant de le comprendre.
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Gilbert (1600) — une méthode, un instrument, un mot</h2>
+    <p class="course-text">
+      Il faut attendre plus de deux mille ans pour que quelqu'un reprenne sérieusement l'observation de Thalès. William Gilbert, médecin personnel de la reine Élisabeth I<sup>re</sup> d'Angleterre, s'y intéresse avec une méthode nouvelle pour son époque : au lieu de se contenter d'un seul matériau, il frotte systématiquement des dizaines de substances différentes — verre, soufre, résine, cire, mais aussi des métaux — pour voir lesquelles attirent les objets légers après frottement, et lesquelles n'en font rien.
+    </p>
+    <p class="course-text">
+      Pour rendre ses observations plus fiables, il invente un petit instrument : une aiguille métallique légère, équilibrée sur une pointe comme une boussole, qui pivote dès qu'on approche un objet frotté. Cet appareil, le <em>versorium</em>, est considéré comme le tout premier détecteur d'électricité de l'histoire.
+    </p>
+    <div class="definition-box">
+      <span class="box-label">📘 À comprendre</span>
+      La découverte la plus importante de Gilbert est peut-être conceptuelle : il montre que l'attraction produite par l'ambre frotté — qu'il baptise <em>electricus</em>, à partir du grec <em>elektron</em> — est un phénomène différent de l'attraction exercée par le minerai de fer, l'aimant. Jusque-là, électricité et magnétisme étaient souvent confondus ; Gilbert les sépare clairement, pour la première fois.
+    </div>
+  </section>
+
+  <section>
+    <h2>c. Nollet (1746) — une décharge à travers 200 moines</h2>
+    <p class="course-text">
+      Un siècle et demi plus tard, l'abbé Jean-Antoine Nollet, physicien français, dispose d'un nouvel outil : la bouteille de Leyde, un dispositif tout juste inventé qui permet d'accumuler une charge électrique et de la restituer d'un coup. Nollet a l'idée d'une démonstration spectaculaire devant le roi Louis XV, à Versailles.
+    </p>
+    <p class="course-text">
+      Il fait former une chaîne humaine par 180 gardes du roi, se tenant par des fils de fer. Au moment où il décharge la bouteille de Leyde à une extrémité de la chaîne, les 180 hommes sursautent tous exactement au même instant. La cour est impressionnée ; Nollet recommence l'expérience avec 140 dames.
+    </p>
+    <p class="course-text">
+      Non content de cet effet, il pousse l'expérience à une échelle bien plus grande : dans les jardins d'un couvent, il fait former un cercle de 200 moines chartreux, reliés entre eux par des fils de fer, sur une circonférence d'environ 1600 mètres. Même résultat : la décharge semble atteindre tout le cercle en un instant, sans délai perceptible pour aucun des moines.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Nollet démontre ainsi, sans la mesurer précisément, que l'électricité se propage extrêmement vite — assez vite pour paraître instantanée, même sur plus d'un kilomètre de chaîne humaine.
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Edison (1882) — la première centrale électrique commerciale</h2>
+    <p class="course-text">
+      Il faut attendre encore plus d'un siècle pour que l'électricité quitte les laboratoires et les salons de démonstration et devienne un service vendu au public. En 1882, à New York, Thomas Edison met en service la station de Pearl Street, dans le quartier financier de Manhattan. C'est la première centrale électrique commerciale de l'histoire : elle alimente quelques dizaines de clients en éclairage électrique, qui commence tout juste à remplacer les becs de gaz utilisés jusque-là dans les rues et les bureaux.
+    </p>
+    <p class="course-text">
+      Pour la première fois, l'électricité n'est plus seulement une curiosité de savant ou un spectacle de cour : c'est un produit, vendu par abonnement, distribué par un réseau, à une clientèle urbaine et fortunée.
+    </p>
+  </section>
+
+  <section>
+    <h2>e. La guerre des courants (1886 – 1893) — Edison contre Westinghouse et Tesla</h2>
+    <p class="course-text">
+      Le succès de Pearl Street lance une compétition commerciale acharnée. Edison a construit tout son système autour d'une technologie qu'il maîtrise et dont il détient les brevets, le courant continu. Mais un ingénieur d'origine serbe, Nikola Tesla, met au point une autre approche, le courant alternatif, que le riche industriel George Westinghouse rachète et développe. Le courant alternatif présente un avantage décisif : il se transporte sur de longues distances avec beaucoup moins de pertes, alors que le système d'Edison ne reste efficace que sur de courtes distances — il faudrait une centrale tous les deux kilomètres pour équiper un pays entier avec sa technologie.
+    </p>
+    <p class="course-text">
+      Edison refuse de perdre ce marché sans combattre. Il lance une campagne de communication très agressive contre le courant alternatif, qu'il présente comme dangereux : il finance des démonstrations publiques d'électrocution d'animaux, et pousse même à l'adoption de ce courant pour la toute première chaise électrique utilisée lors d'une exécution judiciaire — dans l'espoir d'associer, dans l'esprit du public, « courant alternatif » et « mort ». Cet épisode, resté dans l'histoire sous le nom de « guerre des courants », est un cas d'école de rivalité industrielle où la communication et la peur organisée comptent autant que la technique elle-même.
+    </p>
+    <p class="course-text">
+      Le dénouement a lieu à l'Exposition universelle de Chicago, en 1893 : c'est Westinghouse qui remporte le contrat pour illuminer le site en courant alternatif, devant des millions de visiteurs. Peu après, ce même courant alternatif est choisi pour exploiter l'énergie des chutes du Niagara. Le courant continu d'Edison perd la bataille commerciale ; dès 1892 déjà, son entreprise avait fusionné pour former General Electric, sans qu'il en garde le contrôle.
+    </p>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Pour les curieux d'HGGSP</span>
+      La guerre des courants n'est pas qu'une affaire de technique : c'est une guerre économique et médiatique, avec propagande, peur organisée et enjeux de brevets. Une bonne illustration du fait qu'une innovation technique s'impose aussi par des rapports de force sociaux et économiques, pas seulement par ses qualités techniques.
+    </div>
+  </section>
+
+  <section>
+    <h2>f. Villes et campagnes — une diffusion en plusieurs vitesses</h2>
+    <p class="course-text">
+      L'électricité arrive en ville bien avant d'arriver dans les campagnes — et l'écart n'est pas le même partout, ni pour les mêmes raisons. Rendre un pays entier électrique n'est pas qu'une question technique : cela dépend des priorités données à un moment donné — desservir un centre urbain, une activité industrielle, ou l'ensemble de la population — et du relief à franchir pour y parvenir.
+    </p>
+    <div style="overflow-x:auto;">
+      <table class="bilan-table">
+        <thead>
+          <tr><th>Pays</th><th>Villes</th><th>Campagnes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>États-Unis</td>
+            <td>Dès 1882 (station Pearl Street, New York)</td>
+            <td>Vers 1950, grâce au <em>Rural Electrification Act</em> (1936), un programme public du New Deal qui finance des coopératives rurales là où les compagnies privées jugeaient le raccordement non rentable.</td>
+          </tr>
+          <tr>
+            <td>France</td>
+            <td>Entre 1880 et 1930</td>
+            <td>1968, terme d'un vaste plan public d'électrification rurale mené après-guerre.</td>
+          </tr>
+          <tr>
+            <td>Maroc</td>
+            <td>Dès le début du XX<sup>e</sup> siècle : premières concessions électriques à Tanger et au palais royal de Fès sous le sultan Moulay Abdelaziz, avant même l'instauration du protectorat (1912). Le réseau s'étend ensuite sous le protectorat, mais en priorité vers les ports, les mines de phosphates et les quartiers européens — pas vers l'ensemble de la population urbaine.</td>
+            <td>De 18&nbsp;% de foyers raccordés au milieu des années 1990 à 99,7&nbsp;% en 2019 : le Programme d'Électrification Rurale Généralisée (PERG), piloté par l'ONE (devenu l'ONEE), raccorde plus de 40 000 douars isolés — souvent dans le relief accidenté de l'Atlas — en combinant extension du réseau et kits solaires décentralisés. Une réussite d'ingénierie publique saluée à l'international.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="course-text">
+      Un même geste — allumer une lampe en actionnant un interrupteur — a donc pu être une évidence quotidienne pour un citadin américain dès les années 1880, tandis que les villages les plus reculés de l'Atlas marocain n'ont été raccordés, dans leur quasi-totalité, qu'à la toute fin des années 2010 — non par retard, mais parce qu'y parvenir supposait de résoudre un défi d'ingénierie et de logistique considérable, finalement relevé en l'espace de deux décennies.
+    </p>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT                                                 -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+
+      <h3>a. Thalès (~600 av. J.-C.)</h3>
+      <p>
+        Le philosophe grec <input class="blank" data-answer="Thalès|thales" size="10"> observe qu'un morceau d'<input class="blank" data-answer="ambre" size="8"> frotté avec de la laine attire de petits objets légers. Le mot grec pour ambre, <em>elektron</em>, donnera plus tard le mot <input class="blank" data-answer="électricité|electricite" size="12">.
+      </p>
+
+      <h3>b. Gilbert (1600)</h3>
+      <p>
+        William Gilbert, médecin de la reine d'<input class="blank" data-answer="Angleterre|angleterre" size="12">, teste systématiquement de nombreux matériaux et invente un instrument appelé le <input class="blank" data-answer="versorium" size="10">. Il distingue pour la première fois l'électricité du <input class="blank" data-answer="magnétisme|magnetisme" size="12">.
+      </p>
+
+      <h3>c. Nollet (1746)</h3>
+      <p>
+        L'abbé Nollet réalise devant le roi <input class="blank" data-answer="Louis XV|louis xv" size="10"> à <input class="blank" data-answer="Versailles|versailles" size="10"> une expérience où une décharge électrique traverse en un instant une chaîne de <input class="blank" data-answer="200" size="4"> moines chartreux, ce qui montre que l'électricité se propage très <input class="blank" data-answer="vite|rapidement" size="10">.
+      </p>
+
+      <h3>d. Edison (1882)</h3>
+      <p>
+        Thomas Edison met en service à New York la station de <input class="blank" data-answer="Pearl Street|pearl street" size="14">, première <input class="blank" data-answer="centrale électrique|centrale electrique" size="18"> commerciale de l'histoire.
+      </p>
+
+      <h3>e. La guerre des courants (1886 – 1893)</h3>
+      <p>
+        Edison défend le courant <input class="blank" data-answer="continu" size="10">, tandis que Westinghouse et <input class="blank" data-answer="Tesla|tesla" size="8"> développent le courant <input class="blank" data-answer="alternatif" size="10">. Le conflit se résout à l'Exposition universelle de <input class="blank" data-answer="Chicago|chicago" size="10"> en 1893.
+      </p>
+
+      <h3>f. Électrification des campagnes</h3>
+      <p>
+        Au Maroc, le Programme d'Électrification Rurale Généralisée (<input class="blank" data-answer="PERG|perg" size="8">) fait passer le taux d'électrification rurale d'environ 18&nbsp;% au milieu des années 1990 à 99,7&nbsp;% en <input class="blank" data-answer="2019" size="6">, en raccordant plus de 40 000 <input class="blank" data-answer="douars|villages" size="10"> isolés.
+      </p>
+
+    </div>
+
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Le mot « électricité »</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:6px;">Retour sur l'observation de Thalès et le baptême du phénomène par Gilbert.</p>
+    <div class="activity-block"><div id="actEtymologie"></div></div>
+  </section>
+
+  <section>
+    <h2>L'expérience de Nollet</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:6px;">Que cherchait vraiment à montrer Nollet avec sa chaîne de 200 moines ?</p>
+    <div class="activity-block"><div id="actNollet"></div></div>
+  </section>
+
+  <section>
+    <h2>La guerre des courants</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:6px;">Courant continu contre courant alternatif : qui l'a emporté, et où cela s'est-il joué ?</p>
+    <div class="activity-block"><div id="actGuerreCourants"></div></div>
+  </section>
+
+  <section>
+    <h2>L'électrification urbaine au Maroc</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:6px;">Concessions, palais royal, protectorat : à quel moment commence vraiment l'histoire ?</p>
+    <div class="activity-block"><div id="actMarocVilles"></div></div>
+  </section>
+
+  <section>
+    <h2>Le PERG et l'électrification rurale du Maroc</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:6px;">Un programme public salué comme une réussite d'ingénierie, face à un relief très contraignant.</p>
+    <div class="activity-block"><div id="actPerg"></div></div>
+  </section>
+
+  <section>
+    <h2>Villes et campagnes</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:6px;">Compare les rythmes d'électrification entre les États-Unis et la France.</p>
+    <div class="activity-block"><div id="actVillesCampagnes"></div></div>
+  </section>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- MODE_SYNTHESE                                                     -->
+<!-- ================================================================ -->
+<div class="mode-panel" id="panelSynthese">
+
+  <section>
+    <h2>Tableau-bilan</h2>
+    <div style="overflow-x:auto;">
+      <table class="bilan-table">
+        <thead>
+          <tr><th>Repère</th><th>Date</th><th>Ce que ça change (compréhension)</th><th>Qui est concerné (diffusion)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Thalès</td>
+            <td>~600 av. J.-C.</td>
+            <td>On observe pour la première fois qu'un matériau frotté peut attirer des objets légers — naissance du mot « électricité ».</td>
+            <td>Une curiosité de philosophe, sans aucune application ni diffusion.</td>
+          </tr>
+          <tr>
+            <td>Gilbert</td>
+            <td>1600</td>
+            <td>On distingue clairement électricité et magnétisme ; premier instrument de détection, le versorium.</td>
+            <td>Un cercle restreint de savants européens.</td>
+          </tr>
+          <tr>
+            <td>Nollet</td>
+            <td>1746</td>
+            <td>On démontre, par une expérience spectaculaire, que l'électricité se propage quasi instantanément.</td>
+            <td>La cour de Versailles, puis un large public informé par le récit de l'expérience.</td>
+          </tr>
+          <tr>
+            <td>Edison</td>
+            <td>1882</td>
+            <td>L'électricité devient un service commercial distribué par un réseau, et non plus une expérience de laboratoire.</td>
+            <td>Quelques dizaines de clients fortunés d'un quartier de New York.</td>
+          </tr>
+          <tr>
+            <td>Guerre des courants</td>
+            <td>1886 – 1893</td>
+            <td>Le choix du courant alternatif rend possible le transport de l'électricité sur de longues distances.</td>
+            <td>Les grandes villes industrielles, puis progressivement des régions entières.</td>
+          </tr>
+          <tr>
+            <td>Électrification généralisée</td>
+            <td>1950 – 2019 selon les pays</td>
+            <td>L'électricité devient une infrastructure de base, comme l'eau courante, et non plus un luxe urbain ou industriel.</td>
+            <td>L'ensemble de la population, jusqu'aux villages les plus isolés — au Maroc, ce dernier maillon est bouclé en 2019 grâce au PERG, un programme public d'ampleur reconnu à l'international.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Une dépendance très récente, à l'échelle d'une vie humaine</h2>
+    <p class="course-text">
+      Aujourd'hui, l'électricité est partout : elle éclaire, elle chauffe, elle fait fonctionner nos smartphones, conserve nos aliments au réfrigérateur, fait tourner les hôpitaux et l'ensemble d'internet. On la remarque surtout quand elle manque, lors d'une coupure de quelques heures. Cette dépendance quasi totale paraît une évidence — et pourtant, replacée dans l'histoire qu'on vient de parcourir, elle est extrêmement récente.
+    </p>
+    <p class="course-text">
+      Le programme PERG ne s'achève qu'en 2019 pour atteindre 99,7&nbsp;% des foyers ruraux marocains. Autrement dit, les grands-parents de beaucoup d'entre vous ont très probablement connu, dans leur jeunesse, une maison sans électricité au Maroc — sans qu'il soit besoin de remonter très loin dans le passé. Ce chapitre 0 ne raconte donc pas seulement une histoire ancienne : il décrit une transformation achevée dans la génération juste avant la vôtre.
+    </p>
+    <p class="course-text">
+      Ce programme est aujourd'hui cité comme une référence internationale d'électrification rurale, comparable par son ampleur au <em>Rural Electrification Act</em> américain ou au plan français des années 1960 — mais mené sur un relief bien plus contraignant, et en combinant l'extension du réseau à des kits solaires individuels pour les hameaux les plus isolés.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Maintenant que le monde entier dépend de l'électricité, comment continuer à la produire demain, sans épuiser les ressources ni aggraver le dérèglement climatique ? C'est tout l'enjeu du thème de l'année : « le futur des énergies ». Le Maroc, qui vient tout juste d'achever l'électrification de son dernier village, est aussi devenu en quelques années un pionnier des énergies renouvelables — avec le complexe solaire Noor à Ouarzazate, l'un des plus grands du monde, et plusieurs grands parcs éoliens. Le pays qui a mis un siècle à électrifier ses campagnes est aujourd'hui l'un de ceux qui inventent la suite.
+    </div>
+  </section>
+
+</div>
+
+</main>
+
+<footer>Chapitre 0 — Une brève histoire de l'électricité (Terminale ES).</footer>
+
+<script>
+/* ---------- Correction du texte à trous (mode entraînement) ---------- */
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch0-terminale", "trous-complet", true);
+});
+
+/* ---------- Activités ---------- */
+initQCM({
+  containerId: "actEtymologie", chapterId: "ch0-terminale", activityId: "qcm-etymologie",
+  prompt: "D'où vient le mot « électricité » ?",
+  options: [
+    { text: "Du grec « elektron », qui désigne l'ambre", correct: true },
+    { text: "Du latin « electrum », qui désigne l'éclair", correct: false },
+    { text: "Du nom d'un physicien appelé Electricus", correct: false },
+    { text: "D'une ville grecque nommée Elektra", correct: false }
+  ],
+  explanation: "Thalès observe l'ambre frotté vers 600 av. J.-C. ; c'est Gilbert, en 1600, qui forge le mot « electricus » à partir du grec « elektron »."
+});
+
+initVraiFaux({
+  containerId: "actNollet", chapterId: "ch0-terminale", activityId: "vf-nollet",
+  prompt: "L'expérience de Nollet à Versailles avait pour but de mesurer précisément, en mètres par seconde, la vitesse de propagation de l'électricité.",
+  correct: false,
+  explanation: "Nollet démontre qualitativement que la décharge paraît instantanée sur toute la chaîne, y compris sur 1600 mètres de circonférence — mais il ne la mesure pas précisément."
+});
+
+initQCM({
+  containerId: "actGuerreCourants", chapterId: "ch0-terminale", activityId: "qcm-guerre-courants",
+  prompt: "Qui remporte, en pratique, la « guerre des courants » ?",
+  options: [
+    { text: "Le courant alternatif, porté par Westinghouse et Tesla", correct: true },
+    { text: "Le courant continu, porté par Edison", correct: false },
+    { text: "Aucun des deux : le projet est abandonné", correct: false },
+    { text: "Les deux, à parts égales, dès 1893", correct: false }
+  ],
+  explanation: "Westinghouse remporte le contrat de l'Exposition universelle de Chicago (1893), puis l'exploitation des chutes du Niagara, ce qui installe durablement le courant alternatif."
+});
+
+initVraiFaux({
+  containerId: "actMarocVilles", chapterId: "ch0-terminale", activityId: "vf-maroc-villes",
+  prompt: "L'électrification des villes marocaines n'a commencé qu'avec l'instauration du protectorat français, en 1912.",
+  correct: false,
+  explanation: "Dès le début du XXe siècle, Tanger et le palais royal de Fès (sous le sultan Moulay Abdelaziz) disposent déjà de l'électricité. Le protectorat étend ensuite le réseau, mais en priorité vers les ports, les mines de phosphates et les quartiers européens."
+});
+
+initEstimation({
+  containerId: "actPerg", chapterId: "ch0-terminale", activityId: "est-perg",
+  prompt: "En quelle année le taux d'électrification rurale marocain atteint-il 99,7 % grâce au programme PERG ?",
+  answer: 2019, tolerance: 2, unit: "",
+  explanation: "Le PERG, lancé en 1996 par l'ONE (devenu l'ONEE en 2011), fait passer le taux d'électrification rurale d'environ 18 % au milieu des années 1990 à 99,7 % en 2019, en raccordant plus de 40 000 douars isolés — un déploiement salué comme un cas d'école d'ingénierie publique."
+});
+
+initVraiFaux({
+  containerId: "actVillesCampagnes", chapterId: "ch0-terminale", activityId: "vf-villes-campagnes",
+  prompt: "Les campagnes américaines ont été électrifiées avant les campagnes françaises.",
+  correct: true,
+  explanation: "Les campagnes américaines sont largement raccordées vers 1950 (Rural Electrification Act, 1936), contre 1968 pour les campagnes françaises."
+});
+
+/* ---------- Onglets + barre de progression ---------- */
+initModeTabs("ch0-terminale");
+initProgressBar("ch0-terminale", 7); // texte à trous complet + 6 activités
+</script>
+</body>
+</html>

@@ -66,7 +66,7 @@
       La matière existe sous trois états : <strong>solide</strong>, <strong>liquide</strong> et <strong>gaz</strong>. Ils se distinguent par la disposition et le mouvement de leurs particules.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les 3 états : compare l'échelle macroscopique et l'échelle microscopique.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis un état, puis pousse le piston de la seringue : observe si tu peux comprimer la matière !</p>
     <div class="toggle-row">
       <button class="toggle-btn" id="smSolideCours">Solide</button>
       <button class="toggle-btn" id="smLiquideCours">Liquide</button>
@@ -77,6 +77,8 @@
         <svg id="smSvgCours" viewBox="0 0 235 105"></svg>
       </div>
       <div class="anim-controls">
+        <label>Pousse le piston</label>
+        <input type="range" id="smPistonCours" min="0" max="100" value="0" step="2">
         <div class="anim-readout" id="smReadoutCours"></div>
       </div>
     </div>
@@ -93,10 +95,10 @@
       À l'échelle microscopique, les particules d'un corps pur sont toutes identiques ; celles d'un mélange sont différentes. On ne distingue plus les constituants d'un mélange à l'œil nu, mais on peut les identifier par des tests caractéristiques.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre corps pur et mélange.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Glisse chaque forme dans le bon récipient pour séparer le mélange en deux corps purs.</p>
     <div class="toggle-row">
-      <button class="toggle-btn" id="pmPureCours">Corps pur</button>
-      <button class="toggle-btn" id="pmMixCours">Mélange</button>
+      <button class="toggle-btn" id="pmPureCours">🔀 Nouveau mélange</button>
+      <button class="toggle-btn" id="pmMixCours">↺ Réinitialiser</button>
     </div>
     <div class="anim-zone">
       <div class="anim-wrap">
@@ -135,16 +137,24 @@
       Lors du changement d'état d'un <strong>corps pur</strong>, la température reste <strong>constante</strong> (palier). Ce n'est pas le cas lors du changement d'état d'un <strong>mélange</strong>.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Compare l'allure de la courbe pour un corps pur et pour un mélange.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Maintiens le bouton 🔥 appuyé pour chauffer : observe le thermomètre et la courbe se tracer en temps réel.</p>
     <div class="toggle-row">
       <button class="toggle-btn" id="ctPureCours">Corps pur</button>
       <button class="toggle-btn" id="ctMixCours">Mélange</button>
     </div>
-    <div class="anim-zone">
+    <div class="anim-zone" style="flex-wrap:wrap; gap:14px;">
       <div class="anim-wrap" style="width:100%; max-width:260px;">
         <svg id="ctSvgCours" viewBox="0 0 235 150"></svg>
       </div>
+      <div class="anim-wrap" style="width:100%; max-width:140px;">
+        <svg id="ctMeltSvgCours" viewBox="0 0 220 170"></svg>
+        <div style="text-align:center; font-size:0.75rem; color:var(--chalk-dim); margin-top:4px;">👀 Dans le bécher</div>
+      </div>
       <div class="anim-controls">
+        <div class="actions" style="justify-content:flex-start; margin-bottom:10px;">
+          <button id="ctHeatBtnCours">🔥 Maintenir pour chauffer</button>
+          <button id="ctResetBtnCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim);">↺ Recommencer</button>
+        </div>
         <div class="anim-readout" id="ctReadoutCours"></div>
       </div>
     </div>
@@ -185,20 +195,31 @@
       Un corps de masse volumique inférieure à celle de l'eau (1,00 kg/L) flotte sur l'eau. Un corps de masse volumique supérieure coule dans l'eau.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis une matière et règle la masse : observe si l'objet flotte ou coule.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Mode libre : choisis une matière et règle la masse. Mode défi : calcule ρ = m/V d'un objet mystère, compare-le à 1,00 kg/L, puis prédis s'il flotte ou coule.</p>
     <div class="toggle-row">
+      <button class="toggle-btn" id="vmModeLibreCours">🔓 Mode libre</button>
+      <button class="toggle-btn" id="vmModeDefiCours">🎯 Mode défi</button>
+    </div>
+    <div class="toggle-row" id="vmMaterialButtonsWrapCours">
       <button class="toggle-btn" id="vmBoisCours">Bois</button>
       <button class="toggle-btn" id="vmHuileCours">Huile</button>
       <button class="toggle-btn" id="vmAluCours">Aluminium</button>
       <button class="toggle-btn" id="vmFerCours">Fer</button>
+    </div>
+    <div class="toggle-row" id="vmDefiControlsWrapCours" style="display:none;">
+      <button class="toggle-btn" id="vmPredictFloatCours">🔼 Ça flotte</button>
+      <button class="toggle-btn" id="vmPredictSinkCours">🔽 Ça coule</button>
+      <button class="toggle-btn" id="vmNewChallengeCours">🎲 Nouveau défi</button>
     </div>
     <div class="anim-zone">
       <div class="anim-wrap" style="width:100%; max-width:200px;">
         <svg id="vmSvgCours" viewBox="0 0 200 170"></svg>
       </div>
       <div class="anim-controls">
-        <label>Masse m (g)</label>
-        <input type="range" id="vmMCours" min="50" max="1000" value="300" step="10">
+        <div id="vmSliderWrapCours">
+          <label>Masse m (g)</label>
+          <input type="range" id="vmMCours" min="50" max="1000" value="300" step="10">
+        </div>
         <div class="anim-readout" id="vmReadoutCours"></div>
       </div>
     </div>
@@ -216,14 +237,15 @@
       La solubilité dépend de la température.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Ajoute du soluté petit à petit dans 1 L d'eau : observe la saturation apparaître.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Défi : dose précisément avec la cuillère pour atteindre exactement 360 g/L, sans dépasser !</p>
     <div class="anim-zone">
       <div class="anim-wrap" style="width:100%; max-width:200px;">
         <svg id="slSvgCours" viewBox="0 0 220 165"></svg>
       </div>
       <div class="anim-controls">
         <div class="actions" style="justify-content:flex-start; margin-bottom:10px;">
-          <button id="slAddCours">+ Ajouter 40 g</button>
+          <button id="slAddSmallCours">🥄 + 10 g</button>
+          <button id="slAddBigCours">🥄🥄 + 50 g</button>
           <button id="slResetCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim);">↺ Recommencer</button>
         </div>
         <div class="anim-readout" id="slReadoutCours"></div>
@@ -290,7 +312,7 @@
 
   <section>
     <h2>Les états de la matière</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 états : compare l'échelle macroscopique et l'échelle microscopique.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis un état, puis pousse le piston de la seringue : observe si tu peux comprimer la matière !</p>
     <div class="toggle-row">
       <button class="toggle-btn" id="smSolide">Solide</button>
       <button class="toggle-btn" id="smLiquide">Liquide</button>
@@ -301,6 +323,8 @@
         <svg id="smSvg" viewBox="0 0 235 105"></svg>
       </div>
       <div class="anim-controls">
+        <label>Pousse le piston</label>
+        <input type="range" id="smPiston" min="0" max="100" value="0" step="2">
         <div class="anim-readout" id="smReadout"></div>
       </div>
     </div>
@@ -309,10 +333,10 @@
 
   <section>
     <h2>Corps purs et mélanges</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre corps pur et mélange.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Glisse chaque forme dans le bon récipient pour séparer le mélange en deux corps purs.</p>
     <div class="toggle-row">
-      <button class="toggle-btn" id="pmPure">Corps pur</button>
-      <button class="toggle-btn" id="pmMix">Mélange</button>
+      <button class="toggle-btn" id="pmPure">🔀 Nouveau mélange</button>
+      <button class="toggle-btn" id="pmMix">↺ Réinitialiser</button>
     </div>
     <div class="anim-zone">
       <div class="anim-wrap">
@@ -343,16 +367,24 @@
 
   <section>
     <h2>Changements d'état et température</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Compare l'allure de la courbe pour un corps pur et pour un mélange.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Maintiens le bouton 🔥 appuyé pour chauffer : observe le thermomètre et la courbe se tracer en temps réel.</p>
     <div class="toggle-row">
       <button class="toggle-btn" id="ctPure">Corps pur</button>
       <button class="toggle-btn" id="ctMix">Mélange</button>
     </div>
-    <div class="anim-zone">
+    <div class="anim-zone" style="flex-wrap:wrap; gap:14px;">
       <div class="anim-wrap" style="width:100%; max-width:260px;">
         <svg id="ctSvg" viewBox="0 0 235 150"></svg>
       </div>
+      <div class="anim-wrap" style="width:100%; max-width:140px;">
+        <svg id="ctMeltSvg" viewBox="0 0 220 170"></svg>
+        <div style="text-align:center; font-size:0.75rem; color:var(--chalk-dim); margin-top:4px;">👀 Dans le bécher</div>
+      </div>
       <div class="anim-controls">
+        <div class="actions" style="justify-content:flex-start; margin-bottom:10px;">
+          <button id="ctHeatBtn">🔥 Maintenir pour chauffer</button>
+          <button id="ctResetBtn" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim);">↺ Recommencer</button>
+        </div>
         <div class="anim-readout" id="ctReadout"></div>
       </div>
     </div>
@@ -380,20 +412,31 @@
 
   <section>
     <h2>La masse volumique</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Choisis une matière et règle la masse : observe si l'objet flotte ou coule.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Mode libre : choisis une matière et règle la masse. Mode défi : calcule ρ = m/V d'un objet mystère, compare-le à 1,00 kg/L, puis prédis s'il flotte ou coule.</p>
     <div class="toggle-row">
+      <button class="toggle-btn" id="vmModeLibre">🔓 Mode libre</button>
+      <button class="toggle-btn" id="vmModeDefi">🎯 Mode défi</button>
+    </div>
+    <div class="toggle-row" id="vmMaterialButtonsWrap">
       <button class="toggle-btn" id="vmBois">Bois</button>
       <button class="toggle-btn" id="vmHuile">Huile</button>
       <button class="toggle-btn" id="vmAlu">Aluminium</button>
       <button class="toggle-btn" id="vmFer">Fer</button>
+    </div>
+    <div class="toggle-row" id="vmDefiControlsWrap" style="display:none;">
+      <button class="toggle-btn" id="vmPredictFloat">🔼 Ça flotte</button>
+      <button class="toggle-btn" id="vmPredictSink">🔽 Ça coule</button>
+      <button class="toggle-btn" id="vmNewChallenge">🎲 Nouveau défi</button>
     </div>
     <div class="anim-zone">
       <div class="anim-wrap" style="width:100%; max-width:200px;">
         <svg id="vmSvg" viewBox="0 0 200 170"></svg>
       </div>
       <div class="anim-controls">
-        <label>Masse m (g)</label>
-        <input type="range" id="vmM" min="50" max="1000" value="300" step="10">
+        <div id="vmSliderWrap">
+          <label>Masse m (g)</label>
+          <input type="range" id="vmM" min="50" max="1000" value="300" step="10">
+        </div>
         <div class="anim-readout" id="vmReadout"></div>
       </div>
     </div>
@@ -402,14 +445,15 @@
 
   <section>
     <h2>La solubilité</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Ajoute du soluté petit à petit dans 1 L d'eau : observe la saturation apparaître.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Défi : dose précisément avec la cuillère pour atteindre exactement 360 g/L, sans dépasser !</p>
     <div class="anim-zone">
       <div class="anim-wrap" style="width:100%; max-width:200px;">
         <svg id="slSvg" viewBox="0 0 220 165"></svg>
       </div>
       <div class="anim-controls">
         <div class="actions" style="justify-content:flex-start; margin-bottom:10px;">
-          <button id="slAdd">+ Ajouter 40 g</button>
+          <button id="slAddSmall">🥄 + 10 g</button>
+          <button id="slAddBig">🥄🥄 + 50 g</button>
           <button id="slReset" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim);">↺ Recommencer</button>
         </div>
         <div class="anim-readout" id="slReadout"></div>
@@ -481,22 +525,22 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 });
 
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initStatesOfMatter({ svgId: "smSvgCours", readoutId: "smReadoutCours", buttonIds: ["smSolideCours", "smLiquideCours", "smGazCours"] });
-initPureOrMixtureParticles({ svgId: "pmSvgCours", readoutId: "pmReadoutCours", btnPureId: "pmPureCours", btnMixId: "pmMixCours" });
+initSyringeCompressibility({ svgId: "smSvgCours", readoutId: "smReadoutCours", buttonIds: ["smSolideCours", "smLiquideCours", "smGazCours"], rangeId: "smPistonCours" });
+initSortingGame({ svgId: "pmSvgCours", readoutId: "pmReadoutCours", shuffleBtnId: "pmPureCours", resetBtnId: "pmMixCours" });
 initStateChangeMassVolume({ svgId: "cvSvgCours", progressRangeId: "cvProgressCours", readoutId: "cvReadoutCours" });
-initStateChangeTemperature({ svgId: "ctSvgCours", readoutId: "ctReadoutCours", btnPureId: "ctPureCours", btnMixId: "ctMixCours" });
+initHeatingCurve({ svgId: "ctSvgCours", readoutId: "ctReadoutCours", btnPureId: "ctPureCours", btnMixId: "ctMixCours", heatBtnId: "ctHeatBtnCours", resetBtnId: "ctResetBtnCours", meltSvgId: "ctMeltSvgCours" });
 initAirComposition({ svgId: "acSvgCours", readoutId: "acReadoutCours", buttonIds: ["acN2Cours", "acO2Cours", "acAutresCours"] });
-initVolumicMass({ svgId: "vmSvgCours", mRangeId: "vmMCours", readoutId: "vmReadoutCours", buttonIds: ["vmBoisCours", "vmHuileCours", "vmAluCours", "vmFerCours"] });
-initSolubility({ svgId: "slSvgCours", readoutId: "slReadoutCours", addBtnId: "slAddCours", resetBtnId: "slResetCours" });
+initVolumicMass({ svgId: "vmSvgCours", mRangeId: "vmMCours", readoutId: "vmReadoutCours", buttonIds: ["vmBoisCours", "vmHuileCours", "vmAluCours", "vmFerCours"], modeLibreBtnId: "vmModeLibreCours", modeDefiBtnId: "vmModeDefiCours", sliderWrapId: "vmSliderWrapCours", materialButtonsWrapId: "vmMaterialButtonsWrapCours", defiControlsWrapId: "vmDefiControlsWrapCours", predictFloatBtnId: "vmPredictFloatCours", predictSinkBtnId: "vmPredictSinkCours", newChallengeBtnId: "vmNewChallengeCours" });
+initSolubility({ svgId: "slSvgCours", readoutId: "slReadoutCours", addSmallBtnId: "slAddSmallCours", addBigBtnId: "slAddBigCours", resetBtnId: "slResetCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initStatesOfMatter({ svgId: "smSvg", readoutId: "smReadout", buttonIds: ["smSolide", "smLiquide", "smGaz"] });
-initPureOrMixtureParticles({ svgId: "pmSvg", readoutId: "pmReadout", btnPureId: "pmPure", btnMixId: "pmMix" });
+initSyringeCompressibility({ svgId: "smSvg", readoutId: "smReadout", buttonIds: ["smSolide", "smLiquide", "smGaz"], rangeId: "smPiston" });
+initSortingGame({ svgId: "pmSvg", readoutId: "pmReadout", shuffleBtnId: "pmPure", resetBtnId: "pmMix" });
 initStateChangeMassVolume({ svgId: "cvSvg", progressRangeId: "cvProgress", readoutId: "cvReadout" });
-initStateChangeTemperature({ svgId: "ctSvg", readoutId: "ctReadout", btnPureId: "ctPure", btnMixId: "ctMix" });
+initHeatingCurve({ svgId: "ctSvg", readoutId: "ctReadout", btnPureId: "ctPure", btnMixId: "ctMix", heatBtnId: "ctHeatBtn", resetBtnId: "ctResetBtn", meltSvgId: "ctMeltSvg" });
 initAirComposition({ svgId: "acSvg", readoutId: "acReadout", buttonIds: ["acN2", "acO2", "acAutres"] });
-initVolumicMass({ svgId: "vmSvg", mRangeId: "vmM", readoutId: "vmReadout", buttonIds: ["vmBois", "vmHuile", "vmAlu", "vmFer"] });
-initSolubility({ svgId: "slSvg", readoutId: "slReadout", addBtnId: "slAdd", resetBtnId: "slReset" });
+initVolumicMass({ svgId: "vmSvg", mRangeId: "vmM", readoutId: "vmReadout", buttonIds: ["vmBois", "vmHuile", "vmAlu", "vmFer"], modeLibreBtnId: "vmModeLibre", modeDefiBtnId: "vmModeDefi", sliderWrapId: "vmSliderWrap", materialButtonsWrapId: "vmMaterialButtonsWrap", defiControlsWrapId: "vmDefiControlsWrap", predictFloatBtnId: "vmPredictFloat", predictSinkBtnId: "vmPredictSink", newChallengeBtnId: "vmNewChallenge" });
+initSolubility({ svgId: "slSvg", readoutId: "slReadout", addSmallBtnId: "slAddSmall", addBigBtnId: "slAddBig", resetBtnId: "slReset" });
 
 /* ---------- Activités liées à chaque animation ---------- */
 initQCM({
@@ -555,9 +599,9 @@ initVraiFaux({
 
 initEstimation({
   containerId: "actSolubility", chapterId: "ch1-4eme", activityId: "est-solubility",
-  prompt: "Dans 1 L d'eau, on peut dissoudre au maximum 360 g d'un sel avant saturation. Quelle est la solubilité s de ce sel (en g/L) ?",
+  prompt: "D'après ton expérience avec le bécher juste au-dessus : à partir de quelle masse dissoute (en g/L, pour 1 L d'eau) la solution devient-elle saturée ?",
   answer: 360, tolerance: 5, unit: "g/L",
-  explanation: "s = m_max/V = 360/1 = 360 g/L."
+  explanation: "s = m_max/V = 360/1 = 360 g/L : c'est la masse à partir de laquelle un dépôt apparaissait dans le bécher."
 });
 
 /* ---------- Onglets + barre de progression ---------- */
