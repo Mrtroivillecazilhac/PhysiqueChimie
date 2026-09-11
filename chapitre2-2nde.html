@@ -8,6 +8,16 @@
 <script src="animations-common.js"></script>
 <script src="animations-ch2-2nde.js"></script>
 <script src="modules-common.js"></script>
+<style>
+  /* ---------- Lien de téléchargement des slides (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+</style>
 </head>
 <body>
 
@@ -23,6 +33,7 @@
   <div class="badge-inline chimie">Chimie</div>
   <h1>Chapitre 2 — Corps purs et mélanges</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch2-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -102,6 +113,10 @@
     <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
       Exemple : 10 L d'air contiennent environ 7,8 L de diazote, soit un pourcentage volumique de 78%. L'air contient en volume environ 78% de diazote, 21% de dioxygène et 1% d'autres gaz.
     </p>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Les masses s'additionnent toujours rigoureusement lors d'un mélange : m<sub>tot</sub> = m<sub>1</sub> + m<sub>2</sub>. Pour les volumes, c'est également vrai en général (mélange de gaz, ou liquides non miscibles superposés). Mais lorsqu'on mélange certains liquides <strong>miscibles</strong> (par exemple eau et éthanol), leurs molécules s'interpénètrent et le volume total obtenu peut être légèrement inférieur à la somme des volumes initiaux (non-additivité des volumes).
+    </div>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis le mode, puis règle la quantité de E et la quantité totale : observe la proportion se remplir.</p>
     <div class="toggle-row">
@@ -110,12 +125,12 @@
     </div>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="prSvgCours" viewBox="0 0 140 180"></svg>
+        <svg id="prSvgCours" viewBox="0 0 200 210"></svg>
       </div>
       <div class="anim-controls">
-        <label>Quantité de l'espèce E (<span id="prUnitECours">L</span>)</label>
+        <label><span id="prGrandeurECours">Volume</span> de l'espèce E (<span id="prUnitECours">L</span>)</label>
         <input type="range" id="prECours" min="1" max="10" value="7.8" step="0.1">
-        <label>Quantité totale (<span id="prUnitTotCours">L</span>)</label>
+        <label><span id="prGrandeurTotCours">Volume</span> total (<span id="prUnitTotCours">L</span>)</label>
         <input type="range" id="prTotCours" min="1" max="10" value="10" step="0.1">
         <div class="anim-readout" id="prReadoutCours"></div>
       </div>
@@ -154,6 +169,9 @@
       La <strong>masse volumique</strong> ρ d'un échantillon est le quotient de sa masse <em>m</em> par son volume <em>V</em>. Elle s'exprime en g/L (ou kg/L, g/mL, g/cm³).
     </div>
     <div class="formula">ρ = <span class="frac"><span class="num">m</span><span class="den">V</span></span></div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">
+      ℹ️ Dans le Système International, l'unité de la masse volumique est le <strong>kg·m⁻³</strong> (ou kg/m³). En pratique, au laboratoire, on utilise plus volontiers le g/L ou le g/cm³, plus adaptés aux échantillons courants.
+    </p>
     <p class="course-text">
       La masse volumique dépend des conditions expérimentales, en particulier de la <strong>température</strong> (la matière se dilate ou se contracte légèrement). Pour identifier une espèce sans avoir à se soucier précisément de la température du laboratoire, on utilise une grandeur qui compense cet effet : la <strong>densité</strong>.
     </p>
@@ -283,7 +301,7 @@
 
       <h3>2b. Identification par des tests chimiques</h3>
       <p>
-        Le sulfate de cuivre anhydre bleuit en présence d'<input class="blank" data-answer="eau" size="8">. Le dioxyde de carbone trouble l'<input class="blank" data-answer="eau de chaux" size="16">. Le dioxygène ravive une <input class="blank" data-answer="allumette incandescente|allumette" size="20">. Le dihydrogène produit une <input class="blank" data-answer="détonation|detonation" size="16"> au contact d'une flamme.
+        Le sulfate de cuivre anhydre bleuit en présence d'<input class="blank" data-answer="eau" size="8">. Le dioxyde de carbone trouble l'<input class="blank" data-answer="eau de chaux" size="16">. Le dioxygène ravive une <input class="blank" data-answer="allumette incandescente|allumette|buchette|buchette incandescente" size="20">. Le dihydrogène produit une <input class="blank" data-answer="détonation|detonation" size="16"> au contact d'une flamme.
       </p>
 
       <h3>2c. Identification par la chromatographie</h3>
@@ -291,7 +309,7 @@
         Les espèces chimiques d'un mélange sont entraînées par une phase mobile appelée l'<input class="blank" data-answer="éluant|eluant" size="14">, qui monte par capillarité dans une phase fixe. La figure obtenue s'appelle un <input class="blank" data-answer="chromatogramme" size="18">.
       </p>
       <p>
-        Pour un éluant et un support donnés, une espèce migre toujours de la <input class="blank" data-answer="même façon|meme facon" size="16">, qu'elle soit pure ou dans un mélange. Deux taches à la même <input class="blank" data-answer="hauteur" size="12"> correspondent à la même espèce chimique.
+        Pour un éluant et un support donnés, une espèce migre toujours de la <input class="blank" data-answer="même façon|meme facon|meme maniere|meme hauteur" size="16">, qu'elle soit pure ou dans un mélange. Deux taches à la même <input class="blank" data-answer="hauteur" size="12"> correspondent à la même espèce chimique.
       </p>
 
     </div>
@@ -328,12 +346,12 @@
     </div>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="prSvg" viewBox="0 0 140 180"></svg>
+        <svg id="prSvg" viewBox="0 0 200 210"></svg>
       </div>
       <div class="anim-controls">
-        <label>Quantité de l'espèce E (<span id="prUnitE">L</span>)</label>
+        <label><span id="prGrandeurE">Volume</span> de l'espèce E (<span id="prUnitE">L</span>)</label>
         <input type="range" id="prE" min="1" max="10" value="7.8" step="0.1">
-        <label>Quantité totale (<span id="prUnitTot">L</span>)</label>
+        <label><span id="prGrandeurTot">Volume</span> total (<span id="prUnitTot">L</span>)</label>
         <input type="range" id="prTot" min="1" max="10" value="10" step="0.1">
         <div class="anim-readout" id="prReadout"></div>
       </div>
@@ -472,14 +490,14 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
 initPureOrMixture({ svgId: "pmSvgCours", readoutId: "pmReadoutCours", btnPureId: "pmPureCours", btnHomoId: "pmHomoCours", btnHeteroId: "pmHeteroCours" });
-initProportionCalculator({ svgId: "prSvgCours", eRangeId: "prECours", totRangeId: "prTotCours", readoutId: "prReadoutCours", btnMassId: "prMassCours", btnVolId: "prVolCours", unitLabelEId: "prUnitECours", unitLabelTotId: "prUnitTotCours" });
+initProportionCalculator({ svgId: "prSvgCours", eRangeId: "prECours", totRangeId: "prTotCours", readoutId: "prReadoutCours", btnMassId: "prMassCours", btnVolId: "prVolCours", unitLabelEId: "prUnitECours", unitLabelTotId: "prUnitTotCours", grandeurLabelEId: "prGrandeurECours", grandeurLabelTotId: "prGrandeurTotCours" });
 initStateChangeGraph({ svgId: "scSvgCours", readoutId: "scReadoutCours", btnPureId: "scPureCours", btnMixId: "scMixCours" });
 initDensityCalculator({ svgId: "dcSvgCours", mRangeId: "dcMCours", vRangeId: "dcVCours", readoutId: "dcReadoutCours", btnLiquidId: "dcLiquidCours", btnGasId: "dcGasCours", unitMLabelId: "dcUnitMCours" });
 initChromatography({ svgId: "chSvgCours", readoutId: "chReadoutCours", eluerBtnId: "chEluerBtnCours", resetBtnId: "chResetBtnCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
 initPureOrMixture({ svgId: "pmSvg", readoutId: "pmReadout", btnPureId: "pmPure", btnHomoId: "pmHomo", btnHeteroId: "pmHetero" });
-initProportionCalculator({ svgId: "prSvg", eRangeId: "prE", totRangeId: "prTot", readoutId: "prReadout", btnMassId: "prMass", btnVolId: "prVol", unitLabelEId: "prUnitE", unitLabelTotId: "prUnitTot" });
+initProportionCalculator({ svgId: "prSvg", eRangeId: "prE", totRangeId: "prTot", readoutId: "prReadout", btnMassId: "prMass", btnVolId: "prVol", unitLabelEId: "prUnitE", unitLabelTotId: "prUnitTot", grandeurLabelEId: "prGrandeurE", grandeurLabelTotId: "prGrandeurTot" });
 initStateChangeGraph({ svgId: "scSvg", readoutId: "scReadout", btnPureId: "scPure", btnMixId: "scMix" });
 initDensityCalculator({ svgId: "dcSvg", mRangeId: "dcM", vRangeId: "dcV", readoutId: "dcReadout", btnLiquidId: "dcLiquid", btnGasId: "dcGas", unitMLabelId: "dcUnitM" });
 initChromatography({ svgId: "chSvg", readoutId: "chReadout", eluerBtnId: "chEluerBtn", resetBtnId: "chResetBtn" });

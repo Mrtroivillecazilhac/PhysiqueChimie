@@ -5,6 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 13 — Mouvements d'un système — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* Notation vectorielle : flèche au-dessus des grandeurs vectorielles
+     (ex. v_i, Δv, ΣF, M_iM_i+1). À terme, ce bloc peut être déplacé dans
+     styles.css pour être réutilisé par les autres chapitres. */
+  .vec { position: relative; display: inline-block; padding-top: 0.55em; }
+  .vec::before {
+    content: "";
+    position: absolute;
+    top: 0.18em;
+    left: 0;
+    right: 6px;
+    border-top: 1.4px solid currentColor;
+  }
+  .vec::after {
+    content: "";
+    position: absolute;
+    top: -0.03em;
+    right: -1px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 3px 0 3px 5px;
+    border-color: transparent transparent transparent currentColor;
+  }
+</style>
 <script src="animations-common.js"></script>
 <script src="animations-ch13.js"></script>
 <script src="modules-common.js"></script>
@@ -63,17 +88,26 @@
     <h2>1. Le vecteur vitesse</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Le système est considéré comme <strong>ponctuel</strong>. Dans un référentiel donné, la valeur v<sub>i</sub> de la vitesse du système à la position M<sub>i</sub> est assimilée à la valeur de la vitesse <strong>moyenne</strong> du système entre deux positions très proches M<sub>i</sub> et M<sub>i+1</sub>.
+      Le système est considéré comme <strong>ponctuel</strong>. Dans un référentiel donné, le <strong>vecteur vitesse</strong> <span class="vec">v<sub>i</sub></span> du système à la position M<sub>i</sub> est assimilé au vecteur vitesse <strong>moyen</strong> du système entre deux positions très proches M<sub>i</sub> et M<sub>i+1</sub> ; sa <strong>valeur</strong> (norme) est alors assimilée à la valeur de la vitesse moyenne sur ce court intervalle.
     </div>
     <div class="formula">
-      v<sub>i</sub> = <span class="frac"><span class="num">M<sub>i</sub>M<sub>i+1</sub></span><span class="den">t<sub>i+1</sub> − t<sub>i</sub></span></span>
+      <span class="vec">v<sub>i</sub></span> = <span class="frac"><span class="num"><span class="vec">M<sub>i</sub>M<sub>i+1</sub></span></span><span class="den">t<sub>i+1</sub> − t<sub>i</sub></span></span>
     </div>
     <p class="course-text">
       Le vecteur vitesse en un point de la trajectoire est assimilé au vecteur vitesse moyen obtenu pour une durée Δt extrêmement <strong>courte</strong>. Lorsque la durée est suffisamment courte, le vecteur déplacement devient <strong>tangent</strong> à la trajectoire.
     </p>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      Le vecteur vitesse v<sub>i</sub> est défini par : sa <strong>direction</strong> (tangente à la trajectoire), son <strong>sens</strong> (celui du mouvement), sa <strong>valeur</strong> (celle de la vitesse en m·s⁻¹).
+      Le vecteur vitesse <span class="vec">v<sub>i</sub></span> est défini par : sa <strong>direction</strong> (tangente à la trajectoire), son <strong>sens</strong> (celui du mouvement), sa <strong>valeur</strong> (celle de la vitesse en m·s⁻¹).
+    </div>
+
+    <div class="method-box">
+      <span class="box-label">🔬 Point de méthode — chronophotographie / TP</span>
+      Lorsqu'on dispose d'un enregistrement à intervalles de temps réguliers (chronophotographie, vidéo pointée), on estime souvent le vecteur vitesse en M<sub>i</sub> à l'aide des deux points <strong>encadrants</strong> M<sub>i−1</sub> et M<sub>i+1</sub>, plutôt qu'avec le seul point suivant M<sub>i+1</sub> :
+      <div class="formula" style="font-size:0.95rem; margin-top:8px;">
+        <span class="vec">v<sub>i</sub></span> = <span class="frac"><span class="num"><span class="vec">M<sub>i−1</sub>M<sub>i+1</sub></span></span><span class="den">2Δt</span></span>
+      </div>
+      Cette estimation <strong>centrée</strong> est en général plus précise que celle obtenue avec un seul intervalle [M<sub>i</sub> ; M<sub>i+1</sub>], car elle limite l'effet des erreurs de pointé de part et d'autre de M<sub>i</sub>.
     </div>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Rapproche M<sub>i+1</sub> de M<sub>i</sub> : observe le vecteur devenir tangent à la trajectoire.</p>
@@ -96,7 +130,7 @@
       Lors d'un mouvement, le vecteur vitesse peut varier en <strong>direction</strong>, en <strong>sens</strong> ou en <strong>valeur</strong>.
     </p>
     <div class="formula">
-      (Δv)<sub>i→j</sub> = v<sub>j</sub> − v<sub>i</sub>
+      (<span class="vec">Δv</span>)<sub>i→j</sub> = <span class="vec">v<sub>j</sub></span> − <span class="vec">v<sub>i</sub></span>
     </div>
     <div class="warning-box">
       <span class="box-label">⚠️ Attention</span>
@@ -137,7 +171,7 @@
   <section>
     <h2>3. La somme des forces appliquées au système</h2>
     <div class="formula">
-      ΣF = m × <span class="frac"><span class="num">Δv</span><span class="den">Δt</span></span>
+      <span class="vec">ΣF</span> = m × <span class="frac"><span class="num"><span class="vec">Δv</span></span><span class="den">Δt</span></span>
     </div>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
@@ -203,13 +237,13 @@
         Le système est considéré comme <input class="blank" data-answer="ponctuel" size="14">. Dans un référentiel donné, la valeur v<sub>i</sub> de la vitesse du système à la position M<sub>i</sub> est assimilée à la valeur de la vitesse <input class="blank" data-answer="moyenne" size="14"> du système entre deux positions très proches M<sub>i</sub> et M<sub>i+1</sub>.
       </p>
       <div class="formula">
-        v<sub>i</sub> = <span class="frac"><span class="num">M<sub>i</sub>M<sub>i+1</sub></span><span class="den">t<sub>i+1</sub> − t<sub>i</sub></span></span>
+        <span class="vec">v<sub>i</sub></span> = <span class="frac"><span class="num"><span class="vec">M<sub>i</sub>M<sub>i+1</sub></span></span><span class="den">t<sub>i+1</sub> − t<sub>i</sub></span></span>
       </div>
       <p>
         Le vecteur vitesse en un point de la trajectoire est assimilé au vecteur vitesse moyen obtenu pour une durée Δt extrêmement <input class="blank" data-answer="courte" size="14">. Lorsque la durée est suffisamment courte, le vecteur déplacement devient <input class="blank" data-answer="tangent" size="14"> à la trajectoire.
       </p>
       <p>
-        Le vecteur vitesse v<sub>i</sub> est défini par : sa <input class="blank" data-answer="direction" size="14"> (tangente à la trajectoire), son <input class="blank" data-answer="sens" size="12"> (celui du mouvement), sa <input class="blank" data-answer="valeur" size="14"> (celle de la vitesse en m·s⁻¹).
+        Le vecteur vitesse <span class="vec">v<sub>i</sub></span> est défini par : sa <input class="blank" data-answer="direction" size="14"> (tangente à la trajectoire), son <input class="blank" data-answer="sens" size="12"> (celui du mouvement), sa <input class="blank" data-answer="valeur" size="14"> (celle de la vitesse en m·s⁻¹).
       </p>
 
       <h3>2. Le vecteur variation de vitesse</h3>
@@ -217,13 +251,13 @@
         Lors d'un mouvement, le vecteur vitesse peut varier en <input class="blank" data-answer="direction" size="14">, en <input class="blank" data-answer="sens" size="12"> ou en <input class="blank" data-answer="valeur" size="14">.
       </p>
       <div class="formula">
-        (Δv)<sub>i→j</sub> = v<sub>j</sub> − v<sub>i</sub>
+        (<span class="vec">Δv</span>)<sub>i→j</sub> = <span class="vec">v<sub>j</sub></span> − <span class="vec">v<sub>i</sub></span>
       </div>
       <em class="note">Exemple : lors d'un mouvement circulaire uniforme, la valeur de la vitesse est constante mais le vecteur vitesse varie en <input class="blank" data-answer="direction" size="14"> car la trajectoire n'est pas <input class="blank" data-answer="rectiligne" size="14">. Le vecteur variation de vitesse n'est pas égal au vecteur <input class="blank" data-answer="nul" size="10">.</em>
 
       <h3>3. La somme des forces appliquées au système</h3>
       <div class="formula">
-        ΣF = m × <span class="frac"><span class="num">Δv</span><span class="den">Δt</span></span>
+        <span class="vec">ΣF</span> = m × <span class="frac"><span class="num"><span class="vec">Δv</span></span><span class="den">Δt</span></span>
       </div>
       <p>
         Ces deux vecteurs sont <input class="blank" data-answer="colinéaires|colineaires" size="16"> et de même <input class="blank" data-answer="sens" size="12">. La somme vectorielle des forces qui s'exercent sur le système est aussi appelée <input class="blank" data-answer="résultante|resultante" size="16"> des forces.
@@ -356,9 +390,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Vecteur vitesse</td><td style="padding:10px 8px; color:var(--yellow);">v<sub>i</sub> = M<sub>i</sub>M<sub>i+1</sub> / (t<sub>i+1</sub>−t<sub>i</sub>)</td><td style="padding:10px 8px; color:var(--chalk-dim);">tangent à la trajectoire quand Δt → 0</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Vecteur variation de vitesse</td><td style="padding:10px 8px; color:var(--yellow);">Δv = v<sub>j</sub> − v<sub>i</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">peut varier en direction, sens, ou valeur</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Relation fondamentale</td><td style="padding:10px 8px; color:var(--yellow);">ΣF = m × Δv/Δt</td><td style="padding:10px 8px; color:var(--chalk-dim);">ΣF et Δv toujours colinéaires, même sens</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Vecteur vitesse</td><td style="padding:10px 8px; color:var(--yellow);"><span class="vec">v<sub>i</sub></span> = <span class="vec">M<sub>i</sub>M<sub>i+1</sub></span> / (t<sub>i+1</sub>−t<sub>i</sub>)</td><td style="padding:10px 8px; color:var(--chalk-dim);">tangent à la trajectoire quand Δt → 0</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Vecteur variation de vitesse</td><td style="padding:10px 8px; color:var(--yellow);"><span class="vec">Δv</span> = <span class="vec">v<sub>j</sub></span> − <span class="vec">v<sub>i</sub></span></td><td style="padding:10px 8px; color:var(--chalk-dim);">peut varier en direction, sens, ou valeur</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Relation fondamentale</td><td style="padding:10px 8px; color:var(--yellow);"><span class="vec">ΣF</span> = m × <span class="vec">Δv</span>/Δt</td><td style="padding:10px 8px; color:var(--chalk-dim);"><span class="vec">ΣF</span> et <span class="vec">Δv</span> toujours colinéaires, même sens</td></tr>
           <tr><td style="padding:10px 8px;">Rôle de la masse</td><td style="padding:10px 8px; color:var(--yellow);">—</td><td style="padding:10px 8px; color:var(--chalk-dim);">à ΣF fixée, plus m est grande, plus Δv est petit</td></tr>
         </tbody>
       </table>
@@ -369,7 +403,7 @@
       <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
         <li><strong>En valeur</strong> : trajectoire rectiligne, accélération ou décélération</li>
         <li><strong>En direction</strong> : trajectoire circulaire à vitesse constante en valeur (Δv pointe vers le centre)</li>
-        <li>Dans les deux cas, Δv ≠ vecteur nul, et ΣF lui est colinéaire et de même sens</li>
+        <li>Dans les deux cas, <span class="vec">Δv</span> ≠ vecteur nul, et <span class="vec">ΣF</span> lui est colinéaire et de même sens</li>
       </ul>
     </div>
   </section>

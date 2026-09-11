@@ -1,4 +1,4 @@
-/* Animations du chapitre 1 — 2nde — "Corps purs et mélanges"
+/* Animations du chapitre 2 — 2nde — "Corps purs et mélanges"
    Version simple (raw) : à raffiner plus tard, une fois toute la
    progression du 1er trimestre posée. */
 
@@ -49,7 +49,23 @@ function initPureOrMixture(cfg) {
   draw();
 }
 
-/* ---------- 2. Calculateur de proportion (massique / volumique) ---------- */
+/* ---------- 2. Calculateur de proportion (massique / volumique) ----------
+   Représentation particulaire macro/micro. 100 billes existent toujours
+   (elles représentent le pourcentage), mais le récipient qui les contient
+   réagit maintenant à la quantité TOTALE choisie, pour que "augmenter le
+   total" se voie clairement :
+     - en mode volumique : un flacon qui grossit avec le volume total (posé
+       sur une ligne de sol fixe) ;
+     - en mode massique : la balance analogique déjà utilisée pour la masse
+       volumique plus bas dans la page — le plateau s'enfonce d'autant plus
+       que la masse totale est grande (l'objet posé dessus garde une taille
+       fixe : seule la position du plateau change, la masse ne "grossit"
+       pas comme un volume).
+   Dans les deux cas, exactement N = round(pct) billes "s'allument" (couleur
+   pleine) pour symboliser l'espèce E ; les 100−N restantes restent
+   éteintes/grisées pour symboliser le reste du mélange. L'ordre d'allumage
+   est mélangé une seule fois à l'initialisation (aspect "mélange homogène"
+   plutôt qu'un remplissage en bloc façon jauge). */
 function initProportionCalculator(cfg) {
   const svg = document.getElementById(cfg.svgId);
   const eRange = document.getElementById(cfg.eRangeId);
@@ -59,29 +75,142 @@ function initProportionCalculator(cfg) {
   const btnVol = document.getElementById(cfg.btnVolId);
   const unitLabelE = document.getElementById(cfg.unitLabelEId);
   const unitLabelTot = document.getElementById(cfg.unitLabelTotId);
+  const grandeurLabelE = document.getElementById(cfg.grandeurLabelEId);
+  const grandeurLabelTot = document.getElementById(cfg.grandeurLabelTotId);
 
   let mode = "vol"; // "mass" (grammes) ou "vol" (litres)
+
+  // ---- grille de 100 billes, en coordonnées NORMALISÉES (0..1) à l'intérieur
+  // d'une "boîte" qui sera repositionnée/redimensionnée à chaque dessin selon
+  // le récipient utilisé (flacon ou objet posé sur la balance). ----
+  const GRID_COLS = 10, GRID_ROWS = 10;
+  const norm = [];
+  for (let row = 0; row < GRID_ROWS; row++) {
+    for (let col = 0; col < GRID_COLS; col++) {
+      norm.push({
+        u: GRID_COLS > 1 ? col / (GRID_COLS - 1) : 0.5,
+        v: GRID_ROWS > 1 ? row / (GRID_ROWS - 1) : 0.5
+      });
+    }
+  }
+
+  // ---- ordre d'allumage fixé une fois pour toutes (mélangé, aspect
+  // "mélange homogène" — un générateur pseudo-aléatoire simple suffit car
+  // seul le rendu visuel est concerné, pas la reproductibilité d'un calcul). ----
+  const order = norm.map((_, i) => i);
+  let seed = 42;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  const colorRank = new Array(100);
+  order.forEach((posIndex, rank) => { colorRank[posIndex] = rank; });
+
+  const totMax = Number(totRange.max) || 10;
+  const totMin = Number(totRange.min) || 0;
+
+  // Facteur d'échelle (0.35 → 1) du récipient, calculé à partir de la
+  // quantité TOTALE choisie : plus le total est grand, plus le flacon (ou
+  // l'objet sur la balance) grossit. Borné à 0.35 pour rester visible même
+  // quand le total est réglé au minimum.
+  function scaleFromTotal(tot) {
+    const span = totMax - totMin;
+    const t = span > 0 ? Math.max(0, Math.min(1, (tot - totMin) / span)) : 0;
+    return 0.35 + 0.65 * t;
+  }
+
+  // Dessine les 100 billes à l'intérieur d'une boîte {x,y,w,h} (coordonnées
+  // SVG), N d'entre elles "allumées" dans la couleur de l'espèce E.
+  function drawParticles(box, N, colorE, dotR) {
+    let s = "";
+    norm.forEach((p, i) => {
+      const cx = box.x + p.u * box.w;
+      const cy = box.y + p.v * box.h;
+      const lit = colorRank[i] < N;
+      if (lit) {
+        s += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${dotR.toFixed(1)}" fill="${colorE}" opacity="0.95"/>`;
+      } else {
+        s += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${dotR.toFixed(1)}" fill="var(--chalk-dim)" opacity="0.3"/>`;
+      }
+    });
+    return s;
+  }
 
   function draw() {
     let e = Number(eRange.value);
     let tot = Number(totRange.value);
-    if (e > tot) { e = tot; eRange.value = tot; }
+
+    // Empêche strictement E > total : le curseur de E ne peut pas dépasser
+    // la valeur courante du total.
+    eRange.max = String(tot);
+    if (e > tot) { e = tot; eRange.value = String(tot); }
+
     const pct = tot > 0 ? (e / tot) * 100 : 0;
+    const decimal = tot > 0 ? e / tot : 0;
+    const N = Math.max(0, Math.min(100, Math.round(pct)));
     const unit = mode === "mass" ? "g" : "L";
     const grandeur = mode === "mass" ? "masse" : "volume";
+    const grandeurCap = mode === "mass" ? "Masse" : "Volume";
+    const colorE = mode === "mass" ? "var(--yellow)" : "var(--teal)";
+    const scale = scaleFromTotal(tot);
+    const dotR = mode === "vol" ? (3.4 + 2.0 * scale) : 4.4; // taille fixe en mode masse (seule la position du plateau bouge)
 
-    const barX = 60, barY = 20, barW = 40, barH = 140;
-    const fillH = (pct / 100) * barH;
-    let s = `<rect x="${barX}" y="${barY}" width="${barW}" height="${barH}" fill="none" stroke="var(--line)" stroke-width="1.5"/>`;
-    s += `<rect x="${barX}" y="${barY + barH - fillH}" width="${barW}" height="${fillH}" fill="var(--teal)"/>`;
-    s += `<text x="${barX + barW / 2}" y="${barY - 10}" font-size="13" fill="var(--yellow)" text-anchor="middle" font-weight="700">${pct.toFixed(0)}%</text>`;
-    s += `<text x="${barX + barW / 2}" y="${barY + barH + 18}" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">espèce E</text>`;
+    let s = "";
+    let box; // zone {x,y,w,h} où répartir les 100 billes
+
+    if (mode === "vol") {
+      // ---- un flacon qui grossit avec le volume total, posé sur un sol fixe ----
+      const W = 46 + 110 * scale, H = 60 + 110 * scale;
+      const bx = 100 - W / 2, topY = 192 - H; // base toujours au même niveau
+      const neckW = Math.max(24, W * 0.32), neckH = 22;
+
+      s += `<line x1="20" y1="192" x2="180" y2="192" stroke="var(--chalk-dim)" stroke-width="1" opacity="0.5"/>`;
+      s += `<rect x="${bx.toFixed(1)}" y="${topY.toFixed(1)}" width="${W.toFixed(1)}" height="${H.toFixed(1)}" rx="14" fill="rgba(107,191,171,0.05)" stroke="var(--line)" stroke-width="2"/>`;
+      s += `<rect x="${(100 - neckW / 2).toFixed(1)}" y="${(topY - neckH).toFixed(1)}" width="${neckW.toFixed(1)}" height="${neckH.toFixed(1)}" rx="5" fill="rgba(107,191,171,0.05)" stroke="var(--line)" stroke-width="2"/>`;
+      s += `<rect x="${(100 - neckW / 2 - 5).toFixed(1)}" y="${(topY - neckH - 8).toFixed(1)}" width="${(neckW + 10).toFixed(1)}" height="8" rx="4" fill="var(--chalk-dim)"/>`;
+
+      box = { x: bx + W * 0.1, y: topY + H * 0.1, w: W * 0.8, h: H * 0.8 };
+    } else {
+      // ---- balance analogique (même principe que le Test 2 plus bas) : seul
+      // le plateau s'enfonce quand la masse totale augmente (plus lourd = plus
+      // bas). L'objet posé dessus garde une taille FIXE : la masse ne "grossit"
+      // pas comme un volume, elle pèse plus ou moins lourd. ----
+      const PIVOT_Y = 18, PLATE_Y_MIN = 66, PLATE_Y_MAX = 150;
+      const plateY = PLATE_Y_MIN + scale * (PLATE_Y_MAX - PLATE_Y_MIN);
+      const W = 100, H = 74; // taille fixe, indépendante de la masse totale
+      const bx = 100 - W / 2, topY = plateY - H;
+
+      // potence
+      s += `<rect x="40" y="12" width="120" height="8" rx="3" fill="var(--board-2)" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
+      s += `<rect x="96" y="4" width="8" height="16" fill="var(--board-2)" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
+      // règle graduée sur le côté
+      s += `<line x1="176" y1="${PLATE_Y_MIN}" x2="176" y2="${PLATE_Y_MAX}" stroke="var(--chalk-dim)" stroke-width="1.2"/>`;
+      // ressort en zig-zag
+      const segs = 6, zx = 12;
+      let spring = `M100 ${PIVOT_Y + 8}`;
+      for (let i = 1; i <= segs; i++) {
+        const y = PIVOT_Y + 8 + (plateY - PIVOT_Y - 8) * (i / segs);
+        spring += ` L${(100 + (i % 2 === 0 ? zx : -zx)).toFixed(1)} ${y.toFixed(1)}`;
+      }
+      s += `<path d="${spring}" fill="none" stroke="var(--chalk-dim)" stroke-width="2.5"/>`;
+      // plateau
+      s += `<ellipse cx="100" cy="${plateY.toFixed(1)}" rx="46" ry="7" fill="rgba(0,0,0,0.2)" stroke="var(--chalk-dim)" stroke-width="2"/>`;
+      // objet posé sur le plateau (taille fixe)
+      s += `<rect x="${bx.toFixed(1)}" y="${topY.toFixed(1)}" width="${W.toFixed(1)}" height="${H.toFixed(1)}" rx="12" fill="rgba(107,191,171,0.05)" stroke="var(--line)" stroke-width="2"/>`;
+
+      box = { x: bx + W * 0.1, y: topY + H * 0.1, w: W * 0.8, h: H * 0.8 };
+    }
+
+    s += drawParticles(box, N, colorE, dotR);
     svg.innerHTML = s;
 
     if (unitLabelE) unitLabelE.textContent = unit;
     if (unitLabelTot) unitLabelTot.textContent = unit;
+    if (grandeurLabelE) grandeurLabelE.textContent = grandeurCap;
+    if (grandeurLabelTot) grandeurLabelTot.textContent = grandeurCap;
 
-    readout.innerHTML = `Proportion ${grandeur} = <span class="frac"><span class="num">${e.toFixed(1)} ${unit}</span><span class="den">${tot.toFixed(1)} ${unit}</span></span> = <strong style="color:var(--yellow)">${pct.toFixed(0)}%</strong>`;
+    readout.innerHTML = `Proportion ${grandeur} = <span class="frac"><span class="num">${e.toFixed(1)} ${unit}</span><span class="den">${tot.toFixed(1)} ${unit}</span></span> = <strong>${decimal.toFixed(2)}</strong> = <strong style="color:var(--yellow)">${pct.toFixed(0)}%</strong><br><span style="font-size:0.85em; color:var(--chalk-dim);">Soit ${N} particules de E allumées sur 100 particules de mélange.</span>`;
   }
   eRange.addEventListener("input", draw);
   totRange.addEventListener("input", draw);

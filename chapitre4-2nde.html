@@ -5,6 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 4 — Description des mouvements — 2nde</title>
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* Notation vectorielle : flèche au-dessus des grandeurs vectorielles
+     (ex. v, v_moy, MM'). À terme, ce bloc peut être déplacé dans styles.css
+     pour être réutilisé par les autres chapitres. */
+  .vec { position: relative; display: inline-block; padding-top: 0.42em; }
+  .vec::before {
+    content: "";
+    position: absolute;
+    top: 0.06em;
+    left: 0;
+    right: 3px;
+    border-top: 1.3px solid currentColor;
+  }
+  .vec::after {
+    content: "";
+    position: absolute;
+    top: -0.09em;
+    right: -1px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 2.6px 0 2.6px 4.2px;
+    border-color: transparent transparent transparent currentColor;
+  }
+</style>
 <script src="animations-common.js"></script>
 <script src="animations-ch4-2nde.js"></script>
 <script src="modules-common.js"></script>
@@ -111,7 +136,7 @@
     <h2>1c. Vecteur déplacement</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Lorsqu'un système se déplace entre deux positions notées M et M', on peut définir un <strong>vecteur déplacement</strong>, noté MM'.
+      Lorsqu'un système se déplace entre deux positions notées M et M', on peut définir un <strong>vecteur déplacement</strong>, noté <span class="vec">MM'</span>.
     </div>
     <p class="course-text">
       Ce vecteur a pour <strong>direction</strong> la droite (MM'), pour <strong>sens</strong> celui du mouvement (de M vers M'), et pour <strong>valeur</strong> la distance séparant les points M et M'.
@@ -140,12 +165,12 @@
     <h2>2a. Vecteur vitesse moyenne</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Dans un référentiel donné, entre les positions M et M', le vecteur vitesse moyenne v<sub>moy</sub> du système est le rapport du vecteur déplacement MM' par la durée Δt du parcours.
+      Dans un référentiel donné, entre les positions M et M', le vecteur vitesse moyenne <span class="vec">v<sub>moy</sub></span> du système est le rapport du vecteur déplacement <span class="vec">MM'</span> par la durée Δt du parcours.
     </div>
-    <div class="formula">v<sub>moy</sub> = <span class="frac"><span class="num">MM'</span><span class="den">Δt</span></span></div>
+    <div class="formula"><span class="vec">v<sub>moy</sub></span> = <span class="frac"><span class="num"><span class="vec">MM'</span></span><span class="den">Δt</span></span></div>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      Le vecteur vitesse moyenne est <strong>indépendant de la trajectoire</strong> du système entre M et M'. Il est colinéaire au vecteur déplacement MM' et de même sens.
+      Le vecteur vitesse moyenne est <strong>indépendant de la trajectoire</strong> du système entre M et M'. Il est colinéaire au vecteur déplacement <span class="vec">MM'</span> et de même sens.
     </div>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la distance parcourue et la durée du parcours.</p>
@@ -170,25 +195,27 @@
     </p>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Le <strong>vecteur vitesse</strong> v en un point de la trajectoire est assimilé au vecteur vitesse moyenne obtenu pour une durée Δt extrêmement courte.
+      Le <strong>vecteur vitesse</strong> <span class="vec">v</span> en un point de la trajectoire est assimilé au vecteur vitesse moyenne obtenu pour une durée Δt extrêmement courte.
     </div>
-    <div class="formula">v = <span class="frac"><span class="num">MM'</span><span class="den">Δt</span></span> avec Δt extrêmement courte</div>
+    <div class="formula"><span class="vec">v</span> = <span class="frac"><span class="num"><span class="vec">MM'</span></span><span class="den">Δt</span></span> avec Δt extrêmement courte</div>
     <p class="course-text">
-      Le vecteur vitesse v du système en un point a pour <strong>direction</strong> la tangente à la trajectoire, pour <strong>sens</strong> celui du mouvement, et pour <strong>valeur</strong> celle de la vitesse, en m·s⁻¹.
+      Le vecteur vitesse <span class="vec">v</span> du système en un point a pour <strong>direction</strong> la tangente à la trajectoire, pour <strong>sens</strong> celui du mouvement, et pour <strong>valeur</strong> celle de la vitesse, en m·s⁻¹.
     </p>
     <div class="warning-box">
       <span class="box-label">⚠️ Attention</span>
-      Plus la durée Δt est courte, meilleure est l'approximation v = MM'/Δt.
+      Plus la durée Δt est courte, meilleure est l'approximation <span class="vec">v</span> = <span class="vec">MM'</span>/Δt.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Réduis l'écart entre M et M' : observe le vecteur devenir tangent à la trajectoire.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Réduis l'écart temporel entre M et M' : observe le point parcourir M→M' (plus ou moins vite selon l'écart) et le vecteur devenir tangent à la trajectoire.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="vtSvgCours" viewBox="0 0 230 200"></svg>
       </div>
       <div class="anim-controls">
-        <label>Écart entre M et M' (grand → petit)</label>
-        <input type="range" id="vtGapCours" min="5" max="70" value="70" step="1">
+        <label>Écart temporel (× Δt)</label>
+        <input type="range" id="vtGapCours" min="2" max="60" value="60" step="1">
+        <div class="actions" style="margin-top:6px;"><button class="toggle-btn" id="vtPlayCours">▶ Rejouer le déplacement</button></div>
+        <div class="formula" id="vtFormulaCours" style="font-size:1rem; margin-top:14px;"></div>
         <div class="anim-readout" id="vtReadoutCours"></div>
       </div>
     </div>
@@ -209,6 +236,7 @@
       <button class="toggle-btn" id="mnAccelCours">Accéléré</button>
       <button class="toggle-btn" id="mnDecelCours">Décéléré</button>
       <button class="toggle-btn" id="mnUniformCours">Uniforme</button>
+      <button class="toggle-btn" id="mnGhostCours">📷 Points fantômes (Δt)</button>
     </div>
     <div class="anim-zone">
       <div class="anim-wrap" style="width:100%; max-width:230px;">
@@ -249,14 +277,14 @@
 
       <h3>1c. Vecteur déplacement</h3>
       <p>
-        Le vecteur déplacement MM' a pour direction la droite (MM'), pour sens celui du <input class="blank" data-answer="mouvement" size="14"> (de M vers M'), et pour valeur la <input class="blank" data-answer="distance" size="14"> séparant M et M'.
+        Le vecteur déplacement <span class="vec">MM'</span> a pour direction la droite (MM'), pour sens celui du <input class="blank" data-answer="mouvement" size="14"> (de M vers M'), et pour valeur la <input class="blank" data-answer="distance" size="14"> séparant M et M'.
       </p>
 
       <h3>2a. Vecteur vitesse moyenne</h3>
       <p>
         Le vecteur vitesse moyenne est le rapport du vecteur <input class="blank" data-answer="déplacement|deplacement" size="16"> par la <input class="blank" data-answer="durée|duree" size="12"> du parcours.
       </p>
-      <div class="formula">v<sub>moy</sub> = <span class="frac"><span class="num">MM'</span><span class="den">Δt</span></span></div>
+      <div class="formula"><span class="vec">v<sub>moy</sub></span> = <span class="frac"><span class="num"><span class="vec">MM'</span></span><span class="den">Δt</span></span></div>
       <p>
         Le vecteur vitesse moyenne est <input class="blank" data-answer="indépendant|independant" size="16"> de la trajectoire du système entre M et M'.
       </p>
@@ -340,14 +368,16 @@
 
   <section>
     <h2>Vecteur vitesse en un point</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Réduis l'écart entre M et M' : observe le vecteur devenir tangent à la trajectoire.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Réduis l'écart temporel entre M et M' : observe le point parcourir M→M' (plus ou moins vite selon l'écart) et le vecteur devenir tangent à la trajectoire.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="vtSvg" viewBox="0 0 230 200"></svg>
       </div>
       <div class="anim-controls">
-        <label>Écart entre M et M' (grand → petit)</label>
-        <input type="range" id="vtGap" min="5" max="70" value="70" step="1">
+        <label>Écart temporel (× Δt)</label>
+        <input type="range" id="vtGap" min="2" max="60" value="60" step="1">
+        <div class="actions" style="margin-top:6px;"><button class="toggle-btn" id="vtPlay">▶ Rejouer le déplacement</button></div>
+        <div class="formula" id="vtFormula" style="font-size:1rem; margin-top:14px;"></div>
         <div class="anim-readout" id="vtReadout"></div>
       </div>
     </div>
@@ -361,6 +391,7 @@
       <button class="toggle-btn" id="mnAccel">Accéléré</button>
       <button class="toggle-btn" id="mnDecel">Décéléré</button>
       <button class="toggle-btn" id="mnUniform">Uniforme</button>
+      <button class="toggle-btn" id="mnGhost">📷 Points fantômes (Δt)</button>
     </div>
     <div class="anim-zone">
       <div class="anim-wrap" style="width:100%; max-width:230px;">
@@ -393,9 +424,9 @@
         <tbody>
           <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Référentiel</td><td style="padding:10px 8px;">repère + horloge</td><td style="padding:10px 8px; color:var(--chalk-dim);">mouvement toujours relatif à un référentiel</td></tr>
           <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Trajectoire</td><td style="padding:10px 8px;">ensemble des positions successives</td><td style="padding:10px 8px; color:var(--chalk-dim);">rectiligne / circulaire / curviligne</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Vecteur déplacement</td><td style="padding:10px 8px;">MM' : direction, sens M→M', valeur = distance</td><td style="padding:10px 8px; color:var(--chalk-dim);">indépendant de la trajectoire suivie</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Vecteur vitesse moyenne</td><td style="padding:10px 8px;">v<sub>moy</sub> = MM'/Δt</td><td style="padding:10px 8px; color:var(--chalk-dim);">colinéaire à MM', même sens</td></tr>
-          <tr><td style="padding:10px 8px;">Vecteur vitesse en un point</td><td style="padding:10px 8px;">v = MM'/Δt, Δt extrêmement courte</td><td style="padding:10px 8px; color:var(--chalk-dim);">direction = tangente à la trajectoire</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Vecteur déplacement</td><td style="padding:10px 8px;"><span class="vec">MM'</span> : direction, sens M→M', valeur = distance</td><td style="padding:10px 8px; color:var(--chalk-dim);">indépendant de la trajectoire suivie</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Vecteur vitesse moyenne</td><td style="padding:10px 8px;"><span class="vec">v<sub>moy</sub></span> = <span class="vec">MM'</span>/Δt</td><td style="padding:10px 8px; color:var(--chalk-dim);">colinéaire à <span class="vec">MM'</span>, même sens</td></tr>
+          <tr><td style="padding:10px 8px;">Vecteur vitesse en un point</td><td style="padding:10px 8px;"><span class="vec">v</span> = <span class="vec">MM'</span>/Δt, Δt extrêmement courte</td><td style="padding:10px 8px; color:var(--chalk-dim);">direction = tangente à la trajectoire</td></tr>
         </tbody>
       </table>
     </div>
@@ -449,15 +480,15 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 initTrajectoryTypes({ svgId: "ttSvgCours", readoutId: "ttReadoutCours", btnLineId: "ttLineCours", btnCircleId: "ttCircleCours", btnCurvyId: "ttCurvyCours" });
 initDisplacementVector({ svgId: "dvSvgCours", readoutId: "dvReadoutCours", btn1Id: "dv1Cours", btn2Id: "dv2Cours" });
 initAverageVelocity({ svgId: "avSvgCours", dRangeId: "avDCours", tRangeId: "avTCours", readoutId: "avReadoutCours" });
-initVelocityTangent({ svgId: "vtSvgCours", gapRangeId: "vtGapCours", readoutId: "vtReadoutCours" });
-initMotionNature({ svgId: "mnSvgCours", readoutId: "mnReadoutCours", btnAccelId: "mnAccelCours", btnDecelId: "mnDecelCours", btnUniformId: "mnUniformCours" });
+initVelocityTangent({ svgId: "vtSvgCours", gapRangeId: "vtGapCours", readoutId: "vtReadoutCours", formulaId: "vtFormulaCours", btnPlayId: "vtPlayCours" });
+initMotionNature({ svgId: "mnSvgCours", readoutId: "mnReadoutCours", btnAccelId: "mnAccelCours", btnDecelId: "mnDecelCours", btnUniformId: "mnUniformCours", ghostToggleId: "mnGhostCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
 initTrajectoryTypes({ svgId: "ttSvg", readoutId: "ttReadout", btnLineId: "ttLine", btnCircleId: "ttCircle", btnCurvyId: "ttCurvy" });
 initDisplacementVector({ svgId: "dvSvg", readoutId: "dvReadout", btn1Id: "dv1", btn2Id: "dv2" });
 initAverageVelocity({ svgId: "avSvg", dRangeId: "avD", tRangeId: "avT", readoutId: "avReadout" });
-initVelocityTangent({ svgId: "vtSvg", gapRangeId: "vtGap", readoutId: "vtReadout" });
-initMotionNature({ svgId: "mnSvg", readoutId: "mnReadout", btnAccelId: "mnAccel", btnDecelId: "mnDecel", btnUniformId: "mnUniform" });
+initVelocityTangent({ svgId: "vtSvg", gapRangeId: "vtGap", readoutId: "vtReadout", formulaId: "vtFormula", btnPlayId: "vtPlay" });
+initMotionNature({ svgId: "mnSvg", readoutId: "mnReadout", btnAccelId: "mnAccel", btnDecelId: "mnDecel", btnUniformId: "mnUniform", ghostToggleId: "mnGhost" });
 
 /* ---------- Activités liées à chaque animation ---------- */
 initQCM({

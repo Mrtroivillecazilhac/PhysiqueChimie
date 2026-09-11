@@ -1,6 +1,212 @@
-/* Animations du chapitre 5 — 1ère spé PC */
+/* Animations du chapitre 4 — 1ère spé PC — Tableau d'avancement */
 
-/* ---------- 15. Tableau d'avancement interactif (barres animées) ---------- */
+function fmt1(n) { return n.toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }); }
+
+/* ================================================================== */
+/* a. Avancement d'une réaction chimique — A → B + C                  */
+/* ================================================================== */
+function initAvancementIntro(cfg) {
+  const svg = document.getElementById(cfg.svgId);
+  const xR = document.getElementById(cfg.xId);
+  const readout = document.getElementById(cfg.readoutId);
+  const explain = document.getElementById(cfg.explainId);
+
+  const N0A = 10;
+  const SPECIES = [
+    { key: "A", label: "A", color: "var(--yellow)" },
+    { key: "B", label: "B", color: "var(--teal)" },
+    { key: "C", label: "C", color: "var(--coral)" }
+  ];
+  const baseline = 130, barW = 48, gap = 34, SCALE = 11;
+
+  function draw() {
+    const x = Number(xR.value);
+    const quantities = { A: N0A - x, B: x, C: x };
+
+    let svgContent = `<line x1="10" y1="${baseline}" x2="250" y2="${baseline}" stroke="var(--line)" stroke-width="1.5"/>`;
+    SPECIES.forEach((sp, i) => {
+      const bx = 25 + i * (barW + gap);
+      const h = Math.min(baseline - 12, quantities[sp.key] * SCALE);
+      svgContent += `<rect x="${bx}" y="${baseline - h}" width="${barW}" height="${h}" fill="${sp.color}" opacity="0.85" rx="4"/>`;
+      svgContent += `<text x="${bx + barW / 2}" y="${baseline + 16}" font-size="11" fill="var(--chalk-dim)" text-anchor="middle">${sp.label}</text>`;
+      svgContent += `<text x="${bx + barW / 2}" y="${baseline - h - 6}" font-size="10" fill="${sp.color}" text-anchor="middle">${quantities[sp.key].toFixed(1)}</text>`;
+    });
+    svg.innerHTML = svgContent;
+
+    readout.innerHTML = `x = ${x.toFixed(1)} mol &nbsp;|&nbsp; A restant : ${quantities.A.toFixed(1)} mol &nbsp;|&nbsp; B formé : ${quantities.B.toFixed(1)} mol &nbsp;|&nbsp; C formé : ${quantities.C.toFixed(1)} mol`;
+
+    explain.classList.add("lit");
+    clearTimeout(explain._litTimer);
+    explain._litTimer = setTimeout(() => explain.classList.remove("lit"), 700);
+  }
+
+  xR.addEventListener("input", draw);
+  draw();
+}
+
+/* ================================================================== */
+/* b. Tableau d'avancement — A + 2B → C                                */
+/* ================================================================== */
+function initAvancementTableDemo(cfg) {
+  const svg = document.getElementById(cfg.svgId);
+  const xR = document.getElementById(cfg.xId);
+  const readout = document.getElementById(cfg.readoutId);
+  const tableBody = document.getElementById(cfg.tableBodyId);
+  const formulas = document.getElementById(cfg.formulasId);
+
+  const N0A = 5, N0B = 8;
+  const XMAX = Math.min(N0A / 1, N0B / 2); // = 4
+  const SPECIES = [
+    { key: "A", label: "A", color: "var(--yellow)" },
+    { key: "B", label: "B", color: "var(--teal)" },
+    { key: "C", label: "C", color: "var(--coral)" }
+  ];
+  const baseline = 130, barW = 48, gap = 34, SCALE = 13.5;
+
+  function quantitiesAt(x) {
+    return {
+      A: Math.max(0, N0A - x),
+      B: Math.max(0, N0B - 2 * x),
+      C: x
+    };
+  }
+
+  function draw() {
+    const x = Math.min(Number(xR.value), XMAX);
+    const q = quantitiesAt(x);
+
+    let svgContent = `<line x1="10" y1="${baseline}" x2="250" y2="${baseline}" stroke="var(--line)" stroke-width="1.5"/>`;
+    SPECIES.forEach((sp, i) => {
+      const bx = 25 + i * (barW + gap);
+      const h = Math.min(baseline - 12, q[sp.key] * SCALE);
+      svgContent += `<rect x="${bx}" y="${baseline - h}" width="${barW}" height="${h}" fill="${sp.color}" opacity="0.85" rx="4"/>`;
+      svgContent += `<text x="${bx + barW / 2}" y="${baseline + 16}" font-size="11" fill="var(--chalk-dim)" text-anchor="middle">${sp.label}</text>`;
+      svgContent += `<text x="${bx + barW / 2}" y="${baseline - h - 6}" font-size="10" fill="${sp.color}" text-anchor="middle">${q[sp.key].toFixed(1)}</text>`;
+    });
+    svg.innerHTML = svgContent;
+
+    formulas.innerHTML = `
+      <div><span style="color:var(--yellow)">n(A) = 5 − x</span> = <strong>${fmt1(q.A)} mol</strong></div>
+      <div><span style="color:var(--teal)">n(B) = 8 − 2x</span> = <strong>${fmt1(q.B)} mol</strong></div>
+      <div><span style="color:var(--coral)">n(C) = x</span> = <strong>${fmt1(q.C)} mol</strong></div>
+    `;
+
+    const isInitial = x <= 0.001;
+    const isFinal = x >= XMAX - 0.001;
+    const isInter = !isInitial && !isFinal;
+    tableBody.innerHTML = `
+      <tr class="${isInitial ? 'row-active' : ''}">
+        <td>État initial</td><td>x = 0</td><td>5</td><td>8</td><td>0</td>
+      </tr>
+      <tr class="${isInter ? 'row-active' : ''}">
+        <td>État intermédiaire</td><td>0 &lt; x &lt; x<sub>max</sub></td>
+        <td>5 − x</td><td>8 − 2x</td><td>x</td>
+      </tr>
+      <tr class="${isFinal ? 'row-active' : ''}">
+        <td>État final</td><td>x = x<sub>max</sub> = ${fmt1(XMAX)}</td>
+        <td>${fmt1(N0A - XMAX)}</td><td>${fmt1(N0B - 2 * XMAX)}</td><td>${fmt1(XMAX)}</td>
+      </tr>
+    `;
+
+    readout.innerHTML = `x = ${x.toFixed(1)} mol (x<sub>max</sub> = ${fmt1(XMAX)} mol)`;
+  }
+
+  xR.addEventListener("input", draw);
+  draw();
+}
+
+/* ================================================================== */
+/* c. Réactif limitant & x_max — 2A + B → P                            */
+/* ================================================================== */
+function initLimitingReagentDemo(cfg) {
+  const svg = document.getElementById(cfg.svgId);
+  const n0AR = document.getElementById(cfg.n0AId);
+  const n0BR = document.getElementById(cfg.n0BId);
+  const readout = document.getElementById(cfg.readoutId);
+
+  const baseline = 128, barW = 40, maxBarH = 96, SCALE = maxBarH / 10; // xmax varie de 0 à 10
+
+  function draw() {
+    const n0A = Number(n0AR.value), n0B = Number(n0BR.value);
+    const xmax1 = n0A / 2;   // hypothèse : A limitant
+    const xmax2 = n0B / 1;   // hypothèse : B limitant
+    const xmax = Math.min(xmax1, xmax2);
+    const isStoich = Math.abs(xmax1 - xmax2) < 0.05;
+    const limitingKey = isStoich ? null : (xmax1 < xmax2 ? "A" : "B");
+
+    const bars = [
+      { label: "Hyp. 1 : A limitant", value: xmax1, color: "var(--yellow)", active: limitingKey === "A" },
+      { label: "Hyp. 2 : B limitant", value: xmax2, color: "var(--teal)", active: limitingKey === "B" },
+      { label: "x_max réel", value: xmax, color: "var(--coral)", active: true }
+    ];
+
+    let svgContent = `<line x1="10" y1="${baseline}" x2="250" y2="${baseline}" stroke="var(--line)" stroke-width="1.5"/>`;
+    bars.forEach((b, i) => {
+      const bx = 20 + i * (barW + 32);
+      const h = Math.min(maxBarH, b.value * SCALE);
+      const opacity = b.active ? 0.9 : 0.35;
+      svgContent += `<rect x="${bx}" y="${baseline - h}" width="${barW}" height="${h}" fill="${b.color}" opacity="${opacity}" rx="4"/>`;
+      if (b.active && i < 2) {
+        svgContent += `<rect x="${bx - 2}" y="${baseline - h - 2}" width="${barW + 4}" height="${h + 2}" fill="none" stroke="${b.color}" stroke-width="1.5" rx="5"/>`;
+      }
+      svgContent += `<text x="${bx + barW / 2}" y="${baseline - h - 6}" font-size="10" fill="${b.color}" text-anchor="middle">${fmt1(b.value)}</text>`;
+    });
+    svg.innerHTML = svgContent;
+
+    const badgeText = isStoich
+      ? `<span class="limiting-badge stoich">mélange stœchiométrique</span>`
+      : `<span class="limiting-badge">Réactif limitant : ${limitingKey}</span>`;
+
+    readout.innerHTML = `n₀(A) = ${n0A} mol, n₀(B) = ${n0B} mol &nbsp;→&nbsp; x<sub>max</sub> = min(${fmt1(xmax1)} ; ${fmt1(xmax2)}) = <strong>${fmt1(xmax)} mol</strong> &nbsp;${badgeText}`;
+  }
+
+  n0AR.addEventListener("input", draw);
+  n0BR.addEventListener("input", draw);
+  draw();
+}
+
+/* ================================================================== */
+/* e. Espèce en excès — soluté vs eau (solvant)                        */
+/* ================================================================== */
+function initExcessSpeciesDemo(cfg) {
+  const svg = document.getElementById(cfg.svgId);
+  const nR = document.getElementById(cfg.nId);
+  const readout = document.getElementById(cfg.readoutId);
+
+  const baseline = 128, barW = 56, maxH = 100;
+
+  function draw() {
+    const n = Number(nR.value);
+    const hSolute = Math.min(maxH, n * 9);
+    const hWater = maxH; // toujours "plein" : excès
+
+    let svgContent = `<line x1="10" y1="${baseline}" x2="250" y2="${baseline}" stroke="var(--line)" stroke-width="1.5"/>`;
+
+    // Soluté
+    svgContent += `<rect x="40" y="${baseline - hSolute}" width="${barW}" height="${hSolute}" fill="var(--coral)" opacity="0.85" rx="4"/>`;
+    svgContent += `<text x="${40 + barW / 2}" y="${baseline + 16}" font-size="11" fill="var(--chalk-dim)" text-anchor="middle">Réactif dissous</text>`;
+    svgContent += `<text x="${40 + barW / 2}" y="${baseline - hSolute - 6}" font-size="10" fill="var(--coral)" text-anchor="middle">${n.toFixed(1)} mol</text>`;
+
+    // Eau (grisée, "infinie")
+    svgContent += `<rect x="160" y="${baseline - hWater}" width="${barW}" height="${hWater}" fill="var(--chalk-dim)" opacity="0.25" stroke="var(--chalk-dim)" stroke-dasharray="3,2" rx="4"/>`;
+    for (let i = 0; i < 3; i++) {
+      svgContent += `<line x1="${168 + i * 14}" y1="${baseline - hWater - 6}" x2="${168 + i * 14 - 4}" y2="${baseline - hWater - 14}" stroke="var(--chalk-dim)" stroke-width="1.2"/>`;
+    }
+    svgContent += `<text x="${160 + barW / 2}" y="${baseline + 16}" font-size="11" fill="var(--chalk-dim)" text-anchor="middle">H₂O (solvant)</text>`;
+    svgContent += `<text x="${160 + barW / 2}" y="${baseline - hWater - 20}" font-size="9.5" fill="var(--chalk-dim)" text-anchor="middle">« excès »</text>`;
+
+    svg.innerHTML = svgContent;
+    readout.textContent = `Réactif dissous : ${n.toFixed(1)} mol — quelle que soit cette valeur (dans la gamme du labo), la quantité d'eau reste sans commune mesure.`;
+  }
+
+  nR.addEventListener("input", draw);
+  draw();
+}
+
+/* ================================================================== */
+/* d. Mélange stœchiométrique — I₂ + 2 S₂O₃²⁻ → 2 I⁻ + S₄O₆²⁻           */
+/*    (simulateur complet — Cours uniquement)                          */
+/* ================================================================== */
 function initAdvancementTable(cfg) {
   const svg = document.getElementById(cfg.svgId);
   const n0AR = document.getElementById(cfg.n0AId);
@@ -84,8 +290,6 @@ function initAdvancementTable(cfg) {
     svg.innerHTML = svgContent;
   }
 
-  function fmt(n) { return n.toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }); }
-
   function drawTable(n0I2, n0S2O3, x, xMax) {
     const isInitial = x <= 0.001;
     const isFinal = x >= xMax - 0.001;
@@ -94,15 +298,15 @@ function initAdvancementTable(cfg) {
     tableBody.innerHTML = `
       <tr class="${isInitial ? 'row-active' : ''}">
         <td>État initial</td><td>x = 0</td>
-        <td>${fmt(n0I2)}</td><td>${fmt(n0S2O3)}</td><td>0,0</td><td>0,0</td>
+        <td>${fmt1(n0I2)}</td><td>${fmt1(n0S2O3)}</td><td>0,0</td><td>0,0</td>
       </tr>
       <tr class="${isInter ? 'row-active' : ''}">
         <td>État intermédiaire</td><td>0 &lt; x &lt; x<sub>max</sub></td>
-        <td>${fmt(n0I2)} − x</td><td>${fmt(n0S2O3)} − 2x</td><td>2x</td><td>x</td>
+        <td>${fmt1(n0I2)} − x</td><td>${fmt1(n0S2O3)} − 2x</td><td>2x</td><td>x</td>
       </tr>
       <tr class="${isFinal ? 'row-active' : ''}">
-        <td>État final</td><td>x = x<sub>max</sub> = ${fmt(xMax)}</td>
-        <td>${fmt(n0I2 - xMax)}</td><td>${fmt(n0S2O3 - 2 * xMax)}</td><td>${fmt(2 * xMax)}</td><td>${fmt(xMax)}</td>
+        <td>État final</td><td>x = x<sub>max</sub> = ${fmt1(xMax)}</td>
+        <td>${fmt1(n0I2 - xMax)}</td><td>${fmt1(n0S2O3 - 2 * xMax)}</td><td>${fmt1(2 * xMax)}</td><td>${fmt1(xMax)}</td>
       </tr>
     `;
   }
@@ -129,4 +333,110 @@ function initAdvancementTable(cfg) {
   n0BR.addEventListener("input", draw);
   xR.addEventListener("input", draw);
   draw();
+}
+
+/* ================================================================== */
+/* Entraînement — Défi interactif : Bilan de matière (tirage aléatoire) */
+/* ================================================================== */
+function initBilanChallenge(cfg) {
+  const container = document.getElementById(cfg.containerId);
+  const chapterId = cfg.chapterId;
+  const activityId = cfg.activityId;
+
+  let state = null;
+
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+  function drawExercise() {
+    let a, b, n0A, n0B, xmax1, xmax2;
+    // on retire les tirages trop proches d'une égalité pour éviter l'ambiguïté du réactif limitant
+    do {
+      a = randInt(1, 3);
+      b = randInt(1, 3);
+      n0A = randInt(2, 12);
+      n0B = randInt(2, 12);
+      xmax1 = n0A / a;
+      xmax2 = n0B / b;
+    } while (Math.abs(xmax1 - xmax2) < 0.4);
+
+    const limiting = xmax1 < xmax2 ? "A" : "B";
+    const xmax = Math.min(xmax1, xmax2);
+    const c = randInt(1, 3);
+
+    state = { a, b, c, n0A, n0B, xmax1, xmax2, limiting, xmax, checked: false };
+    renderExercise();
+  }
+
+  function renderExercise() {
+    const s = state;
+    container.innerHTML = `
+      <div class="big-equation" style="font-size:1.15rem; margin-bottom:14px;">
+        <span class="coef">${s.a}</span> <span style="color:var(--yellow);">A</span>
+        &nbsp;+&nbsp;
+        <span class="coef">${s.b}</span> <span style="color:var(--teal);">B</span>
+        &nbsp;→&nbsp;
+        <span class="coef">${s.c}</span> <span style="color:var(--coral);">C</span>
+      </div>
+      <p class="course-text">n₀(A) = <strong>${s.n0A} mol</strong> &nbsp;—&nbsp; n₀(B) = <strong>${s.n0B} mol</strong></p>
+
+      <div class="challenge-field">
+        <label>Quel est le réactif limitant ?</label>
+        <div class="challenge-radios">
+          <label><input type="radio" name="${cfg.activityId}-limiting" value="A"> A</label>
+          <label><input type="radio" name="${cfg.activityId}-limiting" value="B"> B</label>
+        </div>
+      </div>
+
+      <div class="challenge-field">
+        <label for="${cfg.activityId}-xmax">Valeur de x<sub>max</sub> (en mol) :</label>
+        <input type="number" step="0.1" id="${cfg.activityId}-xmax" class="challenge-input">
+      </div>
+
+      <div class="actions" style="justify-content:flex-start; margin-top:10px;">
+        <button id="${cfg.activityId}-check">✅ Vérifier</button>
+        <button id="${cfg.activityId}-redraw">🎲 Nouveau tirage</button>
+      </div>
+      <div class="challenge-feedback" id="${cfg.activityId}-feedback"></div>
+    `;
+
+    container.querySelector(`#${cfg.activityId}-check`).addEventListener("click", checkAnswer);
+    container.querySelector(`#${cfg.activityId}-redraw`).addEventListener("click", drawExercise);
+  }
+
+  function checkAnswer() {
+    const s = state;
+    const feedback = container.querySelector(`#${cfg.activityId}-feedback`);
+    const radios = container.querySelectorAll(`input[name="${cfg.activityId}-limiting"]`);
+    let chosenLimiting = null;
+    radios.forEach(r => { if (r.checked) chosenLimiting = r.value; });
+    const xmaxInput = container.querySelector(`#${cfg.activityId}-xmax`);
+    const chosenXmax = Number(xmaxInput.value);
+
+    if (chosenLimiting === null || xmaxInput.value === "") {
+      feedback.innerHTML = `<p style="color:var(--coral);">Réponds aux deux questions avant de vérifier.</p>`;
+      return;
+    }
+
+    const limitingOk = chosenLimiting === s.limiting;
+    const xmaxOk = Math.abs(chosenXmax - s.xmax) < 0.05;
+    const allOk = limitingOk && xmaxOk;
+
+    feedback.innerHTML = `
+      <p style="color:${allOk ? 'var(--teal)' : 'var(--coral)'}; font-weight:700;">
+        ${allOk ? "✅ Bravo, c'est exact !" : "❌ Pas tout à fait."}
+      </p>
+      <p class="course-text" style="font-size:0.88rem;">
+        x<sub>max,1</sub> (A limitant) = ${s.n0A} / ${s.a} = ${fmt1(s.xmax1)} mol<br>
+        x<sub>max,2</sub> (B limitant) = ${s.n0B} / ${s.b} = ${fmt1(s.xmax2)} mol<br>
+        Le plus petit des deux impose x<sub>max</sub> = ${fmt1(s.xmax)} mol : le réactif limitant est <strong>${s.limiting}</strong>.
+      </p>
+    `;
+
+    if (allOk && !s.checked) {
+      s.checked = true;
+      ProgressStore.record(chapterId, activityId, true);
+    }
+  }
+
+  drawExercise();
 }

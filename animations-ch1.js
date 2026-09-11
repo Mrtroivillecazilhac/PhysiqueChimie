@@ -973,3 +973,270 @@ function initDilutionProcess(cfg) {
   diluteBtn.style.display = "none";
   draw();
 }
+
+/* ---------- h. Protocole expérimental — la dilution étape par étape ---------- */
+/* Widget autonome : timeline de 6 pastilles cliquables (pattern tablist/tab/tabpanel,
+   roving tabindex, navigation clavier ← → Home End), chaque étape avec schéma SVG,
+   encadré Verrerie/Matériel et encadré Vigilance/Bon geste. Même principe de double
+   instanciation Cours / Entraînement que les autres animations (cfg.containerId). */
+
+function getCH1DprSteps() {
+  return [
+  {
+    title: "Prélever la solution mère dans un bécher dédié",
+    label: "Bécher dédié",
+    description:
+      "Verse une quantité suffisante de solution mère du flacon d'origine dans un bécher propre et sec, réservé à cet usage. C'est dans <strong>ce bécher</strong> que tu prélèveras ensuite à la pipette.",
+    materiel: ["Flacon de solution mère", "Bécher propre et sec (réservé au prélèvement)"],
+    vigilance:
+      "Ne jamais plonger la pipette — ni la propipette — directement dans le flacon d'origine : la moindre goutte ou impureté introduite contaminerait durablement tout le stock de solution mère.",
+    svg: `<svg viewBox="0 0 260 170" xmlns="http://www.w3.org/2000/svg">
+      ${verrerieG("flacon", { x: 15, y: 5, scale: 0.72 })}
+      <path d="M112 78 Q140 78 168 78" stroke="var(--yellow)" stroke-width="2.5" fill="none" marker-end="url(#dprArrowStep1)"/>
+      <defs><marker id="dprArrowStep1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="var(--yellow)"/></marker></defs>
+      ${verrerieG("becher", { x: 168, y: 10, scale: 0.82 })}
+      <text x="65" y="160" text-anchor="middle" font-size="10" fill="var(--chalk-dim)" font-family="var(--font-body)">flacon</text>
+      <text x="205" y="160" text-anchor="middle" font-size="10" fill="var(--chalk-dim)" font-family="var(--font-body)">bécher</text>
+    </svg>`
+  },
+  {
+    title: "Prélever V<sub>mère</sub> à la pipette jaugée",
+    label: "Pipette + propipette",
+    description:
+      "À l'aide d'une <strong>propipette</strong> (jamais à la bouche), prélève dans le bécher le volume <em>V</em><sub>mère</sub> calculé, avec une pipette jaugée adaptée. Ajuste le bas du ménisque exactement sur le trait de jauge, l'œil à sa hauteur.",
+    materiel: ["Pipette jaugée (volume adapté à V<sub>mère</sub>)", "Propipette"],
+    vigilance:
+      "Vise toujours avec le <strong>bas du ménisque</strong>, œil à hauteur du trait — jamais en regardant par-dessus ou par-dessous, sous peine d'erreur de parallaxe sur le volume prélevé.",
+    svg: `<svg viewBox="0 0 220 260" xmlns="http://www.w3.org/2000/svg">
+      ${verrerieG("propipette", { x: 70, y: 5, scale: 0.85 })}
+      ${verrerieG("pipetteJaugee", { x: 70, y: 81.5, scale: 0.85 })}
+      <line x1="30" y1="158" x2="64" y2="158" stroke="var(--chalk-dim)" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <circle cx="26" cy="158" r="2.8" fill="var(--chalk-dim)"/>
+      <text x="20" y="152" text-anchor="middle" font-size="9" fill="var(--chalk-dim)" font-family="var(--font-body)">œil</text>
+    </svg>`
+  },
+  {
+    title: "Transférer dans la fiole jaugée",
+    label: "Transfert en fiole",
+    description:
+      "Verse le contenu de la pipette dans la fiole jaugée de volume <em>V</em><sub>fille</sub>, <strong>pointe posée contre la paroi inclinée</strong> du col de la fiole, pour un écoulement sans éclaboussure ni bulle.",
+    materiel: ["Fiole jaugée de volume V<sub>fille</sub>"],
+    vigilance:
+      "Laisse s'écouler tout le liquide par gravité ; ne souffle jamais dans la pipette pour évacuer la dernière goutte — ce volume résiduel est déjà pris en compte dans le jaugeage de la pipette.",
+    svg: `<svg viewBox="0 0 210 150" xmlns="http://www.w3.org/2000/svg">
+      ${verrerieG("pipetteJaugee", { x: 20, y: 5, scale: 0.6 })}
+      <path d="M50 107 Q103.4 117 156.8 33.4" stroke="var(--teal)" stroke-width="2" fill="none" stroke-dasharray="2,3"/>
+      ${verrerieG("fioleJaugee", { x: 110, y: 5, scale: 0.78 })}
+    </svg>`
+  },
+  {
+    title: "Ajouter l'eau distillée aux 2/3 et homogénéiser",
+    label: "Eau distillée 2/3",
+    description:
+      "Complète avec de l'eau distillée à la <strong>pissette</strong> jusqu'aux deux tiers environ du volume de la fiole, puis bouche et effectue une première homogénéisation par mouvements circulaires doux.",
+    materiel: ["Pissette d'eau distillée", "Bouchon de la fiole jaugée"],
+    vigilance:
+      "Ne remplis pas jusqu'au trait dès maintenant : il faut laisser de la place pour ajuster précisément au trait de jauge à l'étape suivante.",
+    svg: `<svg viewBox="0 0 210 150" xmlns="http://www.w3.org/2000/svg">
+      ${verrerieG("pissette", { x: 0, y: 10, scale: 0.5 })}
+      <path d="M60.5 40 Q103.65 48 146.8 28.4" stroke="var(--teal)" stroke-width="2" fill="none" stroke-dasharray="2,3"/>
+      ${verrerieG("fioleJaugee", { x: 100, y: 0, scale: 0.78 })}
+      <path d="M130.8 105.3 a16 8 0 1 0 32 0 a16 8 0 1 0 -32 0" fill="none" stroke="var(--yellow)" stroke-width="1.8" stroke-dasharray="3,2"/>
+      <path d="M159.8 98.3 l4 4 l-4 4" fill="none" stroke="var(--yellow)" stroke-width="1.8"/>
+      <text x="105" y="145" text-anchor="middle" font-size="8" fill="var(--chalk-dim)" font-family="var(--font-body)">≈ 2/3 + agitation circulaire</text>
+    </svg>`
+  },
+  {
+    title: "Ajuster précisément au trait de jauge",
+    label: "Ajustement au trait",
+    description:
+      "Complète au <strong>compte-gouttes</strong> jusqu'à ce que le bas du ménisque soit tangent au trait de jauge, l'œil parfaitement à l'horizontale du trait pour éviter toute erreur de parallaxe.",
+    materiel: ["Compte-gouttes", "Eau distillée"],
+    vigilance:
+      "Ajoute l'eau goutte à goutte à l'approche du trait : un excès, même minime, oblige à tout recommencer depuis l'étape 1.",
+    svg: `<svg viewBox="0 0 210 150" xmlns="http://www.w3.org/2000/svg">
+      ${verrerieG("fioleJaugee", { x: 30, y: 5, scale: 0.72 })}
+      ${verrerieG("compteGouttes", { x: 128, y: 0, scale: 0.52 })}
+      <path d="M154 78 Q113.6 84 73.2 28.04" stroke="var(--coral)" stroke-width="1.6" fill="none" stroke-dasharray="1,3"/>
+      <line x1="2" y1="37.4" x2="63.84" y2="37.4" stroke="var(--chalk-dim)" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <circle cx="0" cy="37.4" r="2.5" fill="var(--chalk-dim)"/>
+      <text x="8" y="31.4" font-size="9" fill="var(--chalk-dim)" font-family="var(--font-body)">œil</text>
+    </svg>`
+  },
+  {
+    title: "Boucher et homogénéiser par retournement",
+    label: "Bouchage + retournement",
+    description:
+      "Bouche la fiole jaugée et retourne-la plusieurs fois (une dizaine), en la maintenant fermement, pour homogénéiser parfaitement la solution fille obtenue.",
+    materiel: ["Fiole jaugée bouchée"],
+    vigilance:
+      "Une homogénéisation insuffisante laisse des zones de concentration différente dans la fiole : la solution ne serait pas uniforme, faussant tout prélèvement ultérieur.",
+    svg: `<svg viewBox="0 0 210 175" xmlns="http://www.w3.org/2000/svg">
+      <g transform="rotate(14 115 83)">
+        ${verrerieG("fioleJaugee", { x: 70, y: 8, scale: 0.75 })}
+        ${verrerieG("bouchon", { x: 109, y: 23, scale: 0.75 })}
+      </g>
+      <path d="M22 46 A32 32 0 1 1 22 80" fill="none" stroke="var(--teal)" stroke-width="2.5" marker-end="url(#dprSpinStep6)"/>
+      <defs><marker id="dprSpinStep6" markerWidth="9" markerHeight="9" refX="5" refY="4" orient="auto"><path d="M0 0 L7 4 L0 8 Z" fill="var(--teal)"/></marker></defs>
+      <text x="105" y="168" text-anchor="middle" font-size="9" fill="var(--chalk-dim)" font-family="var(--font-body)">×10 retournements</text>
+    </svg>`
+  }
+  ];
+}
+
+function injectDilutionProtocolStyles() {
+  if (document.getElementById("dilutionProtocolStyles")) return;
+  const style = document.createElement("style");
+  style.id = "dilutionProtocolStyles";
+  style.textContent = `
+    .dilution-protocol-widget{ font-family:var(--font-body); }
+    .dpr-timeline{ display:flex; align-items:flex-start; justify-content:center; gap:0; margin-bottom:18px; overflow-x:auto; padding:4px 2px 8px; }
+    .dpr-step-wrap{ display:flex; align-items:center; flex:none; }
+    .dpr-dot{ display:flex; flex-direction:column; align-items:center; gap:5px; background:none; border:none; cursor:pointer; padding:4px 6px; font-family:var(--font-body); }
+    .dpr-dot-num{ width:32px; height:32px; border-radius:50%; border:2px solid var(--line); color:var(--chalk-dim); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:1.02rem; transition:all .2s ease; background:var(--board, #12181a); }
+    .dpr-dot-label{ font-size:0.62rem; color:var(--chalk-dim); max-width:76px; text-align:center; line-height:1.25; white-space:normal; overflow-wrap:break-word; }
+    .dpr-dot:hover .dpr-dot-num{ border-color:var(--teal); }
+    .dpr-dot:focus-visible .dpr-dot-num{ outline:2px solid var(--yellow); outline-offset:2px; }
+    .dpr-dot.done .dpr-dot-num{ border-color:var(--teal); color:var(--teal); }
+    .dpr-dot.active .dpr-dot-num{ border-color:var(--yellow); background:var(--yellow); color:var(--board, #12181a); }
+    .dpr-dot.active .dpr-dot-label{ color:var(--yellow); }
+    .dpr-connector{ width:26px; height:2px; background:var(--line); margin:0 2px 22px; flex:none; transition:background .2s ease; }
+    .dpr-connector.done{ background:var(--teal); }
+    .dpr-nav{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+    .dpr-nav-btn{ font-family:var(--font-display); font-size:0.85rem; background:transparent; color:var(--chalk); border:1.5px solid var(--line); border-radius:8px; padding:8px 14px; cursor:pointer; transition:border-color .15s ease, color .15s ease; }
+    .dpr-nav-btn:hover:not(:disabled){ border-color:var(--yellow); color:var(--yellow); }
+    .dpr-nav-btn:disabled{ opacity:0.35; cursor:not-allowed; }
+    .dpr-nav-label{ font-size:0.8rem; color:var(--chalk-dim); text-align:center; flex:1; min-width:120px; }
+    .dpr-panel{ border:1px solid var(--line); border-radius:12px; padding:18px; background:rgba(255,255,255,0.015); animation:dprFadeIn .3s ease; }
+    @keyframes dprFadeIn{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:translateY(0);} }
+    .dpr-title{ font-family:var(--font-display); color:var(--yellow); font-size:1.08rem; margin:0 0 14px; text-align:center; }
+    .dpr-body{ display:flex; gap:22px; align-items:flex-start; flex-wrap:wrap; }
+    .dpr-schema{ flex:none; width:200px; background:rgba(0,0,0,0.12); border:1px solid var(--line); border-radius:10px; padding:8px; }
+    .dpr-schema svg{ width:100%; height:auto; display:block; }
+    .dpr-text{ flex:1; min-width:220px; }
+    .dpr-desc{ color:var(--chalk); font-size:0.95rem; line-height:1.55; margin:0 0 14px; }
+    .dpr-box{ border-radius:8px; padding:12px 14px; font-size:0.86rem; line-height:1.5; margin-bottom:10px; position:relative; }
+    .dpr-box:last-child{ margin-bottom:0; }
+    .dpr-box-label{ display:block; font-family:var(--font-display); font-size:0.74rem; text-transform:uppercase; letter-spacing:0.03em; margin-bottom:6px; }
+    .dpr-materiel{ background:rgba(107,191,171,0.08); border:1px solid rgba(107,191,171,0.28); }
+    .dpr-materiel .dpr-box-label{ color:var(--teal); }
+    .dpr-materiel ul{ margin:0; padding-left:18px; color:var(--chalk-dim); }
+    .dpr-materiel li{ margin-bottom:2px; }
+    .dpr-vigilance{ background:rgba(217,122,99,0.08); border:1px solid rgba(217,122,99,0.30); color:var(--chalk-dim); }
+    .dpr-vigilance .dpr-box-label{ color:var(--coral); }
+    @media (max-width:640px){
+      .dpr-body{ flex-direction:column; align-items:center; }
+      .dpr-schema{ width:160px; }
+      .dpr-dot-label{ display:none; }
+      .dpr-nav-label{ order:3; width:100%; }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function initDilutionProtocol(cfg) {
+  const container = document.getElementById(cfg.containerId);
+  if (!container) return;
+
+  if (typeof verrerieG !== "function") {
+    console.error("[initDilutionProtocol] verrerieG() est introuvable : le fichier verrerie-svg.js doit être chargé AVANT animations-ch1.js. Widget ignoré, le reste de la page continue normalement.");
+    container.innerHTML = `<p style="color:var(--chalk-dim); font-size:0.85rem;">⚠️ Schéma indisponible (verrerie-svg.js non chargé).</p>`;
+    return;
+  }
+
+  let steps;
+  try {
+    steps = getCH1DprSteps();
+  } catch (err) {
+    console.error("[initDilutionProtocol] Erreur lors de la construction des étapes :", err);
+    container.innerHTML = `<p style="color:var(--chalk-dim); font-size:0.85rem;">⚠️ Schéma indisponible pour le moment.</p>`;
+    return;
+  }
+
+  injectDilutionProtocolStyles();
+  const uid = cfg.containerId;
+  let current = 0;
+
+  container.classList.add("dilution-protocol-widget");
+  container.innerHTML = `
+    <div class="dpr-timeline" role="tablist" aria-label="Étapes du protocole de dilution">
+      ${steps.map((s, i) => `
+        <div class="dpr-step-wrap">
+          <button type="button" class="dpr-dot" role="tab" id="${uid}-tab-${i}" aria-selected="${i === 0 ? "true" : "false"}" aria-controls="${uid}-panel-${i}" data-index="${i}" tabindex="${i === 0 ? "0" : "-1"}">
+            <span class="dpr-dot-num">${i + 1}</span>
+            <span class="dpr-dot-label">${s.label}</span>
+          </button>
+          ${i < steps.length - 1 ? '<div class="dpr-connector"></div>' : ""}
+        </div>
+      `).join("")}
+    </div>
+    <div class="dpr-nav">
+      <button type="button" class="dpr-nav-btn" id="${uid}-prev">← Étape précédente</button>
+      <div class="dpr-nav-label" id="${uid}-navlabel"></div>
+      <button type="button" class="dpr-nav-btn" id="${uid}-next">Étape suivante →</button>
+    </div>
+    <div class="dpr-panels">
+      ${steps.map((s, i) => `
+        <div class="dpr-panel" role="tabpanel" id="${uid}-panel-${i}" aria-labelledby="${uid}-tab-${i}" ${i === 0 ? "" : "hidden"}>
+          <h3 class="dpr-title">Étape ${i + 1} — ${s.title}</h3>
+          <div class="dpr-body">
+            <div class="dpr-schema">${s.svg}</div>
+            <div class="dpr-text">
+              <p class="dpr-desc">${s.description}</p>
+              <div class="dpr-box dpr-materiel">
+                <span class="dpr-box-label">🧪 Verrerie / Matériel</span>
+                <ul>${s.materiel.map(m => `<li>${m}</li>`).join("")}</ul>
+              </div>
+              <div class="dpr-box dpr-vigilance">
+                <span class="dpr-box-label">⚠️ Vigilance / Bon geste</span>
+                ${s.vigilance}
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  const dots = Array.from(container.querySelectorAll(".dpr-dot"));
+  const connectors = Array.from(container.querySelectorAll(".dpr-connector"));
+  const panels = Array.from(container.querySelectorAll(".dpr-panel"));
+  const prevBtn = container.querySelector(`#${CSS.escape(uid)}-prev`);
+  const nextBtn = container.querySelector(`#${CSS.escape(uid)}-next`);
+  const navLabel = container.querySelector(`#${CSS.escape(uid)}-navlabel`);
+
+  function render(focusDot) {
+    dots.forEach((dot, i) => {
+      dot.setAttribute("aria-selected", i === current ? "true" : "false");
+      dot.setAttribute("tabindex", i === current ? "0" : "-1");
+      dot.classList.toggle("active", i === current);
+      dot.classList.toggle("done", i < current);
+    });
+    connectors.forEach((c, i) => c.classList.toggle("done", i < current));
+    panels.forEach((p, i) => { p.hidden = i !== current; });
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === steps.length - 1;
+    navLabel.textContent = `Étape ${current + 1} / ${steps.length}`;
+    if (focusDot) dots[current].focus();
+  }
+
+  function goTo(index, focusDot) {
+    current = Math.max(0, Math.min(steps.length - 1, index));
+    render(focusDot);
+  }
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener("click", () => goTo(i, false));
+    dot.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); goTo(current + 1 >= steps.length ? 0 : current + 1, true); }
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); goTo(current - 1 < 0 ? steps.length - 1 : current - 1, true); }
+      else if (e.key === "Home") { e.preventDefault(); goTo(0, true); }
+      else if (e.key === "End") { e.preventDefault(); goTo(steps.length - 1, true); }
+    });
+  });
+
+  prevBtn.addEventListener("click", () => goTo(current - 1, false));
+  nextBtn.addEventListener("click", () => goTo(current + 1, false));
+
+  render(false);
+}

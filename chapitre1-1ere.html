@@ -6,6 +6,7 @@
 <title>Chapitre 1 — Détermination de la composition d'un système chimique — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
 <script src="animations-common.js"></script>
+<script src="verrerie-svg.js"></script>
 <script src="animations-ch1.js"></script>
 <script src="modules-common.js"></script>
 <style>
@@ -28,6 +29,15 @@
   .ptable-slot.cat-noble{ background:rgba(232,196,104,0.10); }
   .ptable-slot.cat-h{ background:rgba(242,237,225,0.06); }
   .ptable-slot.selected{ border-style:solid; border-color:var(--yellow); background:var(--yellow); color:var(--board); font-weight:700; }
+
+  /* ---------- Lien de téléchargement des slides (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
 </style>
 </head>
 <body>
@@ -44,6 +54,7 @@
   <div class="badge-inline chimie">Chimie</div>
   <h1>Chapitre 1 — Détermination de la composition d'un système chimique</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch1-1ere.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -276,6 +287,12 @@
     </div>
   </section>
 
+  <section>
+    <h2>h. Protocole expérimental de la dilution</h2>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique sur les pastilles ou utilise les flèches du clavier pour parcourir les 6 étapes.</p>
+    <div id="dilutionProtocoleCours"></div>
+  </section>
+
 </div>
 
 <!-- ================================================================ -->
@@ -506,10 +523,15 @@
           <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Masse ↔ quantité de matière</td><td style="padding:10px 8px; color:var(--yellow);">n = m / M</td><td style="padding:10px 8px; color:var(--chalk-dim);">m (g) • M (g/mol)</td></tr>
           <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Quantité de matière d'un gaz</td><td style="padding:10px 8px; color:var(--yellow);">n = V / V<sub>m</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">V (L) • V<sub>m</sub> ≈ 24,0 L/mol</td></tr>
           <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Concentration</td><td style="padding:10px 8px; color:var(--yellow);">C = n / V<sub>solution</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">C (mol/L)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Concentration massique (titre massique)</td><td style="padding:10px 8px; color:var(--yellow);">t = m / V<sub>solution</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">t (g/L) • m : masse de soluté dissous (g) • lien avec C : t = C × M</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Masse volumique</td><td style="padding:10px 8px; color:var(--yellow);">ρ = m / V</td><td style="padding:10px 8px; color:var(--chalk-dim);">ρ (g/L ou g/mL) • m : masse totale de l'échantillon (g) • V : son volume</td></tr>
           <tr><td style="padding:10px 8px;">Dilution</td><td style="padding:10px 8px; color:var(--yellow);">C<sub>m</sub>V<sub>m</sub> = C<sub>f</sub>V<sub>f</sub> ; F = C<sub>m</sub>/C<sub>f</sub> = V<sub>f</sub>/V<sub>m</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">F : facteur de dilution (F &gt; 1)</td></tr>
         </tbody>
       </table>
     </div>
+    <p style="color:var(--chalk-dim); font-size:0.85rem; margin-top:10px; font-style:italic;">
+      Concentration massique et masse volumique sont des notions vues en seconde, ajoutées ici en complément car elles reviennent souvent (attention à ne pas confondre t, qui concerne un soluté dissous dans une solution, et ρ, qui concerne un échantillon de matière en général — et à ne pas confondre ce t avec les C<sub>m</sub>/C<sub>f</sub> de la dilution ci-dessus, où l'indice « m » signifie « mère », pas « massique »).
+    </p>
   </section>
 </div>
 
@@ -554,6 +576,7 @@ initMassScale({ svgId: "scaleSvgCours", nRangeId: "scaleNCours", molarRangeId: "
 initGasMolarVolume({ svgId: "gasSvgCours", nRangeId: "gasNCours", readoutId: "gasReadoutCours", buttonIds: ["gasN2Cours", "gasO2Cours", "gasArCours", "gasCH4Cours"] });
 initConcentration({ svgId: "concSvgCours", nRangeId: "concNCours", vRangeId: "concVCours", readoutId: "concReadoutCours" });
 initDilutionProcess({ svgId: "diluSvgCours", nRangeId: "diluNCours", fRangeId: "diluFCours", lockBtnId: "diluLockCours", diluteBtnId: "diluGoCours", resetBtnId: "diluResetCours", readoutId: "diluReadoutCours", fRowId: "diluFRowCours" });
+initDilutionProtocol({ containerId: "dilutionProtocoleCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
 initMoleZoom({ containerId: "moleZoom" });
@@ -599,9 +622,9 @@ initEstimation({
 
 initEstimation({
   containerId: "actGasVolume", chapterId: "ch1-1ere", activityId: "est-gas-volume",
-  prompt: "Avec V_m = 24,0 L/mol, quel volume (en L) occupe n = 2,0 mol de méthane CH₄ ? (même réponse pour n'importe quel autre gaz à cette quantité de matière)",
+  prompt: "Avec V<sub>m</sub> = 24,0 L/mol, quel volume (en L) occupe n = 2,0 mol de méthane CH₄ ? (même réponse pour n'importe quel autre gaz à cette quantité de matière)",
   answer: 48.0, tolerance: 1, unit: "L",
-  explanation: "V = n × V_m = 2,0 × 24,0 = 48,0 L — ce volume serait le même pour 2,0 mol de N₂, O₂ ou Ar."
+  explanation: "V = n × V<sub>m</sub> = 2,0 × 24,0 = 48,0 L — ce volume serait le même pour 2,0 mol de N₂, O₂ ou Ar."
 });
 
 initEstimation({

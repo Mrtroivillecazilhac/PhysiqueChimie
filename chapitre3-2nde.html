@@ -106,7 +106,15 @@
       Exemple : une solution de volume 500 mL contenant une masse de 2,5 g de glucose dissous a une concentration en masse t = 2,5 / (500×10⁻³) = 5,0 g·L⁻¹.
     </p>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la masse de soluté et le volume de la solution.</p>
+    <p class="course-text">
+      Un solvant ne peut cependant dissoudre qu'une masse limitée de soluté : au-delà d'une masse maximale, la <strong>solubilité</strong>, la solution est dite <strong>saturée</strong> et le soluté en excès ne se dissout plus. Il forme alors un <strong>dépôt solide</strong> au fond du récipient, non dissous.
+    </p>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Dans l'animation ci-dessous, la solubilité est fixée à s = 200 g·L⁻¹ à titre d'exemple : si t dépasse cette valeur, la solution devient saturée et la concentration réellement dissoute reste bloquée à 200 g·L⁻¹.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la masse de soluté et le volume de la solution, et observe l'apparition d'un dépôt en cas de saturation.</p>
     <div class="anim-zone">
       <div class="anim-wrap" style="width:100%; max-width:210px;">
         <svg id="mcSvgCours" viewBox="0 0 210 180"></svg>
@@ -133,14 +141,14 @@
       Une <strong>dissolution</strong> est l'obtention d'une solution par mélange d'un solvant et d'une espèce chimique.
     </div>
     <p class="course-text">
-      Pour préparer une solution aqueuse de volume V<sub>solution</sub> à la concentration en masse t, il faut peser une masse m d'espèce chimique à dissoudre dans l'eau, à l'aide d'une fiole jaugée complétée jusqu'au trait de jauge.
+      Pour préparer une solution aqueuse de volume V<sub>solution</sub> à la concentration en masse t, il faut peser une masse m d'espèce chimique (à l'aide d'une balance électronique), la verser dans une fiole jaugée à l'aide d'un entonnoir à solide, puis dissoudre et compléter avec de l'eau jusqu'au trait de jauge.
     </p>
     <div class="formula">m = t × V<sub>solution</sub></div>
     <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
       Exemple : pour préparer 100,0 mL d'une solution de glucose à t = 20,0 g·L⁻¹, il faut peser m = 20,0 × 100,0×10⁻³ = 2,00 g.
     </p>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle t et V : observe la masse à peser.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle t et V : observe la masse à peser sur la balance électronique et la fiole jaugée à préparer.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="dpSvgCours" viewBox="0 0 220 170"></svg>
@@ -162,7 +170,7 @@
       La <strong>dilution</strong> d'une solution aqueuse est l'ajout d'eau à cette solution. La solution obtenue (<strong>solution fille</strong>) est moins concentrée que la solution initiale (<strong>solution mère</strong>).
     </div>
     <p class="course-text">
-      Au cours d'une dilution, la masse de soluté prélevée dans la solution mère est égale à celle présente dans la solution fille : t<sub>m</sub> × V<sub>m</sub> = t<sub>f</sub> × V<sub>f</sub>.
+      Au cours d'une dilution, la masse de soluté prélevée dans la solution mère à l'aide d'une <strong>pipette jaugée</strong> est égale à celle présente dans la solution fille : t<sub>m</sub> × V<sub>m</sub> = t<sub>f</sub> × V<sub>f</sub>.
     </p>
     <div class="formula">F = <span class="frac"><span class="num">t<sub>m</sub></span><span class="den">t<sub>f</sub></span></span> = <span class="frac"><span class="num">V<sub>f</sub></span><span class="den">V<sub>m</sub></span></span></div>
     <div class="recall-box">
@@ -170,10 +178,10 @@
       Comme t<sub>f</sub> &lt; t<sub>m</sub>, le facteur de dilution F est toujours <strong>supérieur à 1</strong>.
     </div>
     <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
-      Exemple : pour diluer 5 fois une solution mère à t<sub>m</sub> = 10,0 g·L⁻¹ et obtenir V<sub>f</sub> = 100,0 mL, on prélève V<sub>m</sub> = V<sub>f</sub>/F = 20,0 mL ; la solution fille obtenue a pour concentration t<sub>f</sub> = t<sub>m</sub>/F = 2,0 g·L⁻¹.
+      Exemple : pour diluer 5 fois une solution mère à t<sub>m</sub> = 10,0 g·L⁻¹ et obtenir V<sub>f</sub> = 100,0 mL, on prélève V<sub>m</sub> = V<sub>f</sub>/F = 20,0 mL à la pipette jaugée ; la solution fille obtenue a pour concentration t<sub>f</sub> = t<sub>m</sub>/F = 2,0 g·L⁻¹.
     </p>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la concentration mère et le facteur de dilution.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la concentration mère et le facteur de dilution : observe le volume prélevé à la pipette jaugée.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
         <svg id="dlSvgCours" viewBox="0 0 220 160"></svg>
@@ -245,6 +253,9 @@
       <p>
         La masse volumique ρ<sub>solution</sub> d'une solution et la concentration en masse t<sub>soluté</sub> d'un soluté s'expriment dans la <input class="blank" data-answer="même unité|meme unite" size="16">, mais ce sont deux grandeurs <input class="blank" data-answer="différentes|differentes" size="16">.
       </p>
+      <p>
+        Au-delà d'une masse maximale (la <input class="blank" data-answer="solubilité|solubilite" size="14">), la solution est dite <input class="blank" data-answer="saturée|saturee" size="14"> et le soluté en excès forme un <input class="blank" data-answer="dépôt|depot" size="12"> non dissous.
+      </p>
 
       <h3>3a. Les préparations de solutions — par dissolution</h3>
       <p>
@@ -279,90 +290,43 @@
   </section>
 
   <section>
-    <h2>Soluté ionique ou moléculaire</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux types de soluté.</p>
-    <div class="toggle-row">
-      <button class="toggle-btn" id="stIonic">Soluté ionique</button>
-      <button class="toggle-btn" id="stMolecular">Soluté moléculaire</button>
-    </div>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="stSvg" viewBox="0 0 220 190"></svg>
+    <h2>🧪 Défi Laboratoire &amp; Verrerie</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Calcule le volume à prélever, puis choisis la verrerie adaptée pour réaliser la dilution demandée.</p>
+    <div class="definition-box" id="lcPrompt"></div>
+    <div class="anim-controls" style="margin-top:14px;">
+      <label>Volume à prélever V<sub>m</sub> (mL)</label>
+      <input type="number" id="lcVmInput" step="0.1" placeholder="Vm en mL">
+      <label>Verrerie de prélèvement</label>
+      <select id="lcPipetteSelect">
+        <option value="">— Choisir —</option>
+        <option value="pipette-5">Pipette jaugée 5 mL</option>
+        <option value="pipette-10">Pipette jaugée 10 mL</option>
+        <option value="pipette-20">Pipette jaugée 20 mL</option>
+        <option value="eprouvette">Éprouvette graduée</option>
+      </select>
+      <label>Verrerie de préparation</label>
+      <select id="lcFioleSelect">
+        <option value="">— Choisir —</option>
+        <option value="fiole-50">Fiole jaugée 50 mL</option>
+        <option value="fiole-100">Fiole jaugée 100 mL</option>
+        <option value="fiole-250">Fiole jaugée 250 mL</option>
+        <option value="becher">Bécher</option>
+      </select>
+      <div class="actions" style="margin-top:10px;">
+        <button id="lcNewChallengeBtn">🎲 Nouveau défi</button>
+        <button id="lcValidateBtn">✅ Valider</button>
       </div>
-      <div class="anim-controls">
-        <div class="anim-readout" id="stReadout"></div>
-      </div>
+      <div class="anim-readout" id="lcFeedback"></div>
     </div>
+  </section>
+
+  <section>
+    <h2>Questions rapides</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Vérifie ta compréhension des notions du chapitre.</p>
     <div class="activity-block"><div id="actSoluteType"></div></div>
-  </section>
-
-  <section>
-    <h2>Calculateur de concentration en masse</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la masse de soluté et le volume de la solution.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:210px;">
-        <svg id="mcSvg" viewBox="0 0 210 180"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Masse de soluté m (g)</label>
-        <input type="range" id="mcM" min="0" max="20" value="2.5" step="0.1">
-        <label>Volume de la solution V (mL)</label>
-        <input type="range" id="mcV" min="50" max="500" value="500" step="10">
-        <div class="anim-readout" id="mcReadout"></div>
-      </div>
-    </div>
     <div class="activity-block"><div id="actMassConcentration"></div></div>
-  </section>
-
-  <section>
-    <h2>Préparation par dissolution</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle t et V : observe la masse à peser.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="dpSvg" viewBox="0 0 220 170"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Concentration visée t (g/L)</label>
-        <input type="range" id="dpT" min="1" max="30" value="20" step="1">
-        <label>Volume de la solution V (mL)</label>
-        <input type="range" id="dpV" min="50" max="500" value="100" step="10">
-        <div class="anim-readout" id="dpReadout"></div>
-      </div>
-    </div>
     <div class="activity-block"><div id="actDissolutionPrep"></div></div>
-  </section>
-
-  <section>
-    <h2>Préparation par dilution</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la concentration mère et le facteur de dilution.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="dlSvg" viewBox="0 0 220 160"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Concentration mère t<sub>m</sub> (g/L)</label>
-        <input type="range" id="dlTm" min="1" max="30" value="10" step="1">
-        <label>Facteur de dilution F</label>
-        <input type="range" id="dlF" min="2" max="10" value="5" step="1">
-        <div class="anim-readout" id="dlReadout"></div>
-      </div>
-    </div>
     <div class="activity-block"><div id="actDilutionPrep"></div></div>
-  </section>
-
-  <section>
-    <h2>Gamme d'étalonnage (échelle de teintes)</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Déplace S le long de l'échelle et observe l'encadrement obtenu.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:260px;">
-        <svg id="csSvg" viewBox="0 0 220 195"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Position de S sur l'échelle</label>
-        <input type="range" id="csS" min="1" max="5" value="3.4" step="0.1">
-        <div class="anim-readout" id="csReadout"></div>
-      </div>
-    </div>
     <div class="activity-block"><div id="actColorScale"></div></div>
   </section>
 
@@ -384,9 +348,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Concentration en masse</td><td style="padding:10px 8px; color:var(--yellow);">t = m<sub>soluté</sub> / V<sub>solution</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">en g/L ; soluté ionique et/ou moléculaire</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Préparation par dissolution</td><td style="padding:10px 8px; color:var(--yellow);">m = t × V<sub>solution</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">masse à peser, fiole jaugée</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Préparation par dilution</td><td style="padding:10px 8px; color:var(--yellow);">t<sub>m</sub>V<sub>m</sub> = t<sub>f</sub>V<sub>f</sub> ; F = t<sub>m</sub>/t<sub>f</sub> = V<sub>f</sub>/V<sub>m</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">F toujours &gt; 1</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Concentration en masse</td><td style="padding:10px 8px; color:var(--yellow);">t = m<sub>soluté</sub> / V<sub>solution</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">en g/L ; soluté ionique et/ou moléculaire ; au-delà de la solubilité, la solution est saturée</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Préparation par dissolution</td><td style="padding:10px 8px; color:var(--yellow);">m = t × V<sub>solution</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">masse à peser (balance électronique), fiole jaugée + entonnoir à solide</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Préparation par dilution</td><td style="padding:10px 8px; color:var(--yellow);">t<sub>m</sub>V<sub>m</sub> = t<sub>f</sub>V<sub>f</sub> ; F = t<sub>m</sub>/t<sub>f</sub> = V<sub>f</sub>/V<sub>m</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">F toujours &gt; 1 ; prélèvement de V<sub>m</sub> à la pipette jaugée</td></tr>
           <tr><td style="padding:10px 8px;">Gamme d'étalonnage</td><td style="padding:10px 8px; color:var(--yellow);">—</td><td style="padding:10px 8px; color:var(--chalk-dim);">comparaison à des solutions étalon → encadrement de t</td></tr>
         </tbody>
       </table>
@@ -395,7 +359,7 @@
     <div class="method-box" style="margin-top:20px;">
       <span class="box-label">🔧 Étapes de préparation</span>
       <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li><strong>Dissolution</strong> : peser la masse m, verser dans une fiole jaugée, dissoudre, compléter à l'eau distillée jusqu'au trait de jauge</li>
+        <li><strong>Dissolution</strong> : peser la masse m sur une balance électronique, verser la poudre dans une fiole jaugée à l'aide d'un entonnoir à solide, dissoudre, compléter à l'eau distillée jusqu'au trait de jauge</li>
         <li><strong>Dilution</strong> : prélever V<sub>m</sub> de solution mère à la pipette jaugée, verser dans une fiole jaugée, compléter à l'eau distillée jusqu'au trait de jauge</li>
         <li>Verrerie de précision : pipette jaugée, pipette graduée, burette graduée, fiole jaugée</li>
       </ul>
@@ -443,12 +407,12 @@ initDissolutionPrep({ svgId: "dpSvgCours", tRangeId: "dpTCours", vRangeId: "dpVC
 initDilutionPrep({ svgId: "dlSvgCours", tmRangeId: "dlTmCours", fRangeId: "dlFCours", readoutId: "dlReadoutCours" });
 initColorScale({ svgId: "csSvgCours", sRangeId: "csSCours", readoutId: "csReadoutCours" });
 
-/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initSoluteType({ svgId: "stSvg", readoutId: "stReadout", btnIonicId: "stIonic", btnMolecularId: "stMolecular" });
-initMassConcentration({ svgId: "mcSvg", mRangeId: "mcM", vRangeId: "mcV", readoutId: "mcReadout" });
-initDissolutionPrep({ svgId: "dpSvg", tRangeId: "dpT", vRangeId: "dpV", readoutId: "dpReadout" });
-initDilutionPrep({ svgId: "dlSvg", tmRangeId: "dlTm", fRangeId: "dlF", readoutId: "dlReadout" });
-initColorScale({ svgId: "csSvg", sRangeId: "csS", readoutId: "csReadout" });
+/* ---------- Défi Laboratoire & Verrerie (mode Entraînement) ---------- */
+initLabChallenge({
+  promptId: "lcPrompt", vmInputId: "lcVmInput", pipetteSelectId: "lcPipetteSelect",
+  fioleSelectId: "lcFioleSelect", newBtnId: "lcNewChallengeBtn", validateBtnId: "lcValidateBtn",
+  feedbackId: "lcFeedback", chapterId: "ch3-2nde", activityId: "defi-labo-verrerie"
+});
 
 /* ---------- Activités liées à chaque animation ---------- */
 initQCM({
@@ -496,7 +460,7 @@ initQCM({
 
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch3-2nde");
-initProgressBar("ch3-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+initProgressBar("ch3-2nde", 7); // texte à trous complet + défi labo/verrerie + 5 questions rapides
 </script>
 </body>
 </html>
