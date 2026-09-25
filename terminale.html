@@ -5,6 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Terminale ES — Physique-Chimie</title>
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* ---------- Regroupement d'un chapitre par séances (ES uniquement) ----------
+     Contrairement aux autres niveaux (un chapitre = une page), l'ES avance
+     séance par séance : chaque chapitre affiche ici un sous-titre suivi de
+     cartes "Séance", au lieu d'une seule carte "Chapitre". */
+  .chapter-group{ margin-top:22px; }
+  .chapter-group:first-child{ margin-top:0; }
+  .chapter-group-title{
+    font-family:var(--font-display); color:var(--chalk-dim); font-size:1.05rem;
+    margin:0 0 10px; padding-left:2px;
+  }
+  .badge-seance{ background:var(--yellow); color:var(--board); }
+  .soon-card{ opacity:0.45; cursor:default; pointer-events:none; }
+  .soon-card:hover{ transform:none; border-color:var(--line); }
+  .badge-soon{ background:transparent; border:1px solid var(--chalk-dim); color:var(--chalk-dim); }
+</style>
 </head>
 <body>
 
@@ -25,10 +41,27 @@
 <main>
   <section>
     <h2>Chapitres</h2>
+
     <a href="terminale-chap0-histoire-electricite.html" class="chapter-card">
       <span class="ch-title">Chapitre 0 — Une brève histoire de l'électricité</span>
       <span class="badge badge-physique">Récit</span>
     </a>
+
+    <div class="chapter-group">
+      <h3 class="chapter-group-title">Chapitre 1 — Deux siècles d'énergie électrique</h3>
+      <a href="terminale-seances/ch1-seance1.html" class="chapter-card">
+        <span class="ch-title">Séance 1 — L'induction électromagnétique</span>
+        <span class="badge badge-seance">Séance</span>
+      </a>
+      <a href="terminale-seances/ch1-seance2.html" class="chapter-card">
+        <span class="ch-title">Séance 2 — L'alternateur</span>
+        <span class="badge badge-seance">Séance</span>
+      </a>
+      <div class="chapter-card soon-card">
+        <span class="ch-title">Séance 3 — La cellule photovoltaïque</span>
+        <span class="badge badge-soon">Bientôt</span>
+      </div>
+    </div>
   </section>
 
   <section>

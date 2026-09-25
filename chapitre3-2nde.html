@@ -8,6 +8,16 @@
 <script src="animations-common.js"></script>
 <script src="animations-ch3-2nde.js"></script>
 <script src="modules-common.js"></script>
+<style>
+  /* ---------- Lien de téléchargement des slides (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+</style>
 </head>
 <body>
 
@@ -23,6 +33,7 @@
   <div class="badge-inline chimie">Chimie</div>
   <h1>Chapitre 3 — Solutions aqueuses</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch3-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -111,7 +122,7 @@
     </p>
     <div class="warning-box">
       <span class="box-label">⚠️ Attention</span>
-      Dans l'animation ci-dessous, la solubilité est fixée à s = 200 g·L⁻¹ à titre d'exemple : si t dépasse cette valeur, la solution devient saturée et la concentration réellement dissoute reste bloquée à 200 g·L⁻¹.
+      Dans l'animation ci-dessous, la solubilité est fixée à s = 50 g·L⁻¹ à titre d'exemple : si t dépasse cette valeur, la solution devient saturée et la concentration réellement dissoute reste bloquée à 50 g·L⁻¹.
     </div>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la masse de soluté et le volume de la solution, et observe l'apparition d'un dépôt en cas de saturation.</p>
@@ -121,9 +132,9 @@
       </div>
       <div class="anim-controls">
         <label>Masse de soluté m (g)</label>
-        <input type="range" id="mcMCours" min="0" max="20" value="2.5" step="0.1">
+        <input type="range" id="mcMCours" min="0" max="40" value="2.5" step="0.5">
         <label>Volume de la solution V (mL)</label>
-        <input type="range" id="mcVCours" min="50" max="500" value="500" step="10">
+        <input type="range" id="mcVCours" min="50" max="500" value="500" step="25">
         <div class="anim-readout" id="mcReadoutCours"></div>
       </div>
     </div>
@@ -181,16 +192,16 @@
       Exemple : pour diluer 5 fois une solution mère à t<sub>m</sub> = 10,0 g·L⁻¹ et obtenir V<sub>f</sub> = 100,0 mL, on prélève V<sub>m</sub> = V<sub>f</sub>/F = 20,0 mL à la pipette jaugée ; la solution fille obtenue a pour concentration t<sub>f</sub> = t<sub>m</sub>/F = 2,0 g·L⁻¹.
     </p>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la concentration mère et le facteur de dilution : observe le volume prélevé à la pipette jaugée.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 La solution mère est à t<sub>m</sub> = 20 g/L. Choisis la pipette jaugée et la fiole jaugée : observe la teinte de la solution fille et le facteur de dilution obtenu.</p>
     <div class="anim-zone">
       <div class="anim-wrap">
-        <svg id="dlSvgCours" viewBox="0 0 220 160"></svg>
+        <svg id="dlSvgCours" viewBox="0 0 220 170"></svg>
       </div>
       <div class="anim-controls">
-        <label>Concentration mère t<sub>m</sub> (g/L)</label>
-        <input type="range" id="dlTmCours" min="1" max="30" value="10" step="1">
-        <label>Facteur de dilution F</label>
-        <input type="range" id="dlFCours" min="2" max="10" value="5" step="1">
+        <label>Volume prélevé à la pipette jaugée V<sub>m</sub> : <strong id="dlVmValCours"></strong></label>
+        <input type="range" id="dlVmCours" min="0" max="3" value="1" step="1">
+        <label>Volume de la fiole jaugée V<sub>f</sub> : <strong id="dlVfValCours"></strong></label>
+        <input type="range" id="dlVfCours" min="0" max="4" value="1" step="1">
         <div class="anim-readout" id="dlReadoutCours"></div>
       </div>
     </div>
@@ -359,9 +370,9 @@
     <div class="method-box" style="margin-top:20px;">
       <span class="box-label">🔧 Étapes de préparation</span>
       <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li><strong>Dissolution</strong> : peser la masse m sur une balance électronique, verser la poudre dans une fiole jaugée à l'aide d'un entonnoir à solide, dissoudre, compléter à l'eau distillée jusqu'au trait de jauge</li>
-        <li><strong>Dilution</strong> : prélever V<sub>m</sub> de solution mère à la pipette jaugée, verser dans une fiole jaugée, compléter à l'eau distillée jusqu'au trait de jauge</li>
-        <li>Verrerie de précision : pipette jaugée, pipette graduée, burette graduée, fiole jaugée</li>
+        <li><strong>Dissolution</strong> : peser la masse m dans une coupelle sur une balance électronique tarée, la transférer dans une fiole jaugée à l'aide d'un entonnoir à solide (rincer coupelle et entonnoir), remplir aux trois quarts d'eau distillée et agiter jusqu'à dissolution, compléter jusqu'au trait de jauge, boucher et homogénéiser</li>
+        <li><strong>Dilution</strong> : verser un peu de solution mère dans un bécher, prélever V<sub>m</sub> à la pipette jaugée munie d'une propipette, verser dans une fiole jaugée, compléter à l'eau distillée jusqu'au trait de jauge, boucher et homogénéiser</li>
+        <li>Verrerie de précision : pipette jaugée, fiole jaugée, burette graduée</li>
       </ul>
     </div>
   </section>
@@ -404,7 +415,7 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 initSoluteType({ svgId: "stSvgCours", readoutId: "stReadoutCours", btnIonicId: "stIonicCours", btnMolecularId: "stMolecularCours" });
 initMassConcentration({ svgId: "mcSvgCours", mRangeId: "mcMCours", vRangeId: "mcVCours", readoutId: "mcReadoutCours" });
 initDissolutionPrep({ svgId: "dpSvgCours", tRangeId: "dpTCours", vRangeId: "dpVCours", readoutId: "dpReadoutCours" });
-initDilutionPrep({ svgId: "dlSvgCours", tmRangeId: "dlTmCours", fRangeId: "dlFCours", readoutId: "dlReadoutCours" });
+initDilutionPrep({ svgId: "dlSvgCours", vmRangeId: "dlVmCours", vfRangeId: "dlVfCours", vmValueId: "dlVmValCours", vfValueId: "dlVfValCours", readoutId: "dlReadoutCours", tm: 20 });
 initColorScale({ svgId: "csSvgCours", sRangeId: "csSCours", readoutId: "csReadoutCours" });
 
 /* ---------- Défi Laboratoire & Verrerie (mode Entraînement) ---------- */

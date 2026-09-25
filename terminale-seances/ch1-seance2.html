@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 1, Séance 2 : L'alternateur et le barrage des Trois-Gorges (Terminale ES)</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  /* ---------- Lien vers le diaporama (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+
+  /* ---------- Tableau-bilan (comme au Chapitre 0 / Séance 1) ---------- */
+  .bilan-table{ width:100%; border-collapse:collapse; margin:16px 0 8px; font-size:0.92rem; }
+  .bilan-table th, .bilan-table td{ border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top; }
+  .bilan-table th{ background:rgba(107,191,171,0.12); color:var(--teal); font-family:var(--font-display); font-weight:700; font-size:0.95rem; }
+  .bilan-table tr:nth-child(even) td{ background:rgba(255,255,255,0.02); }
+  @media (max-width:700px){
+    .bilan-table{ font-size:0.82rem; }
+    .bilan-table th, .bilan-table td{ padding:8px; }
+  }
+
+  /* ---------- Schéma en chaîne ---------- */
+  .chain-diagram{
+    display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+    margin:16px 0; padding:14px; border:1px solid var(--line); border-radius:10px;
+    font-family:var(--font-body); font-size:0.9rem;
+  }
+  .chain-diagram .step{
+    padding:8px 12px; border-radius:8px; background:rgba(107,191,171,0.10);
+    font-weight:600;
+  }
+  .chain-diagram .loss{
+    font-size:0.8rem; color:var(--teal); font-style:italic; white-space:nowrap;
+  }
+  .chain-diagram .arrow{ color:var(--teal); font-weight:700; }
+  @media (max-width:700px){
+    .chain-diagram{ flex-direction:column; align-items:stretch; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="../index.html">Accueil</a>
+  <a href="../4eme.html">4ème</a>
+  <a href="../2nde.html">2nde</a>
+  <a href="../1ere.html">1ère spé PC</a>
+  <a href="../terminale.html" class="current">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique-Chimie</div>
+  <h1>Chapitre 1, Séance 2 : L'alternateur et le barrage des Trois-Gorges</h1>
+  <p class="sub">Le mouvement d'un aimant près d'une bobine, vu à la Séance 1, à l'échelle d'une centrale de plusieurs centaines de mégawatts. <a href="ch1-seance1.html" style="color:var(--teal);">← Revoir la Séance 1</a></p>
+  <a class="slides-link" href="../slides/ch1-terminale-seance2.html" target="_blank" rel="noopener">📽️ Voir le diaporama de la séance</a>
+</header>
+
+<main>
+
+  <section>
+    <h2>De l'induction à la centrale</h2>
+    <p class="course-text">
+      La Séance 1 s'est arrêtée sur un principe : un aimant qui bouge près d'une bobine y fait naître un courant, sans aucun contact. Reste une question de taille : comment fait-on tourner l'aimant, à l'échelle industrielle, pour produire des centaines de mégawatts en continu ? Cette séance répond à cette question à travers un cas concret, l'un des plus grands ouvrages hydroélectriques au monde : le barrage des Trois-Gorges, sur le fleuve Yangtsé, en Chine.
+    </p>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs de la séance</span>
+      <ul>
+        <li>Comprendre comment un alternateur transforme un mouvement en électricité</li>
+        <li>Comprendre le fonctionnement d'un barrage hydroélectrique</li>
+        <li>Savoir calculer un rendement à partir d'une puissance brute et d'une puissance utile</li>
+        <li>Interroger le coût social, politique, économique et écologique d'une grande infrastructure énergétique</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. De l'aimant qui tourne à l'alternateur</h2>
+    <p class="course-text">
+      Un alternateur, c'est le principe de Faraday mis en boucle. Il est constitué de deux parties : le rotor, un aimant (ou un électroaimant) qu'on fait tourner, et le stator, un ensemble de bobines fixes tout autour. Quand le rotor tourne, chaque bobine du stator voit l'aimant s'approcher puis s'éloigner en continu : un courant électrique y apparaît, comme à la Séance 1, mais de façon ininterrompue tant que le rotor tourne.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Un alternateur ne crée pas l'énergie électrique à partir de rien : il la convertit. Il faut d'abord fournir un mouvement de rotation au rotor. C'est là que les centrales diffèrent les unes des autres : l'eau qui tombe pour un barrage, le vent pour une éolienne, la vapeur sous pression pour une centrale thermique ou nucléaire. Dans tous les cas, la même machine termine la conversion : l'alternateur.
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Le barrage des Trois-Gorges : convertir l'eau en électricité</h2>
+    <p class="course-text">
+      Un barrage retient l'eau d'un fleuve à une certaine hauteur. Cette eau stockée possède une énergie potentielle, liée à sa masse et à sa hauteur de chute. Lorsqu'elle est lâchée, elle descend dans une conduite forcée et arrive avec une grande vitesse sur les pales d'une turbine, qui se met à tourner. La turbine est reliée par un axe au rotor de l'alternateur : c'est elle qui fournit le mouvement de rotation décrit plus haut. L'énergie de l'eau devient ainsi, en une seule chaîne de conversions, de l'électricité disponible sur le réseau.
+    </p>
+    <div class="chain-diagram">
+      <span class="step">Énergie potentielle de l'eau</span>
+      <span class="loss">pertes hydrauliques amont</span>
+      <span class="arrow">→</span>
+      <span class="step">Énergie cinétique à la turbine</span>
+      <span class="loss">pertes mécaniques</span>
+      <span class="arrow">→</span>
+      <span class="step">Énergie mécanique du rotor</span>
+      <span class="loss">pertes fer + Joule</span>
+      <span class="arrow">→</span>
+      <span class="step">Énergie électrique utile</span>
+    </div>
+    <p class="course-text">
+      À chaque étape de cette chaîne, une partie de l'énergie se perd, le plus souvent sous forme de chaleur : frottements de l'eau dans la conduite, frottements mécaniques de l'axe, échauffement des bobines. Aucune conversion d'énergie n'est parfaite ; c'est justement ce que mesure un rendement.
+    </p>
+  </section>
+
+  <section>
+    <h2>c. Calculer un rendement</h2>
+    <p class="course-text">
+      La puissance brute disponible dans l'eau qui tombe se calcule avec la formule Pf = h·d·ρ·g, où h est la hauteur de chute, d le débit d'eau, ρ la masse volumique de l'eau et g l'intensité de pesanteur. Cette puissance brute Pf n'est jamais entièrement récupérée : seule une puissance utile Pu arrive réellement sur le réseau électrique. Le rendement de l'installation se calcule alors par r = Pu / Pf.
+    </p>
+    <table class="bilan-table">
+      <thead>
+        <tr><th>Grandeur</th><th>Symbole</th><th>Valeur</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Puissance brute de l'eau</td><td>Pf = h·d·ρ·g</td><td>≈ 842 MW</td></tr>
+        <tr><td>Puissance utile délivrée</td><td>Pu</td><td>710 MW</td></tr>
+        <tr><td>Rendement global de l'installation</td><td>r = Pu / Pf</td><td>≈ 84 %</td></tr>
+        <tr><td>Rendement nominal du turbo-alternateur seul</td><td>—</td><td>0,96 (96 %)</td></tr>
+      </tbody>
+    </table>
+    <div class="warning-box">
+      <span class="box-label">⚖️ 84 % ou 96 % : deux chiffres, pas une erreur</span>
+      Le rendement global de 84 % porte sur toute l'installation, depuis l'énergie brute de l'eau. Le rendement nominal de 0,96 porte seulement sur le turbo-alternateur, une fois l'eau déjà arrivée à la turbine. Ce ne sont pas deux mesures contradictoires : elles ne portent pas sur la même frontière du système. L'écart entre les deux correspond aux pertes hydrauliques en amont, avant même que l'eau n'atteigne la turbine.
+    </div>
+  </section>
+
+  <section>
+    <h2>Un choix qui dépasse la physique</h2>
+    <p class="course-text">
+      Le barrage des Trois-Gorges est présenté officiellement comme une réussite technique : il protège des crues dévastatrices du Yangtsé et fournit une électricité décarbonée, en évitant le recours au charbon. Mais cette réussite a un coût rarement mis en avant. Sa construction a déplacé entre 1,2 et 1,9 million de personnes ; selon l'ONG International Rivers Network, une partie des fonds d'indemnisation prévus pour ces populations aurait été détournée, et des manifestations liées à ces déplacements ont été réprimées.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Comme au Chapitre 0, un choix énergétique ne se résume jamais à un rendement ou à une prouesse technique : il engage toujours des personnes, des décisions politiques et des rapports de force. Le rendement de 84 % justifie-t-il, une fois le coût humain intégré, ce choix d'infrastructure ? La question reste ouverte.
+    </div>
+  </section>
+
+  <section>
+    <div class="recall-box">
+      <span class="box-label">📌 Pour la prochaine séance</span>
+      La Séance 3 change de source : comment une cellule photovoltaïque produit-elle de l'électricité directement à partir de la lumière, sans aucune pièce en mouvement ?
+    </div>
+  </section>
+
+</main>
+
+<footer>Chapitre 1, Séance 2 : L'alternateur et le barrage des Trois-Gorges (Terminale ES).</footer>
+
+</body>
+</html>

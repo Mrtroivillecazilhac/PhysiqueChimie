@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 1, Séance 1 : Deux siècles d'énergie électrique (Terminale ES)</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  /* ---------- Lien vers le diaporama (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+
+  /* ---------- Tableau-bilan (comme au Chapitre 0) ---------- */
+  .bilan-table{ width:100%; border-collapse:collapse; margin:16px 0 8px; font-size:0.92rem; }
+  .bilan-table th, .bilan-table td{ border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top; }
+  .bilan-table th{ background:rgba(107,191,171,0.12); color:var(--teal); font-family:var(--font-display); font-weight:700; font-size:0.95rem; }
+  .bilan-table tr:nth-child(even) td{ background:rgba(255,255,255,0.02); }
+  @media (max-width:700px){
+    .bilan-table{ font-size:0.82rem; }
+    .bilan-table th, .bilan-table td{ padding:8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="../index.html">Accueil</a>
+  <a href="../4eme.html">4ème</a>
+  <a href="../2nde.html">2nde</a>
+  <a href="../1ere.html">1ère spé PC</a>
+  <a href="../terminale.html" class="current">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique-Chimie</div>
+  <h1>Chapitre 1, Séance 1 : Deux siècles d'énergie électrique</h1>
+  <p class="sub">De l'aiguille d'Ørsted qui bouge par accident à l'aimant de Faraday qui fait naître un courant sans aucun contact. <a href="../terminale-chap0-histoire-electricite.html" style="color:var(--teal);">← Revoir le Chapitre 0</a></p>
+  <a class="slides-link" href="../slides/ch1-terminale-seance1.html" target="_blank" rel="noopener">📽️ Voir le diaporama de la séance</a>
+</header>
+
+<main>
+
+  <section>
+    <h2>Deux siècles d'énergie électrique</h2>
+    <p class="course-text">
+      Le Chapitre 0 s'est terminé sur une idée à garder en tête toute l'année : une découverte scientifique ne devient jamais automatiquement un objet du quotidien. Entre la découverte et l'usage, il y a toujours des choix : qui paie, qui décide, qui a peur de quoi. L'abbé Nollet, on s'en souvient, faisait sursauter 200 moines chartreux en cercle devant la cour, à Versailles : une démonstration organisée comme un spectacle, pour asseoir le prestige de la science auprès d'un roi.
+    </p>
+    <p class="course-text">
+      Michael Faraday, personnage central de cette séance, est lui aussi un showman. Mais dans une intention politique exactement inverse : non pas impressionner un roi, mais démocratiser l'accès au savoir. On sait maintenant que l'électricité s'est diffusée par choix politiques, pas par magie de la technique. Reste une question qu'on n'a pas encore posée : comment l'a-t-on produite, concrètement, pendant deux siècles ?
+    </p>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Comprendre l'induction électromagnétique, découverte par Ørsted et Faraday</li>
+        <li>Découvrir comment un alternateur transforme ce principe en électricité utilisable</li>
+        <li>Comprendre le fonctionnement d'une cellule photovoltaïque</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Ørsted (1820) : un accident de cours</h2>
+    <p class="course-text">
+      Le physicien danois Hans Christian Ørsted fait cours avec une pile électrique posée près d'une boussole. En allumant le courant, il remarque que l'aiguille de la boussole bouge : un accident, pas une expérience préparée. C'est le tout premier lien jamais établi entre électricité et magnétisme : jusque-là, on croyait les deux phénomènes complètement séparés.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      La découverte d'Ørsted se diffuse dans toute l'Europe savante en quelques mois seulement, via les revues scientifiques, à une époque de rivalités nationales très fortes entre puissances scientifiques.
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Faraday (1821) : le premier moteur électrique</h2>
+    <p class="course-text">
+      Michael Faraday est fils de forgeron, sans éducation formelle. Apprenti relieur, il assiste par chance à des conférences du grand chimiste Humphry Davy et lui envoie ses propres notes, joliment illustrées. Davy est impressionné : il l'engage à la Royal Institution de Londres. Devenu à son tour une star de la science, Faraday lance en 1825 les <em>Christmas Lectures</em>, des conférences pensées spécifiquement pour intéresser les enfants à la science (19 séries données au total, un record jamais égalé), dont la célèbre <em>Histoire chimique d'une bougie</em>. C'est un showman reconnu : il lui arrive de lancer des pincettes ou un tisonnier sur un électroaimant géant en pleine conférence. Mais il refuse la chevalerie, refuse deux fois la présidence de la Royal Society, et refuse de travailler sur des armes chimiques pendant la guerre de Crimée.
+    </p>
+    <p class="course-text">
+      Un an après l'accident d'Ørsted, Faraday reprend son observation et construit une expérience à sensation : un aimant plongé dans du mercure, relié à une pile, se met à tourner en continu autour d'un fil. C'est le premier moteur électrique de l'histoire.
+    </p>
+  </section>
+
+  <section>
+    <h2>c. Faraday (1831) : l'induction</h2>
+    <p class="course-text">
+      Il faut dix ans de recherche supplémentaires à Faraday pour aller plus loin. Il montre qu'un courant peut naître du simple mouvement, sans aucun contact entre deux circuits : une bobine bouge près d'un aimant, ou un aimant bouge près d'une bobine, et un courant apparaît dans la bobine, sans fil qui les relie. C'est l'induction électromagnétique.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir : comment fonctionne l'induction électromagnétique</span>
+      <ul>
+        <li>Il faut un aimant et une bobine (un fil enroulé). Aucun des deux ne doit toucher l'autre.</li>
+        <li>Ce qui compte, c'est le <strong>mouvement relatif</strong> entre les deux : soit l'aimant bouge et la bobine reste fixe, soit l'inverse. Un aimant immobile près d'une bobine immobile ne produit rien.</li>
+        <li>Ce mouvement fait apparaître un courant électrique dans la bobine, sans aucun fil, sans aucun contact physique entre l'aimant et la bobine.</li>
+        <li>Plus le mouvement est rapide, plus le courant produit est important.</li>
+      </ul>
+      C'est ce principe, et rien d'autre, qui produit l'écrasante majorité de l'électricité mondiale : peu importe la source d'énergie (eau, vent, vapeur), on finit toujours par faire tourner un aimant près d'une bobine.
+    </div>
+    <table class="bilan-table">
+      <thead>
+        <tr><th>Repère</th><th>Date</th><th>Ce que ça change</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ørsted</td><td>1820</td><td>Premier lien électricité-magnétisme</td></tr>
+        <tr><td>Faraday, rotation</td><td>1821</td><td>Premier mouvement continu produit par l'électricité</td></tr>
+        <tr><td>Faraday, induction</td><td>1831</td><td>Un courant né du mouvement, sans aucun contact</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Ce qui tourne, en ce moment même, dans une centrale</h2>
+    <p class="course-text">
+Ce principe qu'on vient de découvrir (un aimant qui bouge près d'une bobine) est très exactement ce qui tourne, à cette seconde, dans un barrage marocain, une éolienne, ou n'importe quelle centrale sur Terre. Seule la façon de faire tourner l'aimant change d'une centrale à l'autre : l'eau, le vent, la vapeur.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 Pour la prochaine séance</span>
+      La semaine prochaine, on ouvre la machine : comment un alternateur transforme ce principe en mégawatts.
+    </div>
+  </section>
+
+</main>
+
+<footer>Chapitre 1, Séance 1 : Deux siècles d'énergie électrique (Terminale ES).</footer>
+
+</body>
+</html>

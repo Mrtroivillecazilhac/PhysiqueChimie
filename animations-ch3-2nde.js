@@ -1,14 +1,59 @@
 /* Animations du chapitre 3 — 2nde — "Solutions aqueuses" */
 
+/* ---------- Utilitaires communs au chapitre ---------- */
+
+/* Nombre au format français : virgule décimale. */
+function ch3Fr(x, digits) {
+  return Number(x).toFixed(digits).replace(".", ",");
+}
+
+/* Branche un écouteur en remplaçant celui posé par un appel précédent :
+   une animation ré-initialisée sur les mêmes éléments ne cumule pas les écouteurs. */
+function ch3Listen(el, type, fn) {
+  if (!el) return;
+  el.__ch3Handlers = el.__ch3Handlers || {};
+  if (el.__ch3Handlers[type]) el.removeEventListener(type, el.__ch3Handlers[type]);
+  el.__ch3Handlers[type] = fn;
+  el.addEventListener(type, fn);
+}
+
+/* Impose la plage d'un curseur et y ramène sa valeur courante. */
+function ch3Range(el, min, max, step) {
+  if (!el) return;
+  el.min = String(min);
+  el.max = String(max);
+  el.step = String(step);
+  const v = Number(el.value);
+  if (!isFinite(v) || v < min) el.value = String(min);
+  else if (v > max) el.value = String(max);
+}
+
+/* Vérifie que tous les éléments requis existent avant de dessiner. */
+function ch3Ready() {
+  for (let i = 0; i < arguments.length; i++) if (!arguments[i]) return false;
+  return true;
+}
+
+function ch3Frac(num, den) {
+  return `<span class="frac"><span class="num">${num}</span><span class="den">${den}</span></span>`;
+}
+
 /* ---------- 1. Soluté ionique ou moléculaire ---------- */
 function initSoluteType(cfg) {
   const svg = document.getElementById(cfg.svgId);
   const readout = document.getElementById(cfg.readoutId);
   const btnIonic = document.getElementById(cfg.btnIonicId);
   const btnMolecular = document.getElementById(cfg.btnMolecularId);
+  if (!ch3Ready(svg, readout)) return;
 
   let mode = "ionic";
-  const SOLVENT_POS = generateDotsInEllipse(40, 0, 0, 1, 1);
+
+  /* Entités du soluté, relatives au centre (110 ; 105).
+     Toutes contenues dans l'ellipse rx = 45, ry = 35, rayon des entités compris :
+     aucune ne touche la paroi ni la surface libre. */
+  const CX = 110, CY = 105;
+  const IONS = [[-32, -8], [-18, 14], [-4, -20], [8, 4], [24, -10], [30, 16], [-6, 26], [14, -26]];
+  const MOLS = [[-30, -6], [-12, 14], [4, -18], [22, 6], [-2, 0], [30, -14], [8, 24]];
 
   function drawLegend() {
     if (mode === "ionic") {
@@ -27,32 +72,38 @@ function initSoluteType(cfg) {
     </g>`;
   }
 
-  function draw() {
-    const cx = 110, cy = 95, r = 80;
-    let s = drawLegend();
-    s += `<path d="M${cx - r} ${cy - 30} L${cx - r} ${cy + r - 20} Q${cx - r} ${cy + r} ${cx - r + 20} ${cy + r} L${cx + r - 20} ${cy + r} Q${cx + r} ${cy + r} ${cx + r} ${cy + r - 20} L${cx + r} ${cy - 30}" fill="rgba(90,150,210,0.15)" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-
-    // solvant : petits points bleu clair, en fond
-    SOLVENT_POS.forEach(([u, v]) => {
-      const x = cx + u * (r - 15), y = cy + 15 + v * (r - 35);
-      s += `<circle cx="${x}" cy="${y}" r="1.6" fill="#5a96d2" opacity="0.5"/>`;
+  function styleButtons() {
+    [[btnIonic, "ionic"], [btnMolecular, "molecular"]].forEach(([b, m]) => {
+      if (!b) return;
+      const on = mode === m;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.style.borderStyle = on ? "solid" : "dashed";
+      b.style.borderColor = on ? "#e8c468" : "rgba(242,237,225,0.22)";
+      b.style.color = on ? "#e8c468" : "#c9c2b0";
     });
+  }
+
+  function draw() {
+    const left = 30, right = 190, top = 50, bottom = 175, surf = 62;
+    let s = drawLegend();
+
+    // solution aqueuse : fond bleu translucide, surface libre avec léger ménisque (remonte aux parois)
+    s += `<path d="M${left + 2} ${surf - 4} Q${left + 6} ${surf} ${left + 20} ${surf} L${right - 20} ${surf} Q${right - 6} ${surf} ${right - 2} ${surf - 4} L${right - 2} ${bottom - 20} Q${right - 2} ${bottom - 2} ${right - 20} ${bottom - 2} L${left + 20} ${bottom - 2} Q${left + 2} ${bottom - 2} ${left + 2} ${bottom - 20} Z" fill="rgba(90,160,230,0.2)"/>`;
+    s += `<path d="M${left + 2} ${surf - 4} Q${left + 6} ${surf} ${left + 20} ${surf} L${right - 20} ${surf} Q${right - 6} ${surf} ${right - 2} ${surf - 4}" fill="none" stroke="rgba(150,200,240,0.75)" stroke-width="1.4"/>`;
+
+    // récipient
+    s += `<path d="M${left} ${top} L${left} ${bottom - 20} Q${left} ${bottom} ${left + 20} ${bottom} L${right - 20} ${bottom} Q${right} ${bottom} ${right} ${bottom - 20} L${right} ${top}" fill="none" stroke="var(--chalk-dim)" stroke-width="2"/>`;
 
     if (mode === "ionic") {
-      // paires d'ions +/- réparties
-      const IONS = [[-45, -10], [-10, 10], [30, -20], [50, 30], [-30, 40], [10, -40]];
       IONS.forEach(([dx, dy], i) => {
-        const x = cx + dx, y = cy + 10 + dy;
+        const x = CX + dx, y = CY + dy;
         const isPos = i % 2 === 0;
-        s += `<circle cx="${x}" cy="${y}" r="7" fill="${isPos ? 'var(--coral)' : 'var(--teal)'}"/>`;
-        s += `<text x="${x}" y="${y + 3}" font-size="8" fill="var(--board)" text-anchor="middle" font-weight="700">${isPos ? '+' : '−'}</text>`;
+        s += `<circle cx="${x}" cy="${y}" r="7" fill="${isPos ? "var(--coral)" : "var(--teal)"}"/>`;
+        s += `<text x="${x}" y="${y + 3}" font-size="8" fill="var(--board)" text-anchor="middle" font-weight="700">${isPos ? "+" : "−"}</text>`;
       });
     } else {
-      // molécules neutres, un seul type de point (glucose par ex.)
-      const MOLS = [[-45, -10], [-10, 10], [30, -20], [50, 30], [-30, 40], [10, -40], [0, 0]];
       MOLS.forEach(([dx, dy]) => {
-        const x = cx + dx, y = cy + 10 + dy;
-        s += `<circle cx="${x}" cy="${y}" r="6" fill="var(--yellow)"/>`;
+        s += `<circle cx="${CX + dx}" cy="${CY + dy}" r="6" fill="var(--yellow)"/>`;
       });
     }
 
@@ -61,10 +112,11 @@ function initSoluteType(cfg) {
       ? "Soluté ionique : ex. Na⁺(aq) + Cl⁻(aq) — des ions positifs (Na⁺, en corail) et négatifs (Cl⁻, en bleu-vert) dissous dans le solvant."
       : "Soluté moléculaire : ex. C₆H₁₂O₆(aq) le glucose — des molécules neutres (en jaune) dissoutes dans le solvant.")
       + `<br><span style="color:var(--chalk-dim); font-size:0.85em;">L'indice (aq) se lit « aqueux » : il indique que l'espèce est dissoute dans l'eau, donc en solution aqueuse.</span>`;
+    styleButtons();
   }
 
-  btnIonic.addEventListener("click", () => { mode = "ionic"; draw(); });
-  btnMolecular.addEventListener("click", () => { mode = "molecular"; draw(); });
+  ch3Listen(btnIonic, "click", () => { mode = "ionic"; draw(); });
+  ch3Listen(btnMolecular, "click", () => { mode = "molecular"; draw(); });
   draw();
 }
 
@@ -74,97 +126,119 @@ function initMassConcentration(cfg) {
   const mRange = document.getElementById(cfg.mRangeId);
   const vRange = document.getElementById(cfg.vRangeId);
   const readout = document.getElementById(cfg.readoutId);
+  if (!ch3Ready(svg, mRange, vRange, readout)) return;
 
-  const SOLUBILITY = 200; // g/L — solubilité maximale fixée pour l'exemple pédagogique
+  const SOLUBILITY = 50; // g/L — solubilité fixée pour l'exemple pédagogique
+  const V_MAX = 500;     // mL
+
+  ch3Range(mRange, 0, 40, 0.5);
+  ch3Range(vRange, 50, 500, 25);
 
   function draw() {
     const m = Number(mRange.value); // g
     const V = Number(vRange.value); // mL
-    const Vl = V / 1000; // L
+    const Vl = V / 1000;            // L
     const t = Vl > 0 ? m / Vl : 0;
     const saturated = t > SOLUBILITY;
-
-    const x0 = 75, y0 = 20, x1 = 135, yBase = 150;
-    let s = `<path d="M${x0} ${y0} L${x0} ${yBase - 10} Q${x0} ${yBase} ${x0 + 10} ${yBase} L${x1 - 10} ${yBase} Q${x1} ${yBase} ${x1} ${yBase - 10} L${x1} ${y0}" fill="none" stroke="var(--chalk-dim)" stroke-width="2.5"/>`;
-    const fillH = Math.min(yBase - y0 - 4, (V / 500) * (yBase - y0));
-    s += `<rect x="${x0 + 2}" y="${yBase - fillH}" width="${x1 - x0 - 4}" height="${fillH - 4}" fill="rgba(107,191,171,0.4)"/>`;
-
-    // soluté dissous : nombre de points proportionnel à la partie dissoute (plafonnée à la solubilité)
     const tDissolved = Math.min(t, SOLUBILITY);
-    const dotCount = Math.min(20, Math.round(tDissolved / 3));
-    const pos = generateDotsInEllipse(dotCount, 0, 0, 1, 1);
-    const depositZoneH = saturated ? 14 : 0;
-    pos.forEach(([u, v]) => {
-      const x = (x0 + x1) / 2 + u * (x1 - x0 - 10) / 2;
-      const y = yBase - depositZoneH - 8 - Math.abs(v) * (fillH - depositZoneH - 12);
-      if (y > yBase - fillH) s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.2" fill="var(--yellow)"/>`;
-    });
+    const mDeposit = saturated ? m - SOLUBILITY * Vl : 0;
 
-    // soluté non dissous (dépôt), si saturation dépassée
+    const x0 = 70, x1 = 140, y0 = 18, yBase = 150;
+    const innerH = yBase - y0 - 6;
+    const fillH = (V / V_MAX) * innerH;   // hauteur strictement proportionnelle à V
+    const yTop = yBase - 2 - fillH;
+    let s = "";
+
+    // solution : teinte proportionnelle à la concentration dissoute, bloquée à la solubilité
+    const alpha = 0.10 + (tDissolved / SOLUBILITY) * 0.55;
+    const b = yBase - 2, l = x0 + 2, r = x1 - 2;
+    const bottomRound = Math.min(8, fillH);
+    s += `<path d="M${l} ${yTop.toFixed(1)} L${l} ${(b - bottomRound).toFixed(1)} Q${l} ${b} ${l + bottomRound} ${b} L${r - bottomRound} ${b} Q${r} ${b} ${r} ${(b - bottomRound).toFixed(1)} L${r} ${yTop.toFixed(1)} Z" fill="rgba(232,196,104,${alpha.toFixed(2)})"/>`;
+    s += `<line x1="${l}" y1="${yTop.toFixed(1)}" x2="${r}" y2="${yTop.toFixed(1)}" stroke="rgba(232,196,104,0.9)" stroke-width="1"/>`;
+
+    // dépôt solide non dissous
+    let depH = 0;
     if (saturated) {
-      const excess = t - SOLUBILITY;
-      const depositCount = Math.min(16, Math.max(2, Math.round(excess / 12)));
-      for (let i = 0; i < depositCount; i++) {
-        const frac = depositCount > 1 ? i / (depositCount - 1) : 0.5;
-        const layer = Math.floor(i / 6);
-        const x = x0 + 8 + frac * (x1 - x0 - 16) + Math.sin(i * 12.9) * 2;
-        const y = yBase - 4 - layer * 4;
-        s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6" fill="var(--yellow)" stroke="var(--coral)" stroke-width="0.7"/>`;
+      depH = Math.min(fillH * 0.55, 3 + 12 * Math.min(1, mDeposit / 25));
+      const dy = b - 1 - depH;
+      s += `<rect x="${x0 + 4}" y="${dy.toFixed(1)}" width="${x1 - x0 - 8}" height="${depH.toFixed(1)}" rx="3" fill="var(--yellow)" stroke="var(--coral)" stroke-width="1"/>`;
+      const grains = Math.min(16, 4 + Math.round(mDeposit / 1.5));
+      for (let i = 0; i < grains; i++) {
+        const frac = grains > 1 ? i / (grains - 1) : 0.5;
+        const gx = x0 + 9 + frac * (x1 - x0 - 18) + Math.sin(i * 12.9) * 1.5;
+        const gy = dy - 1.6 - (i % 3 === 1 ? 2.2 : 0);
+        s += `<circle cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" r="2.2" fill="var(--yellow)" stroke="#b89a2e" stroke-width="0.6"/>`;
       }
-      s += `<rect x="${x0 + 2}" y="${yBase - 12}" width="${x1 - x0 - 4}" height="10" fill="rgba(217,122,99,0.18)" stroke="var(--coral)" stroke-width="1.2" stroke-dasharray="3,2"/>`;
+      s += `<text x="${x1 + 6}" y="${(dy + depH / 2 + 3).toFixed(1)}" font-size="8" fill="var(--coral)" font-weight="700">dépôt</text>`;
     }
+
+    // entités dissoutes : nombre proportionnel à la concentration dissoute
+    const dotCount = Math.round((tDissolved / SOLUBILITY) * 18);
+    const pos = generateDotsInEllipse(dotCount, 0, 0, 1, 1);
+    const zoneTop = yTop + 4, zoneBottom = b - depH - 6;
+    if (zoneBottom > zoneTop) {
+      pos.forEach(([u, v]) => {
+        const x = (x0 + x1) / 2 + u * (x1 - x0 - 14) / 2;
+        const y = zoneTop + ((v + 1) / 2) * (zoneBottom - zoneTop);
+        s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2" fill="var(--yellow)"/>`;
+      });
+    }
+
+    // graduations du bécher
+    for (let g = 100; g <= V_MAX; g += 100) {
+      const gy = yBase - 2 - (g / V_MAX) * innerH;
+      s += `<line x1="${x0}" y1="${gy.toFixed(1)}" x2="${x0 + 6}" y2="${gy.toFixed(1)}" stroke="var(--chalk-dim)" stroke-width="1"/>`;
+      s += `<text x="${x0 - 4}" y="${(gy + 2.5).toFixed(1)}" font-size="7" fill="var(--chalk-dim)" text-anchor="end">${g}</text>`;
+    }
+
+    // bécher
+    s += `<path d="M${x0} ${y0} L${x0} ${yBase - 10} Q${x0} ${yBase} ${x0 + 10} ${yBase} L${x1 - 10} ${yBase} Q${x1} ${yBase} ${x1} ${yBase - 10} L${x1} ${y0}" fill="none" stroke="var(--chalk-dim)" stroke-width="2.5"/>`;
+    s += `<text x="${(x0 + x1) / 2}" y="${yBase + 14}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">V = ${V} mL</text>`;
 
     svg.innerHTML = s;
 
     const tColor = saturated ? "var(--coral)" : "var(--yellow)";
-    const baseFrac = `t = <span class="frac"><span class="num">m</span><span class="den">V</span></span> = <span class="frac"><span class="num">${m.toFixed(1)} g</span><span class="den">${Vl.toFixed(3)} L</span></span> = <strong style="color:${tColor}">${t.toFixed(1)} g/L</strong>`;
+    const formula = `<em>t</em> = ${ch3Frac("<em>m</em>", "<em>V</em>")} = ${ch3Frac(`${ch3Fr(m, 1)} g`, `${ch3Fr(Vl, 3)} L`)} = <strong style="color:${tColor}">${ch3Fr(t, 1)} g/L</strong>`;
     readout.innerHTML = saturated
-      ? `${baseFrac}<br><span style="color:var(--coral); font-weight:700;">⚠️ Solution saturée ! Tout le soluté ne peut pas se dissoudre (dépôt au fond). La concentration dissoute maximale reste bloquée à ${SOLUBILITY} g/L.</span>`
-      : `${baseFrac}<br><span style="color:var(--teal);">Solution homogène / non saturée.</span>`;
+      ? `${formula}<br>`
+        + `<span style="color:var(--coral); font-weight:700;">⚠️ <em>t</em> dépasse la solubilité (${SOLUBILITY} g/L) : la solution est saturée.</span><br>`
+        + `Concentration réellement dissoute : <strong style="color:var(--yellow)">${SOLUBILITY} g/L</strong> (maximum)<br>`
+        + `Dépôt non dissous : <em>m</em><sub>dépôt</sub> = <em>m</em> − ${SOLUBILITY} × <em>V</em> = ${ch3Fr(m, 1)} − ${SOLUBILITY} × ${ch3Fr(Vl, 3)} = <strong style="color:var(--coral)">${ch3Fr(mDeposit, 2)} g</strong>`
+      : `${formula}<br><span style="color:var(--teal);">Solution homogène, non saturée (solubilité : ${SOLUBILITY} g/L).</span>`;
   }
-  mRange.addEventListener("input", draw);
-  vRange.addEventListener("input", draw);
+  ch3Listen(mRange, "input", draw);
+  ch3Listen(vRange, "input", draw);
   draw();
 }
 
-/* ---------- 3. Préparation par dissolution (balance électronique + fiole/entonnoir) ---------- */
+/* ---------- 3. Préparation par dissolution (balance électronique + fiole jaugée dynamique) ---------- */
 function initDissolutionPrep(cfg) {
   const svg = document.getElementById(cfg.svgId);
   const tRange = document.getElementById(cfg.tRangeId);
   const vRange = document.getElementById(cfg.vRangeId);
   const readout = document.getElementById(cfg.readoutId);
+  if (!ch3Ready(svg, tRange, vRange, readout)) return;
 
-  const MAX_M = 15; // g, borne haute réaliste (t max 30 g/L × V max 500 mL)
+  const MAX_M = 15;        // g, borne haute réaliste (t max 30 g/L × V max 500 mL)
+  const FILL_MS = 1100;    // durée du remplissage jusqu'au trait de jauge
+  const clipId = `${cfg.svgId}-fiole-clip`;
 
-  function draw() {
-    const t = Number(tRange.value); // g/L
-    const V = Number(vRange.value); // mL
-    const m = t * (V / 1000); // g
-    const mClamped = Math.min(m, MAX_M);
-    const heapScale = mClamped / MAX_M; // 0..1, proportion de poudre visible
+  let fillProgress = 1;    // 0 → 1 : niveau d'eau entre le fond et le trait de jauge
+  let rafId = 0;
 
-    let s = "";
-
-    /* ---- Balance électronique de laboratoire ---- */
+  function balance(m) {
+    const heapScale = Math.min(m, MAX_M) / MAX_M;
     const baseX = 8, baseY = 108, baseW = 96, baseH = 34;
-    s += `<rect x="${baseX}" y="${baseY}" width="${baseW}" height="${baseH}" rx="5" fill="var(--board-2)" stroke="var(--chalk-dim)" stroke-width="1.8"/>`;
-
-    // écran digital LCD affichant la masse en direct
+    let s = `<rect x="${baseX}" y="${baseY}" width="${baseW}" height="${baseH}" rx="5" fill="var(--board-2)" stroke="var(--chalk-dim)" stroke-width="1.8"/>`;
     const lcdX = baseX + 8, lcdY = baseY + 6, lcdW = 58, lcdH = 20;
     s += `<rect x="${lcdX}" y="${lcdY}" width="${lcdW}" height="${lcdH}" rx="2" fill="#16241a" stroke="#3a5a3a" stroke-width="1"/>`;
-    s += `<text x="${lcdX + lcdW - 5}" y="${lcdY + lcdH / 2 + 4}" font-size="10" font-family="monospace" fill="var(--yellow)" text-anchor="end">${m.toFixed(2)} g</text>`;
+    s += `<text x="${lcdX + lcdW - 5}" y="${lcdY + lcdH / 2 + 4}" font-size="10" font-family="monospace" fill="var(--yellow)" text-anchor="end">${ch3Fr(m, 2)} g</text>`;
     s += `<circle cx="${baseX + baseW - 12}" cy="${baseY + baseH - 10}" r="4" fill="var(--chalk-dim)" opacity="0.55"/>`;
-
-    // plateau de pesée
     const plateCx = baseX + 30, plateY = baseY - 3;
     s += `<rect x="${plateCx - 26}" y="${plateY}" width="52" height="6" rx="2" fill="var(--board-2)" stroke="var(--chalk-dim)" stroke-width="1.4"/>`;
-
-    // coupelle de pesée (verre de montre)
     const dishCy = plateY - 6;
-    s += `<ellipse cx="${plateCx}" cy="${dishCy}" rx="22" ry="6" fill="rgba(90,150,210,0.18)" stroke="var(--chalk-dim)" stroke-width="1.4"/>`;
+    s += `<ellipse cx="${plateCx}" cy="${dishCy}" rx="22" ry="6" fill="rgba(90,160,230,0.18)" stroke="var(--chalk-dim)" stroke-width="1.4"/>`;
     s += `<ellipse cx="${plateCx}" cy="${dishCy - 1.5}" rx="19" ry="4.3" fill="none" stroke="var(--chalk-dim)" stroke-width="1"/>`;
-
-    // tas de poudre jaune, proportionnel à m
     if (heapScale > 0.01) {
       const heapRx = 3 + heapScale * 15, heapRy = 2 + heapScale * 6.5;
       s += `<ellipse cx="${plateCx}" cy="${(dishCy - 2.5).toFixed(1)}" rx="${heapRx.toFixed(1)}" ry="${heapRy.toFixed(1)}" fill="var(--yellow)" opacity="0.9"/>`;
@@ -176,27 +250,69 @@ function initDissolutionPrep(cfg) {
         s += `<circle cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" r="0.9" fill="#b89a2e"/>`;
       }
     }
-
-    /* ---- Fiole jaugée surmontée d'un entonnoir à solide ---- */
-    const fx = 168, fTop = 28, fNeck = 58, fBase = 138;
-
-    // entonnoir à solide, posé au-dessus du col
-    s += `<path d="M${fx - 22} ${fTop - 24} L${fx + 22} ${fTop - 24} L${fx + 5} ${fTop - 4} L${fx - 5} ${fTop - 4} Z" fill="rgba(90,150,210,0.12)" stroke="var(--chalk-dim)" stroke-width="1.6"/>`;
-    s += `<line x1="${fx - 5}" y1="${fTop - 4}" x2="${fx - 3}" y2="${fTop + 4}" stroke="var(--chalk-dim)" stroke-width="1.6"/>`;
-    s += `<line x1="${fx + 5}" y1="${fTop - 4}" x2="${fx + 3}" y2="${fTop + 4}" stroke="var(--chalk-dim)" stroke-width="1.6"/>`;
-
-    // corps de la fiole jaugée
-    s += `<path d="M${fx - 8} ${fTop} L${fx - 8} ${fNeck} L${fx - 28} ${fBase - 10} Q${fx - 30} ${fBase} ${fx - 18} ${fBase} L${fx + 18} ${fBase} Q${fx + 30} ${fBase} ${fx + 28} ${fBase - 10} L${fx + 8} ${fNeck} L${fx + 8} ${fTop}" fill="rgba(90,150,210,0.15)" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-    // trait de jauge
-    s += `<line x1="${fx - 28}" y1="${fBase - 22}" x2="${fx + 28}" y2="${fBase - 22}" stroke="var(--coral)" stroke-width="1.4" stroke-dasharray="3,2"/>`;
-    s += `<text x="${fx}" y="${fBase + 14}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">V = ${V} mL</text>`;
-
-    svg.innerHTML = s;
-    readout.innerHTML = `m = t × V<sub>solution</sub> = ${t.toFixed(1)} × ${(V / 1000).toFixed(3)} = <strong style="color:var(--yellow)">${m.toFixed(2)} g</strong> à peser`;
+    return s;
   }
-  tRange.addEventListener("input", draw);
-  vRange.addEventListener("input", draw);
-  draw();
+
+  function flask(t, V) {
+    const fx = 168, fTop = 26, base = 150, neckHalf = 4.5;
+    const k = Math.sqrt(Math.min(1, V / 500));        // 50 mL → petit bulbe, 500 mL → grand bulbe
+    const w = 12 + 18 * k;                             // demi-largeur du bulbe
+    const bulbH = 38 + 40 * k;                         // hauteur du bulbe
+    const neckBot = base - bulbH;
+    const jaugeY = fTop + 12;                          // trait de jauge gravé sur le col
+    const h = bulbH;
+
+    const body = `M${fx - neckHalf} ${fTop} L${fx - neckHalf} ${neckBot} C${fx - neckHalf} ${neckBot + h * 0.25} ${fx - w} ${neckBot + h * 0.35} ${fx - w} ${neckBot + h * 0.72} Q${fx - w} ${base} ${fx - w + 8} ${base} L${fx + w - 8} ${base} Q${fx + w} ${base} ${fx + w} ${neckBot + h * 0.72} C${fx + w} ${neckBot + h * 0.35} ${fx + neckHalf} ${neckBot + h * 0.25} ${fx + neckHalf} ${neckBot} L${fx + neckHalf} ${fTop}`;
+
+    let s = `<defs><clipPath id="${clipId}"><path d="${body} Z"/></clipPath></defs>`;
+
+    // eau (légèrement teintée par le soluté) montant jusqu'au trait de jauge
+    const level = base - fillProgress * (base - jaugeY);
+    const alpha = 0.16 + Math.min(1, t / 30) * 0.45;
+    s += `<rect x="${fx - w - 2}" y="${level.toFixed(1)}" width="${2 * w + 4}" height="${(base - level + 1).toFixed(1)}" fill="rgba(232,196,104,${alpha.toFixed(2)})" clip-path="url(#${clipId})"/>`;
+    s += `<rect x="${fx - w - 2}" y="${level.toFixed(1)}" width="${2 * w + 4}" height="1.2" fill="rgba(150,200,240,0.8)" clip-path="url(#${clipId})"/>`;
+
+    // entonnoir à solide au-dessus du col
+    s += `<path d="M${fx - 20} ${fTop - 22} L${fx + 20} ${fTop - 22} L${fx + 4} ${fTop - 4} L${fx - 4} ${fTop - 4} Z" fill="rgba(90,160,230,0.12)" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
+    s += `<line x1="${fx - 3}" y1="${fTop - 4}" x2="${fx - 2.5}" y2="${fTop + 5}" stroke="var(--chalk-dim)" stroke-width="1.4"/>`;
+    s += `<line x1="${fx + 3}" y1="${fTop - 4}" x2="${fx + 2.5}" y2="${fTop + 5}" stroke="var(--chalk-dim)" stroke-width="1.4"/>`;
+
+    // paroi de la fiole
+    s += `<path d="${body}" fill="rgba(90,160,230,0.10)" stroke="var(--chalk-dim)" stroke-width="2"/>`;
+
+    // trait de jauge
+    s += `<line x1="${fx - neckHalf - 3}" y1="${jaugeY}" x2="${fx + neckHalf + 3}" y2="${jaugeY}" stroke="var(--coral)" stroke-width="1.6"/>`;
+    s += `<text x="${fx + neckHalf + 6}" y="${jaugeY + 3}" font-size="7" fill="var(--coral)">trait de jauge</text>`;
+
+    s += `<text x="${fx}" y="${base + 13}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">Fiole jaugée de ${V} mL</text>`;
+    return s;
+  }
+
+  function render() {
+    const t = Number(tRange.value); // g/L
+    const V = Number(vRange.value); // mL
+    const m = t * (V / 1000);       // g
+    svg.innerHTML = balance(m) + flask(t, V);
+    readout.innerHTML = `<em>m</em> = <em>t</em> × <em>V</em><sub>solution</sub> = ${ch3Fr(t, 1)} × ${ch3Fr(V / 1000, 3)} = <strong style="color:var(--yellow)">${ch3Fr(m, 2)} g</strong> à peser`;
+  }
+
+  function animateFill() {
+    if (rafId) cancelAnimationFrame(rafId);
+    const t0 = performance.now();
+    fillProgress = 0;
+    const step = (now) => {
+      if (!svg.isConnected) { rafId = 0; return; }
+      const p = Math.min(1, (now - t0) / FILL_MS);
+      fillProgress = 1 - Math.pow(1 - p, 2);
+      render();
+      rafId = p < 1 ? requestAnimationFrame(step) : 0;
+    };
+    rafId = requestAnimationFrame(step);
+  }
+
+  ch3Listen(tRange, "input", render);
+  ch3Listen(vRange, "input", animateFill);
+  render();
 }
 
 /* ---------- 4. Préparation par dilution (avec pipette jaugée) ---------- */
@@ -205,64 +321,60 @@ function initDilutionPrep(cfg) {
   const tmRange = document.getElementById(cfg.tmRangeId);
   const fRange = document.getElementById(cfg.fRangeId);
   const readout = document.getElementById(cfg.readoutId);
+  if (!ch3Ready(svg, tmRange, fRange, readout)) return;
 
   const VF_FIXED = 100; // mL, volume final fixé pour l'exemple
-  const TM_MAX = 30; // g/L, borne haute du curseur t_m, référence commune pour l'opacité
+  const TM_MAX = 30;    // g/L, borne haute du curseur t_m, référence commune pour l'opacité
+  const arrowId = `${cfg.svgId}-arrow`;
+
+  function tint(tVal) {
+    return 0.10 + Math.min(1, tVal / TM_MAX) * 0.80;
+  }
+
+  function flask(x, tVal, label) {
+    const fTop = 16, fNeck = 42, fBase = 122;
+    let s = `<path d="M${x - 6} ${fTop} L${x - 6} ${fNeck} L${x - 22} ${fBase - 8} Q${x - 24} ${fBase} ${x - 14} ${fBase} L${x + 14} ${fBase} Q${x + 24} ${fBase} ${x + 22} ${fBase - 8} L${x + 6} ${fNeck} L${x + 6} ${fTop}" fill="rgba(232,196,104,${tint(tVal).toFixed(2)})" stroke="var(--chalk-dim)" stroke-width="2"/>`;
+    const dotCount = Math.max(1, Math.round((tVal / TM_MAX) * 14));
+    generateDotsInEllipse(dotCount, 0, 0, 1, 1).forEach(([u, v]) => {
+      const dx = x + u * 15, dy = (fNeck + 8) + Math.abs(v) * (fBase - fNeck - 16);
+      if (dy < fBase - 4) s += `<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="2" fill="var(--yellow)" opacity="0.9"/>`;
+    });
+    s += `<text x="${x}" y="${fBase + 14}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">${label}</text>`;
+    s += `<text x="${x}" y="${fBase + 25}" font-size="8" fill="var(--yellow)" text-anchor="middle" font-weight="700">${ch3Fr(tVal, 1)} g/L</text>`;
+    return s;
+  }
+
+  function pipette(x, tVal, vol) {
+    const bulbCy = 12, bulbRx = 9, bulbRy = 7.5;
+    const tubeTop = 21, tubeBottom = 92, tipY = 104;
+    const fill = `rgba(232,196,104,${tint(tVal).toFixed(2)})`;
+    const liquidTopY = tubeBottom - (tubeBottom - tubeTop) * 0.55;
+    let s = `<ellipse cx="${x}" cy="${bulbCy}" rx="${bulbRx}" ry="${bulbRy}" fill="var(--board-2)" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
+    s += `<line x1="${x}" y1="${bulbCy + bulbRy}" x2="${x}" y2="${tubeTop}" stroke="var(--chalk-dim)" stroke-width="2"/>`;
+    s += `<line x1="${x - 4}" y1="${tubeTop}" x2="${x - 4}" y2="${tubeBottom}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
+    s += `<line x1="${x + 4}" y1="${tubeTop}" x2="${x + 4}" y2="${tubeBottom}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
+    for (let i = 1; i <= 3; i++) {
+      const gy = tubeTop + (i / 4) * (tubeBottom - tubeTop);
+      s += `<line x1="${x - 4}" y1="${gy.toFixed(1)}" x2="${x - 1.5}" y2="${gy.toFixed(1)}" stroke="var(--chalk-dim)" stroke-width="1"/>`;
+    }
+    s += `<rect x="${x - 4}" y="${liquidTopY.toFixed(1)}" width="8" height="${(tubeBottom - liquidTopY).toFixed(1)}" fill="${fill}"/>`;
+    s += `<line x1="${x - 6}" y1="${liquidTopY.toFixed(1)}" x2="${x + 6}" y2="${liquidTopY.toFixed(1)}" stroke="var(--coral)" stroke-width="1.2" stroke-dasharray="2,1.5"/>`;
+    s += `<path d="M${x - 4} ${tubeBottom} L${x} ${tipY} L${x + 4} ${tubeBottom} Z" fill="${fill}" stroke="var(--chalk-dim)" stroke-width="1.3"/>`;
+    s += `<text x="${x}" y="${tipY + 13}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">V\u2098 = ${ch3Fr(vol, 1)} mL</text>`;
+    return s;
+  }
+
+  function arrow(x1, y1, x2, y2) {
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--chalk-dim)" stroke-width="1.5" marker-end="url(#${arrowId})"/>`;
+  }
 
   function draw() {
     const tm = Number(tmRange.value);
-    const F = Number(fRange.value);
+    const F = Number(fRange.value) || 1;
     const tf = tm / F;
     const Vm = VF_FIXED / F;
 
-    // fiole (mère ou fille) : la teinte (opacité) est proportionnelle à la concentration réelle
-    function flask(x, tVal, label) {
-      const fTop = 16, fNeck = 42, fBase = 122;
-      const alpha = 0.10 + Math.min(1, tVal / TM_MAX) * 0.80;
-      let s = `<path d="M${x - 6} ${fTop} L${x - 6} ${fNeck} L${x - 22} ${fBase - 8} Q${x - 24} ${fBase} ${x - 14} ${fBase} L${x + 14} ${fBase} Q${x + 24} ${fBase} ${x + 22} ${fBase - 8} L${x + 6} ${fNeck} L${x + 6} ${fTop}" fill="rgba(232,196,104,${alpha.toFixed(2)})" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-      const dotCount = Math.max(1, Math.round((tVal / TM_MAX) * 14));
-      const dots = generateDotsInEllipse(dotCount, 0, 0, 1, 1);
-      dots.forEach(([u, v]) => {
-        const dx = x + u * 15, dy = (fNeck + 8) + Math.abs(v) * (fBase - fNeck - 16);
-        if (dy < fBase - 4) s += `<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="2" fill="var(--yellow)" opacity="0.9"/>`;
-      });
-      s += `<text x="${x}" y="${fBase + 14}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">${label}</text>`;
-      s += `<text x="${x}" y="${fBase + 25}" font-size="8" fill="var(--yellow)" text-anchor="middle" font-weight="700">${tVal.toFixed(1)} g/L</text>`;
-      return s;
-    }
-
-    // pipette jaugée : matérialise le prélèvement du volume mère Vm
-    // son opacité reprend celle de la solution mère (t_m), sur la même échelle que les fioles
-    function pipette(x, tVal, vol) {
-      const bulbCy = 12, bulbRx = 9, bulbRy = 7.5;
-      const tubeTop = 21, tubeBottom = 92, tipY = 104;
-      const alpha = 0.10 + Math.min(1, tVal / TM_MAX) * 0.80;
-      const liquidTopY = tubeBottom - (tubeBottom - tubeTop) * 0.55;
-
-      let s = `<ellipse cx="${x}" cy="${bulbCy}" rx="${bulbRx}" ry="${bulbRy}" fill="var(--board-2)" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
-      s += `<line x1="${x}" y1="${bulbCy + bulbRy}" x2="${x}" y2="${tubeTop}" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-      // corps gradué de la pipette
-      s += `<line x1="${x - 4}" y1="${tubeTop}" x2="${x - 4}" y2="${tubeBottom}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
-      s += `<line x1="${x + 4}" y1="${tubeTop}" x2="${x + 4}" y2="${tubeBottom}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
-      // repères de graduation
-      for (let i = 1; i <= 3; i++) {
-        const gy = tubeTop + (i / 4) * (tubeBottom - tubeTop);
-        s += `<line x1="${x - 4}" y1="${gy.toFixed(1)}" x2="${x - 1.5}" y2="${gy.toFixed(1)}" stroke="var(--chalk-dim)" stroke-width="1"/>`;
-      }
-      // liquide prélevé, même opacité que la solution mère
-      s += `<rect x="${x - 4}" y="${liquidTopY.toFixed(1)}" width="8" height="${(tubeBottom - liquidTopY).toFixed(1)}" fill="rgba(232,196,104,${alpha.toFixed(2)})"/>`;
-      s += `<line x1="${x - 6}" y1="${liquidTopY.toFixed(1)}" x2="${x + 6}" y2="${liquidTopY.toFixed(1)}" stroke="var(--coral)" stroke-width="1.2" stroke-dasharray="2,1.5"/>`;
-      // pointe effilée
-      s += `<path d="M${x - 4} ${tubeBottom} L${x} ${tipY} L${x + 4} ${tubeBottom} Z" fill="rgba(232,196,104,${alpha.toFixed(2)})" stroke="var(--chalk-dim)" stroke-width="1.3"/>`;
-      s += `<text x="${x}" y="${tipY + 13}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">V\u2098 = ${vol.toFixed(1)} mL</text>`;
-      return s;
-    }
-
-    function arrow(x1, y1, x2, y2) {
-      return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--chalk-dim)" stroke-width="1.5" marker-end="url(#dilArrow)"/>`;
-    }
-
-    let s = `<defs><marker id="dilArrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--chalk-dim)"/></marker></defs>`;
+    let s = `<defs><marker id="${arrowId}" markerWidth="7" markerHeight="7" refX="6" refY="3.5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--chalk-dim)"/></marker></defs>`;
     s += flask(38, tm, "mère (t\u2098)");
     s += arrow(62, 55, 92, 45);
     s += `<text x="77" y="40" font-size="7" fill="var(--teal)" text-anchor="middle">prélève</text>`;
@@ -272,10 +384,10 @@ function initDilutionPrep(cfg) {
     s += flask(182, tf, "fille (t\u0192)");
 
     svg.innerHTML = s;
-    readout.innerHTML = `F = ${F} → V<sub>m</sub> à prélever = V<sub>f</sub>/F = ${VF_FIXED}/${F} = <strong style="color:var(--yellow)">${Vm.toFixed(1)} mL</strong><br>t<sub>f</sub> = t<sub>m</sub>/F = ${tm.toFixed(1)}/${F} = <strong style="color:var(--teal)">${tf.toFixed(1)} g/L</strong>`;
+    readout.innerHTML = `<em>F</em> = ${F} → <em>V</em><sub>m</sub> à prélever = <em>V</em><sub>f</sub>/<em>F</em> = ${VF_FIXED}/${F} = <strong style="color:var(--yellow)">${ch3Fr(Vm, 1)} mL</strong><br><em>t</em><sub>f</sub> = <em>t</em><sub>m</sub>/<em>F</em> = ${ch3Fr(tm, 1)}/${F} = <strong style="color:var(--teal)">${ch3Fr(tf, 1)} g/L</strong>`;
   }
-  tmRange.addEventListener("input", draw);
-  fRange.addEventListener("input", draw);
+  ch3Listen(tmRange, "input", draw);
+  ch3Listen(fRange, "input", draw);
   draw();
 }
 
@@ -284,17 +396,18 @@ function initColorScale(cfg) {
   const svg = document.getElementById(cfg.svgId);
   const sRange = document.getElementById(cfg.sRangeId);
   const readout = document.getElementById(cfg.readoutId);
+  if (!ch3Ready(svg, sRange, readout)) return;
 
   const T_VALUES = [1, 2, 3, 4, 5]; // concentrations arbitraires croissantes des étalons
+  const arrowId = `${cfg.svgId}-arrow`;
 
   function draw() {
-    const sVal = Number(sRange.value); // position de S sur la même échelle (peut être non entière)
+    const sVal = Number(sRange.value);
     const lower = Math.max(1, Math.floor(sVal));
     const upper = Math.min(5, Math.ceil(sVal));
 
-    // rangée des étalons, en haut
     const tubeW = 26, gap = 10, startX = 15, tubeH = 65, y0 = 10;
-    let s = "";
+    let s = `<defs><marker id="${arrowId}" markerWidth="6" markerHeight="6" refX="5" refY="3" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--teal)"/></marker></defs>`;
     const tubeCenterX = {};
     T_VALUES.forEach((t, i) => {
       const x = startX + i * (tubeW + gap);
@@ -302,33 +415,29 @@ function initColorScale(cfg) {
       const alpha = 0.15 + (t / 5) * 0.75;
       const isBracket = lower !== upper && (t === lower || t === upper);
       const strokeColor = isBracket ? "var(--teal)" : "var(--chalk-dim)";
-      s += `<rect x="${x}" y="${y0}" width="${tubeW}" height="${tubeH}" rx="4" fill="rgba(217,122,99,${alpha})" stroke="${strokeColor}" stroke-width="${isBracket ? 2.5 : 1.5}"/>`;
-      s += `<text x="${x + tubeW / 2}" y="${y0 + tubeH + 13}" font-size="9" fill="${strokeColor}" text-anchor="middle" font-weight="${isBracket ? '700' : '400'}">t${i + 1}</text>`;
+      s += `<rect x="${x}" y="${y0}" width="${tubeW}" height="${tubeH}" rx="4" fill="rgba(217,122,99,${alpha.toFixed(2)})" stroke="${strokeColor}" stroke-width="${isBracket ? 2.5 : 1.5}"/>`;
+      s += `<text x="${x + tubeW / 2}" y="${y0 + tubeH + 13}" font-size="9" fill="${strokeColor}" text-anchor="middle" font-weight="${isBracket ? "700" : "400"}">t${i + 1}</text>`;
     });
 
-    // tube S, EN DESSOUS de la rangée, aligné sur sa position réelle sur l'échelle
     const sCenterX = startX + tubeW / 2 + (sVal - 1) * (tubeW + gap);
     const sY = y0 + tubeH + 40, sTubeH = 55;
     const sAlpha = 0.15 + (sVal / 5) * 0.75;
 
-    // flèches d'encadrement, de S vers les étalons qui l'encadrent
-    s += `<defs><marker id="csArrow" markerWidth="6" markerHeight="6" refX="5" refY="3" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--teal)"/></marker></defs>`;
-    const brackets = lower === upper ? [lower] : [lower, upper];
-    brackets.forEach(t => {
-      s += `<line x1="${sCenterX}" y1="${sY}" x2="${tubeCenterX[t]}" y2="${y0 + tubeH}" stroke="var(--teal)" stroke-width="1.6" stroke-dasharray="3,2" marker-end="url(#csArrow)"/>`;
+    (lower === upper ? [lower] : [lower, upper]).forEach((t) => {
+      s += `<line x1="${sCenterX.toFixed(1)}" y1="${sY}" x2="${tubeCenterX[t]}" y2="${y0 + tubeH}" stroke="var(--teal)" stroke-width="1.6" stroke-dasharray="3,2" marker-end="url(#${arrowId})"/>`;
     });
 
-    s += `<rect x="${sCenterX - tubeW / 2}" y="${sY}" width="${tubeW}" height="${sTubeH}" rx="4" fill="rgba(217,122,99,${sAlpha})" stroke="var(--yellow)" stroke-width="2.5"/>`;
-    s += `<text x="${sCenterX}" y="${sY + sTubeH + 14}" font-size="10" fill="var(--yellow)" text-anchor="middle" font-weight="700">S</text>`;
+    s += `<rect x="${(sCenterX - tubeW / 2).toFixed(1)}" y="${sY}" width="${tubeW}" height="${sTubeH}" rx="4" fill="rgba(217,122,99,${sAlpha.toFixed(2)})" stroke="var(--yellow)" stroke-width="2.5"/>`;
+    s += `<text x="${sCenterX.toFixed(1)}" y="${sY + sTubeH + 14}" font-size="10" fill="var(--yellow)" text-anchor="middle" font-weight="700">S</text>`;
 
     svg.innerHTML = s;
 
     const encadrement = lower === upper
-      ? `t ≈ t${lower} (même teinte qu'un étalon)`
-      : `t${lower} &lt; t &lt; t${upper}`;
+      ? `<em>t</em> ≈ t${lower} (même teinte qu'un étalon)`
+      : `t${lower} &lt; <em>t</em> &lt; t${upper}`;
     readout.innerHTML = `En comparant la teinte de S à celle des étalons, on obtient l'encadrement : <strong style="color:var(--yellow)">${encadrement}</strong>`;
   }
-  sRange.addEventListener("input", draw);
+  ch3Listen(sRange, "input", draw);
   draw();
 }
 
@@ -341,10 +450,11 @@ function initLabChallenge(cfg) {
   const newBtn = document.getElementById(cfg.newBtnId);
   const validateBtn = document.getElementById(cfg.validateBtnId);
   const feedback = document.getElementById(cfg.feedbackId);
+  if (!ch3Ready(promptEl, vmInput, pipetteSelect, fioleSelect, newBtn, validateBtn, feedback)) return;
 
-  const VF_OPTIONS = [50, 100, 250];   // mL, volumes de fioles jaugées disponibles
-  const VM_OPTIONS = [5, 10, 20];      // mL, volumes de pipettes jaugées disponibles
-  const TF_OPTIONS = [0.5, 1, 1.5, 2, 2.5, 3]; // g/L, concentrations filles possibles
+  const VF_OPTIONS = [50, 100, 250];
+  const VM_OPTIONS = [5, 10, 20];
+  const TF_OPTIONS = [0.5, 1, 1.5, 2, 2.5, 3];
 
   let current = null;
 
@@ -362,7 +472,7 @@ function initLabChallenge(cfg) {
 
   function newChallenge() {
     current = pickChallenge();
-    promptEl.innerHTML = `On souhaite préparer un volume V<sub>f</sub> = <strong style="color:var(--yellow)">${current.Vf} mL</strong> d'une solution fille de concentration t<sub>f</sub> = <strong style="color:var(--yellow)">${current.tf.toFixed(1)} g/L</strong> à partir d'une solution mère de concentration t<sub>m</sub> = <strong style="color:var(--yellow)">${current.tm.toFixed(1)} g/L</strong>.`;
+    promptEl.innerHTML = `On souhaite préparer un volume <em>V</em><sub>f</sub> = <strong style="color:var(--yellow)">${current.Vf} mL</strong> d'une solution fille de concentration <em>t</em><sub>f</sub> = <strong style="color:var(--yellow)">${ch3Fr(current.tf, 1)} g/L</strong> à partir d'une solution mère de concentration <em>t</em><sub>m</sub> = <strong style="color:var(--yellow)">${ch3Fr(current.tm, 1)} g/L</strong>.`;
     vmInput.value = "";
     pipetteSelect.value = "";
     fioleSelect.value = "";
@@ -371,7 +481,7 @@ function initLabChallenge(cfg) {
 
   function validate() {
     if (!current) return;
-    const vmGiven = Number(vmInput.value);
+    const vmGiven = Number(String(vmInput.value).replace(",", "."));
     const vmOk = vmInput.value !== "" && Math.abs(vmGiven - current.Vm) <= 0.3;
     const pipetteOk = pipetteSelect.value === `pipette-${current.Vm}`;
     const fioleOk = fioleSelect.value === `fiole-${current.Vf}`;
@@ -379,8 +489,8 @@ function initLabChallenge(cfg) {
 
     let msg = "";
     msg += vmOk
-      ? `<span style="color:var(--teal);">✅ V<sub>m</sub> = V<sub>f</sub>/F = ${current.Vf}/${current.F} = ${current.Vm} mL — correct.</span><br>`
-      : `<span style="color:var(--coral);">❌ V<sub>m</sub> = V<sub>f</sub>/F = ${current.Vf}/${current.F} = <strong>${current.Vm} mL</strong> (ta réponse : ${vmInput.value !== "" ? vmInput.value : "—"}).</span><br>`;
+      ? `<span style="color:var(--teal);">✅ <em>V</em><sub>m</sub> = <em>V</em><sub>f</sub>/<em>F</em> = ${current.Vf}/${current.F} = ${current.Vm} mL — correct.</span><br>`
+      : `<span style="color:var(--coral);">❌ <em>V</em><sub>m</sub> = <em>V</em><sub>f</sub>/<em>F</em> = ${current.Vf}/${current.F} = <strong>${current.Vm} mL</strong> (ta réponse : ${vmInput.value !== "" ? vmInput.value : "—"}).</span><br>`;
     msg += pipetteOk
       ? `<span style="color:var(--teal);">✅ Verrerie de prélèvement adaptée : pipette jaugée ${current.Vm} mL.</span><br>`
       : `<span style="color:var(--coral);">❌ Il fallait une <strong>pipette jaugée de ${current.Vm} mL</strong> : la verrerie jaugée est obligatoire pour une précision analytique (une éprouvette graduée ou une pipette d'un autre volume ne conviennent pas).</span><br>`;
@@ -390,12 +500,12 @@ function initLabChallenge(cfg) {
 
     feedback.innerHTML = msg;
 
-    if (allOk && cfg.chapterId && cfg.activityId) {
+    if (allOk && cfg.chapterId && cfg.activityId && typeof ProgressStore !== "undefined") {
       ProgressStore.record(cfg.chapterId, cfg.activityId, true);
     }
   }
 
-  newBtn.addEventListener("click", newChallenge);
-  validateBtn.addEventListener("click", validate);
+  ch3Listen(newBtn, "click", newChallenge);
+  ch3Listen(validateBtn, "click", validate);
   newChallenge();
 }
