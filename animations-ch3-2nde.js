@@ -315,52 +315,78 @@ function initDissolutionPrep(cfg) {
   render();
 }
 
-/* ---------- 4. Préparation par dilution (avec pipette jaugée) ---------- */
+/* ---------- 4. Préparation par dilution : des gestes au facteur de dilution ----------
+   L'élève choisit les gestes (pipette jaugée V_m, fiole jaugée V_f) ;
+   c'est l'animation qui fait apparaître le rapport F = V_f / V_m. */
 function initDilutionPrep(cfg) {
   const svg = document.getElementById(cfg.svgId);
-  const tmRange = document.getElementById(cfg.tmRangeId);
-  const fRange = document.getElementById(cfg.fRangeId);
+  const vmRange = document.getElementById(cfg.vmRangeId);
+  const vfRange = document.getElementById(cfg.vfRangeId);
   const readout = document.getElementById(cfg.readoutId);
-  if (!ch3Ready(svg, tmRange, fRange, readout)) return;
+  const vmValue = cfg.vmValueId ? document.getElementById(cfg.vmValueId) : null;
+  const vfValue = cfg.vfValueId ? document.getElementById(cfg.vfValueId) : null;
+  if (!ch3Ready(svg, vmRange, vfRange, readout)) return;
 
-  const VF_FIXED = 100; // mL, volume final fixé pour l'exemple
-  const TM_MAX = 30;    // g/L, borne haute du curseur t_m, référence commune pour l'opacité
+  const TM = cfg.tm || 20;                    // g/L, concentration de la solution mère (fixée)
+  const PIPETTES = [5, 10, 20, 25];           // mL, pipettes jaugées disponibles
+  const FIOLES = [50, 100, 200, 250, 500];    // mL, fioles jaugées disponibles (toujours > V_m)
   const arrowId = `${cfg.svgId}-arrow`;
 
+  // les curseurs parcourent l'index de la verrerie disponible
+  ch3Range(vmRange, 0, PIPETTES.length - 1, 1);
+  ch3Range(vfRange, 0, FIOLES.length - 1, 1);
+
+  // teinte proportionnelle à la concentration ; la mère sert de référence
   function tint(tVal) {
-    return 0.10 + Math.min(1, tVal / TM_MAX) * 0.80;
+    return 0.15 + Math.min(1, tVal / TM) * 0.75;
   }
 
-  function flask(x, tVal, label) {
-    const fTop = 16, fNeck = 42, fBase = 122;
-    let s = `<path d="M${x - 6} ${fTop} L${x - 6} ${fNeck} L${x - 22} ${fBase - 8} Q${x - 24} ${fBase} ${x - 14} ${fBase} L${x + 14} ${fBase} Q${x + 24} ${fBase} ${x + 22} ${fBase - 8} L${x + 6} ${fNeck} L${x + 6} ${fTop}" fill="rgba(232,196,104,${tint(tVal).toFixed(2)})" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-    const dotCount = Math.max(1, Math.round((tVal / TM_MAX) * 14));
-    generateDotsInEllipse(dotCount, 0, 0, 1, 1).forEach(([u, v]) => {
-      const dx = x + u * 15, dy = (fNeck + 8) + Math.abs(v) * (fBase - fNeck - 16);
-      if (dy < fBase - 4) s += `<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="2" fill="var(--yellow)" opacity="0.9"/>`;
-    });
-    s += `<text x="${x}" y="${fBase + 14}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">${label}</text>`;
-    s += `<text x="${x}" y="${fBase + 25}" font-size="8" fill="var(--yellow)" text-anchor="middle" font-weight="700">${ch3Fr(tVal, 1)} g/L</text>`;
+  function motherBeaker(x, tVal) {
+    const top = 40, base = 122, w = 22, liq = 62;
+    const fill = `rgba(232,196,104,${tint(tVal).toFixed(2)})`;
+    let s = `<path d="M${x - w} ${liq} L${x - w} ${base - 6} Q${x - w} ${base} ${x - w + 6} ${base} L${x + w - 6} ${base} Q${x + w} ${base} ${x + w} ${base - 6} L${x + w} ${liq} Z" fill="${fill}"/>`;
+    s += `<path d="M${x - w} ${top} L${x - w} ${base - 6} Q${x - w} ${base} ${x - w + 6} ${base} L${x + w - 6} ${base} Q${x + w} ${base} ${x + w} ${base - 6} L${x + w} ${top}" fill="none" stroke="var(--chalk-dim)" stroke-width="2"/>`;
+    s += `<text x="${x}" y="135" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">solution mère</text>`;
+    s += `<text x="${x}" y="146" font-size="8" fill="var(--yellow)" text-anchor="middle" font-weight="700">t\u2098 = ${ch3Fr(tVal, 1)} g/L</text>`;
     return s;
   }
 
   function pipette(x, tVal, vol) {
-    const bulbCy = 12, bulbRx = 9, bulbRy = 7.5;
-    const tubeTop = 21, tubeBottom = 92, tipY = 104;
+    const bulbCy = 44, bulbRx = 7, bulbRy = 6;
+    const stemTop = 26, tubeBottom = 108, tipY = 118, half = 2.6;
     const fill = `rgba(232,196,104,${tint(tVal).toFixed(2)})`;
-    const liquidTopY = tubeBottom - (tubeBottom - tubeTop) * 0.55;
-    let s = `<ellipse cx="${x}" cy="${bulbCy}" rx="${bulbRx}" ry="${bulbRy}" fill="var(--board-2)" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
-    s += `<line x1="${x}" y1="${bulbCy + bulbRy}" x2="${x}" y2="${tubeTop}" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-    s += `<line x1="${x - 4}" y1="${tubeTop}" x2="${x - 4}" y2="${tubeBottom}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
-    s += `<line x1="${x + 4}" y1="${tubeTop}" x2="${x + 4}" y2="${tubeBottom}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
-    for (let i = 1; i <= 3; i++) {
-      const gy = tubeTop + (i / 4) * (tubeBottom - tubeTop);
-      s += `<line x1="${x - 4}" y1="${gy.toFixed(1)}" x2="${x - 1.5}" y2="${gy.toFixed(1)}" stroke="var(--chalk-dim)" stroke-width="1"/>`;
-    }
-    s += `<rect x="${x - 4}" y="${liquidTopY.toFixed(1)}" width="8" height="${(tubeBottom - liquidTopY).toFixed(1)}" fill="${fill}"/>`;
-    s += `<line x1="${x - 6}" y1="${liquidTopY.toFixed(1)}" x2="${x + 6}" y2="${liquidTopY.toFixed(1)}" stroke="var(--coral)" stroke-width="1.2" stroke-dasharray="2,1.5"/>`;
-    s += `<path d="M${x - 4} ${tubeBottom} L${x} ${tipY} L${x + 4} ${tubeBottom} Z" fill="${fill}" stroke="var(--chalk-dim)" stroke-width="1.3"/>`;
-    s += `<text x="${x}" y="${tipY + 13}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">V\u2098 = ${ch3Fr(vol, 1)} mL</text>`;
+    const jaugeY = stemTop + 5;
+    let s = "";
+    // liquide : tige haute (jusqu'au trait de jauge), bulbe, tube et pointe
+    s += `<rect x="${x - half}" y="${jaugeY}" width="${2 * half}" height="${bulbCy - jaugeY}" fill="${fill}"/>`;
+    s += `<rect x="${x - half}" y="${bulbCy}" width="${2 * half}" height="${tubeBottom - bulbCy}" fill="${fill}"/>`;
+    s += `<ellipse cx="${x}" cy="${bulbCy}" rx="${bulbRx}" ry="${bulbRy}" fill="${fill}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
+    s += `<path d="M${x - half} ${tubeBottom} L${x} ${tipY} L${x + half} ${tubeBottom} Z" fill="${fill}" stroke="var(--chalk-dim)" stroke-width="1.2"/>`;
+    // parois du tube (au-dessus et au-dessous du bulbe)
+    [[stemTop, bulbCy - bulbRy], [bulbCy + bulbRy, tubeBottom]].forEach(([y1, y2]) => {
+      s += `<line x1="${x - half}" y1="${y1}" x2="${x - half}" y2="${y2}" stroke="var(--chalk-dim)" stroke-width="1.3"/>`;
+      s += `<line x1="${x + half}" y1="${y1}" x2="${x + half}" y2="${y2}" stroke="var(--chalk-dim)" stroke-width="1.3"/>`;
+    });
+    // trait de jauge unique de la pipette jaugée
+    s += `<line x1="${x - 6}" y1="${jaugeY}" x2="${x + 6}" y2="${jaugeY}" stroke="var(--coral)" stroke-width="1.4"/>`;
+    s += `<text x="${x}" y="135" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">pipette</text>`;
+    s += `<text x="${x}" y="146" font-size="8" fill="var(--yellow)" text-anchor="middle" font-weight="700">V\u2098 = ${vol} mL</text>`;
+    return s;
+  }
+
+  function daughterFlask(x, tVal, V) {
+    const fTop = 26, base = 122, neckHalf = 4;
+    const k = Math.sqrt(Math.min(1, V / 500));
+    const w = 11 + 15 * k, bulbH = 32 + 38 * k;
+    const neckBot = base - bulbH, h = bulbH, jaugeY = fTop + 10;
+    const body = `M${x - neckHalf} ${fTop} L${x - neckHalf} ${neckBot} C${x - neckHalf} ${neckBot + h * 0.25} ${x - w} ${neckBot + h * 0.35} ${x - w} ${neckBot + h * 0.72} Q${x - w} ${base} ${x - w + 7} ${base} L${x + w - 7} ${base} Q${x + w} ${base} ${x + w} ${neckBot + h * 0.72} C${x + w} ${neckBot + h * 0.35} ${x + neckHalf} ${neckBot + h * 0.25} ${x + neckHalf} ${neckBot} L${x + neckHalf} ${fTop}`;
+    const clipId = `${cfg.svgId}-fille-clip`;
+    let s = `<defs><clipPath id="${clipId}"><path d="${body} Z"/></clipPath></defs>`;
+    s += `<rect x="${x - w - 2}" y="${jaugeY}" width="${2 * w + 4}" height="${base - jaugeY + 1}" fill="rgba(232,196,104,${tint(tVal).toFixed(2)})" clip-path="url(#${clipId})"/>`;
+    s += `<path d="${body}" fill="rgba(90,160,230,0.10)" stroke="var(--chalk-dim)" stroke-width="2"/>`;
+    s += `<line x1="${x - neckHalf - 3}" y1="${jaugeY}" x2="${x + neckHalf + 3}" y2="${jaugeY}" stroke="var(--coral)" stroke-width="1.5"/>`;
+    s += `<text x="${x}" y="135" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">fiole ${V} mL</text>`;
+    s += `<text x="${x}" y="146" font-size="8" fill="var(--teal)" text-anchor="middle" font-weight="700">t\u0192 = ${ch3Fr(tVal, 2)} g/L</text>`;
     return s;
   }
 
@@ -369,25 +395,38 @@ function initDilutionPrep(cfg) {
   }
 
   function draw() {
-    const tm = Number(tmRange.value);
-    const F = Number(fRange.value) || 1;
-    const tf = tm / F;
-    const Vm = VF_FIXED / F;
+    const Vm = PIPETTES[Math.round(Number(vmRange.value))] || PIPETTES[0];
+    const Vf = FIOLES[Math.round(Number(vfRange.value))] || FIOLES[0];
+    const ratio = Vf / Vm;
+    const tf = TM / ratio;
+    const mPrel = TM * Vm / 1000; // g
+
+    if (vmValue) vmValue.textContent = `${Vm} mL`;
+    if (vfValue) vfValue.textContent = `${Vf} mL`;
 
     let s = `<defs><marker id="${arrowId}" markerWidth="7" markerHeight="7" refX="6" refY="3.5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="var(--chalk-dim)"/></marker></defs>`;
-    s += flask(38, tm, "mère (t\u2098)");
-    s += arrow(62, 55, 92, 45);
-    s += `<text x="77" y="40" font-size="7" fill="var(--teal)" text-anchor="middle">prélève</text>`;
-    s += pipette(110, tm, Vm);
-    s += arrow(128, 45, 158, 55);
-    s += `<text x="143" y="40" font-size="7" fill="var(--teal)" text-anchor="middle">+ eau (×${F})</text>`;
-    s += flask(182, tf, "fille (t\u0192)");
+    s += motherBeaker(30, TM);
+    s += arrow(56, 74, 88, 74);
+    s += `<text x="72" y="66" font-size="7.5" fill="var(--teal)" text-anchor="middle">1. prélever</text>`;
+    s += pipette(102, TM, Vm);
+    s += arrow(114, 74, 144, 74);
+    s += `<text x="132" y="9" font-size="7.5" fill="var(--teal)" text-anchor="middle">2. verser dans la fiole,</text>`;
+    s += `<text x="132" y="18" font-size="7.5" fill="var(--teal)" text-anchor="middle">puis compléter à l'eau</text>`;
+    s += daughterFlask(176, tf, Vf);
+    s += `<text x="110" y="164" font-size="9" fill="var(--yellow)" text-anchor="middle" font-weight="700">volume : ${Vm} mL → ${Vf} mL, soit × ${ch3Fr(ratio, ratio % 1 ? 1 : 0)}</text>`;
 
     svg.innerHTML = s;
-    readout.innerHTML = `<em>F</em> = ${F} → <em>V</em><sub>m</sub> à prélever = <em>V</em><sub>f</sub>/<em>F</em> = ${VF_FIXED}/${F} = <strong style="color:var(--yellow)">${ch3Fr(Vm, 1)} mL</strong><br><em>t</em><sub>f</sub> = <em>t</em><sub>m</sub>/<em>F</em> = ${ch3Fr(tm, 1)}/${F} = <strong style="color:var(--teal)">${ch3Fr(tf, 1)} g/L</strong>`;
+
+    const F = ch3Fr(ratio, ratio % 1 ? 1 : 0);
+    readout.innerHTML =
+      `<div>Masse de soluté prélevée : <em>m</em> = <em>t</em><sub>m</sub> × <em>V</em><sub>m</sub> = ${TM} × ${ch3Fr(Vm / 1000, 3)} = <strong style="color:var(--yellow)">${ch3Fr(mPrel, 2)} g</strong></div>`
+      + `<div>Cette masse se conserve dans la fiole : <em>t</em><sub>m</sub> × <em>V</em><sub>m</sub> = <em>t</em><sub>f</sub> × <em>V</em><sub>f</sub></div>`
+      + `<div>d'où <em>t</em><sub>f</sub> = <em>t</em><sub>m</sub> × ${ch3Frac("<em>V</em><sub>m</sub>", "<em>V</em><sub>f</sub>")} = ${TM} × ${ch3Frac(Vm, Vf)} = <strong style="color:var(--teal)">${ch3Fr(tf, 2)} g/L</strong></div>`
+      + `<div>Le volume a été multiplié par ${F}, la concentration divisée par ${F}.</div>`
+      + `<div style="margin-top:10px;border:2px solid rgba(107,191,171,0.5);background:rgba(107,191,171,0.1);border-radius:12px;padding:12px 18px;color:var(--chalk);">Le rapport <em>F</em> = ${ch3Frac("<em>V</em><sub>f</sub>", "<em>V</em><sub>m</sub>")} = ${ch3Frac("<em>t</em><sub>m</sub>", "<em>t</em><sub>f</sub>")} est appelé <strong style="color:var(--teal)">facteur de dilution</strong> : ici <em>F</em> = ${F}, la solution a été diluée ${F} fois.</div>`;
   }
-  ch3Listen(tmRange, "input", draw);
-  ch3Listen(fRange, "input", draw);
+  ch3Listen(vmRange, "input", draw);
+  ch3Listen(vfRange, "input", draw);
   draw();
 }
 
@@ -509,3 +548,4 @@ function initLabChallenge(cfg) {
   ch3Listen(validateBtn, "click", validate);
   newChallenge();
 }
+
