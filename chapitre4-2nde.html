@@ -29,6 +29,15 @@
     border-width: 2.6px 0 2.6px 4.2px;
     border-color: transparent transparent transparent currentColor;
   }
+
+  /* ---------- Lien de téléchargement des slides (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
 </style>
 <script src="animations-common.js"></script>
 <script src="animations-ch4-2nde.js"></script>
@@ -48,6 +57,7 @@
   <div class="badge-inline physique">Physique</div>
   <h1>Chapitre 4 — Description des mouvements</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch4-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -226,6 +236,22 @@
     <p class="course-text">
       Le mouvement d'un système dépend du <strong>référentiel</strong> utilisé pour le décrire. On dit que le mouvement est <strong>relatif</strong>.
     </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Change de référentiel et observe les positions successives du passager.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="relQuaiCours">Référentiel du quai</button>
+      <button class="toggle-btn" id="relTrainCours">Référentiel du train</button>
+      <button class="toggle-btn" id="relGhostCours">📷 Positions successives</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="relSvgCours" viewBox="0 8 240 116"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="relReadoutCours"></div>
+      </div>
+    </div>
+
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
       Dans un référentiel donné, l'évolution dans le temps du vecteur vitesse permet de décrire le mouvement du système : si la <strong>direction</strong> reste la même au cours du temps, le mouvement est <strong>rectiligne</strong> ; si la <strong>valeur</strong> reste la même au cours du temps, le mouvement est <strong>uniforme</strong>.
@@ -385,6 +411,25 @@
   </section>
 
   <section>
+    <h2>Référentiel et relativité</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Change de référentiel et observe les positions successives du passager.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="relQuai">Référentiel du quai</button>
+      <button class="toggle-btn" id="relTrain">Référentiel du train</button>
+      <button class="toggle-btn" id="relGhost">📷 Positions successives</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:260px;">
+        <svg id="relSvg" viewBox="0 8 240 116"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="relReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actRelativity"></div></div>
+  </section>
+
+  <section>
     <h2>Nature du mouvement</h2>
     <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 cas : observe l'évolution de la valeur du vecteur vitesse.</p>
     <div class="toggle-row">
@@ -481,6 +526,7 @@ initTrajectoryTypes({ svgId: "ttSvgCours", readoutId: "ttReadoutCours", btnLineI
 initDisplacementVector({ svgId: "dvSvgCours", readoutId: "dvReadoutCours", btn1Id: "dv1Cours", btn2Id: "dv2Cours" });
 initAverageVelocity({ svgId: "avSvgCours", dRangeId: "avDCours", tRangeId: "avTCours", readoutId: "avReadoutCours" });
 initVelocityTangent({ svgId: "vtSvgCours", gapRangeId: "vtGapCours", readoutId: "vtReadoutCours", formulaId: "vtFormulaCours", btnPlayId: "vtPlayCours" });
+initRelativity({ svgId: "relSvgCours", readoutId: "relReadoutCours", btnQuaiId: "relQuaiCours", btnTrainId: "relTrainCours", ghostToggleId: "relGhostCours" });
 initMotionNature({ svgId: "mnSvgCours", readoutId: "mnReadoutCours", btnAccelId: "mnAccelCours", btnDecelId: "mnDecelCours", btnUniformId: "mnUniformCours", ghostToggleId: "mnGhostCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
@@ -488,6 +534,7 @@ initTrajectoryTypes({ svgId: "ttSvg", readoutId: "ttReadout", btnLineId: "ttLine
 initDisplacementVector({ svgId: "dvSvg", readoutId: "dvReadout", btn1Id: "dv1", btn2Id: "dv2" });
 initAverageVelocity({ svgId: "avSvg", dRangeId: "avD", tRangeId: "avT", readoutId: "avReadout" });
 initVelocityTangent({ svgId: "vtSvg", gapRangeId: "vtGap", readoutId: "vtReadout", formulaId: "vtFormula", btnPlayId: "vtPlay" });
+initRelativity({ svgId: "relSvg", readoutId: "relReadout", btnQuaiId: "relQuai", btnTrainId: "relTrain", ghostToggleId: "relGhost" });
 initMotionNature({ svgId: "mnSvg", readoutId: "mnReadout", btnAccelId: "mnAccel", btnDecelId: "mnDecel", btnUniformId: "mnUniform", ghostToggleId: "mnGhost" });
 
 /* ---------- Activités liées à chaque animation ---------- */
@@ -528,6 +575,17 @@ initQCM({
 });
 
 initQCM({
+  containerId: "actRelativity", chapterId: "ch4-2nde", activityId: "qcm-relativity",
+  prompt: "Un voyageur reste immobile sur un tapis roulant d'aéroport en marche. Par rapport à quoi est-il immobile ?",
+  options: [
+    { text: "Le tapis roulant", correct: true },
+    { text: "Le sol de l'aéroport", correct: false },
+    { text: "Les deux à la fois", correct: false }
+  ],
+  explanation: "Même système, deux référentiels, deux descriptions : par rapport au tapis, le voyageur est immobile ; par rapport au sol, il est en mouvement (il avance avec le tapis). Le mouvement est relatif."
+});
+
+initQCM({
   containerId: "actMotionNature", chapterId: "ch4-2nde", activityId: "qcm-motion-nature",
   prompt: "Si la valeur du vecteur vitesse reste la même au cours du temps, le mouvement est dit…",
   options: [
@@ -540,7 +598,7 @@ initQCM({
 
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch4-2nde");
-initProgressBar("ch4-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+initProgressBar("ch4-2nde", 7); // texte à trous complet + 6 activités liées aux animations
 </script>
 </body>
 </html>

@@ -349,3 +349,110 @@ function initMotionNature(cfg) {
   btnUniform.classList.add("active-hist");
   makePausableAnimation(svg, frame);
 }
+
+/* ---------- 6. Relativité du mouvement (référentiel du quai / du train) ---------- */
+/* Un train défile devant un quai ; selon le référentiel choisi, c'est soit le
+   train (et son passager) qui se déplace devant un quai fixe, soit le train
+   qui reste fixe à l'écran pendant que le quai (et son observateur) défilent
+   sous les yeux du passager. Le bouton "positions successives" dépose des
+   points fantômes sur la trajectoire du passager, à intervalles de temps Δt
+   égaux, pour rendre visible que sa trajectoire est rectiligne dans un
+   référentiel et réduite à un point dans l'autre. */
+function initRelativity(cfg) {
+  const svg = document.getElementById(cfg.svgId);
+  const readout = document.getElementById(cfg.readoutId);
+  const btnQuai = document.getElementById(cfg.btnQuaiId);
+  const btnTrain = document.getElementById(cfg.btnTrainId);
+  const btnGhost = cfg.ghostToggleId ? document.getElementById(cfg.ghostToggleId) : null;
+
+  const PERIOD = 4.2, RUN = 150, N_GHOSTS = 7;
+  let view = "quai", showGhosts = false, startTime = null, ghosts = [], lastStepIndex = -1;
+
+  const TEXTS = {
+    quai: "<strong style=\"color:var(--yellow)\">Référentiel du quai</strong> : le passager se déplace avec le train. Ses positions successives forment une trajectoire rectiligne.",
+    train: "<strong style=\"color:var(--yellow)\">Référentiel du train</strong> : le passager reste immobile, ses positions successives sont confondues. Ce sont le quai et l'observateur qui défilent."
+  };
+
+  function frame(now) {
+    if (startTime === null) { startTime = now; ghosts = []; lastStepIndex = -1; }
+    let t = (now - startTime) / 1000;
+    if (t >= PERIOD) { startTime = now; t = 0; ghosts = []; lastStepIndex = -1; }
+
+    const sPos = RUN * t / PERIOD;
+    const trainX = view === "quai" ? 10 + sPos : 85;
+    const offset = view === "quai" ? 0 : 85 - (10 + sPos);
+    const px = trainX + 44, py = 44;
+
+    // chronophotographie du passager : un point fantôme toutes les PERIOD/N_GHOSTS secondes
+    const stepIndex = Math.floor(t / (PERIOD / N_GHOSTS));
+    if (showGhosts && stepIndex > lastStepIndex) { lastStepIndex = stepIndex; ghosts.push(px); }
+
+    let s = "";
+    // poteaux du quai (défilent ou non selon le référentiel choisi)
+    for (let k = -8; k < 16; k++) {
+      const x = offset + k * 36 + 18;
+      if (x < -4 || x > 244) continue;
+      s += `<line x1="${x}" y1="14" x2="${x}" y2="74" stroke="var(--line)" stroke-width="1.4"/>`;
+      s += `<line x1="${x - 5}" y1="16" x2="${x + 5}" y2="16" stroke="var(--line)" stroke-width="1.4"/>`;
+    }
+    // rail
+    s += `<line x1="0" y1="74" x2="240" y2="74" stroke="var(--chalk-dim)" stroke-width="1.6"/>`;
+    for (let k = -30; k < 60; k++) {
+      const x = offset + k * 8;
+      if (x < -4 || x > 244) continue;
+      s += `<line x1="${x}" y1="74" x2="${x - 3}" y2="79" stroke="var(--line)" stroke-width="1"/>`;
+    }
+    // wagon
+    s += `<rect x="${trainX}" y="30" width="72" height="36" rx="7" fill="#1d3229" stroke="var(--chalk)" stroke-width="1.8"/>`;
+    s += `<rect x="${trainX + 8}" y="36" width="20" height="14" rx="2" fill="none" stroke="var(--chalk-dim)" stroke-width="1.2"/>`;
+    s += `<rect x="${trainX + 34}" y="36" width="20" height="14" rx="2" fill="none" stroke="var(--chalk-dim)" stroke-width="1.2"/>`;
+    s += `<circle cx="${trainX + 14}" cy="69" r="4" fill="var(--board)" stroke="var(--chalk)" stroke-width="1.4"/>`;
+    s += `<circle cx="${trainX + 58}" cy="69" r="4" fill="var(--board)" stroke="var(--chalk)" stroke-width="1.4"/>`;
+    // points fantômes du passager
+    if (showGhosts) {
+      ghosts.forEach((gx) => {
+        s += `<circle cx="${gx}" cy="${py}" r="3.4" fill="var(--teal)" opacity="0.6"/>`;
+      });
+    }
+    // passager
+    s += `<circle cx="${px}" cy="${py}" r="4.6" fill="var(--coral)"/>`;
+    s += `<text x="${trainX + 36}" y="25" font-size="9" fill="var(--coral)" text-anchor="middle">passager</text>`;
+    // sol
+    s += `<rect x="0" y="100" width="240" height="8" fill="rgba(242,237,225,0.12)"/>`;
+    // observateur fixe sur le quai
+    const ox = offset + 60;
+    if (ox > -10 && ox < 250) {
+      s += `<circle cx="${ox}" cy="80" r="4.2" fill="none" stroke="var(--teal)" stroke-width="1.6"/>`;
+      s += `<line x1="${ox}" y1="84.5" x2="${ox}" y2="94" stroke="var(--teal)" stroke-width="1.8"/>`;
+      s += `<line x1="${ox}" y1="94" x2="${ox - 4}" y2="100" stroke="var(--teal)" stroke-width="1.8"/><line x1="${ox}" y1="94" x2="${ox + 4}" y2="100" stroke="var(--teal)" stroke-width="1.8"/>`;
+      s += `<line x1="${ox - 5}" y1="88" x2="${ox + 5}" y2="88" stroke="var(--teal)" stroke-width="1.6"/>`;
+      s += `<text x="${ox + 9}" y="92" font-size="9" fill="var(--teal)">observateur</text>`;
+    }
+    s += `<text x="${offset + 200}" y="118" font-size="9" fill="var(--chalk-dim)">quai</text>`;
+    s += `<text x="${offset - 160}" y="118" font-size="9" fill="var(--chalk-dim)">quai</text>`;
+
+    svg.innerHTML = s;
+  }
+
+  function sync() {
+    [btnQuai, btnTrain].forEach(b => b && b.classList.remove("active-hist"));
+    (view === "quai" ? btnQuai : btnTrain).classList.add("active-hist");
+    if (btnGhost) btnGhost.classList.toggle("active-hist", showGhosts);
+    if (readout) readout.innerHTML = TEXTS[view];
+  }
+
+  btnQuai.addEventListener("click", () => { view = "quai"; startTime = null; sync(); });
+  btnTrain.addEventListener("click", () => { view = "train"; startTime = null; sync(); });
+  if (btnGhost) {
+    btnGhost.addEventListener("click", () => {
+      showGhosts = !showGhosts;
+      ghosts = [];
+      lastStepIndex = -1;
+      startTime = null;
+      sync();
+    });
+  }
+
+  sync();
+  makePausableAnimation(svg, frame);
+}
