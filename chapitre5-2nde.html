@@ -5,9 +5,72 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 5 — Modéliser une action mécanique sur un système — 2nde</title>
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* Notation vectorielle (même bloc que le chapitre 4) */
+  .vec { position: relative; display: inline-block; padding-top: 0.42em; }
+  .vec::before { content: ""; position: absolute; top: 0.06em; left: 0; right: 3px; border-top: 1.3px solid currentColor; }
+  .vec::after { content: ""; position: absolute; top: -0.09em; right: -1px; width: 0; height: 0; border-style: solid; border-width: 2.6px 0 2.6px 4.2px; border-color: transparent transparent transparent currentColor; }
+  .vw { white-space: nowrap; }
+
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+
+  /* Animations du chapitre 5 : plus larges que la valeur par défaut (260 px) */
+  .anim-wrap.wide{ width:100%; max-width:360px; }
+  .anim-wrap svg{ width:100%; height:auto; display:block; }
+
+  /* Schémas dessinés (remplacent les photos du manuel) */
+  .scene{ position:relative; width:100%; max-width:420px; margin:14px auto; border:1px solid var(--line); background:rgba(0,0,0,0.18); border-radius:12px; overflow:hidden; }
+  .scene svg{ width:100%; height:auto; display:block; }
+  .scene svg.overlay{ position:absolute; inset:0; height:100%; }
+  .scene-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin:14px 0; }
+  .scene-row .scene{ margin:0; max-width:none; display:flex; flex-direction:column; }
+  .scene-cap{ font-family:var(--font-display); color:var(--chalk); font-size:1rem; padding:10px 14px 0; }
+  .scene-foot{ font-size:0.85rem; color:var(--chalk-dim); padding:6px 14px 12px; }
+  .magnets{ flex:1; display:flex; align-items:center; justify-content:center; gap:36px; padding:26px 12px; }
+  .magnet{ display:flex; flex-direction:column; align-items:center; gap:6px; font-size:0.8rem; color:var(--chalk-dim); }
+  .magnet .bar{ display:flex; width:96px; height:26px; border:1.5px solid var(--chalk); border-radius:3px; overflow:hidden; }
+  .magnet .bar span{ flex:1; }
+
+  /* Diagramme objets-interactions */
+  .doi{ display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:0; margin:16px 0 8px; }
+  .doi-node{ border:2px solid; border-radius:999px; padding:8px 20px; font-family:var(--font-display); font-size:1.05rem; }
+  .doi-sys{ border:2px solid var(--chalk); border-radius:4px; padding:8px 16px; text-align:center; line-height:1.3; font-size:0.9rem; }
+  .doi-link{ display:flex; align-items:center; width:80px; color:var(--chalk); font-size:0.8rem; }
+  .doi-link i{ flex:1; border-top:2px solid var(--chalk); }
+  .doi-link.dash i{ border-top-style:dashed; }
+  .doi-legend{ display:flex; justify-content:center; flex-wrap:wrap; gap:6px 24px; font-size:0.82rem; color:var(--chalk-dim); }
+</style>
 <script src="animations-common.js"></script>
 <script src="animations-ch5-2nde.js"></script>
 <script src="modules-common.js"></script>
+<script>
+/* Aperçu uniquement : si l'URL porte un jeton (?…), recharge les fichiers voisins avec ce jeton.
+   Sur le site réel (pas de query string), rien ne change. */
+(function () {
+  var q = location.search || "";
+  window.__ch5Ready = function (fn) {
+    if (typeof initContactForce === "function" && typeof initModeTabs === "function") return fn();
+    if (!q) return;
+    var files = ["animations-common.js", "animations-ch5-2nde.js", "modules-common.js"];
+    var l = document.createElement("link");
+    l.rel = "stylesheet"; l.href = "styles.css" + q;
+    document.head.appendChild(l);
+    (function next(i) {
+      if (i >= files.length) return fn();
+      var s = document.createElement("script");
+      s.src = files[i] + q;
+      s.onload = s.onerror = function () { next(i + 1); };
+      document.head.appendChild(s);
+    })(0);
+  };
+})();
+</script>
 </head>
 <body>
 
@@ -23,6 +86,7 @@
   <div class="badge-inline physique">Physique</div>
   <h1>Chapitre 5 — Modéliser une action mécanique sur un système</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch5-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -52,6 +116,7 @@
     <div class="objectifs-box">
       <span class="box-label">🎯 Objectifs du chapitre</span>
       <ul>
+        <li>Modéliser une action mécanique par une force et distinguer action de contact et action à distance</li>
         <li>Connaître le principe des actions réciproques</li>
         <li>Savoir calculer une force d'interaction gravitationnelle et un poids</li>
         <li>Savoir modéliser l'action d'un fil ou d'un support</li>
@@ -60,25 +125,142 @@
   </section>
 
   <section>
+    <h2>1. Système étudié et extérieur</h2>
+    <div class="scene">
+      <svg id="sysSvgCours" viewBox="0 0 240 170"></svg>
+      <svg class="overlay" viewBox="0 0 240 170">
+        <ellipse cx="128" cy="66" rx="58" ry="38" fill="rgba(232,196,104,0.06)" stroke="#e8c468" stroke-width="1.8" stroke-dasharray="5,3"></ellipse>
+        <text x="128" y="118" font-size="13" font-family="Kalam,cursive" fill="#e8c468" text-anchor="middle">système</text>
+        <text x="8" y="14" font-size="13" font-family="Kalam,cursive" fill="#f2ede1">extérieur</text>
+      </svg>
+    </div>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le <strong>système</strong> est l'objet, ou l'ensemble d'objets, que l'on choisit d'étudier. Tout ce qui n'en fait pas partie forme l'<strong>extérieur</strong>.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Pour simplifier, on représente le système par un <strong>point</strong>.
+    </div>
+    <p class="course-text">
+      Exemple : on étudie le parachutiste et son équipement. L'air, la Terre et tout ce qui n'appartient pas au système forment l'extérieur. L'extérieur peut agir de plusieurs façons sur le système : ce sont des <strong>actions mécaniques</strong>.
+    </p>
+  </section>
+
+  <section>
+    <h2>1a. Action mécanique</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Toute <strong>action mécanique</strong> de l'extérieur sur le système se modélise par une <strong>force</strong>. On représente cette force par un <strong>vecteur</strong>, défini par :
+      <ul style="margin:8px 0 0; padding-left:20px;">
+        <li>une <strong>direction</strong> : la droite le long de laquelle la force agit, sa droite d'action ;</li>
+        <li>un <strong>sens</strong> : l'orientation de la force sur cette droite ;</li>
+        <li>une <strong>norme</strong> : une longueur proportionnelle à la valeur de la force, en newton (N).</li>
+      </ul>
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Construis le vecteur étape par étape : direction, puis sens, puis norme.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="fvS1Cours">1 · Direction</button>
+      <button class="toggle-btn" id="fvS2Cours">2 · Sens</button>
+      <button class="toggle-btn" id="fvS3Cours">3 · Norme</button>
+      <button class="toggle-btn" id="fvFlipCours">⇄ Inverser le sens</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap wide">
+        <svg id="fvSvgCours" viewBox="0 0 240 146"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Valeur de la force (N)</label>
+        <input type="range" id="fvFCours" min="100" max="800" value="400" step="50">
+        <div class="anim-readout" id="fvReadoutCours" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+    </div>
+
+    <div class="anim-zone" style="margin-top:22px;">
+      <div class="anim-wrap" style="width:100%; max-width:200px;">
+        <svg id="paraSvgCours" viewBox="10 14 140 104"></svg>
+      </div>
+      <div class="anim-controls">
+        <p class="course-text" style="margin:0;">
+          Le parachutiste est modélisé par le point M. La Terre agit sur lui : cette action est modélisée par son poids <span class="vw"><span class="vec">P</span></span>. L'air agit aussi sur lui ; cette action est modélisée par la force <span class="vw"><span class="vec">F</span><sub>air/parachutiste</sub></span>.
+        </p>
+      </div>
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Le <strong>point d'application</strong> d'une force est l'endroit où l'on considère qu'elle agit. Lorsque le système est réduit à un point, c'est ce point qui sert de point d'application à toutes les forces.
+    </div>
+    <p class="course-text">
+      En additionnant toutes les forces qui agissent sur le système, on obtient la <strong>force résultante</strong>.
+    </p>
+  </section>
+
+  <section>
+    <h2>1b. Action de contact et action à distance</h2>
+    <div class="scene-row">
+      <div class="scene">
+        <div class="scene-cap">Le vélo de l'adulte tire celui de l'enfant</div>
+        <svg id="bikeSvgCours" viewBox="0 10 240 132"></svg>
+        <div class="scene-foot">Les vélos se touchent par la barre : action de contact.</div>
+      </div>
+      <div class="scene">
+        <div class="scene-cap">L'aimant 2 repousse l'aimant 1</div>
+        <div class="magnets">
+          <div class="magnet"><div class="bar"><span style="background:#0d1512;"></span><span style="background:#d97a63;"></span></div>Aimant 1</div>
+          <div class="magnet"><div class="bar"><span style="background:#d97a63;"></span><span style="background:#0d1512;"></span></div>Aimant 2</div>
+        </div>
+        <div class="scene-foot">Les aimants ne se touchent pas : action à distance.</div>
+      </div>
+    </div>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>action de contact</strong> n'existe que si le système et l'objet extérieur se touchent.<br>
+      Une <strong>action à distance</strong> s'exerce sans que le système et l'objet extérieur se touchent.
+    </div>
+    <p class="course-text">
+      Exemples : le vélo de l'adulte tire le vélo de l'enfant par la barre qui les relie, c'est une action de contact. L'aimant 2 repousse l'aimant 1 sans le toucher, c'est une action à distance.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Le <strong>diagramme objets-interactions</strong> recense toutes les interactions du système avec l'extérieur : un <strong>trait plein</strong> pour une interaction de contact, des <strong>pointillés</strong> pour une interaction à distance. À chaque action subie par le système correspond une force.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">Exemple : les interactions du parachutiste avec la Terre et avec l'air.</p>
+    <div class="doi">
+      <div class="doi-node" style="border-color:var(--coral); color:var(--coral);">Terre</div>
+      <div class="doi-link dash"><span>◀</span><i></i><span>▶</span></div>
+      <div class="doi-sys">Système<br>{parachutiste}</div>
+      <div class="doi-link"><span>◀</span><i></i><span>▶</span></div>
+      <div class="doi-node" style="border-color:var(--teal); color:var(--teal);">Air</div>
+    </div>
+    <div class="doi-legend"><span>pointillés : action à distance</span><span>trait plein : action de contact</span></div>
+  </section>
+
+  <section>
     <h2>2. Le principe des actions réciproques</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Lorsque deux systèmes sont en <strong>interaction</strong>, ils exercent l'un sur l'autre des forces opposées. Ces forces ont la <strong>même droite d'action</strong>, des <strong>sens opposés</strong>, et la <strong>même valeur</strong>.
+      Si un système A agit sur un système B, alors B agit aussi sur A : ils sont en <strong>interaction</strong>. Les deux forces sont opposées : elles ont la <strong>même droite d'action</strong>, la <strong>même valeur</strong> et des <strong>sens contraires</strong>.
     </div>
+    <div class="formula"><span class="vw"><span class="vec">F</span><sub>A/B</sub></span> = −<span class="vw"><span class="vec">F</span><sub>B/A</sub></span></div>
     <p class="course-text">
-      Ce principe est valable aussi bien pour des actions de contact que pour des actions à distance, que les systèmes soient en mouvement ou au repos.
+      Ce principe s'applique à toutes les interactions, de contact comme à distance, que les systèmes bougent ou non.
     </p>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre une interaction de contact et une interaction à distance.</p>
     <div class="toggle-row">
-      <button class="toggle-btn" id="raContactCours">Contact (livre/table)</button>
-      <button class="toggle-btn" id="raDistanceCours">À distance (Terre/Lune)</button>
+      <button class="toggle-btn" id="raContactCours">Contact (livre / table)</button>
+      <button class="toggle-btn" id="raDistanceCours">À distance (Terre / Lune)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="raSvgCours" viewBox="0 0 230 150"></svg>
+      <div class="anim-wrap wide">
+        <svg id="raSvgCours" viewBox="0 20 240 132"></svg>
       </div>
       <div class="anim-controls">
+        <div id="raMWrapCours">
+          <label>Masse du livre (g)</label>
+          <input type="range" id="raMCours" min="100" max="2000" value="1000" step="100">
+        </div>
         <div class="anim-readout" id="raReadoutCours"></div>
       </div>
     </div>
@@ -88,29 +270,29 @@
     <h2>3a. Forces d'interaction gravitationnelle</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Isaac Newton a montré que deux objets s'attirent mutuellement : ils sont en interaction sous l'effet de la <strong>gravitation</strong>. L'interaction gravitationnelle entre deux objets de centres A et B, de masses m<sub>A</sub> et m<sub>B</sub>, distants de d, est modélisée par deux forces attractives F<sub>A/B</sub> et F<sub>B/A</sub>.
+      Deux objets qui ont une masse s'attirent toujours l'un l'autre : c'est l'interaction <strong>gravitationnelle</strong>, décrite par Newton. Pour deux objets de centres A et B, de masses <em>m</em><sub>A</sub> et <em>m</em><sub>B</sub>, séparés d'une distance <em>d</em>, on la modélise par deux forces attractives <span class="vw"><span class="vec">F</span><sub>A/B</sub></span> et <span class="vw"><span class="vec">F</span><sub>B/A</sub></span>.
     </div>
     <p class="course-text">
-      Ces deux forces sont opposées (F<sub>A/B</sub> = −F<sub>B/A</sub>). Elles ont pour points d'application des points différents : celui de F<sub>A/B</sub> est B, celui de F<sub>B/A</sub> est A.
+      Ces deux forces sont opposées (<span class="vw"><span class="vec">F</span><sub>A/B</sub></span> = −<span class="vw"><span class="vec">F</span><sub>B/A</sub></span>). Elles ne s'appliquent pas au même point : <span class="vw"><span class="vec">F</span><sub>A/B</sub></span> s'applique en B, <span class="vw"><span class="vec">F</span><sub>B/A</sub></span> s'applique en A.
     </p>
     <div class="formula">
-      F = G × <span class="frac"><span class="num">m<sub>A</sub> × m<sub>B</sub></span><span class="den">d²</span></span>
+      <em>F</em> = <em>G</em> × <span class="frac"><span class="num"><em>m</em><sub>A</sub> × <em>m</em><sub>B</sub></span><span class="den"><em>d</em>²</span></span>
     </div>
     <p class="course-text">
-      Avec trois chiffres significatifs, G = 6,67×10⁻¹¹ N·m²·kg⁻².
+      <em>F</em> en newton (N), <em>m</em><sub>A</sub> et <em>m</em><sub>B</sub> en kilogramme (kg), <em>d</em> en mètre (m). Avec trois chiffres significatifs, <em>G</em> = 6,67 × 10⁻¹¹ N·m²·kg⁻².
     </p>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle les masses et la distance : observe la force se calculer.</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:230px;">
-        <svg id="gfSvgCours" viewBox="0 0 230 130"></svg>
+      <div class="anim-wrap wide">
+        <svg id="gfSvgCours" viewBox="0 8 250 120"></svg>
       </div>
       <div class="anim-controls">
-        <label>Masse de A (×10²⁴ kg)</label>
+        <label>Masse de A (× 10²⁴ kg)</label>
         <input type="range" id="gfMACours" min="1" max="10" value="6" step="1">
-        <label>Masse de B (×10²⁴ kg)</label>
+        <label>Masse de B (× 10²⁴ kg)</label>
         <input type="range" id="gfMBCours" min="1" max="10" value="1" step="1">
-        <label>Distance d (×10⁶ m)</label>
+        <label>Distance <em>d</em> (× 10⁶ m)</label>
         <input type="range" id="gfDCours" min="1" max="50" value="10" step="1">
         <div class="anim-readout" id="gfReadoutCours"></div>
       </div>
@@ -121,18 +303,18 @@
     <h2>3b. Poids d'un objet</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Le poids P<sub>A</sub> d'un objet à la surface d'un astre A est assimilé à la force d'interaction gravitationnelle exercée par cet astre sur cet objet.
+      Le poids <em>P</em><sub>A</sub> d'un objet situé à la surface d'un astre A correspond, en bonne approximation, à la force gravitationnelle que l'astre exerce sur l'objet.
     </div>
-    <div class="formula">P<sub>A</sub> = G × <span class="frac"><span class="num">m<sub>A</sub> × m<sub>objet</sub></span><span class="den">R<sub>A</sub>²</span></span></div>
+    <div class="formula"><em>P</em><sub>A</sub> = <em>G</em> × <span class="frac"><span class="num"><em>m</em><sub>A</sub> × <em>m</em><sub>objet</sub></span><span class="den"><em>R</em><sub>A</sub>²</span></span></div>
     <p class="course-text">
-      L'intensité de la pesanteur g dépend de l'astre sur lequel se trouve l'objet, notée g<sub>A</sub> : P<sub>A</sub> = m<sub>objet</sub> × g<sub>A</sub>, avec g<sub>A</sub> = G × m<sub>A</sub>/R<sub>A</sub>².
+      On note <em>g</em><sub>A</sub> l'intensité de la pesanteur à la surface de l'astre A ; elle change d'un astre à l'autre : <em>P</em><sub>A</sub> = <em>m</em><sub>objet</sub> × <em>g</em><sub>A</sub>, avec <em>g</em><sub>A</sub> = <em>G</em> × <em>m</em><sub>A</sub> / <em>R</em><sub>A</sub>².
     </p>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      Le poids P d'un système de masse m est P = mg. Le vecteur g est vertical, dirigé vers le bas ; P et g dépendent du lieu où se trouve le système.
+      Un système de masse <em>m</em> a pour poids <span class="vec">P</span> = <em>m</em><span class="vec">g</span>. Le vecteur <span class="vec">g</span> est vertical et orienté vers le bas ; <span class="vec">P</span> et <span class="vec">g</span> varient selon l'endroit où se trouve le système.
     </div>
     <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
-      g<sub>Terre</sub> = 9,8 N·kg⁻¹, g<sub>Mars</sub> = 3,7 N·kg⁻¹, g<sub>Lune</sub> = 1,6 N·kg⁻¹. La masse d'un astronaute est la même sur la Terre et sur la Lune, mais la valeur de son poids est différente.
+      <em>g</em><sub>Terre</sub> = 9,8 N·kg⁻¹, <em>g</em><sub>Mars</sub> = 3,7 N·kg⁻¹, <em>g</em><sub>Lune</sub> = 1,6 N·kg⁻¹. Un astronaute garde la même masse sur la Terre et sur la Lune, mais son poids n'a pas la même valeur.
     </p>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis un astre et une masse : observe le poids se calculer.</p>
@@ -142,8 +324,8 @@
       <button class="toggle-btn" id="wcLuneCours">Lune</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:230px;">
-        <svg id="wcSvgCours" viewBox="0 0 230 190"></svg>
+      <div class="anim-wrap wide">
+        <svg id="wcSvgCours" viewBox="0 0 240 160"></svg>
       </div>
       <div class="anim-controls">
         <label>Masse de l'objet (kg)</label>
@@ -156,27 +338,29 @@
   <section>
     <h2>3c. Force exercée par un support ou par un fil</h2>
     <p class="course-text">
-      Lorsque le système étudié est maintenu par un fil ou posé sur un support, ce fil ou ce support exerce une <strong>action de contact</strong> sur le système.
+      Un fil qui retient le système, ou un support sur lequel il est posé, agit sur lui par une <strong>action de contact</strong>.
     </p>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      L'action d'un <strong>fil</strong> a pour direction celle du fil, et pour sens du système vers le fil. Lorsque le système n'est soumis qu'à son poids et à l'action d'un <strong>support</strong>, et qu'il est immobile, F<sub>support/système</sub> = −P.
+      La force exercée par un <strong>fil</strong> est dirigée le long du fil, du système vers le fil. Si le système est immobile et ne subit que son poids et l'action d'un <strong>support</strong>, alors <span class="vw"><span class="vec">F</span><sub>support/système</sub></span> = −<span class="vec">P</span>.
     </div>
     <div class="warning-box">
       <span class="box-label">⚠️ Attention</span>
-      En l'absence de frottement, l'action du support est perpendiculaire au support. Avec des frottements, ce n'est plus le cas (par exemple sur un support incliné).
+      Sans frottement, la force exercée par le support est perpendiculaire à sa surface. Avec des frottements, ce n'est en général plus le cas, par exemple sur un support incliné.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre l'action d'un fil et celle d'un support.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Change de situation et observe la flèche jaune.</p>
     <div class="toggle-row">
       <button class="toggle-btn" id="cfFilCours">Fil</button>
       <button class="toggle-btn" id="cfSupportCours">Support</button>
+      <button class="toggle-btn" id="cfInclineCours">Support incliné</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="cfSvgCours" viewBox="0 0 220 160"></svg>
+      <div class="anim-wrap wide">
+        <svg id="cfSvgCours" viewBox="0 0 240 150"></svg>
       </div>
       <div class="anim-controls">
+        <button class="toggle-btn" id="cfOptionCours">▶ Faire osciller</button>
         <div class="anim-readout" id="cfReadoutCours"></div>
       </div>
     </div>
@@ -193,41 +377,53 @@
     <h2>Cours à trous</h2>
     <div class="course-text" id="courseText">
 
+      <h3>1. Système étudié et extérieur</h3>
+      <p>
+        Tout ce qui ne fait pas partie du système forme l'<input class="blank" data-answer="extérieur|exterieur" size="14">. Pour simplifier, on représente le système par un <input class="blank" data-answer="point" size="10">.
+      </p>
+
+      <h3>1a. Action mécanique</h3>
+      <p>
+        Une action mécanique se modélise par une <input class="blank" data-answer="force" size="10">, représentée par un <input class="blank" data-answer="vecteur" size="12">. Ce vecteur a une direction, un <input class="blank" data-answer="sens" size="10"> et une norme proportionnelle à la valeur de la force, exprimée en <input class="blank" data-answer="newton|newtons|N" size="12">.
+      </p>
+
+      <h3>1b. Action de contact et action à distance</h3>
+      <p>
+        Une action qui s'exerce sans que les objets se touchent est une action à <input class="blank" data-answer="distance" size="12">. Dans un diagramme objets-interactions, elle est représentée par des <input class="blank" data-answer="pointillés|pointilles" size="14">.
+      </p>
+
       <h3>2. Le principe des actions réciproques</h3>
       <p>
-        Lorsque deux systèmes sont en interaction, ils exercent l'un sur l'autre des forces <input class="blank" data-answer="opposées|opposees" size="16">. Ces forces ont la même <input class="blank" data-answer="droite d'action|droite daction" size="18">, des sens <input class="blank" data-answer="opposés|opposes" size="14">, et la même <input class="blank" data-answer="valeur" size="12">.
+        Si A agit sur B, B agit aussi sur A. Les deux forces sont <input class="blank" data-answer="opposées|opposees" size="16"> : elles ont la même <input class="blank" data-answer="droite d'action|droite daction" size="18">, la même <input class="blank" data-answer="valeur" size="12"> et des sens <input class="blank" data-answer="contraires|opposés|opposes" size="14">.
       </p>
 
       <h3>3a. Forces d'interaction gravitationnelle</h3>
       <p>
-        Isaac Newton a montré que deux objets s'attirent mutuellement : c'est l'interaction <input class="blank" data-answer="gravitationnelle" size="18">.
+        Deux objets qui ont une masse s'attirent toujours l'un l'autre : c'est l'interaction <input class="blank" data-answer="gravitationnelle" size="18">.
       </p>
-      <div class="formula">F = G × <span class="frac"><span class="num">m<sub>A</sub> × m<sub>B</sub></span><span class="den">d²</span></span></div>
+      <div class="formula"><em>F</em> = <em>G</em> × <span class="frac"><span class="num"><em>m</em><sub>A</sub> × <em>m</em><sub>B</sub></span><span class="den"><em>d</em>²</span></span></div>
       <p>
-        Les points d'application de F<sub>A/B</sub> et F<sub>B/A</sub> sont <input class="blank" data-answer="différents|differents" size="16">.
+        Les deux forces <span class="vw"><span class="vec">F</span><sub>A/B</sub></span> et <span class="vw"><span class="vec">F</span><sub>B/A</sub></span> ne s'appliquent pas au même <input class="blank" data-answer="point" size="10">.
       </p>
 
       <h3>3b. Poids d'un objet</h3>
       <p>
-        Le poids P<sub>A</sub> d'un objet à la surface d'un astre A est assimilé à la force d'interaction <input class="blank" data-answer="gravitationnelle" size="18"> exercée par cet astre sur cet objet.
+        Le poids d'un objet à la surface d'un astre correspond à la force <input class="blank" data-answer="gravitationnelle" size="18"> que l'astre exerce sur l'objet.
       </p>
-      <div class="formula">P = m × g</div>
+      <div class="formula"><em>P</em> = <em>m</em> × <em>g</em></div>
       <p>
-        Le vecteur g est <input class="blank" data-answer="vertical" size="14">, dirigé vers le <input class="blank" data-answer="bas" size="10">. P et g dépendent du <input class="blank" data-answer="lieu" size="10"> où se trouve le système.
-      </p>
-      <p>
-        L'intensité de la pesanteur g dépend de l'<input class="blank" data-answer="astre" size="12"> sur lequel se trouve l'objet.
+        Le vecteur <span class="vec">g</span> est <input class="blank" data-answer="vertical" size="14"> et orienté vers le <input class="blank" data-answer="bas" size="10">. L'intensité de la pesanteur change d'un <input class="blank" data-answer="astre" size="12"> à l'autre ; la <input class="blank" data-answer="masse" size="10">, elle, reste la même.
       </p>
 
       <h3>3c. Force exercée par un support ou par un fil</h3>
       <p>
-        Le fil ou le support exerce une action de <input class="blank" data-answer="contact" size="14"> sur le système.
+        Un fil ou un support agit sur le système par une action de <input class="blank" data-answer="contact" size="14">.
       </p>
       <p>
-        L'action d'un fil a pour direction celle du fil, et pour sens du système vers le <input class="blank" data-answer="fil" size="10">.
+        La force exercée par un fil est dirigée le long du fil, du système vers le <input class="blank" data-answer="fil" size="10">.
       </p>
       <p>
-        En l'absence de frottement, l'action du support est <input class="blank" data-answer="perpendiculaire" size="18"> au support.
+        Sans frottement, la force exercée par le support est <input class="blank" data-answer="perpendiculaire" size="18"> à sa surface.
       </p>
 
     </div>
@@ -237,17 +433,56 @@
   </section>
 
   <section>
+    <h2>Construire le vecteur force</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Direction, puis sens, puis norme.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="fvS1">1 · Direction</button>
+      <button class="toggle-btn" id="fvS2">2 · Sens</button>
+      <button class="toggle-btn" id="fvS3">3 · Norme</button>
+      <button class="toggle-btn" id="fvFlip">⇄ Inverser le sens</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap wide">
+        <svg id="fvSvg" viewBox="0 0 240 146"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Valeur de la force (N)</label>
+        <input type="range" id="fvF" min="100" max="800" value="400" step="50">
+        <div class="anim-readout" id="fvReadout" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actForceVector"></div></div>
+  </section>
+
+  <section>
+    <h2>Contact ou distance ?</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Un livre est posé sur une table. On néglige l'action de l'air.</p>
+    <div class="doi">
+      <div class="doi-node" style="border-color:var(--coral); color:var(--coral);">Terre</div>
+      <div class="doi-link dash"><span>◀</span><i></i><span>▶</span></div>
+      <div class="doi-sys">Système<br>{livre}</div>
+      <div class="doi-link"><span>◀</span><i></i><span>▶</span></div>
+      <div class="doi-node" style="border-color:var(--teal); color:var(--teal);">Table</div>
+    </div>
+    <div class="activity-block"><div id="actInteractions"></div></div>
+  </section>
+
+  <section>
     <h2>Principe des actions réciproques</h2>
     <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre une interaction de contact et une interaction à distance.</p>
     <div class="toggle-row">
-      <button class="toggle-btn" id="raContact">Contact (livre/table)</button>
-      <button class="toggle-btn" id="raDistance">À distance (Terre/Lune)</button>
+      <button class="toggle-btn" id="raContact">Contact (livre / table)</button>
+      <button class="toggle-btn" id="raDistance">À distance (Terre / Lune)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="raSvg" viewBox="0 0 230 150"></svg>
+      <div class="anim-wrap wide">
+        <svg id="raSvg" viewBox="0 20 240 132"></svg>
       </div>
       <div class="anim-controls">
+        <div id="raMWrap">
+          <label>Masse du livre (g)</label>
+          <input type="range" id="raM" min="100" max="2000" value="1000" step="100">
+        </div>
         <div class="anim-readout" id="raReadout"></div>
       </div>
     </div>
@@ -258,15 +493,15 @@
     <h2>Calculateur de force gravitationnelle</h2>
     <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle les masses et la distance : observe la force se calculer.</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:230px;">
-        <svg id="gfSvg" viewBox="0 0 230 130"></svg>
+      <div class="anim-wrap wide">
+        <svg id="gfSvg" viewBox="0 8 250 120"></svg>
       </div>
       <div class="anim-controls">
-        <label>Masse de A (×10²⁴ kg)</label>
+        <label>Masse de A (× 10²⁴ kg)</label>
         <input type="range" id="gfMA" min="1" max="10" value="6" step="1">
-        <label>Masse de B (×10²⁴ kg)</label>
+        <label>Masse de B (× 10²⁴ kg)</label>
         <input type="range" id="gfMB" min="1" max="10" value="1" step="1">
-        <label>Distance d (×10⁶ m)</label>
+        <label>Distance <em>d</em> (× 10⁶ m)</label>
         <input type="range" id="gfD" min="1" max="50" value="10" step="1">
         <div class="anim-readout" id="gfReadout"></div>
       </div>
@@ -283,8 +518,8 @@
       <button class="toggle-btn" id="wcLune">Lune</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:230px;">
-        <svg id="wcSvg" viewBox="0 0 230 190"></svg>
+      <div class="anim-wrap wide">
+        <svg id="wcSvg" viewBox="0 0 240 160"></svg>
       </div>
       <div class="anim-controls">
         <label>Masse de l'objet (kg)</label>
@@ -297,16 +532,18 @@
 
   <section>
     <h2>Force exercée par un fil ou un support</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre l'action d'un fil et celle d'un support.</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Change de situation et observe la flèche jaune.</p>
     <div class="toggle-row">
       <button class="toggle-btn" id="cfFil">Fil</button>
       <button class="toggle-btn" id="cfSupport">Support</button>
+      <button class="toggle-btn" id="cfIncline">Support incliné</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="cfSvg" viewBox="0 0 220 160"></svg>
+      <div class="anim-wrap wide">
+        <svg id="cfSvg" viewBox="0 0 240 150"></svg>
       </div>
       <div class="anim-controls">
+        <button class="toggle-btn" id="cfOption">▶ Faire osciller</button>
         <div class="anim-readout" id="cfReadout"></div>
       </div>
     </div>
@@ -331,10 +568,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Actions réciproques</td><td style="padding:10px 8px; color:var(--yellow);">F<sub>A/B</sub> = −F<sub>B/A</sub></td><td style="padding:10px 8px; color:var(--chalk-dim);">même droite d'action, sens opposés, même valeur</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Force gravitationnelle</td><td style="padding:10px 8px; color:var(--yellow);">F = G × m<sub>A</sub>m<sub>B</sub>/d²</td><td style="padding:10px 8px; color:var(--chalk-dim);">G = 6,67×10⁻¹¹ N·m²·kg⁻²</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Poids</td><td style="padding:10px 8px; color:var(--yellow);">P = m × g</td><td style="padding:10px 8px; color:var(--chalk-dim);">g dépend de l'astre (Terre 9,8 ; Mars 3,7 ; Lune 1,6)</td></tr>
-          <tr><td style="padding:10px 8px;">Action fil/support</td><td style="padding:10px 8px; color:var(--yellow);">F<sub>support/système</sub> = −P (sans autre force)</td><td style="padding:10px 8px; color:var(--chalk-dim);">perpendiculaire au support si pas de frottement</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Action mécanique</td><td style="padding:10px 8px; color:var(--yellow);">force → vecteur</td><td style="padding:10px 8px; color:var(--chalk-dim);">direction, sens, norme (valeur en N) ; appliquée au point qui modélise le système</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Contact / distance</td><td style="padding:10px 8px; color:var(--yellow);">trait plein / pointillés</td><td style="padding:10px 8px; color:var(--chalk-dim);">notation du diagramme objets-interactions</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Actions réciproques</td><td style="padding:10px 8px; color:var(--yellow);"><span class="vw"><span class="vec">F</span><sub>A/B</sub></span> = −<span class="vw"><span class="vec">F</span><sub>B/A</sub></span></td><td style="padding:10px 8px; color:var(--chalk-dim);">même droite d'action, même valeur, sens contraires</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Force gravitationnelle</td><td style="padding:10px 8px; color:var(--yellow);"><em>F</em> = <em>G</em> × <em>m</em><sub>A</sub><em>m</em><sub>B</sub> / <em>d</em>²</td><td style="padding:10px 8px; color:var(--chalk-dim);"><em>G</em> = 6,67 × 10⁻¹¹ N·m²·kg⁻²</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Poids</td><td style="padding:10px 8px; color:var(--yellow);"><em>P</em> = <em>m</em> × <em>g</em></td><td style="padding:10px 8px; color:var(--chalk-dim);"><em>g</em> dépend de l'astre (Terre 9,8 ; Mars 3,7 ; Lune 1,6 N·kg⁻¹)</td></tr>
+          <tr><td style="padding:10px 8px;">Action fil / support</td><td style="padding:10px 8px; color:var(--yellow);"><span class="vw"><span class="vec">F</span><sub>support/système</sub></span> = −<span class="vec">P</span></td><td style="padding:10px 8px; color:var(--chalk-dim);">système immobile, sans autre force ; perpendiculaire au support sans frottement</td></tr>
         </tbody>
       </table>
     </div>
@@ -342,9 +581,9 @@
     <div class="method-box" style="margin-top:20px;">
       <span class="box-label">🔧 Comparer poids et masse</span>
       <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li>La <strong>masse</strong> d'un objet ne change pas d'un astre à l'autre</li>
-        <li>Le <strong>poids</strong> dépend de g, qui varie selon l'astre : il change donc selon le lieu</li>
-        <li>Un astronaute a la même masse sur la Terre et sur la Lune, mais un poids différent</li>
+        <li>La <strong>masse</strong> d'un objet est la même sur tous les astres</li>
+        <li>Le <strong>poids</strong> dépend de <em>g</em>, qui varie d'un astre à l'autre : il dépend donc du lieu</li>
+        <li>Un astronaute garde la même masse sur la Terre et sur la Lune, mais pas le même poids</li>
       </ul>
     </div>
   </section>
@@ -355,6 +594,7 @@
 <footer>Chapitre 5 — Modéliser une action mécanique sur un système (2nde).</footer>
 
 <script>
+__ch5Ready(function () {
 /* ---------- Correction du texte à trous (mode entraînement) ---------- */
 function normalize(str) {
   return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -383,19 +623,48 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   if (correct === blanks.length) ProgressStore.record("ch5-2nde", "trous-complet", true);
 });
 
+/* ---------- Schémas dessinés ---------- */
+ch5DrawSkydiver("sysSvgCours");
+ch5DrawParachute("paraSvgCours");
+ch5DrawBikes("bikeSvgCours");
+
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initReciprocalActions({ svgId: "raSvgCours", readoutId: "raReadoutCours", btnContactId: "raContactCours", btnDistanceId: "raDistanceCours" });
+initForceVector({ svgId: "fvSvgCours", readoutId: "fvReadoutCours", btnStep1Id: "fvS1Cours", btnStep2Id: "fvS2Cours", btnStep3Id: "fvS3Cours", btnFlipId: "fvFlipCours", fRangeId: "fvFCours" });
+initReciprocalActions({ svgId: "raSvgCours", readoutId: "raReadoutCours", btnContactId: "raContactCours", btnDistanceId: "raDistanceCours", massRangeId: "raMCours", massWrapId: "raMWrapCours" });
 initGravitationalForce({ svgId: "gfSvgCours", mARangeId: "gfMACours", mBRangeId: "gfMBCours", dRangeId: "gfDCours", readoutId: "gfReadoutCours" });
 initWeightCalculator({ svgId: "wcSvgCours", mRangeId: "wcMCours", readoutId: "wcReadoutCours", btnTerreId: "wcTerreCours", btnMarsId: "wcMarsCours", btnLuneId: "wcLuneCours" });
-initContactForce({ svgId: "cfSvgCours", readoutId: "cfReadoutCours", btnFilId: "cfFilCours", btnSupportId: "cfSupportCours" });
+initContactForce({ svgId: "cfSvgCours", readoutId: "cfReadoutCours", btnFilId: "cfFilCours", btnSupportId: "cfSupportCours", btnInclineId: "cfInclineCours", btnOptionId: "cfOptionCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initReciprocalActions({ svgId: "raSvg", readoutId: "raReadout", btnContactId: "raContact", btnDistanceId: "raDistance" });
+initForceVector({ svgId: "fvSvg", readoutId: "fvReadout", btnStep1Id: "fvS1", btnStep2Id: "fvS2", btnStep3Id: "fvS3", btnFlipId: "fvFlip", fRangeId: "fvF" });
+initReciprocalActions({ svgId: "raSvg", readoutId: "raReadout", btnContactId: "raContact", btnDistanceId: "raDistance", massRangeId: "raM", massWrapId: "raMWrap" });
 initGravitationalForce({ svgId: "gfSvg", mARangeId: "gfMA", mBRangeId: "gfMB", dRangeId: "gfD", readoutId: "gfReadout" });
 initWeightCalculator({ svgId: "wcSvg", mRangeId: "wcM", readoutId: "wcReadout", btnTerreId: "wcTerre", btnMarsId: "wcMars", btnLuneId: "wcLune" });
-initContactForce({ svgId: "cfSvg", readoutId: "cfReadout", btnFilId: "cfFil", btnSupportId: "cfSupport" });
+initContactForce({ svgId: "cfSvg", readoutId: "cfReadout", btnFilId: "cfFil", btnSupportId: "cfSupport", btnInclineId: "cfIncline", btnOptionId: "cfOption" });
 
 /* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actForceVector", chapterId: "ch5-2nde", activityId: "qcm-force-vector",
+  prompt: "Avec l'échelle 1 graduation ↔ 100 N, combien de graduations mesure le vecteur représentant une force de 350 N ?",
+  options: [
+    { text: "3,5 graduations", correct: true },
+    { text: "35 graduations", correct: false },
+    { text: "0,35 graduation", correct: false }
+  ],
+  explanation: "La longueur est proportionnelle à la valeur : 350 N ÷ 100 N = 3,5 graduations."
+});
+
+initQCM({
+  containerId: "actInteractions", chapterId: "ch5-2nde", activityId: "qcm-interactions",
+  prompt: "Dans le diagramme ci-dessus, quel type d'action la table exerce-t-elle sur le livre ?",
+  options: [
+    { text: "Une action de contact (trait plein)", correct: true },
+    { text: "Une action à distance (pointillés)", correct: false },
+    { text: "Aucune action : seule la Terre agit sur le livre", correct: false }
+  ],
+  explanation: "Le livre touche la table : c'est une action de contact, notée par un trait plein. La Terre agit à distance, d'où les pointillés."
+});
+
 initQCM({
   containerId: "actReciprocalActions", chapterId: "ch5-2nde", activityId: "qcm-reciprocal-actions",
   prompt: "Deux systèmes sont en interaction. Que peut-on dire des deux forces qu'ils exercent l'un sur l'autre ?",
@@ -409,9 +678,9 @@ initQCM({
 
 initEstimation({
   containerId: "actGravitationalForce", chapterId: "ch5-2nde", activityId: "est-gravitational-force",
-  prompt: "Avec m_A = 6×10²⁴ kg, m_B = 1×10²⁴ kg, d = 10×10⁶ m et G = 6,67×10⁻¹¹ N·m²·kg⁻², la force gravitationnelle F vaut environ 4×10²⁴ N. Quelle est la puissance de 10 de cette valeur (l'exposant) ?",
+  prompt: "Avec m_A = 6 × 10²⁴ kg, m_B = 1 × 10²⁴ kg, d = 10 × 10⁶ m et G = 6,67 × 10⁻¹¹ N·m²·kg⁻², la force gravitationnelle F vaut environ 4 × 10²⁴ N. Quelle est la puissance de 10 de cette valeur (l'exposant) ?",
   answer: 24, tolerance: 0, unit: "",
-  explanation: "F = G × mA×mB/d² = 6,67×10⁻¹¹ × 6×10²⁴ × 1×10²⁴ / (10×10⁶)² ≈ 4×10²⁴ N."
+  explanation: "F = G × mA × mB / d² = 6,67 × 10⁻¹¹ × 6 × 10²⁴ × 1 × 10²⁴ / (10 × 10⁶)² ≈ 4,00 × 10²⁴ N."
 });
 
 initEstimation({
@@ -430,7 +699,8 @@ initVraiFaux({
 
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch5-2nde");
-initProgressBar("ch5-2nde", 5); // texte à trous complet + 4 activités liées aux animations
+initProgressBar("ch5-2nde", 7); // texte à trous complet + 6 activités
+});
 </script>
 </body>
 </html>
