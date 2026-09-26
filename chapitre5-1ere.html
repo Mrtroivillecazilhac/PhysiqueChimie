@@ -10,24 +10,40 @@
 <script src="modules-common.js"></script>
 <style>
   .big-equation{
-    text-align:center; font-family:var(--font-body); font-size:1.4rem;
+    text-align:center; font-family:var(--font-body); font-size:1.3rem;
     background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:12px;
-    padding:16px; margin-bottom:16px; letter-spacing:0.02em;
+    padding:14px; margin-bottom:16px; letter-spacing:0.02em;
   }
-  .big-equation .coef{
-    display:inline-flex; align-items:center; justify-content:center;
-    width:24px; height:24px; border-radius:50%;
-    background:var(--yellow); color:var(--board);
-    font-weight:800; font-size:0.7em; vertical-align:middle;
+  .t-titre{ color:var(--yellow); }
+  .t-titrant{ color:var(--teal); }
+  /* Les panneaux remplis par animations-ch5.js sont dimensionnés pour la
+     projection (1920×1080) : on les ramène à l'échelle du site. */
+  .ch5-panel{ zoom:0.52; }
+  .ch5-bench{ display:flex; flex-wrap:wrap; gap:28px; align-items:center; justify-content:center; }
+  .ch5-bench svg.bench{ width:300px; max-width:100%; height:auto; flex:none; }
+  .ch5-bench svg.micro{ width:340px; max-width:100%; height:auto; flex:none; }
+  .ch5-side{ flex:1; min-width:280px; display:flex; flex-direction:column; gap:14px; }
+  .ch5-btns{ display:flex; flex-wrap:wrap; gap:8px; }
+  .ch5-btn{
+    font-family:var(--font-display); font-size:1rem; font-weight:700;
+    background:transparent; color:var(--chalk); border:1.5px solid rgba(242,237,225,0.35);
+    border-radius:10px; padding:8px 16px; cursor:pointer;
   }
-  .adv-table{ width:100%; border-collapse:collapse; margin-top:14px; font-size:0.82rem; }
-  .adv-table th, .adv-table td{
-    border:1px solid var(--line); padding:7px 8px; text-align:center; color:var(--chalk-dim);
+  .ch5-btn.main{ background:var(--yellow); color:var(--board); border-color:transparent; }
+  .ch5-btn.alt{ background:var(--teal); color:var(--board); border-color:transparent; }
+  .ch5-btn.ghost{ color:var(--chalk-dim); border-color:var(--line); }
+  .ch5-btn.starch{ background:rgba(58,66,150,0.18); }
+  .ch5-btn:disabled{ opacity:.4; cursor:default; }
+  .ch5-vb{ font-family:var(--font-display); font-size:1.8rem; }
+  .ch5-box{ border:1px solid var(--line); background:rgba(0,0,0,0.2); border-radius:12px; padding:14px 18px; }
+  .part-list{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
+  .part-list button{
+    font-family:var(--font-display); font-size:1rem; text-align:left; color:var(--chalk-dim);
+    background:rgba(0,0,0,0.2); border:1.5px solid rgba(242,237,225,0.16); border-radius:10px; padding:8px 12px; cursor:pointer;
   }
-  .adv-table th{ color:var(--chalk); font-family:var(--font-display); font-weight:400; }
-  .adv-table tr.row-active{ background:rgba(232,196,104,0.15); }
-  .adv-table tr.row-active td{ color:var(--chalk); font-weight:700; }
-  .adv-table tr.row-active td:first-child{ border-left:3px solid var(--yellow); }
+  .avant-apres{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:12px 0; }
+  .avant-apres > div{ border:1px solid var(--line); background:rgba(0,0,0,0.18); border-radius:10px; padding:12px 14px; line-height:1.5; }
+  .avant-apres .dot{ display:inline-block; width:16px; height:16px; border-radius:50%; vertical-align:-2px; margin-right:8px; border:1.5px solid var(--chalk-dim); }
 </style>
 </head>
 <body>
@@ -81,14 +97,15 @@
   </section>
 
   <section>
-    <h2>a. Les dosages</h2>
+    <h2>1. a. Les dosages</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Un dosage permet de déterminer la quantité de <strong>matière</strong> ou la <strong>concentration</strong> d'une espèce chimique dissoute dans une solution.
+      Un dosage permet de déterminer la quantité de <strong>matière</strong> ou la <strong>concentration</strong> d'une espèce chimique dissoute dans une solution. Un dosage par titrage, ou <strong>titrage</strong>, met en jeu une réaction chimique <strong>totale</strong> et <strong>rapide</strong>.
     </div>
-    <p class="course-text">
-      Un dosage par titrage est une technique de dosage mettant en jeu une réaction chimique <strong>totale</strong> et <strong>rapide</strong>.
-    </p>
+    <div class="avant-apres">
+      <div><strong style="color:var(--coral)">Titrages</strong> — <strong>destructifs</strong> : la réaction chimique consomme l'espèce à doser.</div>
+      <div><strong style="color:var(--teal)">Dosages par étalonnage</strong> — <strong>non destructifs</strong> : aucune réaction, l'espèce à doser demeure intacte.</div>
+    </div>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
       Les dosages par étalonnage diffèrent des dosages par titrage : aucune <strong>réaction chimique</strong> n'est nécessaire pour les réaliser.
@@ -99,68 +116,114 @@
     <h2>b. Réaction support d'un titrage</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Lors d'un titrage, le réactif <strong>titré</strong> A, dont on cherche à déterminer la concentration C<sub>A</sub>, réagit avec le réactif <strong>titrant</strong> B de concentration C<sub>B</sub> connue.
+      Lors d'un titrage, le <strong class="t-titre">réactif titré A</strong>, dont on cherche à déterminer la concentration C<sub>A</sub>, réagit avec le <strong class="t-titrant">réactif titrant B</strong> de concentration C<sub>B</sub> connue.
     </div>
-    <div class="formula">a A + b B → c C + d D</div>
+    <div class="formula" style="color:var(--chalk)"><span class="t-titre"><em>a</em> A</span> + <span class="t-titrant"><em>b</em> B</span> → <em>c</em> C + <em>d</em> D</div>
   </section>
 
   <section>
-    <h2>c. Équivalence d'un titrage</h2>
-    <p class="course-text">
-      Au cours d'un titrage, le réactif <strong>titrant</strong> est versé jusqu'à ce que le réactif <strong>titré</strong> ait totalement réagi : l'<strong>équivalence</strong> est alors atteinte. Elle correspond à un mélange <strong>stœchiométrique</strong> des réactifs titré et titrant.
-    </p>
+    <h2>c. Dispositif de titrage</h2>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique sur un élément du montage ou sur son nom.</p>
+    <div class="ch5-bench">
+      <svg id="setupSvg" class="bench" viewBox="0 0 420 540"></svg>
+      <div class="ch5-side">
+        <div class="part-list" id="setupList">
+          <button data-part="burette">Burette graduée</button>
+          <button data-part="potence">Potence</button>
+          <button data-part="erlen">Erlenmeyer</button>
+          <button data-part="barreau">Barreau aimanté</button>
+          <button data-part="agitateur">Agitateur magnétique</button>
+        </div>
+        <div class="ch5-box"><div class="ch5-panel" id="setupInfo" style="min-height:200px;"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. a. Équivalence d'un titrage</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'<strong>équivalence</strong> d'un titrage est atteinte lorsqu'on a réalisé un mélange <strong>stœchiométrique</strong> des réactifs titré et titrant. Les deux réactifs sont alors totalement consommés.
+    </div>
     <div class="warning-box">
       <span class="box-label">⚠️ Attention</span>
-      Avant l'équivalence, le réactif <strong>titrant</strong> est totalement consommé : il est le réactif limitant. Après l'équivalence, le réactif <strong>titré</strong> est totalement consommé : il devient le réactif limitant. À l'équivalence, il y a <strong>changement de réactif limitant</strong>.
+      Avant l'équivalence, le réactif <strong class="t-titrant">titrant</strong> est totalement consommé : il est le réactif limitant. Après l'équivalence, le réactif <strong class="t-titre">titré</strong> est totalement consommé : il devient le réactif limitant. À l'équivalence, il y a <strong>changement de réactif limitant</strong>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Ouvre le robinet, puis termine goutte à goutte. Essaie ensuite avec l'empois d'amidon.</p>
+    <div class="big-equation">
+      <span class="t-titre">I₂</span> + <span class="t-titrant">2 S₂O₃²⁻</span> → 2 I⁻ + S₄O₆²⁻
+      <div style="font-size:0.8rem; color:var(--chalk-dim); margin-top:6px;">V<sub>A</sub> = 20,0 mL de diiode · C<sub>B</sub> = 5,0 × 10⁻² mol·L⁻¹</div>
+    </div>
+    <div class="ch5-bench">
+      <svg id="benchSvg" class="bench" viewBox="0 0 420 540"></svg>
+      <div class="ch5-side">
+        <div class="ch5-btns">
+          <button class="ch5-btn main" id="benchOpen">🔓 Ouvrir le robinet</button>
+          <button class="ch5-btn" id="benchDrop">💧 1 goutte</button>
+          <button class="ch5-btn" id="benchMl">+ 1 mL</button>
+          <button class="ch5-btn ghost" id="benchReset">↺ Remplir</button>
+          <button class="ch5-btn starch" id="benchStarch">+ Empois d'amidon</button>
+        </div>
+        <div class="ch5-vb" id="benchVB"></div>
+        <div class="ch5-panel" id="benchStatus" style="font-size:30px; line-height:1.45; min-height:150px;"></div>
+        <div class="ch5-box"><div class="ch5-panel" id="benchBars" style="display:flex; flex-direction:column; gap:14px;"></div></div>
+      </div>
     </div>
   </section>
 
   <section>
-    <h2>d. Titrages colorimétriques</h2>
+    <h2>Qui est limitant, et quand ?</h2>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Déplace le curseur : n₀(I₂) = 0,50 mmol, C<sub>B</sub> = 5,0 × 10⁻² mol·L⁻¹.</p>
+    <svg id="graphSvg" viewBox="0 0 620 380" style="width:100%; max-width:680px; height:auto; display:block; margin:0 auto;"></svg>
+    <div class="anim-controls" style="max-width:680px; margin:0 auto;">
+      <label>Volume versé V<sub>B</sub> (mL)</label>
+      <input type="range" id="graphV" min="0" max="40" step="0.5" value="8">
+    </div>
+    <div class="ch5-box" style="max-width:680px; margin:10px auto 0;"><div class="ch5-panel" id="graphReadout"></div></div>
+  </section>
+
+  <section>
+    <h2>b. Titrages colorimétriques</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
       Lors d'un titrage colorimétrique, un changement de <strong>couleur</strong> du mélange réactionnel permet de repérer l'équivalence.
     </div>
-    <p class="course-text">
-      Exemple : dosage du diiode par les ions thiosulfate. Avant l'équivalence, la solution est colorée par la présence du <strong>diiode</strong>. À l'équivalence, il a totalement disparu, la solution devient <strong>incolore</strong>.
-    </p>
+    <p class="course-text">Exemple : dosage du diiode par les ions thiosulfate.</p>
+    <div class="avant-apres">
+      <div><span class="dot" style="background:rgb(201,118,30); border-color:transparent;"></span><strong style="color:var(--teal)">Avant</strong> : il reste du diiode, la solution est colorée.</div>
+      <div><span class="dot"></span><strong style="color:var(--yellow)">À l'équivalence</strong> : le diiode, seule espèce colorée, a disparu. La solution devient incolore.</div>
+      <div><span class="dot"></span><strong style="color:var(--coral)">Après</strong> : les ions thiosulfate, incolores, s'accumulent.</div>
+    </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Verse le titrant petit à petit et observe la couleur de l'erlenmeyer.</p>
-    <div class="big-equation">
-      <span class="coef">1</span> <span style="color:var(--yellow);">I₂</span>
-      &nbsp;+&nbsp;
-      <span class="coef">2</span> <span style="color:var(--teal);">S₂O₃²⁻</span>
-      &nbsp;→&nbsp;
-      <span class="coef">2</span> <span style="color:var(--coral);">I⁻</span>
-      &nbsp;+&nbsp;
-      <span class="coef">1</span> <span style="color:var(--chalk);">S₄O₆²⁻</span>
-    </div>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="tsFlaskSvgCours" viewBox="0 0 190 195"></svg>
-      </div>
-      <div class="anim-wrap" style="width:260px;">
-        <svg id="tsMolSvgCours" viewBox="0 0 210 135"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Volume versé V<sub>B</sub> (mL)</label>
-        <input type="range" id="tsVBCours" min="0" max="60" value="0" step="1">
-        <div class="anim-readout" id="tsReadoutCours"></div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Au cœur de l'erlenmeyer : chaque goutte apporte 2 ions S₂O₃²⁻.</p>
+    <div class="ch5-bench">
+      <svg id="microSvg" class="micro" viewBox="60 0 400 400"></svg>
+      <div class="ch5-side">
+        <div class="ch5-btns">
+          <button class="ch5-btn main" id="microDrop">💧 Verser une goutte</button>
+          <button class="ch5-btn ghost" id="microReset">↺ Recommencer</button>
+        </div>
+        <div class="ch5-panel" id="microCounts"></div>
+        <div class="ch5-panel" id="microStatus" style="font-size:30px; line-height:1.45; border-left:4px solid rgba(242,237,225,0.2); padding:14px 22px; min-height:140px;"></div>
       </div>
     </div>
-    <table class="adv-table">
-      <thead>
-        <tr><th>État</th><th>Avancement</th><th>I₂</th><th>S₂O₃²⁻</th><th>I⁻</th><th>S₄O₆²⁻</th></tr>
-      </thead>
-      <tbody id="tsTableBodyCours"></tbody>
-    </table>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic; margin-top:18px;">
+      Remarques : les ions sodium Na⁺ sont des ions <strong>spectateurs</strong> : ils n'interviennent pas dans l'équation support du titrage. Il est parfois possible d'utiliser un <strong>indicateur de fin de réaction</strong> pour observer un changement de couleur à l'équivalence si les réactifs ne sont pas colorés.
+    </p>
   </section>
 
   <section>
-    <h2>e. Relation à l'équivalence</h2>
+    <h2>c. Relation à l'équivalence</h2>
+    <p class="course-text">
+      Quantité initiale de titré : n₀(A) = C<sub>A</sub> × V<sub>A</sub>. Quantité de titrant versée à l'équivalence : n<sub>E</sub>(B) = C<sub>B</sub> × V<sub>E</sub>.
+    </p>
     <div class="formula">
-      <span class="frac"><span class="num">C<sub>A</sub> × V<sub>A</sub></span><span class="den">a</span></span>
-      &nbsp;=&nbsp;
+      <span class="frac"><span class="num">n₀(A)</span><span class="den">a</span></span> =
+      <span class="frac"><span class="num">n<sub>E</sub>(B)</span><span class="den">b</span></span>
+      &nbsp;soit&nbsp;
+      <span class="frac"><span class="num">C<sub>A</sub> × V<sub>A</sub></span><span class="den">a</span></span> =
       <span class="frac"><span class="num">C<sub>B</sub> × V<sub>E</sub></span><span class="den">b</span></span>
     </div>
     <p class="course-text">La concentration C<sub>A</sub> recherchée est donc :</p>
@@ -168,9 +231,14 @@
       C<sub>A</sub> = <span class="frac"><span class="num">a</span><span class="den">b</span></span> ×
       <span class="frac"><span class="num">C<sub>B</sub> × V<sub>E</sub></span><span class="den">V<sub>A</sub></span></span>
     </div>
-    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
-      Remarque : les ions <strong>spectateurs</strong> (par exemple Na⁺) n'interviennent pas dans l'équation support du titrage.
-    </p>
+    <div class="method-box">
+      <span class="box-label">🔧 Exemple : titrage du diiode (a = 1, b = 2)</span>
+      <div class="course-text" style="line-height:1.9;">
+        À l'équivalence : n₀(I₂) / 1 = n<sub>E</sub>(S₂O₃²⁻) / 2.<br>
+        Avec V<sub>A</sub> = 20,0 mL, C<sub>B</sub> = 5,0 × 10⁻² mol·L⁻¹ et V<sub>E</sub> = 20,0 mL :
+        C<sub>A</sub> = ½ × (5,0 × 10⁻² × 20,0) / 20,0 = <strong style="color:var(--yellow)">2,5 × 10⁻² mol·L⁻¹</strong>.
+      </div>
+    </div>
   </section>
 
 </div>
@@ -242,36 +310,32 @@
   </section>
 
   <section>
-    <h2>Simulation du titrage colorimétrique</h2>
+    <h2>🧪 Le flacon mystère</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Titre la solution de diiode, lis V<sub>E</sub>, puis calcule C<sub>A</sub> avant de révéler la correction.</p>
     <div class="big-equation">
-      <span class="coef">1</span> <span style="color:var(--yellow);">I₂</span>
-      &nbsp;+&nbsp;
-      <span class="coef">2</span> <span style="color:var(--teal);">S₂O₃²⁻</span>
-      &nbsp;→&nbsp;
-      <span class="coef">2</span> <span style="color:var(--coral);">I⁻</span>
-      &nbsp;+&nbsp;
-      <span class="coef">1</span> <span style="color:var(--chalk);">S₄O₆²⁻</span>
+      <span class="t-titre">I₂</span> + <span class="t-titrant">2 S₂O₃²⁻</span> → 2 I⁻ + S₄O₆²⁻
+      <div style="font-size:0.8rem; color:var(--chalk-dim); margin-top:6px;">V<sub>A</sub> = 20,0 mL · C<sub>A</sub> = <strong style="color:var(--yellow)">?</strong> · C<sub>B</sub> = 5,0 × 10⁻² mol·L⁻¹</div>
     </div>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Même réaction que le tableau d'avancement du chapitre 4. Verse le titrant petit à petit et observe la couleur de l'erlenmeyer.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="tsFlaskSvg" viewBox="0 0 190 195"></svg>
-      </div>
-      <div class="anim-wrap" style="width:260px;">
-        <svg id="tsMolSvg" viewBox="0 0 210 135"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Volume versé V<sub>B</sub> (mL)</label>
-        <input type="range" id="tsVB" min="0" max="60" value="0" step="1">
-        <div class="anim-readout" id="tsReadout"></div>
+    <div class="ch5-bench">
+      <svg id="mystSvg" class="bench" viewBox="0 0 420 540"></svg>
+      <div class="ch5-side">
+        <div class="ch5-btns">
+          <button class="ch5-btn main" id="mystOpen">🔓 Ouvrir le robinet</button>
+          <button class="ch5-btn" id="mystDrop">💧 1 goutte</button>
+          <button class="ch5-btn" id="mystMl">+ 1 mL</button>
+          <button class="ch5-btn starch" id="mystStarch">+ Empois d'amidon</button>
+        </div>
+        <div class="ch5-vb" id="mystVB"></div>
+        <div class="ch5-btns">
+          <button class="ch5-btn ghost" id="mystReset">↺ Recommencer</button>
+          <button class="ch5-btn ghost" id="mystNew">🎲 Nouveau flacon</button>
+          <button class="ch5-btn alt" id="mystReveal">Révéler le calcul</button>
+        </div>
+        <div style="border-left:3px solid var(--yellow); background:rgba(232,196,104,0.07); padding:10px 14px;">
+          <div class="ch5-panel" id="mystCalc" style="min-height:150px; opacity:0; transition:opacity .3s ease;"></div>
+        </div>
       </div>
     </div>
-    <table class="adv-table">
-      <thead>
-        <tr><th>État</th><th>Avancement</th><th>I₂</th><th>S₂O₃²⁻</th><th>I⁻</th><th>S₄O₆²⁻</th></tr>
-      </thead>
-      <tbody id="tsTableBody"></tbody>
-    </table>
 
     <div class="activity-block"><div id="actVeEstimate"></div></div>
     <div class="activity-block"><div id="actLimitingReagent"></div></div>
@@ -296,10 +360,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Dosage</td><td style="padding:10px 8px;">détermine n ou C d'une espèce</td><td style="padding:10px 8px; color:var(--chalk-dim);">par titrage (réaction) ou étalonnage (sans réaction)</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réactif titré / titrant</td><td style="padding:10px 8px;">A (C<sub>A</sub> cherché) + B (C<sub>B</sub> connu)</td><td style="padding:10px 8px; color:var(--chalk-dim);">aA + bB → cC + dD</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Dosage</td><td style="padding:10px 8px;">détermine n ou C d'une espèce</td><td style="padding:10px 8px; color:var(--chalk-dim);">par titrage (réaction, destructif) ou étalonnage (sans réaction)</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réactif titré / titrant</td><td style="padding:10px 8px;">A (C<sub>A</sub> cherchée) + B (C<sub>B</sub> connue)</td><td style="padding:10px 8px; color:var(--chalk-dim);">aA + bB → cC + dD</td></tr>
           <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Équivalence</td><td style="padding:10px 8px;">mélange stœchiométrique</td><td style="padding:10px 8px; color:var(--chalk-dim);">changement de réactif limitant</td></tr>
-          <tr><td style="padding:10px 8px;">Relation à l'équivalence</td><td style="padding:10px 8px;">C<sub>A</sub>V<sub>A</sub>/a = C<sub>B</sub>V<sub>E</sub>/b</td><td style="padding:10px 8px; color:var(--chalk-dim);">permet de calculer C<sub>A</sub></td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Titrage colorimétrique</td><td style="padding:10px 8px;">changement de couleur à l'équivalence</td><td style="padding:10px 8px; color:var(--chalk-dim);">diiode : coloré avant, incolore à l'équivalence</td></tr>
+          <tr><td style="padding:10px 8px;">Relation à l'équivalence</td><td style="padding:10px 8px;">C<sub>A</sub>V<sub>A</sub>/a = C<sub>B</sub>V<sub>E</sub>/b</td><td style="padding:10px 8px; color:var(--chalk-dim);">C<sub>A</sub> = (a/b) × C<sub>B</sub>V<sub>E</sub>/V<sub>A</sub></td></tr>
         </tbody>
       </table>
     </div>
@@ -348,18 +413,33 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   if (correct === blanks.length) ProgressStore.record("ch5-1ere", "trous-complet", true);
 });
 
-/* ---------- Animation — instance "Cours" (exploration libre) ---------- */
-initTitrationSim({ svgFlaskId: "tsFlaskSvgCours", svgMolId: "tsMolSvgCours", vbRangeId: "tsVBCours", readoutId: "tsReadoutCours", tableBodyId: "tsTableBodyCours" });
+/* ---------- Animations (mode cours) ---------- */
+initSetupExplorer({ svgId: "setupSvg", listId: "setupList", infoId: "setupInfo" });
+initTitrationBench({
+  svgId: "benchSvg", vbId: "benchVB", statusId: "benchStatus", barsId: "benchBars",
+  openBtnId: "benchOpen", dropBtnId: "benchDrop", mlBtnId: "benchMl",
+  resetBtnId: "benchReset", starchBtnId: "benchStarch"
+});
+initTitrationGraph({ svgId: "graphSvg", rangeId: "graphV", readoutId: "graphReadout" });
+initMicroTitration({
+  svgId: "microSvg", dropBtnId: "microDrop", resetBtnId: "microReset",
+  countsId: "microCounts", statusId: "microStatus"
+});
 
-/* ---------- Animation — instance "Entraînement" (avec activités) ---------- */
-initTitrationSim({ svgFlaskId: "tsFlaskSvg", svgMolId: "tsMolSvg", vbRangeId: "tsVB", readoutId: "tsReadout", tableBodyId: "tsTableBody" });
+/* ---------- Animation (mode entraînement) : flacon mystère ---------- */
+initTitrationBench({
+  mystery: true, svgId: "mystSvg", vbId: "mystVB",
+  openBtnId: "mystOpen", dropBtnId: "mystDrop", mlBtnId: "mystMl",
+  resetBtnId: "mystReset", starchBtnId: "mystStarch", newBtnId: "mystNew",
+  revealBtnId: "mystReveal", calcId: "mystCalc"
+});
 
-/* ---------- Activités liées à l'animation ---------- */
+/* ---------- Activités ---------- */
 initEstimation({
   containerId: "actVeEstimate", chapterId: "ch5-1ere", activityId: "est-ve",
-  prompt: "D'après l'animation (N₀(I₂) = 1,0 mmol, C_B = 0,050 mmol/mL, coefficients 1 I₂ + 2 S₂O₃²⁻), à quel volume V_E versé environ la solution devient-elle incolore ?",
-  answer: 40, tolerance: 2, unit: "mL",
-  explanation: "À l'équivalence, n(S₂O₃²⁻) versé = 2 × n(I₂) initial, donc C_B × V_E = 2 × 1,0 → V_E = 2/0,050 = 40 mL."
+  prompt: "Dans la simulation du cours (V_A = 20,0 mL de diiode à 2,5 × 10⁻² mol/L, C_B = 5,0 × 10⁻² mol/L, I₂ + 2 S₂O₃²⁻), pour quel volume V_E la solution devient-elle incolore ?",
+  answer: 20, tolerance: 1, unit: "mL",
+  explanation: "n₀(I₂) = 2,5 × 10⁻² × 20,0 × 10⁻³ = 0,50 mmol. À l'équivalence, C_B × V_E = 2 × n₀(I₂) = 1,0 mmol, donc V_E = 1,0 / 0,050 = 20 mL."
 });
 
 initQCM({
@@ -382,7 +462,7 @@ initVraiFaux({
 
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch5-1ere");
-initProgressBar("ch5-1ere", 4); // texte à trous complet + 3 activités liées à l'animation
+initProgressBar("ch5-1ere", 4);
 </script>
 </body>
 </html>

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 5 — Diapos de cours — 1ère spé PC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --board:#16261f; --board-2:#1d3229; --chalk:#f2ede1; --chalk-dim:#c9c2b0;
+    --yellow:#e8c468; --teal:#6bbfab; --coral:#d97a63;
+    --line:rgba(242,237,225,0.14);
+    --font-display:'Kalam','Segoe Print',cursive;
+    --font-body:'Space Grotesk','Segoe UI',sans-serif;
+  }
+  html,body{margin:0;padding:0;background:#0d1512;}
+  *{box-sizing:border-box;}
+  a{color:#e8c468;text-decoration:none;}
+  a:hover{color:#f2ede1;}
+  input[type=range]{accent-color:#e8c468;}
+  button:disabled{opacity:.4;cursor:default;}
+</style>
+<script src="animations-common.js"></script>
+<script src="animations-ch5.js"></script>
+<script src="deck-stage.js"></script>
+<script>
+(function () {
+  if (window.__ch5Retry) return;
+  window.__ch5Retry = true;
+  var q = location.search || "";
+  if (!q) return;
+  var checks = [
+    ["support.js", function () { return typeof DCLogic !== "undefined"; }],
+    ["animations-common.js", function () { return typeof toSuperscript === "function"; }],
+    ["animations-ch5.js", function () { return typeof initTitrationBench === "function"; }],
+    ["deck-stage.js", function () { return !!customElements.get("deck-stage"); }]
+  ];
+  function step(i) {
+    if (i >= checks.length) return;
+    var name = checks[i][0], ok = checks[i][1];
+    var done = function () { step(i + 1); };
+    var already = false;
+    try { already = ok(); } catch (e) { already = false; }
+    if (already) return done();
+    var s = document.createElement("script");
+    s.src = name + q;
+    s.onload = done;
+    s.onerror = done;
+    document.head.appendChild(s);
+  }
+  setTimeout(function () { step(0); }, 0);
+})();
+</script>
+</helmet>
+
+<x-import component-from-global-scope="deck-stage" width="1920" height="1080" hint-size="100%,100%">
+
+<section data-label="Titre" data-screen-label="01" data-speaker-notes="Fil du chapitre : on connaît une concentration, on en cherche une autre, et une réaction chimique fait le lien." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:90px 110px;display:flex;flex-direction:column;justify-content:center;gap:34px;">
+  <div style="display:inline-flex;align-self:flex-start;font-family:Kalam,cursive;font-size:30px;color:#16261f;background:#6bbfab;border-radius:999px;padding:8px 28px;letter-spacing:0.04em;">Chimie · 1ère spé PC</div>
+  <div style="font-family:Kalam,cursive;font-size:40px;color:#e8c468;">Chapitre 5</div>
+  <h1 style="font-family:Kalam,cursive;font-weight:700;font-size:104px;line-height:1.05;margin:0;max-width:1500px;text-wrap:pretty;">Titrages colorimétriques</h1>
+  <div style="width:220px;height:4px;background:rgba(242,237,225,0.28);"></div>
+  <p style="font-size:34px;color:#c9c2b0;margin:0;max-width:1200px;">Déterminer une concentration inconnue grâce à une réaction chimique et à un changement de couleur.</p>
+</section>
+
+<section data-label="Objectifs" data-screen-label="02" data-speaker-notes="Trois objectifs progressifs : vocabulaire, équivalence, calcul." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:70px 92px;display:flex;flex-direction:column;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;margin-bottom:6px;">Ce qu'il faudra savoir faire</div>
+  <h2 style="font-family:Kalam,cursive;font-size:64px;font-weight:700;margin:0 0 44px;line-height:1.1;">🎯 Objectifs du chapitre</h2>
+  <div style="display:flex;flex-direction:column;gap:26px;max-width:1560px;">
+    <div data-reveal="1" style="display:flex;gap:28px;align-items:flex-start;border:2px solid rgba(107,191,171,0.35);background:rgba(107,191,171,0.07);border-radius:16px;padding:30px 36px;">
+      <span style="font-family:Kalam,cursive;font-size:46px;color:#6bbfab;line-height:1;">1</span>
+      <span style="font-size:34px;line-height:1.45;text-wrap:pretty;">Identifier le réactif titré, le réactif titrant et repérer l'équivalence.</span>
+    </div>
+    <div data-reveal="2" style="display:flex;gap:28px;align-items:flex-start;border:2px solid rgba(107,191,171,0.35);background:rgba(107,191,171,0.07);border-radius:16px;padding:30px 36px;">
+      <span style="font-family:Kalam,cursive;font-size:46px;color:#6bbfab;line-height:1;">2</span>
+      <span style="font-size:34px;line-height:1.45;text-wrap:pretty;">Comprendre pourquoi le réactif limitant change à l'équivalence.</span>
+    </div>
+    <div data-reveal="3" style="display:flex;gap:28px;align-items:flex-start;border:2px solid rgba(107,191,171,0.35);background:rgba(107,191,171,0.07);border-radius:16px;padding:30px 36px;">
+      <span style="font-family:Kalam,cursive;font-size:46px;color:#6bbfab;line-height:1;">3</span>
+      <span style="font-size:34px;line-height:1.45;text-wrap:pretty;">Exploiter la relation à l'équivalence pour calculer une concentration inconnue.</span>
+    </div>
+  </div>
+</section>
+
+<section data-label="§ 1 Dosages par titrage" data-screen-label="03" data-speaker-notes="Première partie : qu'est-ce qu'un dosage, et quelle place pour le titrage." style="background:#1d3229;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:70px 92px;display:flex;flex-direction:column;justify-content:center;gap:22px;">
+  <div style="font-family:Kalam,cursive;font-size:190px;color:rgba(232,196,104,0.22);line-height:0.9;">1</div>
+  <h2 style="font-family:Kalam,cursive;font-size:82px;font-weight:700;margin:0;line-height:1.1;">Les dosages par titrage</h2>
+  <p style="font-size:36px;color:#c9c2b0;margin:0;max-width:1300px;">Dosage, réaction support, dispositif.</p>
+</section>
+
+<section data-label="Déf · dosages" data-screen-label="04" data-speaker-notes="Citer des domaines : santé, environnement, contrôle qualité. La différence clé : le titrage détruit l'espèce dosée, l'étalonnage non." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:60px 92px;display:flex;flex-direction:column;justify-content:center;gap:28px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">a. Dosages</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Doser, c'est mesurer une quantité</h2>
+  <div style="border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.07);border-radius:16px;padding:28px 36px;max-width:1700px;">
+    <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#e8c468;letter-spacing:0.06em;margin-bottom:10px;">📘 DÉFINITION</span>
+    <span style="font-size:33px;line-height:1.45;text-wrap:pretty;">Un <strong>dosage</strong> permet de déterminer la quantité de matière ou la concentration d'une espèce chimique dissoute dans une solution. Un dosage par titrage, ou <strong>titrage</strong>, met en jeu une réaction chimique <strong>totale</strong> et <strong>rapide</strong>.</span>
+  </div>
+  <div data-reveal="1" style="display:grid;grid-template-columns:1fr 1fr;gap:26px;max-width:1700px;">
+    <div style="border-left:5px solid #d97a63;background:rgba(217,122,99,0.08);padding:24px 30px;">
+      <div style="font-family:Kalam,cursive;font-size:40px;color:#d97a63;margin-bottom:6px;">Titrages</div>
+      <div style="font-size:31px;line-height:1.4;"><strong>Destructifs</strong> : la réaction chimique consomme l'espèce à doser.</div>
+    </div>
+    <div style="border-left:5px solid #6bbfab;background:rgba(107,191,171,0.08);padding:24px 30px;">
+      <div style="font-family:Kalam,cursive;font-size:40px;color:#6bbfab;margin-bottom:6px;">Dosages par étalonnage</div>
+      <div style="font-size:31px;line-height:1.4;"><strong>Non destructifs</strong> : aucune réaction, l'espèce à doser demeure intacte.</div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Déf · réaction support" data-screen-label="05" data-speaker-notes="Code couleur conservé dans tout le chapitre : jaune pour le titré (ce qu'on cherche), turquoise pour le titrant (ce qu'on connaît)." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:60px 92px;display:flex;flex-direction:column;justify-content:center;gap:32px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">b. Réaction support d'un titrage</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Un réactif connu pour trouver l'inconnu</h2>
+  <div style="border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.07);border-radius:16px;padding:28px 36px;max-width:1700px;">
+    <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#e8c468;letter-spacing:0.06em;margin-bottom:10px;">📘 DÉFINITION</span>
+    <span style="font-size:33px;line-height:1.45;text-wrap:pretty;">Lors d'un titrage, le <strong style="color:#e8c468;">réactif titré A</strong>, dont on cherche à déterminer la concentration <em>C</em><sub>A</sub>, réagit avec le <strong style="color:#6bbfab;">réactif titrant B</strong> de concentration <em>C</em><sub>B</sub> connue.</span>
+  </div>
+  <div data-reveal="1" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+    <div style="font-size:28px;color:#c9c2b0;">Équation de la réaction support du titrage</div>
+    <div style="font-family:Kalam,cursive;font-size:76px;line-height:1.1;"><span style="color:#e8c468;"><em>a</em> A</span> + <span style="color:#6bbfab;"><em>b</em> B</span> → <em>c</em> C + <em>d</em> D</div>
+  </div>
+</section>
+
+<section data-label="Anim · montage" data-screen-label="06" data-speaker-notes="Faire nommer chaque élément avant de cliquer. Le titré peut être dans un bécher ou un erlenmeyer ; le titrant est toujours dans la burette." style="background:#16261f;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:44px 70px 36px;display:flex;flex-direction:column;">
+  <div style="display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:10px;">
+    <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">c. Dispositif de titrage</div>
+    <h2 style="font-family:Kalam,cursive;font-size:50px;font-weight:700;margin:0;">🔬 Le montage, pièce par pièce</h2>
+  </div>
+  <div style="flex:1;display:flex;gap:60px;align-items:center;min-height:0;">
+    <svg id="deckSetupSvg" viewBox="0 0 420 540" style="height:880px;width:auto;flex:none;display:block;"></svg>
+    <div style="flex:1;display:flex;flex-direction:column;gap:26px;">
+      <div id="deckSetupList" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <button data-part="burette" style="font-family:Kalam,cursive;font-size:30px;text-align:left;color:#c9c2b0;background:rgba(0,0,0,0.2);border:2px solid rgba(242,237,225,0.16);border-radius:12px;padding:14px 22px;cursor:pointer;">Burette graduée</button>
+        <button data-part="potence" style="font-family:Kalam,cursive;font-size:30px;text-align:left;color:#c9c2b0;background:rgba(0,0,0,0.2);border:2px solid rgba(242,237,225,0.16);border-radius:12px;padding:14px 22px;cursor:pointer;">Potence</button>
+        <button data-part="erlen" style="font-family:Kalam,cursive;font-size:30px;text-align:left;color:#c9c2b0;background:rgba(0,0,0,0.2);border:2px solid rgba(242,237,225,0.16);border-radius:12px;padding:14px 22px;cursor:pointer;">Erlenmeyer</button>
+        <button data-part="barreau" style="font-family:Kalam,cursive;font-size:30px;text-align:left;color:#c9c2b0;background:rgba(0,0,0,0.2);border:2px solid rgba(242,237,225,0.16);border-radius:12px;padding:14px 22px;cursor:pointer;">Barreau aimanté</button>
+        <button data-part="agitateur" style="font-family:Kalam,cursive;font-size:30px;text-align:left;color:#c9c2b0;background:rgba(0,0,0,0.2);border:2px solid rgba(242,237,225,0.16);border-radius:12px;padding:14px 22px;cursor:pointer;">Agitateur magnétique</button>
+      </div>
+      <div id="deckSetupInfo" style="min-height:230px;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:26px 32px;transition:opacity .25s ease;"></div>
+    </div>
+  </div>
+</section>
+
+<section data-label="§ 2 Équivalence" data-screen-label="07" data-speaker-notes="Deuxième partie : jusqu'où verser, et comment le voir." style="background:#1d3229;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:70px 92px;display:flex;flex-direction:column;justify-content:center;gap:22px;">
+  <div style="font-family:Kalam,cursive;font-size:190px;color:rgba(232,196,104,0.22);line-height:0.9;">2</div>
+  <h2 style="font-family:Kalam,cursive;font-size:82px;font-weight:700;margin:0;line-height:1.1;">L'équivalence</h2>
+  <p style="font-size:36px;color:#c9c2b0;margin:0;max-width:1300px;">Le moment où le réactif titré a totalement réagi.</p>
+</section>
+
+<section data-label="Déf · équivalence" data-screen-label="08" data-speaker-notes="Faire le lien avec le chapitre 4 : mélange stœchiométrique. Le piège : croire que le titré est limitant avant l'équivalence." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:60px 92px;display:flex;flex-direction:column;justify-content:center;gap:28px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">a. Équivalence d'un titrage</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Un mélange stœchiométrique</h2>
+  <div style="border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.07);border-radius:16px;padding:28px 36px;max-width:1700px;">
+    <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#e8c468;letter-spacing:0.06em;margin-bottom:10px;">📘 DÉFINITION</span>
+    <span style="font-size:33px;line-height:1.45;text-wrap:pretty;">L'<strong>équivalence</strong> d'un titrage est atteinte lorsqu'on a réalisé un mélange <strong>stœchiométrique</strong> des réactifs <span style="color:#e8c468;">titré</span> et <span style="color:#6bbfab;">titrant</span>. Les deux réactifs sont alors totalement consommés.</span>
+  </div>
+  <div data-reveal="1" style="border:2px solid rgba(217,122,99,0.5);background:rgba(217,122,99,0.08);border-radius:14px;padding:26px 34px;max-width:1700px;">
+    <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#d97a63;letter-spacing:0.06em;margin-bottom:10px;">⚠️ ATTENTION</span>
+    <span style="font-size:32px;line-height:1.45;text-wrap:pretty;">Avant l'équivalence, le réactif <strong style="color:#6bbfab;">titrant</strong> est totalement consommé : il est le réactif limitant. Après l'équivalence, le réactif <strong style="color:#e8c468;">titré</strong> est totalement consommé : il devient le réactif limitant.</span>
+  </div>
+  <div data-reveal="2" style="border:2px solid rgba(107,191,171,0.4);background:rgba(107,191,171,0.08);border-radius:14px;padding:26px 34px;max-width:1700px;">
+    <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#6bbfab;letter-spacing:0.06em;margin-bottom:10px;">📌 À RETENIR</span>
+    <span style="font-size:32px;line-height:1.45;">À l'équivalence du titrage, il y a <strong>changement de réactif limitant</strong>.</span>
+  </div>
+</section>
+
+<section data-label="Anim · titrage" data-screen-label="09" data-speaker-notes="Ouvrir le robinet, puis le fermer vers 18 mL et finir à la goutte. Sans indicateur, la teinte pâlit progressivement : difficile de saisir l'instant exact. Ajouter ensuite l'empois d'amidon (en TP, on l'ajoute près de l'équivalence) : bleu foncé jusqu'à la dernière goutte, puis incolore d'un coup. V_E = 20,00 mL." style="background:#16261f;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:40px 70px 34px;display:flex;flex-direction:column;">
+  <div style="display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:6px;">
+    <h2 style="font-family:Kalam,cursive;font-size:48px;font-weight:700;margin:0;">💧 Le titrage, goutte à goutte</h2>
+    <span style="font-family:Kalam,cursive;font-size:40px;color:#e8c468;border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.08);border-radius:12px;padding:4px 22px;"><span style="color:#e8c468;">I₂</span> + <span style="color:#6bbfab;">2 S₂O₃²⁻</span> <span style="color:#f2ede1;">→ 2 I⁻ + S₄O₆²⁻</span></span>
+  </div>
+  <div style="font-size:26px;color:#c9c2b0;margin-bottom:6px;"><em>V</em><sub>A</sub> = 20,0 mL de diiode · <em>C</em><sub>B</sub> = 5,0 × 10⁻² mol·L⁻¹</div>
+  <div style="flex:1;display:flex;gap:56px;align-items:center;min-height:0;">
+    <svg id="deckBenchSvg" viewBox="0 0 420 540" style="height:830px;width:auto;flex:none;display:block;"></svg>
+    <div style="flex:1;display:flex;flex-direction:column;gap:22px;">
+      <div style="display:flex;flex-wrap:wrap;gap:14px;">
+        <button id="deckBenchOpen" style="font-family:Kalam,cursive;font-size:30px;background:#e8c468;color:#16261f;border:none;border-radius:10px;padding:12px 26px;cursor:pointer;">🔓 Ouvrir le robinet</button>
+        <button id="deckBenchDrop" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">💧 1 goutte</button>
+        <button id="deckBenchMl" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">+ 1 mL</button>
+        <button id="deckBenchReset" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#c9c2b0;border:2px solid rgba(242,237,225,0.2);border-radius:10px;padding:10px 24px;cursor:pointer;">↺ Remplir</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:26px;flex-wrap:wrap;">
+        <div id="deckBenchVB" style="font-family:Kalam,cursive;font-size:56px;color:#f2ede1;"></div>
+        <button id="deckBenchStarch" style="font-family:Kalam,cursive;font-size:28px;background:rgba(58,66,150,0.18);color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 22px;cursor:pointer;">+ Empois d'amidon</button>
+      </div>
+      <div id="deckBenchStatus" style="font-size:30px;line-height:1.45;min-height:150px;"></div>
+      <div id="deckBenchBars" style="display:flex;flex-direction:column;gap:14px;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:22px 28px;"></div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Anim · courbes" data-screen-label="10" data-speaker-notes="Lire le graphique de gauche à droite. Les deux zones colorées montrent le changement de réactif limitant ; le point anguleux de chaque courbe est à V_E." style="background:#16261f;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:44px 70px 36px;display:flex;flex-direction:column;">
+  <div style="display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:10px;">
+    <h2 style="font-family:Kalam,cursive;font-size:48px;font-weight:700;margin:0;">📉 Qui est limitant, et quand ?</h2>
+    <span style="font-size:28px;color:#c9c2b0;">n₀(I₂) = 0,50 mmol · <em>C</em><sub>B</sub> = 5,0 × 10⁻² mol·L⁻¹</span>
+  </div>
+  <div style="flex:1;display:flex;gap:50px;align-items:center;min-height:0;">
+    <div style="width:1100px;flex:none;display:flex;flex-direction:column;gap:18px;">
+      <svg id="deckGraphSvg" viewBox="0 0 620 380" style="width:100%;height:auto;display:block;"></svg>
+      <input type="range" id="deckGraphV" min="0" max="40" step="0.5" style="width:100%;height:38px;">
+    </div>
+    <div id="deckGraphReadout" style="flex:1;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:26px 30px;"></div>
+  </div>
+</section>
+
+<section data-label="Déf · colorimétrique" data-screen-label="11" data-speaker-notes="Le diiode est la seule espèce colorée du système étudié ; les espèces spectatrices ne sont pas indiquées." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:56px 92px;display:flex;flex-direction:column;justify-content:center;gap:26px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">b. Titrages colorimétriques</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Voir l'équivalence</h2>
+  <div style="border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.07);border-radius:16px;padding:26px 36px;max-width:1740px;">
+    <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#e8c468;letter-spacing:0.06em;margin-bottom:10px;">📘 DÉFINITION</span>
+    <span style="font-size:33px;line-height:1.45;text-wrap:pretty;">Lors d'un <strong>titrage colorimétrique</strong>, un changement de couleur du mélange réactionnel permet de repérer l'équivalence.</span>
+  </div>
+  <div style="font-size:30px;color:#c9c2b0;">Exemple : dosage du diiode par les ions thiosulfate.</div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;max-width:1740px;">
+    <div data-reveal="1" style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:24px 28px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;gap:16px;"><span style="width:40px;height:40px;border-radius:50%;background:rgb(201,118,30);flex:none;"></span><span style="font-family:Kalam,cursive;font-size:36px;color:#6bbfab;">Avant</span></div>
+      <div style="font-size:29px;line-height:1.4;">Il reste du <strong style="color:#e8c468;">diiode I₂</strong> : la solution est colorée.</div>
+    </div>
+    <div data-reveal="2" style="border:2px solid rgba(232,196,104,0.5);background:rgba(232,196,104,0.07);border-radius:14px;padding:24px 28px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;gap:16px;"><span style="width:40px;height:40px;border-radius:50%;border:2px solid #c9c2b0;flex:none;"></span><span style="font-family:Kalam,cursive;font-size:36px;color:#e8c468;">À l'équivalence</span></div>
+      <div style="font-size:29px;line-height:1.4;">Le diiode, seule espèce colorée, a disparu : la solution devient <strong>incolore</strong>.</div>
+    </div>
+    <div data-reveal="3" style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:24px 28px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;gap:16px;"><span style="width:40px;height:40px;border-radius:50%;border:2px solid #c9c2b0;flex:none;"></span><span style="font-family:Kalam,cursive;font-size:36px;color:#d97a63;">Après</span></div>
+      <div style="font-size:29px;line-height:1.4;">Les ions thiosulfate, incolores, s'accumulent : la solution reste incolore.</div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Anim · microscopique" data-screen-label="12" data-speaker-notes="Chaque goutte apporte 2 ions thiosulfate, qui vont chercher une molécule de diiode. 6 gouttes suffisent : c'est l'équivalence. Les gouttes suivantes restent sans partenaire." style="background:#16261f;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:44px 70px 36px;display:flex;flex-direction:column;">
+  <div style="display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:10px;">
+    <h2 style="font-family:Kalam,cursive;font-size:48px;font-weight:700;margin:0;">🔍 Au cœur de l'erlenmeyer</h2>
+    <span style="font-family:Kalam,cursive;font-size:40px;color:#e8c468;border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.08);border-radius:12px;padding:4px 22px;"><span style="color:#e8c468;">I₂</span> + <span style="color:#6bbfab;">2 S₂O₃²⁻</span> <span style="color:#f2ede1;">→ <span style="color:#d97a63;">2 I⁻</span> + S₄O₆²⁻</span></span>
+  </div>
+  <div style="flex:1;display:flex;gap:56px;align-items:center;min-height:0;">
+    <svg id="deckMicroSvg" viewBox="60 0 400 400" style="height:820px;width:auto;flex:none;display:block;"></svg>
+    <div style="flex:1;display:flex;flex-direction:column;gap:22px;">
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <button id="deckMicroDrop" style="font-family:Kalam,cursive;font-size:30px;background:#e8c468;color:#16261f;border:none;border-radius:10px;padding:12px 26px;cursor:pointer;">💧 Verser une goutte</button>
+        <button id="deckMicroReset" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#c9c2b0;border:2px solid rgba(242,237,225,0.2);border-radius:10px;padding:10px 24px;cursor:pointer;">↺ Recommencer</button>
+      </div>
+      <div id="deckMicroCounts"></div>
+      <div id="deckMicroStatus" style="font-size:30px;line-height:1.45;color:#f2ede1;border-left:4px solid rgba(242,237,225,0.2);padding:14px 22px;min-height:140px;"></div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Remarques" data-screen-label="13" data-speaker-notes="Na⁺ accompagne les ions thiosulfate dans la burette mais ne réagit pas. L'indicateur de fin de réaction a été vu dans la simulation (empois d'amidon)." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:60px 92px;display:flex;flex-direction:column;justify-content:center;gap:28px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">b. Titrages colorimétriques</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Deux remarques importantes</h2>
+  <div data-reveal="1" style="display:flex;gap:28px;align-items:flex-start;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:28px 34px;max-width:1700px;">
+    <span style="font-family:Kalam,cursive;font-size:46px;color:#6bbfab;line-height:1;">1</span>
+    <span style="font-size:33px;line-height:1.45;text-wrap:pretty;">Lors du titrage du diiode, les ions sodium Na⁺(aq) sont des ions <strong>spectateurs</strong> : ils n'interviennent pas dans l'équation support du titrage.</span>
+  </div>
+  <div data-reveal="2" style="display:flex;gap:28px;align-items:flex-start;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:28px 34px;max-width:1700px;">
+    <span style="font-family:Kalam,cursive;font-size:46px;color:#6bbfab;line-height:1;">2</span>
+    <span style="font-size:33px;line-height:1.45;text-wrap:pretty;">Il est parfois possible d'utiliser un <strong>indicateur de fin de réaction</strong> pour observer un changement de couleur à l'équivalence si les réactifs ne sont pas colorés.</span>
+  </div>
+</section>
+
+<section data-label="§ 3 Relation" data-screen-label="14" data-speaker-notes="Troisième partie : transformer une lecture de volume en concentration." style="background:#1d3229;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:70px 92px;display:flex;flex-direction:column;justify-content:center;gap:22px;">
+  <div style="font-family:Kalam,cursive;font-size:190px;color:rgba(232,196,104,0.22);line-height:0.9;">3</div>
+  <h2 style="font-family:Kalam,cursive;font-size:82px;font-weight:700;margin:0;line-height:1.1;">La relation à l'équivalence</h2>
+  <p style="font-size:36px;color:#c9c2b0;margin:0;max-width:1300px;">Du volume <em>V</em><sub>E</sub> lu à la burette jusqu'à la concentration <em>C</em><sub>A</sub>.</p>
+</section>
+
+<section data-label="Relation à l'équivalence" data-screen-label="15" data-speaker-notes="n₀(A) = C_A × V_A est la quantité initiale de titré ; n_E(B) = C_B × V_E est la quantité de titrant versée à l'équivalence." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:56px 92px;display:flex;flex-direction:column;justify-content:center;gap:30px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">c. Relation à l'équivalence du titrage</div>
+  <h2 style="font-family:Kalam,cursive;font-size:58px;font-weight:700;margin:0;line-height:1.1;">Pour <span style="color:#e8c468;"><em>a</em> A</span> + <span style="color:#6bbfab;"><em>b</em> B</span> → <em>c</em> C + <em>d</em> D</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;max-width:1700px;">
+    <div style="border-left:5px solid #e8c468;background:rgba(232,196,104,0.07);padding:22px 30px;">
+      <div style="font-size:28px;color:#c9c2b0;margin-bottom:6px;">Quantité initiale de titré</div>
+      <div style="font-family:Kalam,cursive;font-size:44px;">n₀(A) = <em>C</em><sub>A</sub> × <em>V</em><sub>A</sub></div>
+    </div>
+    <div style="border-left:5px solid #6bbfab;background:rgba(107,191,171,0.07);padding:22px 30px;">
+      <div style="font-size:28px;color:#c9c2b0;margin-bottom:6px;">Quantité de titrant versée à l'équivalence</div>
+      <div style="font-family:Kalam,cursive;font-size:44px;">n<sub>E</sub>(B) = <em>C</em><sub>B</sub> × <em>V</em><sub>E</sub></div>
+    </div>
+  </div>
+  <div data-reveal="1" style="border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.07);border-radius:16px;padding:24px 36px;max-width:1700px;display:flex;align-items:center;gap:40px;flex-wrap:wrap;">
+    <span style="font-family:Kalam,cursive;font-size:26px;color:#e8c468;letter-spacing:0.06em;">📘 RELATION À L'ÉQUIVALENCE</span>
+    <div style="display:flex;align-items:center;gap:22px;font-family:Kalam,cursive;font-size:46px;color:#e8c468;">
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 12px 6px;">n₀(A)</span><span style="border-bottom:3px solid #e8c468;width:100%;"></span><span style="padding:6px 12px 0;"><em>a</em></span></div>
+      <span>=</span>
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 12px 6px;">n<sub>E</sub>(B)</span><span style="border-bottom:3px solid #e8c468;width:100%;"></span><span style="padding:6px 12px 0;"><em>b</em></span></div>
+      <span style="font-size:32px;color:#c9c2b0;padding:0 14px;">soit</span>
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 12px 6px;"><em>C</em><sub>A</sub> × <em>V</em><sub>A</sub></span><span style="border-bottom:3px solid #e8c468;width:100%;"></span><span style="padding:6px 12px 0;"><em>a</em></span></div>
+      <span>=</span>
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 12px 6px;"><em>C</em><sub>B</sub> × <em>V</em><sub>E</sub></span><span style="border-bottom:3px solid #e8c468;width:100%;"></span><span style="padding:6px 12px 0;"><em>b</em></span></div>
+    </div>
+  </div>
+  <div data-reveal="2" style="display:flex;align-items:center;gap:30px;">
+    <span style="font-size:32px;color:#c9c2b0;">La concentration recherchée est donc :</span>
+    <div style="display:flex;align-items:center;gap:16px;font-family:Kalam,cursive;font-size:52px;color:#e8c468;border:2px solid rgba(232,196,104,0.45);border-radius:14px;padding:12px 30px;">
+      <span><em>C</em><sub>A</sub> =</span>
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 10px 4px;"><em>a</em></span><span style="border-bottom:3px solid #e8c468;width:100%;"></span><span style="padding:4px 10px 0;"><em>b</em></span></div>
+      <span>×</span>
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 10px 4px;"><em>C</em><sub>B</sub> × <em>V</em><sub>E</sub></span><span style="border-bottom:3px solid #e8c468;width:100%;"></span><span style="padding:4px 10px 0;"><em>V</em><sub>A</sub></span></div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Exemple · diiode" data-screen-label="16" data-speaker-notes="Faire écrire les coefficients au-dessus de l'équation avant d'écrire la relation. Valeurs de la simulation de la diapo 9." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:56px 92px;display:flex;flex-direction:column;justify-content:center;gap:30px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">c. Relation à l'équivalence du titrage</div>
+  <h2 style="font-family:Kalam,cursive;font-size:58px;font-weight:700;margin:0;line-height:1.1;">Exemple : le titrage du diiode</h2>
+  <div style="display:flex;gap:70px;align-items:flex-end;font-family:Kalam,cursive;">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><span style="font-size:38px;color:#e8c468;"><em>a</em> = 1</span><span style="font-size:34px;color:#e8c468;">↓</span><span style="font-size:60px;color:#e8c468;">I₂(aq)</span></div>
+    <span style="font-size:60px;">+</span>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><span style="font-size:38px;color:#6bbfab;"><em>b</em> = 2</span><span style="font-size:34px;color:#6bbfab;">↓</span><span style="font-size:60px;color:#6bbfab;">2 S₂O₃²⁻(aq)</span></div>
+    <span style="font-size:60px;">→ 2 I⁻(aq) + S₄O₆²⁻(aq)</span>
+  </div>
+  <div data-reveal="1" style="display:flex;align-items:center;gap:22px;font-family:Kalam,cursive;font-size:46px;">
+    <span style="font-size:32px;color:#c9c2b0;font-family:'Space Grotesk',sans-serif;margin-right:14px;">À l'équivalence :</span>
+    <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 12px 6px;color:#e8c468;">n₀(I₂)</span><span style="border-bottom:3px solid #f2ede1;width:100%;"></span><span style="padding:6px 12px 0;">1</span></div>
+    <span>=</span>
+    <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 12px 6px;color:#6bbfab;">n<sub>E</sub>(S₂O₃²⁻)</span><span style="border-bottom:3px solid #f2ede1;width:100%;"></span><span style="padding:6px 12px 0;">2</span></div>
+  </div>
+  <div data-reveal="2" style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:26px 34px;max-width:1700px;display:flex;flex-direction:column;gap:16px;">
+    <div style="font-size:30px;color:#c9c2b0;"><em>V</em><sub>A</sub> = 20,0 mL · <em>C</em><sub>B</sub> = 5,0 × 10⁻² mol·L⁻¹ · <em>V</em><sub>E</sub> = 20,0 mL</div>
+    <div style="display:flex;align-items:center;gap:14px;font-size:36px;flex-wrap:wrap;">
+      <span><em>C</em><sub>A</sub> =</span>
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 8px 4px;">1</span><span style="border-bottom:2px solid #f2ede1;width:100%;"></span><span style="padding:4px 8px 0;">2</span></div>
+      <span>×</span>
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 8px 4px;">5,0 × 10⁻² × 20,0</span><span style="border-bottom:2px solid #f2ede1;width:100%;"></span><span style="padding:4px 8px 0;">20,0</span></div>
+      <span>=</span>
+      <strong style="font-family:Kalam,cursive;font-size:48px;color:#e8c468;">2,5 × 10⁻² mol·L⁻¹</strong>
+    </div>
+  </div>
+</section>
+
+<section data-label="Anim · flacon mystère" data-screen-label="17" data-speaker-notes="Chaque « nouveau flacon » tire une concentration au hasard entre 1,6 et 3,4 × 10⁻² mol/L. Un élève pilote la burette, la classe note V_E et calcule C_A avant de révéler." style="background:#16261f;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:40px 70px 34px;display:flex;flex-direction:column;">
+  <div style="display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:6px;">
+    <h2 style="font-family:Kalam,cursive;font-size:48px;font-weight:700;margin:0;">🧪 Le flacon mystère</h2>
+    <span style="font-size:28px;color:#c9c2b0;">Titre la solution, lis <em>V</em><sub>E</sub>, calcule <em>C</em><sub>A</sub>.</span>
+  </div>
+  <div style="flex:1;display:flex;gap:56px;align-items:center;min-height:0;">
+    <svg id="deckMystSvg" viewBox="0 0 420 540" style="height:850px;width:auto;flex:none;display:block;"></svg>
+    <div style="flex:1;display:flex;flex-direction:column;gap:22px;">
+      <div style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:20px 28px;font-size:30px;line-height:1.55;">
+        <div><span style="color:#e8c468;">Titré</span> : diiode I₂, <em>V</em><sub>A</sub> = 20,0 mL, <em>C</em><sub>A</sub> = <strong style="color:#e8c468;">?</strong></div>
+        <div><span style="color:#6bbfab;">Titrant</span> : S₂O₃²⁻, <em>C</em><sub>B</sub> = 5,0 × 10⁻² mol·L⁻¹</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;">
+        <button id="deckMystOpen" style="font-family:Kalam,cursive;font-size:30px;background:#e8c468;color:#16261f;border:none;border-radius:10px;padding:12px 26px;cursor:pointer;">🔓 Ouvrir le robinet</button>
+        <button id="deckMystDrop" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">💧 1 goutte</button>
+        <button id="deckMystMl" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">+ 1 mL</button>
+        <button id="deckMystStarch" style="font-family:Kalam,cursive;font-size:28px;background:rgba(58,66,150,0.18);color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 22px;cursor:pointer;">+ Empois d'amidon</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+        <div id="deckMystVB" style="font-family:Kalam,cursive;font-size:56px;color:#f2ede1;margin-right:12px;"></div>
+        <button id="deckMystReset" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#c9c2b0;border:2px solid rgba(242,237,225,0.2);border-radius:10px;padding:8px 22px;cursor:pointer;">↺ Recommencer</button>
+        <button id="deckMystNew" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#c9c2b0;border:2px solid rgba(242,237,225,0.2);border-radius:10px;padding:8px 22px;cursor:pointer;">🎲 Nouveau flacon</button>
+      </div>
+      <button id="deckMystReveal" style="align-self:flex-start;font-family:Kalam,cursive;font-size:30px;background:#6bbfab;color:#16261f;border:none;border-radius:10px;padding:12px 26px;cursor:pointer;">Révéler le calcul</button>
+      <div id="deckMystCalc" style="min-height:150px;border-left:4px solid #e8c468;background:rgba(232,196,104,0.07);padding:18px 26px;opacity:0;transition:opacity .3s ease;"></div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Flash · équivalence" data-screen-label="18" data-speaker-notes="Réponse : 0,40 mmol. Le piège est d'oublier le coefficient 2 et de répondre 0,80 mmol, ou de multiplier au lieu de diviser (1,6 mmol)." style="background:#1d3229;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:70px 92px;display:flex;flex-direction:column;justify-content:center;gap:36px;">
+  <div style="display:inline-flex;align-self:flex-start;font-family:Kalam,cursive;font-size:28px;color:#16261f;background:#e8c468;border-radius:999px;padding:8px 26px;letter-spacing:0.04em;">Question flash</div>
+  <h2 style="font-family:Kalam,cursive;font-size:58px;font-weight:700;margin:0;line-height:1.15;max-width:1650px;text-wrap:pretty;">I₂ + 2 S₂O₃²⁻ → 2 I⁻ + S₄O₆²⁻. À l'équivalence, on a versé n<sub>E</sub>(S₂O₃²⁻) = 0,80 mmol. Quelle était la quantité initiale de diiode ?</h2>
+  <div data-reveal="1" style="display:flex;gap:26px;flex-wrap:wrap;">
+    <div style="border:2px solid #6bbfab;background:rgba(107,191,171,0.16);border-radius:14px;padding:26px 40px;font-size:36px;">0,40 mmol ✅</div>
+    <div style="border:2px dashed rgba(242,237,225,0.2);border-radius:14px;padding:26px 40px;font-size:36px;color:#c9c2b0;">0,80 mmol</div>
+    <div style="border:2px dashed rgba(242,237,225,0.2);border-radius:14px;padding:26px 40px;font-size:36px;color:#c9c2b0;">1,6 mmol</div>
+  </div>
+  <p data-reveal="2" style="font-size:34px;line-height:1.5;margin:0;max-width:1560px;color:#c9c2b0;text-wrap:pretty;">n₀(I₂) / 1 = n<sub>E</sub>(S₂O₃²⁻) / 2, donc n₀(I₂) = 0,80 / 2 = <strong style="color:#e8c468;">0,40 mmol</strong>. Il faut deux ions thiosulfate pour une molécule de diiode.</p>
+</section>
+
+<section data-label="Récapitulatif" data-screen-label="19" data-speaker-notes="Diapo à photographier." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:56px 80px;display:flex;flex-direction:column;">
+  <h2 style="font-family:Kalam,cursive;font-size:58px;font-weight:700;margin:0 0 30px;line-height:1.1;">🗂️ L'essentiel du chapitre</h2>
+  <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+    <div style="display:flex;flex-direction:column;gap:24px;">
+      <div style="flex:1;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.2);border-radius:14px;padding:24px 30px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+        <div style="font-size:26px;color:#6bbfab;font-family:Kalam,cursive;">Titrage</div>
+        <div style="font-size:32px;">réaction support <strong style="color:#e8c468;">totale</strong> et <strong style="color:#e8c468;">rapide</strong></div>
+        <div style="font-size:25px;color:#c9c2b0;">titré A (<em>C</em><sub>A</sub> cherchée) + titrant B (<em>C</em><sub>B</sub> connue)</div>
+      </div>
+      <div style="flex:1;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.2);border-radius:14px;padding:24px 30px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+        <div style="font-size:26px;color:#6bbfab;font-family:Kalam,cursive;">Équivalence</div>
+        <div style="font-size:32px;">mélange <strong style="color:#e8c468;">stœchiométrique</strong> des réactifs</div>
+        <div style="font-size:25px;color:#c9c2b0;">changement de réactif limitant : titrant avant, titré après</div>
+      </div>
+      <div style="flex:1;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.2);border-radius:14px;padding:24px 30px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+        <div style="font-size:26px;color:#6bbfab;font-family:Kalam,cursive;">Titrage colorimétrique</div>
+        <div style="font-size:32px;">un changement de couleur repère l'équivalence</div>
+        <div style="font-size:25px;color:#c9c2b0;">diiode : coloré avant, incolore à l'équivalence</div>
+      </div>
+    </div>
+    <div style="border:2px solid rgba(232,196,104,0.4);background:rgba(232,196,104,0.07);border-radius:14px;padding:28px 32px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:34px;">
+      <div style="font-family:Kalam,cursive;font-size:32px;color:#6bbfab;">Relation à l'équivalence</div>
+      <div style="display:flex;align-items:center;gap:20px;font-family:Kalam,cursive;font-size:50px;color:#e8c468;">
+        <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 12px 6px;"><em>C</em><sub>A</sub> × <em>V</em><sub>A</sub></span><span style="border-bottom:3px solid #e8c468;width:100%;"></span><span style="padding:6px 12px 0;"><em>a</em></span></div>
+        <span>=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 12px 6px;"><em>C</em><sub>B</sub> × <em>V</em><sub>E</sub></span><span style="border-bottom:3px solid #e8c468;width:100%;"></span><span style="padding:6px 12px 0;"><em>b</em></span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;font-family:Kalam,cursive;font-size:50px;color:#e8c468;">
+        <span><em>C</em><sub>A</sub> =</span>
+        <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 10px 4px;"><em>a</em></span><span style="border-bottom:3px solid #e8c468;width:100%;"></span><span style="padding:4px 10px 0;"><em>b</em></span></div>
+        <span>×</span>
+        <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 10px 4px;"><em>C</em><sub>B</sub> × <em>V</em><sub>E</sub></span><span style="border-bottom:3px solid #e8c468;width:100%;"></span><span style="padding:4px 10px 0;"><em>V</em><sub>A</sub></span></div>
+      </div>
+      <div style="font-size:26px;color:#c9c2b0;">les ions spectateurs n'interviennent pas dans l'équation</div>
+    </div>
+  </div>
+</section>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.armReveals();
+    this.waitForSlides(0);
+  }
+
+  armReveals() {
+    document.querySelectorAll("[data-reveal]").forEach((el) => {
+      if (el.getAttribute("data-revealed") === "1") return;
+      el.style.opacity = "0";
+      el.style.transform = "translateY(10px)";
+      el.style.transition = "opacity .32s ease, transform .32s ease";
+    });
+    if (this._revealBound) return;
+    this._revealBound = true;
+    window.addEventListener("keydown", this.onRevealKey.bind(this), true);
+  }
+
+  onRevealKey(e) {
+    const t = e.composedPath ? e.composedPath()[0] : e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const fwd = ["ArrowRight", "PageDown", " ", "Spacebar", "ArrowDown"].indexOf(e.key) > -1;
+    const back = ["ArrowLeft", "PageUp", "ArrowUp"].indexOf(e.key) > -1;
+    if (!fwd && !back) return;
+    const slide = document.querySelector("[data-deck-active]");
+    if (!slide) return;
+    const items = Array.prototype.slice.call(slide.querySelectorAll("[data-reveal]"));
+    if (!items.length) return;
+    const group = (el) => el.getAttribute("data-reveal");
+    const shown = (el) => el.getAttribute("data-revealed") === "1";
+    if (fwd) {
+      const next = items.filter((el) => !shown(el))[0];
+      if (!next) return;
+      const g = group(next);
+      items.filter((el) => group(el) === g).forEach((el) => {
+        el.setAttribute("data-revealed", "1");
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+    } else {
+      const on = items.filter(shown);
+      if (!on.length) return;
+      const g = group(on[on.length - 1]);
+      items.filter((el) => group(el) === g).forEach((el) => {
+        el.removeAttribute("data-revealed");
+        el.style.opacity = "0";
+        el.style.transform = "translateY(10px)";
+      });
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }
+
+  waitForSlides(tries) {
+    const ids = ["deckSetupSvg", "deckBenchSvg", "deckGraphSvg", "deckMicroSvg", "deckMystSvg"];
+    const ready = ids.every((id) => document.getElementById(id))
+      && typeof window.initTitrationBench === "function"
+      && typeof window.initSetupExplorer === "function"
+      && typeof window.initTitrationGraph === "function"
+      && typeof window.initMicroTitration === "function";
+    if (ready) { this.initAnimations(); this.armReveals(); return; }
+    if (tries > 400) return;
+    requestAnimationFrame(() => this.waitForSlides(tries + 1));
+  }
+
+  initAnimations() {
+    if (this._animsDone) return;
+    this._animsDone = true;
+    const g = document.getElementById("deckGraphV");
+    if (g) g.value = 8;
+    initSetupExplorer({ svgId: "deckSetupSvg", listId: "deckSetupList", infoId: "deckSetupInfo" });
+    initTitrationBench({
+      svgId: "deckBenchSvg", vbId: "deckBenchVB", statusId: "deckBenchStatus", barsId: "deckBenchBars",
+      openBtnId: "deckBenchOpen", dropBtnId: "deckBenchDrop", mlBtnId: "deckBenchMl",
+      resetBtnId: "deckBenchReset", starchBtnId: "deckBenchStarch"
+    });
+    initTitrationGraph({ svgId: "deckGraphSvg", rangeId: "deckGraphV", readoutId: "deckGraphReadout" });
+    initMicroTitration({
+      svgId: "deckMicroSvg", dropBtnId: "deckMicroDrop", resetBtnId: "deckMicroReset",
+      countsId: "deckMicroCounts", statusId: "deckMicroStatus"
+    });
+    initTitrationBench({
+      mystery: true, svgId: "deckMystSvg", vbId: "deckMystVB",
+      openBtnId: "deckMystOpen", dropBtnId: "deckMystDrop", mlBtnId: "deckMystMl",
+      resetBtnId: "deckMystReset", starchBtnId: "deckMystStarch", newBtnId: "deckMystNew",
+      revealBtnId: "deckMystReveal", calcId: "deckMystCalc"
+    });
+  }
+
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
