@@ -1,7 +1,8 @@
-/* Animations du chapitre 1 — 2nde — "Introduction : la précision en physique-chimie"
-   Version simple (raw) : une animation par sous-partie (a à f). */
+/* Animations du chapitre 1 — 2nde — « Introduction : la précision en physique-chimie »
+   Version site (révision) : mêmes fonctions init*, mêmes identifiants HTML que la
+   version précédente — seul le contenu des SVG change (animé, plus lisible). */
 
-/* ---------- Fonction utilitaire partagée : arrondi à N chiffres significatifs ---------- */
+/* ---------- Arrondi à N chiffres significatifs ---------- */
 function roundToSig(x, n) {
   if (x === 0) return 0;
   const d = Math.ceil(Math.log10(Math.abs(x)));
@@ -9,9 +10,8 @@ function roundToSig(x, n) {
   const magnitude = Math.pow(10, power);
   return Math.round(x * magnitude) / magnitude;
 }
-// Un nombre JS ne conserve jamais un zéro final (4.3211 et 4.32110 sont la
-// même valeur numérique) : pour AFFICHER le bon nombre de CS, il faut
-// formater en chaîne de caractères avec le bon nombre de décimales.
+// Un nombre JS ne garde jamais de zéro final : pour AFFICHER le bon nombre de CS,
+// on formate en chaîne avec le bon nombre de décimales.
 function formatSig(x, n) {
   const rounded = roundToSig(x, n);
   if (rounded === 0) return (0).toFixed(Math.max(0, n - 1));
@@ -20,187 +20,352 @@ function formatSig(x, n) {
   return rounded.toFixed(decimals);
 }
 
+/* ---------- Outils communs à ce chapitre ---------- */
+const CH1 = (() => {
+  const reduce = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+  const ease = t => { t = clamp(t); return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; };
+  const prog = (t, a, b) => ease((t - a) / (b - a));
+  const fr = (x, d) => Number(x).toFixed(d).replace(".", ",").replace("-", "−");
+  const frs = s => String(s).replace(".", ",");
+  const txt = (x, y, s, o = {}) =>
+    `<text x="${x}" y="${y}" font-size="${o.size || 13}" fill="${o.fill || "var(--chalk)"}" text-anchor="${o.anchor || "middle"}"` +
+    (o.weight ? ` font-weight="${o.weight}"` : "") +
+    (o.hand ? ` font-family="Kalam, 'Segoe Print', cursive"` : "") +
+    (o.op != null ? ` opacity="${o.op}"` : "") + `>${s}</text>`;
+  const ln = (x1, y1, x2, y2, stroke, w = 1.5, extra = "") =>
+    `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="${w}" ${extra}/>`;
+  function active(buttons, i) { buttons.forEach((b, j) => b && b.classList.toggle("active-hist", j === i)); }
+  // Boucle d'animation : draw(t) reçoit le temps (s) depuis le dernier play().
+  // Le temps est gelé tant que le SVG est caché (onglet non affiché).
+  function runner(el, draw) {
+    let t0 = 0, last = 0, dur = 0, running = false;
+    function frame(now) {
+      if (!el.getClientRects().length) { t0 += now - last; last = now; requestAnimationFrame(frame); return; }
+      last = now;
+      const t = reduce ? 1e4 : (now - t0) / 1000;
+      el.innerHTML = draw(t);
+      if (!reduce && t <= dur) requestAnimationFrame(frame); else running = false;
+    }
+    return {
+      play(d) {
+        t0 = last = performance.now(); dur = d;
+        if (!running) { running = true; requestAnimationFrame(frame); }
+      }
+    };
+  }
+  // Générateur pseudo-aléatoire reproductible
+  function rng(seed) {
+    return function () {
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  return { reduce, clamp, ease, prog, fr, frs, txt, ln, active, runner, rng };
+})();
+
 /* ---------- a1. Incertitude implicite (vie quotidienne) vs explicite (physicien) ---------- */
 function initImplicitExplicit(cfg) {
+  const { prog, txt, ln } = CH1;
   const svg = document.getElementById(cfg.svgId);
   const readout = document.getElementById(cfg.readoutId);
   const buttons = cfg.buttonIds.map(id => document.getElementById(id));
+  svg.setAttribute("viewBox", "0 0 360 215");
 
   const EXAMPLES = {
-    trajet: { daily: "« Le trajet dure 20 minutes. »", science: "20 ± 2 min", icon: "🚗" },
-    temperature: { daily: "« Il fait 20 °C dehors. »", science: "20 ± 1 °C", icon: "🌡️" }
+    trajet: { daily: "« Le trajet dure 20 minutes. »", v: 20, U: 2, unit: "min", min: 14, max: 26, lab: 2 },
+    temperature: { daily: "« Il fait 20 °C dehors. »", v: 20, U: 1, unit: "°C", min: 16, max: 24, lab: 1 }
   };
   const keys = ["trajet", "temperature"];
-  let current = "trajet";
+  let current = 0;
+  const X0 = 30, X1 = 330, Y = 122;
 
-  function draw() {
-    const ex = EXAMPLES[current];
-    let s = `<text x="110" y="35" font-size="28" text-anchor="middle">${ex.icon}</text>`;
-    s += `<text x="110" y="70" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">VIE QUOTIDIENNE (incertitude implicite)</text>`;
-    s += `<text x="110" y="88" font-size="12" fill="var(--chalk)" text-anchor="middle">${ex.daily}</text>`;
-    s += `<line x1="30" y1="100" x2="190" y2="100" stroke="var(--chalk-dim)" stroke-width="1" stroke-dasharray="2,2"/>`;
-    s += `<text x="110" y="118" font-size="8" fill="var(--yellow)" text-anchor="middle">UN PHYSICIEN DIRAIT (incertitude explicite)</text>`;
-    s += `<text x="110" y="140" font-size="16" fill="var(--yellow)" text-anchor="middle" font-weight="700">${ex.science}</text>`;
-    svg.innerHTML = s;
+  function draw(t) {
+    const ex = EXAMPLES[keys[current]];
+    const px = v => X0 + ((v - ex.min) / (ex.max - ex.min)) * (X1 - X0);
+    const o1 = prog(t, 0, 0.4), o2 = prog(t, 0.5, 1);
+    let s = txt(180, 22, "VIE QUOTIDIENNE · incertitude implicite", { size: 11, fill: "var(--chalk-dim)", op: o1 });
+    s += txt(180, 52, ex.daily, { size: 18, op: o1 });
 
-    readout.textContent = "Il y a toujours une incertitude, même à l'oral, dans la vie de tous les jours — elle est juste implicite (sous-entendue, jamais énoncée). En sciences, on est obligé de la rendre explicite (chiffrée), car la mesure doit pouvoir être vérifiée et comparée par d'autres.";
+    s += `<g opacity="${o2}">` + ln(X0, Y, X1, Y, "var(--chalk-dim)", 1.5);
+    for (let v = ex.min; v <= ex.max; v++) {
+      const major = (v - ex.min) % ex.lab === 0;
+      s += ln(px(v), Y - (major ? 7 : 4), px(v), Y + (major ? 7 : 4), "var(--chalk-dim)", major ? 1.5 : 1);
+      if (major) s += txt(px(v), Y + 22, v, { size: 11, fill: "var(--chalk-dim)" });
+    }
+    s += txt(X1, Y + 38, ex.unit, { size: 11, fill: "var(--chalk-dim)", anchor: "end" }) + `</g>`;
+
+    const w = prog(t, 1.0, 1.8) * ex.U;
+    if (w > 0) s += `<rect x="${px(ex.v - w)}" y="${Y - 16}" width="${px(ex.v + w) - px(ex.v - w)}" height="32" rx="3" fill="rgba(107,191,171,0.2)" stroke="var(--teal)" stroke-width="1.5"/>`;
+    s += `<circle cx="${px(ex.v)}" cy="${Y}" r="5" fill="var(--yellow)" opacity="${o2}"/>`;
+
+    if (t > 1.8) {
+      const o = prog(t, 1.8, 2.3);
+      const dv = ex.U * 0.8 * Math.sin(t * 1.1) * Math.cos(t * 0.43 + 1);
+      const x = px(ex.v + dv);
+      s += `<g opacity="${o}"><circle cx="${x}" cy="${Y}" r="7" fill="none" stroke="var(--teal)" stroke-width="2"/>`;
+      s += txt(x, Y - 24, "valeur vraie ?", { size: 11, fill: "var(--teal)" }) + `</g>`;
+    }
+    s += txt(180, 174, "UN PHYSICIEN ÉCRIT · incertitude explicite", { size: 11, fill: "var(--yellow)", op: prog(t, 1.9, 2.3) });
+    s += txt(180, 205, `${ex.v} ± ${ex.U} ${ex.unit}`, { size: 28, fill: "var(--yellow)", hand: true, weight: 700, op: prog(t, 2.1, 2.6) });
+    return s;
   }
 
-  buttons.forEach((btn, i) => {
-    btn.addEventListener("click", () => { current = keys[i]; draw(); });
-  });
-  draw();
+  const r = CH1.runner(svg, draw);
+  function select(i) {
+    current = i; CH1.active(buttons, i);
+    readout.textContent = "Il y a toujours une incertitude, même à l'oral, dans la vie de tous les jours — elle est juste implicite (sous-entendue, jamais énoncée). En sciences, on est obligé de la rendre explicite (chiffrée), car la mesure doit pouvoir être vérifiée et comparée par d'autres.";
+    r.play(Infinity);
+  }
+  buttons.forEach((btn, i) => btn.addEventListener("click", () => select(i)));
+  select(0);
 }
 
 /* ---------- a2. Pourquoi ne peut-on jamais avoir une précision parfaite ? (types d'erreurs) ---------- */
 function initErrorTypes(cfg) {
+  const { prog, txt, ln, fr } = CH1;
   const svg = document.getElementById(cfg.svgId);
   const explainEl = document.getElementById(cfg.explainId);
   const prevBtn = document.getElementById(cfg.prevBtnId);
   const nextBtn = document.getElementById(cfg.nextBtnId);
   const stepEl = document.getElementById(cfg.stepId);
+  svg.setAttribute("viewBox", "0 0 360 220");
+
+  // petit diagramme en points : valeurs empilées au-dessus d'un axe
+  function dotPlot(values, { x0, x1, y, vMin, vMax, step, labels, dec }) {
+    const px = v => x0 + ((v - vMin) / (vMax - vMin)) * (x1 - x0);
+    let s = ln(x0, y, x1, y, "var(--chalk-dim)", 1.5);
+    labels.forEach(v => { s += ln(px(v), y - 4, px(v), y + 4, "var(--chalk-dim)", 1) + txt(px(v), y + 16, fr(v, dec), { size: 10, fill: "var(--chalk-dim)" }); });
+    const count = {};
+    values.forEach((v, j) => {
+      const k = Math.round(v / step);
+      count[k] = (count[k] || 0) + 1;
+      const last = j === values.length - 1;
+      s += `<circle cx="${px(k * step)}" cy="${y - 8 - (count[k] - 1) * 10}" r="4" fill="${last ? "var(--yellow)" : "var(--teal)"}"/>`;
+    });
+    return s;
+  }
+
+  const READ = [2.4, 2.5, 2.6, 2.4, 2.5, 2.3, 2.6, 2.5];
+  const MASSES = [500, 498, 503, 501, 499, 502, 497, 500, 501, 499];
 
   const STEPS = [
     {
       title: "Erreur aléatoire — la lecture de l'utilisateur",
       text: "Deux personnes qui lisent la même position sur un instrument gradué n'obtiennent pas toujours exactement la même valeur (angle de lecture, temps de réaction...). Quand l'aiguille ou le repère tombe entre deux graduations, il faut estimer « au jugé » — et c'est là que l'erreur varie d'une personne à l'autre.",
-      draw() {
-        const cx = 100, cy = 60, r = 28;
-        let s = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-        // 12 graduations + chiffres, comme une vraie montre analogique
-        for (let i = 0; i < 12; i++) {
-          const a = (i / 12) * 2 * Math.PI - Math.PI / 2;
-          const x1 = cx + Math.cos(a) * (r - 6), y1 = cy + Math.sin(a) * (r - 6);
-          const x2 = cx + Math.cos(a) * r, y2 = cy + Math.sin(a) * r;
-          s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
-          const xn = cx + Math.cos(a) * (r + 10), yn = cy + Math.sin(a) * (r + 10);
-          const num = i === 0 ? 12 : i;
-          s += `<text x="${xn}" y="${yn + 3}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">${num}</text>`;
+      dur: Infinity,
+      draw(t) {
+        const cx = 110, cy = 150, R = 84;
+        const pt = (v, r) => { const a = Math.PI * (1 - v / 5); return [cx + r * Math.cos(a), cy - r * Math.sin(a)]; };
+        const [ax, ay] = pt(0, R), [bx, by] = pt(5, R);
+        let s = `<path d="M${ax} ${ay} A${R} ${R} 0 0 1 ${bx} ${by}" fill="none" stroke="var(--chalk-dim)" stroke-width="2"/>`;
+        for (let v = 0; v <= 5; v++) {
+          const [x1, y1] = pt(v, R - 12), [x2, y2] = pt(v, R), [xl, yl] = pt(v, R + 14);
+          s += ln(x1, y1, x2, y2, "var(--chalk-dim)", 2) + txt(xl, yl + 4, v, { size: 12, fill: "var(--chalk-dim)" });
         }
-        // aiguille volontairement placée ENTRE deux graduations (ici, entre 12h et 1h)
-        const handAngle = (0.5 / 12) * 2 * Math.PI - Math.PI / 2;
-        const hx = cx + Math.cos(handAngle) * (r - 8), hy = cy + Math.sin(handAngle) * (r - 8);
-        s += `<line x1="${cx}" y1="${cy}" x2="${hx}" y2="${hy}" stroke="var(--yellow)" stroke-width="2.5"/>`;
-        s += `<line x1="${cx}" y1="${cy}" x2="${cx + 15}" y2="${cy + 3}" stroke="var(--yellow)" stroke-width="1.5"/>`;
-        s += `<circle cx="${cx}" cy="${cy}" r="2.5" fill="var(--yellow)"/>`;
-        s += `<text x="${cx}" y="${cy + r + 26}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">montre analogique</text>`;
-        s += `<text x="${cx}" y="${cy + r + 38}" font-size="8" fill="var(--yellow)" text-anchor="middle">entre deux graduations : on estime au jugé</text>`;
+        const [hx, hy] = pt(2.45 + 0.02 * Math.sin(t * 3), R - 18);
+        s += ln(cx, cy, hx, hy, "var(--yellow)", 3, `stroke-linecap="round"`) + `<circle cx="${cx}" cy="${cy}" r="4" fill="var(--yellow)"/>`;
+        s += txt(cx, cy + 24, "l'aiguille est entre 2 et 3", { size: 11, fill: "var(--chalk-dim)" });
+
+        const per = 1.1, cycle = READ.length * per + 1.6, tc = t % cycle;
+        const k = Math.min(READ.length, Math.floor(tc / per) + 1);
+        s += txt(284, 30, "lectures des élèves", { size: 11, fill: "var(--chalk-dim)" });
+        const start = Math.max(0, k - 4);
+        for (let j = start; j < k; j++) {
+          const newest = j === k - 1;
+          const o = newest ? prog(tc, j * per, j * per + 0.3) : 1;
+          s += txt(284, 54 + (j - start) * 20, `élève ${j + 1} : ${fr(READ[j], 1)}`, { size: 13, fill: newest ? "var(--yellow)" : "var(--chalk-dim)", op: o });
+        }
+        s += dotPlot(READ.slice(0, k), { x0: 232, x1: 336, y: 180, vMin: 2.2, vMax: 2.8, step: 0.1, labels: [2.3, 2.5, 2.7], dec: 1 });
+        s += txt(180, 214, "même aiguille, lectures différentes", { size: 12, fill: "var(--yellow)" });
         return s;
       }
     },
     {
       title: "Erreur aléatoire — la variabilité de l'objet mesuré",
       text: "Même des objets censés être identiques varient légèrement. Exemple : la masse de plusieurs comprimés d'un même médicament, sortis de la même chaîne de fabrication, n'est jamais exactement la même d'un comprimé à l'autre.",
-      draw() {
-        const masses = ["500 mg", "498 mg", "503 mg"];
-        let s = "";
-        [40, 100, 160].forEach((x, i) => {
-          s += `<ellipse cx="${x}" cy="70" rx="18" ry="10" fill="var(--teal)" opacity="0.8"/>`;
-          s += `<text x="${x}" y="95" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">${masses[i]}</text>`;
-        });
-        s += `<text x="110" y="120" font-size="8.5" fill="var(--chalk-dim)" text-anchor="middle">3 comprimés « identiques », 3 masses différentes</text>`;
+      dur: Infinity,
+      draw(t) {
+        const per = 1.3, cycle = MASSES.length * per + 1.6, tc = t % cycle;
+        const k = Math.floor(tc / per), local = tc - k * per;
+        const weighing = k < MASSES.length;
+        const shown = weighing ? MASSES.slice(0, k + (local > 0.55 ? 1 : 0)) : MASSES.slice();
+        let s = ln(50, 150, 170, 150, "var(--chalk-dim)", 3, `stroke-linecap="round"`);
+        s += `<rect x="104" y="151" width="12" height="17" fill="var(--chalk-dim)" opacity="0.6"/>`;
+        s += `<rect x="40" y="168" width="140" height="38" rx="6" fill="rgba(0,0,0,0.2)" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
+        s += `<rect x="66" y="176" width="88" height="22" rx="3" fill="#0d1512"/>`;
+        const disp = weighing ? (local > 0.55 ? `${MASSES[k]} mg` : "--- mg") : `${MASSES[MASSES.length - 1]} mg`;
+        s += txt(110, 192, disp, { size: 14, fill: "var(--yellow)", weight: 600 });
+        if (weighing) {
+          const y = 22 + (141 - 22) * prog(local, 0, 0.45);
+          s += `<ellipse cx="110" cy="${y}" rx="18" ry="8" fill="var(--teal)"/>`;
+          s += `<line x1="96" y1="${y}" x2="124" y2="${y}" stroke="var(--board)" stroke-width="1.2" opacity="0.6"/>`;
+        }
+        s += txt(282, 40, "masses mesurées", { size: 11, fill: "var(--chalk-dim)" });
+        s += dotPlot(shown, { x0: 222, x1: 342, y: 168, vMin: 495, vMax: 505, step: 1, labels: [496, 500, 504], dec: 0 });
+        s += txt(180, 214, "comprimés « identiques », masses différentes", { size: 12, fill: "var(--yellow)" });
         return s;
       }
     },
     {
       title: "Erreur systématique — la résolution de l'appareil",
       text: "Un instrument ne peut jamais donner une précision meilleure que sa plus petite graduation. Entre deux graduations, on estime « au jugé » — un dixième de graduation, par exemple — mais on ne peut jamais être certain de cette estimation.",
-      draw() {
-        const x0 = 30, x1 = 190, y = 75;
-        let s = `<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-        // grandes graduations (tous les 20 px) avec chiffres (0 à 8 cm)
-        for (let i = 0; i <= 8; i++) {
-          const x = x0 + i * 20;
-          s += `<line x1="${x}" y1="${y - 10}" x2="${x}" y2="${y + 10}" stroke="var(--chalk-dim)" stroke-width="1.8"/>`;
-          s += `<text x="${x}" y="${y + 22}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">${i}</text>`;
+      dur: 2.2,
+      draw(t) {
+        const X0 = 20, CM = 38, L = 4.64, yR = 150;
+        let s = `<rect x="14" y="${yR}" width="318" height="36" rx="3" fill="rgba(242,237,225,0.06)" stroke="var(--chalk-dim)" stroke-width="1.2"/>`;
+        for (let i = 0; i <= 80; i++) {
+          const x = X0 + i * CM / 10, len = i % 10 === 0 ? 14 : i % 5 === 0 ? 9 : 5;
+          s += ln(x, yR, x, yR + len, "var(--chalk-dim)", i % 10 === 0 ? 1.5 : 0.8);
+          if (i % 10 === 0) s += txt(x, yR + 28, i / 10, { size: 11, fill: "var(--chalk-dim)" });
         }
-        // petites sous-graduations (tous les 4 px, 5 par intervalle) — pour montrer l'estimation fine
-        for (let i = 0; i < 40; i++) {
-          const x = x0 + i * 4;
-          if (i % 5 !== 0) s += `<line x1="${x}" y1="${y - 4}" x2="${x}" y2="${y + 4}" stroke="var(--chalk-dim)" stroke-width="0.8" opacity="0.5"/>`;
+        const w = L * CM * prog(t, 0, 1);
+        s += `<rect x="${X0}" y="${yR - 20}" width="${w}" height="16" rx="3" fill="var(--teal)" opacity="0.85"/>`;
+        const ex = X0 + L * CM;
+        const o = prog(t, 1.1, 1.7);
+        if (o > 0) {
+          const ix = 190, iy = 14, iw = 155, ih = 84, vMin = 4.5, vMax = 4.8;
+          const ipx = v => ix + ((v - vMin) / (vMax - vMin)) * iw;
+          s += `<g opacity="${o}">`;
+          s += `<circle cx="${ex}" cy="${yR - 6}" r="16" fill="none" stroke="var(--yellow)" stroke-width="1.5"/>`;
+          s += ln(ex - 12, yR - 16, ix, iy + ih, "var(--yellow)", 1, `stroke-dasharray="3,3"`) + ln(ex + 12, yR - 16, ix + iw, iy + ih, "var(--yellow)", 1, `stroke-dasharray="3,3"`);
+          s += `<rect x="${ix}" y="${iy}" width="${iw}" height="${ih}" rx="6" fill="#16261f" stroke="var(--yellow)" stroke-width="1.5"/>`;
+          s += `<rect x="${ix}" y="${iy + 32}" width="${ipx(L) - ix}" height="16" fill="var(--teal)" opacity="0.85"/>`;
+          s += ln(ix, iy + 50, ix + iw, iy + 50, "var(--chalk-dim)", 1.5);
+          [4.5, 4.6, 4.7, 4.8].forEach(v => {
+            s += ln(ipx(v), iy + 50, ipx(v), iy + 64, "var(--chalk-dim)", 1.5);
+            if (v > 4.5 && v < 4.8) s += txt(ipx(v), iy + 78, fr(v, 1), { size: 11, fill: "var(--chalk-dim)" });
+          });
+          s += txt(ipx(L), iy + 22, "4,6 ou 4,7 ?", { size: 12, fill: "var(--yellow)" });
+          s += `</g>`;
         }
-        // point de mesure, délibérément entre deux grandes graduations (90 et 110)
-        const px = 102;
-        s += `<circle cx="${px}" cy="${y}" r="4" fill="var(--yellow)"/>`;
-        s += `<line x1="${px}" y1="${y - 27}" x2="${px}" y2="${y - 12}" stroke="var(--yellow)" stroke-width="1.5"/>`;
-        s += `<text x="${px}" y="${y - 31}" font-size="7.5" fill="var(--yellow)" text-anchor="middle">valeur à estimer</text>`;
-        s += `<text x="${(x0 + x1) / 2}" y="${y + 38}" font-size="8" fill="var(--chalk-dim)" text-anchor="middle">au-delà des graduations, on estime au jugé</text>`;
+        s += txt(180, 212, "au-delà de la plus petite graduation, on estime au jugé", { size: 12, fill: "var(--yellow)", op: o });
         return s;
       }
     }
   ];
 
+  const r = CH1.runner(svg, t => STEPS[step - 1].draw(t));
   let step = 1;
   function render() {
-    svg.innerHTML = STEPS[step - 1].draw();
-    explainEl.innerHTML = `<strong style="color:var(--yellow)">${STEPS[step - 1].title}</strong> — ${STEPS[step - 1].text}`;
-    stepEl.textContent = `${step} / 3`;
+    const st = STEPS[step - 1];
+    explainEl.innerHTML = `<strong style="color:var(--yellow)">${st.title}</strong> — ${st.text}`;
+    stepEl.textContent = `${step} / ${STEPS.length}`;
     prevBtn.disabled = step === 1;
-    nextBtn.disabled = step === 3;
+    nextBtn.disabled = step === STEPS.length;
+    r.play(st.dur);
   }
   prevBtn.addEventListener("click", () => { if (step > 1) { step--; render(); } });
-  nextBtn.addEventListener("click", () => { if (step < 3) { step++; render(); } });
+  nextBtn.addEventListener("click", () => { if (step < STEPS.length) { step++; render(); } });
   render();
 }
 
 /* ---------- b. Chiffres significatifs (comptage) ---------- */
 function initSignificantFigures(cfg) {
+  const { prog, txt } = CH1;
   const svg = document.getElementById(cfg.svgId);
   const readout = document.getElementById(cfg.readoutId);
   const buttons = cfg.buttonIds.map(id => document.getElementById(id));
+  svg.setAttribute("viewBox", "0 0 360 175");
 
-  // chaque chiffre annoté : sig = true (significatif) / false (non significatif, zéro de tête)
   const EXAMPLES = {
-    a: { display: "3,20", digits: [{ c: "3", sig: true }, { c: ",", sig: null }, { c: "2", sig: true }, { c: "0", sig: true }], count: "3", rule: "Tous les chiffres sont significatifs, y compris le zéro après la virgule." },
-    b: { display: "0,0450", digits: [{ c: "0", sig: false }, { c: ",", sig: null }, { c: "0", sig: false }, { c: "4", sig: true }, { c: "5", sig: true }, { c: "0", sig: true }], count: "3", rule: "Les zéros de tête (avant le premier chiffre non nul) ne sont pas significatifs ; le zéro final après la virgule l'est." },
-    c: { display: "205", digits: [{ c: "2", sig: true }, { c: "0", sig: true }, { c: "5", sig: true }], count: "3", rule: "Un zéro encadré par deux chiffres non nuls est toujours significatif." }
+    a: { digits: [["3", true, "non nul"], [","], ["2", true, "non nul"], ["0", true, "zéro final"]], count: "3", rule: "Tous les chiffres sont significatifs, y compris le zéro après la virgule." },
+    b: { digits: [["0", false, "de tête"], [","], ["0", false, "de tête"], ["4", true, "non nul"], ["5", true, "non nul"], ["0", true, "zéro final"]], count: "3", rule: "Les zéros de tête (avant le premier chiffre non nul) ne sont pas significatifs ; le zéro final après la virgule l'est." },
+    c: { digits: [["2", true, "non nul"], ["0", true, "encadré"], ["5", true, "non nul"]], count: "3", rule: "Un zéro encadré par deux chiffres non nuls est toujours significatif." }
   };
   const keys = ["a", "b", "c"];
-  let current = "a";
+  let current = 0;
+  const TW = 48, GAP = 6, CW = 16, Y0 = 34, TH = 60, DT = 0.55;
 
-  function draw() {
-    const ex = EXAMPLES[current];
-    const cx = 110, cy = 70;
-    let text = "";
+  function draw(t) {
+    const ex = EXAMPLES[keys[current]];
+    const total = ex.digits.reduce((w, d) => w + (d.length === 1 ? CW : TW) + GAP, -GAP);
+    let x = 180 - total / 2, idx = 0, count = 0, s = "";
     ex.digits.forEach(d => {
-      const color = d.sig === true ? "var(--teal)" : d.sig === false ? "var(--chalk-dim)" : "var(--chalk)";
-      text += `<tspan fill="${color}">${d.c}</tspan>`;
+      if (d.length === 1) { s += txt(x + CW / 2, Y0 + 46, ",", { size: 34, hand: true }); x += CW + GAP; return; }
+      const [c, sig, why] = d;
+      const ts = 0.4 + idx * DT, p = prog(t, ts, ts + 0.3);
+      const cx = x + TW / 2;
+      if (t >= ts && t < ts + DT) s += `<polygon points="${cx - 6},${Y0 - 14} ${cx + 6},${Y0 - 14} ${cx},${Y0 - 5}" fill="var(--yellow)"/>`;
+      const stroke = p > 0 ? (sig ? "var(--teal)" : "var(--chalk-dim)") : "var(--line)";
+      const fill = sig ? `rgba(107,191,171,${0.2 * p})` : "transparent";
+      s += `<rect x="${x}" y="${Y0}" width="${TW}" height="${TH}" rx="6" fill="${fill}" stroke="${stroke}" stroke-width="2"${!sig && p > 0 ? ` stroke-dasharray="4,3"` : ""}/>`;
+      s += txt(cx, Y0 + 44, c, { size: 36, hand: true, weight: 700, fill: p > 0.5 ? (sig ? "var(--teal)" : "var(--chalk-dim)") : "var(--chalk)", op: !sig && p > 0.5 ? 0.6 : 1 });
+      s += txt(cx, Y0 + TH + 18, why, { size: 11, fill: sig ? "var(--teal)" : "var(--chalk-dim)", op: p });
+      if (sig && p >= 1) count++;
+      x += TW + GAP; idx++;
     });
-    let s = `<text x="${cx}" y="${cy}" font-size="28" font-family="var(--font-display)" text-anchor="middle">${text}</text>`;
-    svg.innerHTML = s;
-
-    readout.innerHTML = `<strong style="color:var(--yellow)">${ex.count} chiffre(s) significatif(s)</strong> (en <span style="color:var(--teal)">bleu</span> ; en <span style="color:var(--chalk-dim)">gris</span> : non significatif).<br>${ex.rule}`;
+    s += txt(180, 160, `${count} chiffre${count > 1 ? "s" : ""} significatif${count > 1 ? "s" : ""}`, { size: 24, hand: true, fill: "var(--yellow)", weight: 700 });
+    return s;
   }
 
-  buttons.forEach((btn, i) => {
-    btn.addEventListener("click", () => { current = keys[i]; draw(); });
-  });
-  draw();
+  const r = CH1.runner(svg, draw);
+  function select(i) {
+    current = i; CH1.active(buttons, i);
+    const ex = EXAMPLES[keys[i]];
+    readout.innerHTML = `<strong style="color:var(--yellow)">${ex.count} chiffre(s) significatif(s)</strong> (en <span style="color:var(--teal)">bleu</span> ; en <span style="color:var(--chalk-dim)">gris</span> : non significatif).<br>${ex.rule}`;
+    r.play(0.4 + ex.digits.length * DT + 0.5);
+  }
+  buttons.forEach((btn, i) => btn.addEventListener("click", () => select(i)));
+  select(0);
 }
 
 /* ---------- c. Écriture scientifique ---------- */
 function initScientificNotation(cfg) {
+  const { prog, txt } = CH1;
   const svg = document.getElementById(cfg.svgId);
   const readout = document.getElementById(cfg.readoutId);
   const buttons = cfg.buttonIds.map(id => document.getElementById(id));
+  svg.setAttribute("viewBox", "0 0 360 205");
 
+  // digits : chiffres sans virgule ; c0 / c1 : position de la virgule avant / après
   const EXAMPLES = {
-    a: { standard: "45 000", a: "4,5", n: 4, cs: 2 },
-    b: { standard: "0,0032", a: "3,2", n: -3, cs: 2 },
-    c: { standard: "720 000", a: "7,20", n: 5, cs: 3 }
+    a: { standard: "45 000", digits: "45000", c0: 5, c1: 1, keep: [0, 1], a: "4,5", n: 4, cs: 2 },
+    b: { standard: "0,0032", digits: "00032", c0: 1, c1: 4, keep: [3, 4], a: "3,2", n: -3, cs: 2 }
   };
-  const keys = ["a", "b", "c"];
-  let current = "a";
+  const keys = ["a", "b"];
+  let current = 0;
+  const SW = 34, YD = 96, HOP = 0.6, T0 = 0.8;
+  const sup = n => String(n).replace("-", "−");
 
-  function draw() {
-    const ex = EXAMPLES[current];
-    const cx = 110, cy = 75;
-    let s = `<text x="${cx}" y="${cy - 20}" font-size="16" fill="var(--chalk-dim)" text-anchor="middle">${ex.standard}</text>`;
-    s += `<text x="${cx}" y="${cy + 5}" font-size="9" fill="var(--yellow)" text-anchor="middle">↓ écriture scientifique</text>`;
-    s += `<text x="${cx}" y="${cy + 35}" font-size="18" fill="var(--yellow)" text-anchor="middle" font-weight="700">${ex.a} × 10${ex.n >= 0 ? "" : "⁻"}${toSupExp(Math.abs(ex.n))}</text>`;
-    svg.innerHTML = s;
+  function timing(ex) { const hops = Math.abs(ex.c1 - ex.c0); return { hops, tF: T0 + hops * HOP + 0.2 }; }
 
-    readout.innerHTML = `${ex.standard} = <strong style="color:var(--yellow)">${ex.a} × 10${ex.n >= 0 ? "" : "⁻"}${toSupExp(Math.abs(ex.n))}</strong> — la mantisse « ${ex.a} » contient exactement <strong style="color:var(--teal)">${ex.cs} chiffres significatifs</strong> (1 ≤ a &lt; 10).`;
+  function draw(t) {
+    const ex = EXAMPLES[keys[current]];
+    const { hops, tF } = timing(ex);
+    const dir = Math.sign(ex.c1 - ex.c0);
+    const len = ex.digits.length, x0 = 180 - (len * SW) / 2;
+    const bx = c => x0 + c * SW;
+    let s = txt(180, 16, `nombre de départ : ${ex.standard}`, { size: 12, fill: "var(--chalk-dim)" });
+
+    let done = 0, c = ex.c0;
+    for (let k = 0; k < hops; k++) {
+      const p = prog(t, T0 + k * HOP, T0 + k * HOP + 0.45);
+      c += dir * p;
+      if (p >= 1) done++;
+      if (p > 0) {
+        const xa = bx(ex.c0 + dir * k), xb = bx(ex.c0 + dir * (k + 1)), xm = (xa + xb) / 2;
+        s += `<path d="M${xa} 62 Q${xm} 32 ${xb} 62" fill="none" stroke="var(--yellow)" stroke-width="1.6" pathLength="1" stroke-dasharray="1" stroke-dashoffset="${1 - p}"/>`;
+        s += `<polygon points="${xb - 4},${58} ${xb + 4},${58} ${xb},${65}" fill="var(--yellow)" opacity="${p}"/>`;
+        s += txt(xm, 38, k + 1, { size: 11, fill: "var(--yellow)", op: p });
+      }
+    }
+    const fade = prog(t, tF, tF + 0.5);
+    for (let i = 0; i < len; i++) {
+      const kept = ex.keep.includes(i);
+      s += txt(x0 + i * SW + SW / 2, YD, ex.digits[i], { size: 38, hand: true, weight: 700, fill: kept && fade > 0 ? "var(--yellow)" : "var(--chalk)", op: kept ? 1 : 1 - 0.8 * fade });
+    }
+    const commaOp = ex.c0 === len && t < T0 ? 0.45 : 1;
+    s += txt(bx(c), YD + 4, ",", { size: 38, hand: true, weight: 700, fill: "var(--coral)", op: commaOp });
+
+    const side = dir < 0 ? "gauche" : "droite";
+    s += txt(180, 132, `virgule décalée de ${done} rang${done > 1 ? "s" : ""} vers la ${side}`, { size: 13, fill: "var(--chalk-dim)" });
+    const fo = prog(t, tF + 0.5, tF + 1);
+    s += `<text x="180" y="174" font-size="30" fill="var(--yellow)" text-anchor="middle" font-family="Kalam, 'Segoe Print', cursive" font-weight="700" opacity="${fo}">${ex.a} × 10<tspan dy="-14" font-size="19">${sup(ex.n)}</tspan></text>`;
+    s += txt(180, 199, dir < 0 ? "virgule vers la gauche → n positif" : "virgule vers la droite → n négatif", { size: 12, fill: "var(--teal)", op: fo });
+    return s;
   }
 
   function toSupExp(n) {
@@ -208,184 +373,233 @@ function initScientificNotation(cfg) {
     return String(n).split("").map(d => sup[d]).join("");
   }
 
-  buttons.forEach((btn, i) => {
-    btn.addEventListener("click", () => { current = keys[i]; draw(); });
-  });
-  draw();
+  const r = CH1.runner(svg, draw);
+  function select(i) {
+    current = i; CH1.active(buttons, i);
+    const ex = EXAMPLES[keys[i]];
+    readout.innerHTML = `${ex.standard} = <strong style="color:var(--yellow)">${ex.a} × 10${ex.n >= 0 ? "" : "⁻"}${toSupExp(Math.abs(ex.n))}</strong> — la mantisse « ${ex.a} » contient exactement <strong style="color:var(--teal)">${ex.cs} chiffres significatifs</strong> (1 ≤ a &lt; 10).`;
+    r.play(timing(ex).tF + 1.2);
+  }
+  buttons.forEach((btn, i) => btn.addEventListener("click", () => select(i)));
+  select(0);
 }
 
 /* ---------- d1. Chiffres significatifs et opérations : somme/différence ---------- */
 function initSigFigAddition(cfg) {
+  const { prog, txt, ln, frs } = CH1;
   const svg = document.getElementById(cfg.svgId);
   const dec1Range = document.getElementById(cfg.dec1RangeId);
   const dec2Range = document.getElementById(cfg.dec2RangeId);
   const readout = document.getElementById(cfg.readoutId);
+  svg.setAttribute("viewBox", "0 0 360 215");
 
-  // valeurs neutres, vérifiées sur toutes les combinaisons de décimales (0 à 4)
   const A_TRUE = 12.34567, B_TRUE = 4.78912;
+  const BLUE = "#5a96d2";
+  const decX = k => 186 + (k - 1) * 28;           // colonne de la k-ième décimale
+  const intX = [128, 156];                         // dizaines, unités
+  const COMMA_X = 170;
+  const dLabel = n => `${n} décimale${n > 1 ? "s" : ""}`;
 
-  function draw() {
-    const dec1 = Number(dec1Range.value);
-    const dec2 = Number(dec2Range.value);
-    const a = A_TRUE.toFixed(dec1);   // chaîne, ex: "12.3"
-    const b = B_TRUE.toFixed(dec2);
-    const aNum = Number(a), bNum = Number(b);
-    const cRaw = aNum + bNum;
-    const minDec = Math.min(dec1, dec2);
-    const c = cRaw.toFixed(minDec);
-    const sameDec = dec1 === dec2;
-    const dLabel = (n) => `${n} décimale${n > 1 ? "s" : ""}`;
-
-    // exemple générique d'abord : a + b = c (s'applique aussi à une différence)
-    let s = `<text x="110" y="20" font-size="10" fill="var(--chalk-dim)" text-anchor="middle">Exemple : <tspan fill="var(--teal)">a</tspan> + <tspan fill="#5a96d2">b</tspan> = <tspan fill="var(--yellow)">c</tspan></text>`;
-    s += `<text x="110" y="46" font-size="16" text-anchor="middle"><tspan fill="var(--teal)" font-weight="700">${a}</tspan><tspan fill="var(--chalk)"> + </tspan><tspan fill="#5a96d2" font-weight="700">${b}</tspan><tspan fill="var(--chalk)"> = </tspan><tspan fill="var(--yellow)" font-weight="700">${cRaw.toFixed(4)}</tspan></text>`;
-    s += `<line x1="30" y1="64" x2="190" y2="64" stroke="var(--chalk-dim)" stroke-width="1" stroke-dasharray="3,3"/>`;
-    const line1 = sameDec ? `a et b ont la même précision (${dLabel(dec1)})` : `a a ${dLabel(dec1)}, b a ${dLabel(dec2)}`;
-    const line2 = sameDec ? `→ c est arrondi à ${dLabel(minDec)}` : `→ c arrondi à la moins précise : ${dLabel(minDec)}`;
-    s += `<text x="110" y="82" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">${line1}</text>`;
-    s += `<text x="110" y="96" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">${line2}</text>`;
-    s += `<text x="110" y="128" font-size="20" fill="var(--yellow)" text-anchor="middle" font-weight="700">c ≈ ${c}</text>`;
-    svg.innerHTML = s;
-
-    readout.innerHTML = sameDec
-      ? `a = <strong style="color:var(--teal)">${a}</strong> et b = <strong style="color:#5a96d2">${b}</strong> ont la même précision (${dLabel(dec1)} après la virgule). Résultat brut : a + b = <strong style="color:var(--yellow)">${cRaw.toFixed(4)}</strong>, arrondi à cette même précision : <strong style="color:var(--yellow)">${c}</strong>.`
-      : `a = <strong style="color:var(--teal)">${a}</strong> (${dLabel(dec1)}) et b = <strong style="color:#5a96d2">${b}</strong> (${dLabel(dec2)}) n'ont pas la même précision. Résultat brut : a + b = <strong style="color:var(--yellow)">${cRaw.toFixed(4)}</strong>, arrondi à la précision la moins bonne des deux : <strong style="color:var(--yellow)">${c}</strong>.`;
+  function state() {
+    const dec1 = Number(dec1Range.value), dec2 = Number(dec2Range.value);
+    const a = A_TRUE.toFixed(dec1), b = B_TRUE.toFixed(dec2);
+    const minDec = Math.min(dec1, dec2), maxDec = Math.max(dec1, dec2);
+    const cRaw = Number(a) + Number(b);
+    return { dec1, dec2, a, b, minDec, maxDec, cRaw, rawStr: cRaw.toFixed(maxDec), c: cRaw.toFixed(minDec) };
   }
-  dec1Range.addEventListener("input", draw);
-  dec2Range.addEventListener("input", draw);
-  draw();
+
+  // écrit un nombre en colonnes, alignées sur la virgule
+  function row(str, y, color, opts = {}) {
+    const [ip, dp = ""] = str.split(".");
+    let s = "";
+    const ints = ip.padStart(2, " ");
+    [0, 1].forEach(i => { if (ints[i] !== " ") s += txt(intX[i], y, ints[i], { size: 22, weight: 600, fill: color }); });
+    if (dp) s += txt(COMMA_X, y, ",", { size: 22, weight: 600, fill: color });
+    for (let k = 1; k <= dp.length; k++) {
+      const dead = opts.deadFrom != null && k > opts.deadFrom;
+      s += txt(decX(k), y, dp[k - 1], { size: 22, weight: 600, fill: dead ? "var(--chalk-dim)" : color, op: dead ? 0.55 : 1 });
+      if (dead && opts.strike > 0) s += ln(decX(k) - 9, y - 7, decX(k) - 9 + 18 * opts.strike, y - 7, "var(--coral)", 2);
+    }
+    return s;
+  }
+
+  function draw(t) {
+    const st = state();
+    const o = prog(t, 0, 0.5);
+    let s = "";
+    if (st.maxDec > st.minDec) {
+      const xa = decX(st.minDec + 1) - 14, xb = decX(st.maxDec) + 14;
+      s += `<rect x="${xa}" y="24" width="${xb - xa}" height="120" rx="4" fill="rgba(217,122,99,0.14)" stroke="var(--coral)" stroke-width="1" stroke-dasharray="4,3" opacity="${o}"/>`;
+      s += txt((xa + xb) / 2, 17, "inconnu pour " + (st.dec1 < st.dec2 ? "a" : "b"), { size: 11, fill: "var(--coral)", op: o });
+      const yQ = st.dec1 < st.dec2 ? 50 : 86;
+      for (let k = st.minDec + 1; k <= st.maxDec; k++) s += txt(decX(k), yQ, "?", { size: 20, fill: "var(--coral)", op: o });
+    }
+    s += txt(22, 50, "a", { size: 14, fill: "var(--teal)", anchor: "start" }) + row(st.a, 50, "var(--teal)");
+    s += txt(22, 86, "b", { size: 14, fill: BLUE, anchor: "start" }) + txt(100, 86, "+", { size: 22, fill: "var(--chalk)" }) + row(st.b, 86, BLUE);
+    s += ln(92, 100, 290, 100, "var(--chalk)", 1.5);
+    s += txt(22, 132, "a + b", { size: 14, fill: "var(--chalk-dim)", anchor: "start" }) + row(st.rawStr, 132, "var(--chalk)", { deadFrom: st.minDec, strike: prog(t, 0.4, 0.8) });
+    const fo = prog(t, 0.5, 0.9);
+    s += txt(180, 184, `c ≈ ${frs(st.c)}`, { size: 30, hand: true, weight: 700, fill: "var(--yellow)", op: fo });
+    s += txt(180, 207, st.dec1 === st.dec2 ? `même précision : arrondi à ${dLabel(st.minDec)}` : `arrondi à la moins précise : ${dLabel(st.minDec)}`, { size: 12, fill: "var(--chalk-dim)", op: fo });
+    return s;
+  }
+
+  const r = CH1.runner(svg, draw);
+  function update() {
+    const st = state();
+    const a = frs(st.a), b = frs(st.b), raw = frs(st.rawStr), c = frs(st.c);
+    readout.innerHTML = st.dec1 === st.dec2
+      ? `a = <strong style="color:var(--teal)">${a}</strong> et b = <strong style="color:${BLUE}">${b}</strong> ont la même précision (${dLabel(st.dec1)} après la virgule). Résultat brut : a + b = <strong style="color:var(--yellow)">${raw}</strong>, arrondi à cette même précision : <strong style="color:var(--yellow)">${c}</strong>.`
+      : `a = <strong style="color:var(--teal)">${a}</strong> (${dLabel(st.dec1)}) et b = <strong style="color:${BLUE}">${b}</strong> (${dLabel(st.dec2)}) n'ont pas la même précision. Résultat brut : a + b = <strong style="color:var(--yellow)">${raw}</strong>, arrondi à la précision la moins bonne des deux : <strong style="color:var(--yellow)">${c}</strong>.`;
+    r.play(1);
+  }
+  dec1Range.addEventListener("input", update);
+  dec2Range.addEventListener("input", update);
+  update();
 }
 
 /* ---------- d2. Chiffres significatifs et opérations : produit/quotient ---------- */
 function initSigFigOperations(cfg) {
+  const { prog, txt, ln, frs } = CH1;
   const svg = document.getElementById(cfg.svgId);
   const cs1Range = document.getElementById(cfg.cs1RangeId);
   const cs2Range = document.getElementById(cfg.cs2RangeId);
   const readout = document.getElementById(cfg.readoutId);
+  svg.setAttribute("viewBox", "0 0 360 215");
 
   // valeurs neutres, vérifiées sur toutes les combinaisons de CS (2 à 6)
-  // pour ne jamais tomber sur un résultat qui ferait rire une classe de lycée
   const A_TRUE = 8.234567, B_TRUE = 5.671234;
+  const BLUE = "#5a96d2";
+  const TW = 24, GAP = 3, CW = 9, X0 = 84;
 
-  function draw() {
-    const cs1 = Number(cs1Range.value);
-    const cs2 = Number(cs2Range.value);
-    const a = formatSig(A_TRUE, cs1);   // chaîne, ex: "4.32110" (garde le zéro final)
-    const b = formatSig(B_TRUE, cs2);
-    const aNum = Number(a), bNum = Number(b);
-    const cRaw = aNum * bNum;
+  function state() {
+    const cs1 = Number(cs1Range.value), cs2 = Number(cs2Range.value);
+    const a = formatSig(A_TRUE, cs1), b = formatSig(B_TRUE, cs2);
+    const cRaw = Number(a) * Number(b);
+    const rawStr = String(Number(cRaw.toPrecision(8)));
     const minCS = Math.min(cs1, cs2);
-    const c = formatSig(cRaw, minCS);
-    const sameCS = cs1 === cs2;
-
-    // exemple générique d'abord : a × b = c (s'applique à n'importe quelle opération)
-    let s = `<text x="110" y="20" font-size="10" fill="var(--chalk-dim)" text-anchor="middle">Exemple : <tspan fill="var(--teal)">a</tspan> × <tspan fill="#5a96d2">b</tspan> = <tspan fill="var(--yellow)">c</tspan></text>`;
-    s += `<text x="110" y="46" font-size="16" text-anchor="middle"><tspan fill="var(--teal)" font-weight="700">${a}</tspan><tspan fill="var(--chalk)"> × </tspan><tspan fill="#5a96d2" font-weight="700">${b}</tspan><tspan fill="var(--chalk)"> = </tspan><tspan fill="var(--yellow)" font-weight="700">${cRaw.toFixed(4)}</tspan></text>`;
-    s += `<line x1="30" y1="64" x2="190" y2="64" stroke="var(--chalk-dim)" stroke-width="1" stroke-dasharray="3,3"/>`;
-    const line1 = sameCS ? `a et b ont la même précision (${cs1} CS)` : `a a ${cs1} CS, b a ${cs2} CS`;
-    const line2 = sameCS ? `→ c est arrondi à ${minCS} CS` : `→ c arrondi au plus petit : ${minCS} CS`;
-    s += `<text x="110" y="82" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">${line1}</text>`;
-    s += `<text x="110" y="96" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">${line2}</text>`;
-    s += `<text x="110" y="128" font-size="20" fill="var(--yellow)" text-anchor="middle" font-weight="700">c ≈ ${c}</text>`;
-    svg.innerHTML = s;
-
-    readout.innerHTML = sameCS
-      ? `a = <strong style="color:var(--teal)">${a}</strong> et b = <strong style="color:#5a96d2">${b}</strong> ont la même précision (${cs1} CS). Résultat brut : a × b = <strong style="color:var(--yellow)">${cRaw.toFixed(4)}</strong>, arrondi à cette même précision : <strong style="color:var(--yellow)">${c}</strong> (${minCS} CS).`
-      : `a = <strong style="color:var(--teal)">${a}</strong> (${cs1} CS) et b = <strong style="color:#5a96d2">${b}</strong> (${cs2} CS) n'ont pas la même précision. Résultat brut : a × b = <strong style="color:var(--yellow)">${cRaw.toFixed(4)}</strong>, arrondi au plus petit nombre de CS des deux : <strong style="color:var(--yellow)">${c}</strong> (${minCS} CS).`;
+    return { cs1, cs2, a, b, cRaw, rawStr, minCS, c: formatSig(cRaw, minCS) };
   }
-  cs1Range.addEventListener("input", draw);
-  cs2Range.addEventListener("input", draw);
-  draw();
+
+  // une case par chiffre ; opts.keep = nb de chiffres conservés (les autres barrés)
+  function tiles(str, y, color, opts = {}) {
+    let x = X0, s = "", j = 0;
+    for (const ch of str) {
+      if (ch === ".") { s += txt(x + CW / 2, y + 23, ",", { size: 20, weight: 600, fill: color }); x += CW + GAP; continue; }
+      const dead = opts.keep != null && j >= opts.keep;
+      const p = dead ? prog(opts.t, 0.2 + (j - opts.keep) * 0.08, 0.5 + (j - opts.keep) * 0.08) : 0;
+      const fill = opts.keep != null && !dead ? "rgba(232,196,104,0.18)" : "transparent";
+      const stroke = opts.keep != null ? (dead ? "var(--line)" : "var(--yellow)") : color;
+      s += `<rect x="${x}" y="${y}" width="${TW}" height="32" rx="4" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>`;
+      s += txt(x + TW / 2, y + 23, ch, { size: 18, weight: 600, fill: dead ? "var(--chalk-dim)" : color, op: dead ? 1 - 0.5 * p : 1 });
+      if (dead && p > 0) s += ln(x + 3, y + 29, x + 3 + (TW - 6) * p, y + 3, "var(--coral)", 2);
+      x += TW + GAP; j++;
+    }
+    return { s, end: x - GAP };
+  }
+
+  function draw(t) {
+    const st = state();
+    let s = "";
+    const lim1 = st.cs1 < st.cs2, lim2 = st.cs2 < st.cs1;
+    s += txt(20, 42, "a", { size: 14, fill: "var(--teal)", anchor: "start" }) + tiles(st.a, 20, "var(--teal)").s;
+    s += txt(345, 42, `${st.cs1} CS`, { size: 13, anchor: "end", fill: lim1 ? "var(--yellow)" : "var(--chalk-dim)", weight: lim1 ? 700 : 400 });
+    s += txt(20, 86, "b", { size: 14, fill: BLUE, anchor: "start" }) + tiles(st.b, 64, BLUE).s;
+    s += txt(345, 86, `${st.cs2} CS`, { size: 13, anchor: "end", fill: lim2 ? "var(--yellow)" : "var(--chalk-dim)", weight: lim2 ? 700 : 400 });
+    s += ln(20, 110, 345, 110, "var(--line)", 1);
+    s += txt(20, 142, "a × b", { size: 14, fill: "var(--chalk-dim)", anchor: "start" });
+    const raw = tiles(st.rawStr, 120, "var(--chalk)", { keep: st.minCS, t });
+    s += raw.s;
+    // accolade sous les chiffres conservés
+    const intLen = st.rawStr.indexOf(".") < 0 ? st.rawStr.length : st.rawStr.indexOf(".");
+    const keptEnd = X0 + st.minCS * (TW + GAP) - GAP + (st.minCS > intLen ? CW + GAP : 0);
+    const o = prog(t, 0.3, 0.7);
+    s += `<path d="M${X0} 158 v6 H${keptEnd} v-6" fill="none" stroke="var(--yellow)" stroke-width="1.5" opacity="${o}"/>`;
+    s += txt((X0 + keptEnd) / 2, 180, `on garde ${st.minCS} CS`, { size: 12, fill: "var(--yellow)", op: o });
+    s += txt(345, 180, `c ≈ ${frs(st.c)}`, { size: 26, hand: true, weight: 700, fill: "var(--yellow)", anchor: "end", op: prog(t, 0.6, 1) });
+    s += txt(180, 208, st.cs1 === st.cs2 ? `même précision : ${st.minCS} CS` : `arrondi au plus petit nombre de CS : ${st.minCS}`, { size: 12, fill: "var(--chalk-dim)", op: prog(t, 0.6, 1) });
+    return s;
+  }
+
+  const r = CH1.runner(svg, draw);
+  function update() {
+    const st = state();
+    const a = frs(st.a), b = frs(st.b), raw = frs(st.rawStr), c = frs(st.c);
+    readout.innerHTML = st.cs1 === st.cs2
+      ? `a = <strong style="color:var(--teal)">${a}</strong> et b = <strong style="color:${BLUE}">${b}</strong> ont la même précision (${st.cs1} CS). Résultat brut : a × b = <strong style="color:var(--yellow)">${raw}</strong>, arrondi à cette même précision : <strong style="color:var(--yellow)">${c}</strong> (${st.minCS} CS).`
+      : `a = <strong style="color:var(--teal)">${a}</strong> (${st.cs1} CS) et b = <strong style="color:${BLUE}">${b}</strong> (${st.cs2} CS) n'ont pas la même précision. Résultat brut : a × b = <strong style="color:var(--yellow)">${raw}</strong>, arrondi au plus petit nombre de CS des deux : <strong style="color:var(--yellow)">${c}</strong> (${st.minCS} CS).`;
+    r.play(1.2);
+  }
+  cs1Range.addEventListener("input", update);
+  cs2Range.addEventListener("input", update);
+  update();
 }
 
-/* ---------- d3. Chiffres significatifs et opérations : calcul mixte (produit/quotient + somme) ---------- */
+/* ---------- d3. Calcul mixte (produit/quotient + somme) ---------- */
 function initMixedCalculation(cfg) {
+  const { prog, txt, ln } = CH1;
   const svg = document.getElementById(cfg.svgId);
   const explainEl = document.getElementById(cfg.explainId);
   const prevBtn = document.getElementById(cfg.prevBtnId);
   const nextBtn = document.getElementById(cfg.nextBtnId);
   const stepEl = document.getElementById(cfg.stepId);
+  svg.setAttribute("viewBox", "0 0 360 250");
 
-  // d1/v1 et d2/v2 : deux quotients à 2 CS chacun, choisis pour que l'arrondi
-  // prématuré aurait changé le résultat final (7,3 s au lieu de 7,4 s)
+  // arrondir trop tôt donnerait 4,5 + 2,8 = 7,3 s au lieu de 7,4 s
   const D1 = 5.0, V1 = 1.1, D2 = 8.5, V2 = 3.0;
-  const t1Raw = D1 / V1;                       // 4,545454... s
-  const t2Raw = D2 / V2;                       // 2,833333... s
+  const t1Raw = D1 / V1, t2Raw = D2 / V2;
   const t1RawStr = t1Raw.toFixed(3).replace(".", ",") + "...";
   const t2RawStr = t2Raw.toFixed(3).replace(".", ",") + "...";
   const sumRawStr = (t1Raw + t2Raw).toFixed(3).replace(".", ",") + "...";
   const finalResult = (t1Raw + t2Raw).toFixed(1).replace(".", ",");
+  const t1Rounded = formatSig(t1Raw, 2), t2Rounded = formatSig(t2Raw, 2);
+  const early = (Number(t1Rounded) + Number(t2Rounded)).toFixed(1).replace(".", ",");
 
-  // précision que chaque quotient aurait une fois arrondi à son bon nombre de CS
-  const t1Rounded = formatSig(t1Raw, 2);       // "4.5" -> 1 décimale
-  const t2Rounded = formatSig(t2Raw, 2);       // "2.8" -> 1 décimale
+  function frac(x, num, den, op) {
+    return `<g opacity="${op}">` + txt(x, 34, num, { size: 24, hand: true }) + ln(x - 42, 45, x + 42, 45, "var(--chalk)", 1.6) + txt(x, 72, den, { size: 24, hand: true }) + `</g>`;
+  }
 
-  // dessin cumulatif : chaque étape ajoute une couche au diagramme précédent
-  function drawFractions({ showPrecision, showSum, showFinal }) {
-    let s = "";
-
-    // fraction 1 : 5,0 / 1,1 (juste les nombres, les unités sont données dans le texte)
-    s += `<text x="55" y="22" font-size="14" text-anchor="middle" fill="var(--chalk)">5,0</text>`;
-    s += `<line x1="20" y1="30" x2="90" y2="30" stroke="var(--chalk)" stroke-width="1.4"/>`;
-    s += `<text x="55" y="46" font-size="14" text-anchor="middle" fill="var(--chalk)">1,1</text>`;
-
-    s += `<text x="110" y="36" font-size="18" text-anchor="middle" fill="var(--chalk-dim)">+</text>`;
-
-    // fraction 2 : 8,5 / 3,0
-    s += `<text x="165" y="22" font-size="14" text-anchor="middle" fill="var(--chalk)">8,5</text>`;
-    s += `<line x1="130" y1="30" x2="200" y2="30" stroke="var(--chalk)" stroke-width="1.4"/>`;
-    s += `<text x="165" y="46" font-size="14" text-anchor="middle" fill="var(--chalk)">3,0</text>`;
-
-    s += `<text x="55" y="66" font-size="10" text-anchor="middle" fill="var(--teal)">t₁ = ${t1RawStr} s</text>`;
-    s += `<text x="165" y="66" font-size="10" text-anchor="middle" fill="var(--teal)">t₂ = ${t2RawStr} s</text>`;
-
-    if (showPrecision) {
-      s += `<text x="55" y="80" font-size="8" text-anchor="middle" fill="var(--yellow)">≈ ${t1Rounded} s à 2 CS</text>`;
-      s += `<text x="165" y="80" font-size="8" text-anchor="middle" fill="var(--yellow)">≈ ${t2Rounded} s à 2 CS</text>`;
+  function drawLayers(level, t) {
+    const op = l => (l === level ? prog(t, 0, 0.6) : 1);
+    let s = frac(95, "5,0", "1,1", op(1)) + frac(265, "8,5", "3,0", op(1));
+    s += txt(180, 60, "+", { size: 28, fill: "var(--chalk-dim)", op: op(1) });
+    s += txt(95, 102, `t₁ = ${t1RawStr} s`, { size: 15, fill: "var(--teal)", op: op(1) });
+    s += txt(265, 102, `t₂ = ${t2RawStr} s`, { size: 15, fill: "var(--teal)", op: op(1) });
+    if (level >= 2) {
+      s += txt(95, 124, `≈ ${t1Rounded.replace(".", ",")} s à 2 CS`, { size: 13, fill: "var(--yellow)", op: op(2) });
+      s += txt(265, 124, `≈ ${t2Rounded.replace(".", ",")} s à 2 CS`, { size: 13, fill: "var(--yellow)", op: op(2) });
     }
-
-    if (showSum) {
-      s += `<line x1="10" y1="92" x2="210" y2="92" stroke="var(--chalk-dim)" stroke-width="1" stroke-dasharray="3,3"/>`;
-      s += `<text x="110" y="108" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">t = ${t1RawStr} + ${t2RawStr} = ${sumRawStr} s</text>`;
+    if (level >= 3) {
+      s += ln(20, 140, 340, 140, "var(--chalk-dim)", 1, `stroke-dasharray="3,3" opacity="${op(3)}"`);
+      s += txt(180, 164, `t = ${t1RawStr} + ${t2RawStr} = ${sumRawStr} s`, { size: 14, fill: "var(--chalk)", op: op(3) });
     }
-
-    if (showFinal) {
-      s += `<text x="110" y="126" font-size="9" fill="var(--chalk-dim)" text-anchor="middle">arrondi une seule fois, à la fin, à 1 décimale</text>`;
-      s += `<text x="110" y="158" font-size="20" font-weight="700" fill="var(--yellow)" text-anchor="middle">t ≈ ${finalResult} s</text>`;
+    if (level >= 4) {
+      s += txt(180, 186, "arrondi une seule fois, à la fin, à 1 décimale", { size: 12, fill: "var(--chalk-dim)", op: op(4) });
+      s += txt(180, 218, `t ≈ ${finalResult} s`, { size: 30, hand: true, weight: 700, fill: "var(--yellow)", op: op(4) });
+      s += txt(180, 243, `✗ arrondir trop tôt : ${t1Rounded.replace(".", ",")} + ${t2Rounded.replace(".", ",")} = ${early} s`, { size: 12, fill: "var(--coral)", op: prog(t, 0.8, 1.3) });
     }
     return s;
   }
 
   const STEPS = [
-    {
-      title: "Étape 1 — calculer chaque durée séparément, sans arrondir",
-      text: `t₁ = d₁ / v₁ = 5,0 / 1,1 = ${t1RawStr} s ; t₂ = d₂ / v₂ = 8,5 / 3,0 = ${t2RawStr} s. On garde toute la précision affichée par la calculatrice, on n'arrondit rien pour l'instant.`,
-      draw: () => drawFractions({ showPrecision: false, showSum: false, showFinal: false })
-    },
-    {
-      title: "Étape 2 — repérer la précision visée pour le résultat final",
-      text: `On regarde quelle précision aurait chaque quotient s'il était arrondi seul : t₁ arrondi à 2 CS donnerait ${t1Rounded} s (1 décimale), t₂ arrondi à 2 CS donnerait ${t2Rounded} s (1 décimale). Le résultat final devra donc être donné à 1 décimale — mais on n'arrondit toujours pas les valeurs utilisées dans le calcul.`,
-      draw: () => drawFractions({ showPrecision: true, showSum: false, showFinal: false })
-    },
-    {
-      title: "Étape 3 — additionner les valeurs complètes, non arrondies",
-      text: `t = t₁ + t₂ = ${t1RawStr} + ${t2RawStr} = ${sumRawStr} s. On additionne les valeurs entières telles que la calculatrice les donne, pas des valeurs déjà arrondies.`,
-      draw: () => drawFractions({ showPrecision: true, showSum: true, showFinal: false })
-    },
-    {
-      title: "Étape 4 — arrondir une seule fois, à la fin",
-      text: `On arrondit le résultat à la précision fixée à l'étape 2 (1 décimale) : t ≈ ${finalResult} s. C'est le seul arrondi de tout le calcul.`,
-      draw: () => drawFractions({ showPrecision: true, showSum: true, showFinal: true })
-    }
+    { title: "Étape 1 — calculer chaque durée séparément, sans arrondir",
+      text: `t₁ = d₁ / v₁ = 5,0 / 1,1 = ${t1RawStr} s ; t₂ = d₂ / v₂ = 8,5 / 3,0 = ${t2RawStr} s. On garde toute la précision affichée par la calculatrice, on n'arrondit rien pour l'instant.` },
+    { title: "Étape 2 — repérer la précision visée pour le résultat final",
+      text: `On regarde quelle précision aurait chaque quotient s'il était arrondi seul : t₁ arrondi à 2 CS donnerait ${t1Rounded.replace(".", ",")} s (1 décimale), t₂ arrondi à 2 CS donnerait ${t2Rounded.replace(".", ",")} s (1 décimale). Le résultat final devra donc être donné à 1 décimale — mais on n'arrondit toujours pas les valeurs utilisées dans le calcul.` },
+    { title: "Étape 3 — additionner les valeurs complètes, non arrondies",
+      text: `t = t₁ + t₂ = ${t1RawStr} + ${t2RawStr} = ${sumRawStr} s. On additionne les valeurs entières telles que la calculatrice les donne, pas des valeurs déjà arrondies.` },
+    { title: "Étape 4 — arrondir une seule fois, à la fin",
+      text: `On arrondit le résultat à la précision fixée à l'étape 2 (1 décimale) : t ≈ ${finalResult} s. C'est le seul arrondi de tout le calcul.` }
   ];
 
   let step = 1;
+  const r = CH1.runner(svg, t => drawLayers(step, t));
   function render() {
-    svg.innerHTML = STEPS[step - 1].draw();
     explainEl.innerHTML = `<strong style="color:var(--yellow)">${STEPS[step - 1].title}</strong><br>${STEPS[step - 1].text}`;
     stepEl.textContent = `${step} / ${STEPS.length}`;
     prevBtn.disabled = step === 1;
     nextBtn.disabled = step === STEPS.length;
+    r.play(1.4);
   }
   prevBtn.addEventListener("click", () => { if (step > 1) { step--; render(); } });
   nextBtn.addEventListener("click", () => { if (step < STEPS.length) { step++; render(); } });
@@ -394,102 +608,140 @@ function initMixedCalculation(cfg) {
 
 /* ---------- e. Incertitude de mesure ---------- */
 function initMeasurementUncertainty(cfg) {
+  const { prog, clamp, txt, ln, fr } = CH1;
   const svg = document.getElementById(cfg.svgId);
   const readout = document.getElementById(cfg.readoutId);
   const buttons = cfg.buttonIds.map(id => document.getElementById(id));
+  svg.setAttribute("viewBox", "0 0 360 200");
 
-  const MEASURED = 15.3; // cm, valeur fixe lue sur la règle
-
-  // Chaque échelle correspond à une vraie règle différente : plus la
-  // graduation est fine, plus on doit zoomer pour voir les traits.
+  const MEASURED = 15.3; // cm
+  // chaque échelle = une règle différente ; la fenêtre zoome autour de la lecture
   const SCALES = {
-    s10: { grad: 10, windowMin: 10, windowMax: 40, decimals: 0 },
-    s1: { grad: 1, windowMin: 12, windowMax: 18, decimals: 0 },
-    s01: { grad: 0.1, windowMin: 14.5, windowMax: 15.5, decimals: 1 },
-    s001: { grad: 0.01, windowMin: 15.20, windowMax: 15.30, decimals: 2 }
+    s10: { grad: 10, min: 0, max: 40, decimals: 0 },
+    s1: { grad: 1, min: 12, max: 19, decimals: 0 },
+    s01: { grad: 0.1, min: 14.8, max: 15.8, decimals: 1 },
+    s001: { grad: 0.01, min: 15.25, max: 15.35, decimals: 2 }
   };
   const keys = ["s10", "s1", "s01", "s001"];
-  let current = "s1";
+  let current = 1;
+  let from = { min: SCALES.s1.min, max: SCALES.s1.max }, shown = { ...from };
+  const X0 = 20, X1 = 340, YR = 62;
 
-  function draw() {
-    const sc = SCALES[current];
-    const grad = sc.grad;
-    const U = grad / 2;
-    const rel = (U / MEASURED) * 100;
+  function draw(t) {
+    const sc = SCALES[keys[current]];
+    // zoom : interpolation logarithmique de la largeur de fenêtre
+    const p = prog(t, 0, 0.8);
+    const w0 = from.max - from.min, w1 = sc.max - sc.min;
+    const w = Math.exp(Math.log(w0) + (Math.log(w1) - Math.log(w0)) * p);
+    const c0 = (from.max + from.min) / 2, c1 = (sc.max + sc.min) / 2;
+    const cc = c0 + (c1 - c0) * p;
+    shown = { min: cc - w / 2, max: cc + w / 2 };
+    const px = v => X0 + ((v - shown.min) / w) * (X1 - X0);
+    const grad = sc.grad, U = grad / 2;
 
-    const x0 = 20, x1 = 200, yRuler = 45;
-    function toPx(v) { return x0 + ((v - sc.windowMin) / (sc.windowMax - sc.windowMin)) * (x1 - x0); }
-
-    // repère de la valeur lue, AU-DESSUS de la règle (rien ne masque la valeur)
-    const mx = toPx(MEASURED);
-    let s = `<text x="${mx}" y="18" font-size="9" fill="var(--yellow)" text-anchor="middle">on lit ici : 15,3 cm</text>`;
-    s += `<line x1="${mx}" y1="22" x2="${mx}" y2="${yRuler - 10}" stroke="var(--yellow)" stroke-width="1.5"/>`;
-    s += `<polygon points="${mx - 3},${yRuler - 10} ${mx + 3},${yRuler - 10} ${mx},${yRuler - 4}" fill="var(--yellow)"/>`;
-
-    // la règle et ses graduations
-    s += `<line x1="${x0}" y1="${yRuler}" x2="${x1}" y2="${yRuler}" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-    const nTicks = Math.round((sc.windowMax - sc.windowMin) / grad);
-    for (let i = 0; i <= nTicks; i++) {
-      const val = sc.windowMin + i * grad;
-      const x = toPx(val);
-      s += `<line x1="${x}" y1="${yRuler - 9}" x2="${x}" y2="${yRuler + 9}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
-      s += `<text x="${x}" y="${yRuler + 21}" font-size="7" fill="var(--chalk-dim)" text-anchor="middle">${val.toFixed(sc.decimals)}</text>`;
+    let s = `<rect x="${X0 - 6}" y="${YR}" width="${X1 - X0 + 12}" height="36" rx="3" fill="rgba(242,237,225,0.06)" stroke="var(--chalk-dim)" stroke-width="1.2"/>`;
+    const spacing = (grad / w) * (X1 - X0);
+    if (spacing >= 2) {
+      const tickOp = clamp((spacing - 2) / 10);
+      const lab = spacing >= 40 ? 1 : 2;
+      for (let i = Math.ceil(shown.min / grad - 1e-9); i <= Math.floor(shown.max / grad + 1e-9); i++) {
+        const v = i * grad, x = px(v);
+        s += ln(x, YR, x, YR + 14, "var(--chalk-dim)", 1.5, `opacity="${tickOp}"`);
+        if (i % lab === 0 && spacing >= 18) s += txt(x, YR + 30, fr(v, sc.decimals), { size: 11, fill: "var(--chalk-dim)", op: clamp((spacing - 18) / 10) });
+      }
     }
+    s += txt(X1 + 4, YR + 52, "cm", { size: 11, fill: "var(--chalk-dim)", anchor: "end" });
 
-    // bracket montrant UNE graduation entière — indépendant de la position
-    // exacte de la valeur lue : ce n'est pas une boîte posée sur la valeur,
-    // c'est la largeur d'un intervalle entre deux traits quelconques.
-    let lowerTick = sc.windowMin + Math.floor((MEASURED - sc.windowMin) / grad + 1e-9) * grad;
-    let upperTick = lowerTick + grad;
-    if (upperTick > sc.windowMax + 1e-9) { upperTick = lowerTick; lowerTick = lowerTick - grad; }
-    const bx0 = toPx(lowerTick), bx1 = toPx(upperTick);
-    const yBracket = yRuler + 40;
-    s += `<line x1="${bx0}" y1="${yBracket}" x2="${bx1}" y2="${yBracket}" stroke="var(--teal)" stroke-width="1.5"/>`;
-    s += `<line x1="${bx0}" y1="${yBracket - 5}" x2="${bx0}" y2="${yBracket + 5}" stroke="var(--teal)" stroke-width="1.5"/>`;
-    s += `<line x1="${bx1}" y1="${yBracket - 5}" x2="${bx1}" y2="${yBracket + 5}" stroke="var(--teal)" stroke-width="1.5"/>`;
-    s += `<text x="${(bx0 + bx1) / 2}" y="${yBracket + 16}" font-size="8" fill="var(--teal)" text-anchor="middle">1 graduation = 2 × U(x)</text>`;
+    const oB = prog(t, 0.6, 1);
+    s += `<rect x="${px(MEASURED - U)}" y="${YR - 4}" width="${px(MEASURED + U) - px(MEASURED - U)}" height="44" fill="rgba(107,191,171,0.2)" stroke="var(--teal)" stroke-width="1.5" opacity="${oB}"/>`;
+    const mx = px(MEASURED);
+    s += txt(mx, 18, "on lit : 15,3 cm", { size: 13, fill: "var(--yellow)" });
+    s += ln(mx, 24, mx, YR - 8, "var(--yellow)", 1.5) + `<polygon points="${mx - 4},${YR - 9} ${mx + 4},${YR - 9} ${mx},${YR - 2}" fill="var(--yellow)"/>`;
 
-    svg.innerHTML = s;
+    const lower = Math.floor(MEASURED / grad + 1e-9) * grad, upper = lower + grad;
+    const bx0 = px(lower), bx1 = px(upper), yb = YR + 58, oG = prog(t, 0.7, 1.1);
+    s += `<g opacity="${oG}">` + ln(bx0, yb, bx1, yb, "var(--teal)", 1.5) + ln(bx0, yb - 5, bx0, yb + 5, "var(--teal)", 1.5) + ln(bx1, yb - 5, bx1, yb + 5, "var(--teal)", 1.5);
+    s += txt(clamp((bx0 + bx1) / 2, 80, 280), yb + 16, "1 graduation = 2 × U(x)", { size: 11, fill: "var(--teal)" }) + `</g>`;
 
-    readout.innerHTML = `Sur cette règle, la plus petite graduation vaut ${grad} cm. Entre deux graduations, on ne peut qu'estimer. Par convention, on prend :<br>U(x) = graduation / 2 = ${grad} / 2 = <strong style="color:var(--yellow)">${U.toFixed(3)} cm</strong> (incertitude absolue)<br>incertitude relative = U(x)/x = ${U.toFixed(3)}/${MEASURED} = <strong style="color:var(--teal)">${rel.toFixed(2)} %</strong>`;
+    const rel = formatSig((U / MEASURED) * 100, 2).replace(".", ",");
+    s += txt(180, 172, `U(x) = ${fr(grad, sc.decimals)} / 2 = ${fr(U, sc.decimals + 1)} cm`, { size: 20, hand: true, weight: 700, fill: "var(--yellow)", op: oG });
+    s += txt(180, 194, `incertitude relative : U(x) / x ≈ ${rel} %`, { size: 13, fill: "var(--teal)", op: oG });
+    return s;
   }
 
-  buttons.forEach((btn, i) => {
-    btn.addEventListener("click", () => { current = keys[i]; draw(); });
-  });
-  draw();
+  const r = CH1.runner(svg, draw);
+  function select(i) {
+    from = { ...shown };
+    current = i; CH1.active(buttons, i);
+    const sc = SCALES[keys[i]], U = sc.grad / 2;
+    const rel = ((U / MEASURED) * 100);
+    readout.innerHTML = `Sur cette règle, la plus petite graduation vaut ${fr(sc.grad, sc.decimals)} cm. Entre deux graduations, on ne peut qu'estimer. Par convention, on prend :<br>U(x) = graduation / 2 = ${fr(sc.grad, sc.decimals)} / 2 = <strong style="color:var(--yellow)">${fr(U, sc.decimals + 1)} cm</strong> (incertitude absolue)<br>incertitude relative = U(x)/x = ${fr(U, sc.decimals + 1)}/${fr(MEASURED, 1)} ≈ <strong style="color:var(--teal)">${formatSig(rel, 2).replace(".", ",")} %</strong>`;
+    r.play(1.3);
+  }
+  buttons.forEach((btn, i) => btn.addEventListener("click", () => select(i)));
+  select(current);
 }
 
-/* ---------- f. Intervalle de confiance ---------- */
+/* ---------- f. Intervalle : entre quelles valeurs ? ---------- */
 function initConfidenceInterval(cfg) {
+  const { prog, txt, ln, fr, rng } = CH1;
   const svg = document.getElementById(cfg.svgId);
   const uRange = document.getElementById(cfg.uRangeId);
   const readout = document.getElementById(cfg.readoutId);
+  svg.setAttribute("viewBox", "0 0 360 215");
 
-  const X_MEASURED = 15.3; // cm, même règle et même exemple que la section précédente
-
-  function draw() {
-    const U = Number(uRange.value) / 100; // cm
-    const xMin = X_MEASURED - U, xMax = X_MEASURED + U;
-
-    const x0 = 20, x1 = 200, y = 70;
-    const range = 1.5; // cm, demi-étendue de l'axe autour de X_MEASURED
-    function toPx(v) { return x0 + ((v - (X_MEASURED - range)) / (2 * range)) * (x1 - x0); }
-
-    let s = `<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="var(--chalk-dim)" stroke-width="2"/>`;
-    for (let v = Math.ceil((X_MEASURED - range) * 2) / 2; v <= X_MEASURED + range; v += 0.5) {
-      const x = toPx(v);
-      s += `<line x1="${x}" y1="${y - 6}" x2="${x}" y2="${y + 6}" stroke="var(--chalk-dim)" stroke-width="1.5"/>`;
-      s += `<text x="${x}" y="${y + 18}" font-size="7" fill="var(--chalk-dim)" text-anchor="middle">${v.toFixed(1)}</text>`;
+  const X = 15.3, RANGE = 1.5, SIGMA = 0.28, N = 40, RATE = 0.12, CYCLE = N * RATE + 3.2;
+  const X0 = 20, X1 = 340, Y = 160, BIN = 0.1;
+  const px = v => X0 + ((v - (X - RANGE)) / (2 * RANGE)) * (X1 - X0);
+  const cache = {};
+  function sample(seed) {
+    if (cache[seed]) return cache[seed];
+    const rand = rng(seed * 7919 + 13), out = [];
+    while (out.length < N) {
+      const u = 1 - rand(), v = rand();
+      const z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+      const m = X + SIGMA * z;
+      if (Math.abs(m - X) < RANGE - 0.05) out.push(Math.round(m / BIN) * BIN);
     }
-    const pxMin = toPx(xMin), pxMax = toPx(xMax), pxMid = toPx(X_MEASURED);
-    s += `<rect x="${pxMin}" y="${y - 16}" width="${pxMax - pxMin}" height="32" fill="rgba(107,191,171,0.3)" stroke="var(--teal)" stroke-width="1.5"/>`;
-    s += `<line x1="${pxMid}" y1="${y - 22}" x2="${pxMid}" y2="${y + 22}" stroke="var(--yellow)" stroke-width="2"/>`;
-    s += `<text x="${pxMid}" y="${y - 28}" font-size="9" fill="var(--yellow)" text-anchor="middle">x = ${X_MEASURED} cm</text>`;
-    svg.innerHTML = s;
-
-    readout.innerHTML = `On écrit : L = ${X_MEASURED.toFixed(1)} ± ${U.toFixed(2)} cm.<br>Cela signifie que la longueur vraie a de bonnes chances d'être <strong style="color:var(--teal)">comprise entre ${xMin.toFixed(2)} et ${xMax.toFixed(2)} cm</strong>.`;
+    return (cache[seed] = out);
   }
-  uRange.addEventListener("input", draw);
-  draw();
+
+  function draw(t) {
+    const U = Number(uRange.value) / 100;
+    const xMin = X - U, xMax = X + U;
+    const cyc = Math.floor(t / CYCLE), tc = t - cyc * CYCLE;
+    const data = sample(cyc + 1);
+    const k = Math.min(N, Math.floor(tc / RATE) + 1);
+
+    let s = `<rect x="${px(xMin)}" y="64" width="${px(xMax) - px(xMin)}" height="${Y - 64}" fill="rgba(107,191,171,0.14)" stroke="var(--teal)" stroke-width="1.5"/>`;
+    s += txt(px(xMin) - 4, 58, fr(xMin, 2), { size: 12, fill: "var(--teal)", anchor: "end" });
+    s += txt(px(xMax) + 4, 58, fr(xMax, 2), { size: 12, fill: "var(--teal)", anchor: "start" });
+    s += ln(X0, Y, X1, Y, "var(--chalk-dim)", 2);
+    for (let v = 14; v <= 16.6 + 1e-9; v += 0.5) s += ln(px(v), Y - 5, px(v), Y + 5, "var(--chalk-dim)", 1.5) + txt(px(v), Y + 18, fr(v, 1), { size: 11, fill: "var(--chalk-dim)" });
+
+    const count = {};
+    let inside = 0;
+    for (let j = 0; j < k; j++) {
+      const m = data[j], b = Math.round(m / BIN);
+      count[b] = (count[b] || 0) + 1;
+      const yEnd = Y - 7 - (count[b] - 1) * 8;
+      const fall = j === k - 1 ? prog(tc, j * RATE, j * RATE + 0.25) : 1;
+      const isIn = m >= xMin - 1e-9 && m <= xMax + 1e-9;
+      if (isIn) inside++;
+      s += `<circle cx="${px(m)}" cy="${40 + (yEnd - 40) * fall}" r="3.5" fill="${isIn ? "var(--chalk)" : "var(--coral)"}"/>`;
+    }
+    s += ln(px(X), 38, px(X), Y + 6, "var(--yellow)", 2);
+    s += txt(px(X), 30, `x = ${fr(X, 1)} cm`, { size: 13, fill: "var(--yellow)" });
+    s += `<text x="180" y="204" font-size="12" fill="var(--chalk-dim)" text-anchor="middle"><tspan fill="var(--teal)" font-weight="700">${inside}</tspan> mesures répétées sur ${k} tombent dans l'intervalle</text>`;
+    return s;
+  }
+
+  const r = CH1.runner(svg, draw);
+  function update() {
+    const U = Number(uRange.value) / 100;
+    readout.innerHTML = `On écrit : L = ${fr(X, 1)} ± ${fr(U, 2)} cm.<br>Cela signifie que la longueur vraie a de bonnes chances d'être <strong style="color:var(--teal)">comprise entre ${fr(X - U, 2)} et ${fr(X + U, 2)} cm</strong>.`;
+  }
+  uRange.addEventListener("input", () => { update(); if (CH1.reduce) r.play(0); });
+  update();
+  r.play(Infinity);
 }

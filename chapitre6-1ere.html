@@ -5,13 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 6 — Ondes mécaniques — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
 <script src="animations-common.js"></script>
 <script src="animations-ch6.js"></script>
 <script src="modules-common.js"></script>
 <style>
   .double-zone{ display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
   .double-panel{ width:260px; flex:none; }
+  /* Blocs d'animation grand format, mis à l'échelle de la page */
+  .ch6-stage{ width:100%; position:relative; overflow:hidden; margin:10px 0 26px; border-radius:14px; }
+  .ch6-stage-inner{ position:absolute; top:0; left:0; width:1780px; box-sizing:border-box; padding:36px 50px 40px; transform-origin:0 0; background:#16261f; border:2px solid rgba(242,237,225,0.14); border-radius:30px; font-family:'Space Grotesk',sans-serif; color:#f2ede1; }
+  .ch6-stage-inner *{ box-sizing:border-box; }
+  .ch6-stage-inner button{ margin:0; box-shadow:none; }
 </style>
+<template id="__bundler_thumbnail" data-bg-color="#16261f"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><path d="M240 400 Q345 240 450 400 T660 400 T870 400 T960 400" fill="none" stroke="#e8c468" stroke-width="28" stroke-linecap="round"/></svg></template>
 </head>
 <body>
 
@@ -76,6 +85,9 @@
       Une onde mécanique progressive est le phénomène de propagation d'une perturbation dans un milieu matériel élastique, <strong>sans transport de matière</strong>, mais avec transport d'<strong>énergie</strong>.
     </p>
     <p class="course-text">L'élongation maximale est l'<strong>amplitude</strong> de l'onde.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Lâche le caillou : les bateaux sont-ils emportés par l'onde ?</p><div class="ch6-stage"><div class="ch6-stage-inner"><div style="font-family:Kalam,cursive;font-size:46px;font-weight:700;color:#f2ede1;margin-bottom:10px;">🌊 Les bateaux suivent-ils l'onde ?</div><svg id="webBoatSvg" viewBox="0 0 1780 660" style="width:100%;height:auto;display:block;"></svg>
+<div style="display:flex;gap:40px;align-items:flex-start;margin-top:16px;"><div style="display:flex;flex-direction:column;gap:12px;flex:none;"><button id="webBoatDrop" style="font-family:Kalam,cursive;font-size:30px;background:#e8c468;color:#16261f;border:none;border-radius:10px;padding:12px 26px;cursor:pointer;">🪨 Lâcher le caillou</button><button id="webBoatReset" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">↺ Recommencer</button></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;min-width:0;color:#f2ede1;"><div id="webBoatReadout" style="display:flex;flex-direction:column;gap:8px;"></div><div id="webBoatStatus" style="font-size:29px;line-height:1.45;color:#f2ede1;border-left:4px solid rgba(242,237,225,0.2);padding:8px 22px;min-height:90px;"></div></div></div></div></div>
     <div class="warning-box">
       <span class="box-label">⚠️ Attention</span>
       La lumière n'est pas une onde mécanique — elle peut se propager dans le <strong>vide</strong>, contrairement à une onde mécanique qui a toujours besoin d'un milieu matériel.
@@ -91,6 +103,8 @@
     <p class="course-text">
       Leurs interactions avec les entités <strong>voisines</strong> sont modifiées, qui sont à leur tour déplacées : la perturbation se propage <strong>de proche en proche</strong>.
     </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis corde ou ressort, puis perturbe la première entité.</p><div class="ch6-stage"><div class="ch6-stage-inner"><div style="font-family:Kalam,cursive;font-size:46px;font-weight:700;color:#f2ede1;margin-bottom:10px;">🔍 Des entités qui se passent le relais</div><svg id="webChainSvg" viewBox="0 0 1780 470" style="width:100%;height:auto;display:block;"></svg>
+<div style="display:flex;gap:40px;align-items:flex-start;margin-top:20px;"><div style="display:flex;flex-direction:column;gap:12px;flex:none;"><div style="display:flex;gap:12px;"><button id="webChainUd" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">Corde ↕</button><button id="webChainLr" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">Ressort ↔</button></div><button id="webChainPush" style="font-family:Kalam,cursive;font-size:30px;background:#d97a63;color:#16261f;border:none;border-radius:10px;padding:12px 26px;cursor:pointer;">👉 Perturber</button></div><div id="webChainStatus" style="flex:1;font-size:29px;line-height:1.45;color:#f2ede1;border-left:4px solid rgba(242,237,225,0.2);padding:8px 22px;min-height:130px;"></div></div></div></div>
   </section>
 
   <section>
@@ -105,22 +119,10 @@
       La célérité d'une onde dépend du <strong>milieu matériel</strong> dans lequel elle se propage.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis la distance et la célérité, puis lance la perturbation.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="delaySvgCours" viewBox="0 0 260 100"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Distance AB (d)</label>
-        <input type="range" id="delayDCours" min="60" max="220" value="150" step="10">
-        <label>Célérité (v)</label>
-        <input type="range" id="delayVCours" min="30" max="150" value="80" step="10">
-        <div class="anim-readout" id="delayReadoutCours"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:14px;">
-          <button id="delayPlayCours">▶ Lancer</button>
-        </div>
-      </div>
-    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis la distance et la célérité, puis lance la perturbation.</p><div class="ch6-stage"><div class="ch6-stage-inner"><div style="font-family:Kalam,cursive;font-size:46px;font-weight:700;color:#f2ede1;margin-bottom:10px;">⏱️ Chronométrer la perturbation</div><svg id="webDelaySvg" viewBox="0 0 1780 480" style="width:100%;height:auto;display:block;"></svg>
+<div style="display:flex;gap:44px;align-items:flex-start;margin-top:14px;color:#f2ede1;"><div style="width:520px;flex:none;display:flex;flex-direction:column;gap:12px;"><div style="display:flex;flex-direction:column;gap:2px;"><div id="webDelayDL" style="font-family:Kalam,cursive;font-size:34px;color:#f2ede1;"></div><input type="range" id="webDelayD" min="4" max="16" step="1" value="8" style="width:100%;height:36px;accent-color:#e8c468;"></div><div style="display:flex;flex-direction:column;gap:2px;"><div id="webDelayVL" style="font-family:Kalam,cursive;font-size:34px;color:#f2ede1;"></div><input type="range" id="webDelayV" min="20" max="100" step="5" value="40" style="width:100%;height:36px;accent-color:#e8c468;"></div><div><button id="webDelayPlay" style="font-family:Kalam,cursive;font-size:30px;background:#e8c468;color:#16261f;border:none;border-radius:10px;padding:12px 26px;cursor:pointer;">▶ Lancer la perturbation</button></div></div><div id="webDelayReadout" style="flex:1;min-width:0;"></div></div></div></div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Même source, même distance de 1 km : quel milieu arrive en premier ?</p><div class="ch6-stage"><div class="ch6-stage-inner"><div style="font-family:Kalam,cursive;font-size:46px;font-weight:700;color:#f2ede1;margin-bottom:10px;">🏁 La course des milieux</div><svg id="webRaceSvg" viewBox="0 0 1780 590" style="width:100%;height:auto;display:block;"></svg>
+<div style="display:flex;gap:44px;align-items:flex-start;margin-top:18px;color:#f2ede1;"><div style="display:flex;gap:12px;flex:none;"><button id="webRaceGo" style="font-family:Kalam,cursive;font-size:30px;background:#e8c468;color:#16261f;border:none;border-radius:10px;padding:12px 26px;cursor:pointer;">🔔 Top départ</button><button id="webRaceSlow" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">🐢 Ralenti ×10</button></div><div id="webRaceReadout" style="flex:1;display:flex;flex-direction:column;gap:6px;min-width:0;"></div></div></div></div>
   </section>
 
   <section>
@@ -136,35 +138,10 @@
       La <strong>période spatiale</strong> (ou longueur d'onde), notée λ, est la plus petite distance qui sépare deux points du milieu dans le même état vibratoire.
     </p>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Ajuste T et λ : regarde le point jaune, il oscille de haut en bas mais n'avance jamais.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="waveSvgCours" viewBox="0 0 260 130"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Période T</label>
-        <input type="range" id="waveTCours" min="5" max="40" value="15" step="1">
-        <label>Longueur d'onde λ</label>
-        <input type="range" id="waveLambdaCours" min="40" max="200" value="90" step="5">
-        <div class="anim-readout" id="waveReadoutCours"></div>
-      </div>
-    </div>
-
-    <p class="course-text" style="margin-top:20px;">
-      Comme on ne peut pas représenter le <strong style="color:var(--coral);">temps</strong> et l'<strong style="color:var(--teal);">espace</strong> en même temps sur une page en 2 dimensions, il faut figer l'image : on représente séparément la période temporelle et la période spatiale.
-    </p>
-    <div class="actions" style="justify-content:flex-start; margin-bottom:14px;">
-      <button id="dpSyncCours">📸 Figer les réglages ci-dessus</button>
-    </div>
-    <div class="double-zone">
-      <div class="double-panel">
-        <svg id="dpTimeSvgCours" viewBox="0 0 260 130"></svg>
-      </div>
-      <div class="double-panel">
-        <svg id="dpSpaceSvgCours" viewBox="0 0 260 130"></svg>
-      </div>
-    </div>
-    <div class="anim-readout" id="dpReadoutCours"></div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Le point jaune oscille sur place. Fige l'image pour lire λ (en haut) et T (en bas).</p><div class="ch6-stage"><div class="ch6-stage-inner"><div style="font-family:Kalam,cursive;font-size:46px;font-weight:700;color:#f2ede1;margin-bottom:10px;">📸 Une photo, un enregistrement</div><div style="display:flex;gap:44px;align-items:center;color:#f2ede1;"><div style="width:1120px;flex:none;display:flex;flex-direction:column;gap:6px;">
+<div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">Dans l'espace : la corde à un instant donné</div><svg id="webDpSpace" viewBox="0 0 1260 300" style="width:100%;height:auto;display:block;"></svg>
+<div style="font-family:Kalam,cursive;font-size:30px;color:#d97a63;margin-top:10px;">Dans le temps : l'élongation du point jaune</div><svg id="webDpTime" viewBox="0 0 1260 300" style="width:100%;height:auto;display:block;"></svg></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;min-width:0;"><div style="display:flex;flex-direction:column;gap:2px;"><div id="webDpTL" style="font-family:Kalam,cursive;font-size:34px;color:#d97a63;"></div><input type="range" id="webDpT" min="5" max="30" step="1" value="15" style="width:100%;height:36px;accent-color:#e8c468;"></div><div style="display:flex;flex-direction:column;gap:2px;"><div id="webDpLL" style="font-family:Kalam,cursive;font-size:34px;color:#6bbfab;"></div><input type="range" id="webDpL" min="4" max="20" step="1" value="12" style="width:100%;height:36px;accent-color:#e8c468;"></div><div><button id="webDpFreeze" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">📸 Figer l'image</button></div><div id="webDpReadout" style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:20px 24px;"></div></div></div></div></div>
   </section>
 
   <section>
@@ -173,6 +150,9 @@
       Une onde périodique de célérité v parcourt une distance égale à une longueur d'onde λ pendant une durée égale à une <strong>période</strong> T.
     </p>
     <div class="formula">v = <span class="frac"><span class="num">λ</span><span class="den">T</span></span></div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Lance le chrono : on suit la crête jaune pendant exactement une période T.</p><div class="ch6-stage"><div class="ch6-stage-inner"><div style="font-family:Kalam,cursive;font-size:46px;font-weight:700;color:#f2ede1;margin-bottom:10px;">🏄 Suivre une crête pendant une période</div><svg id="webOneSvg" viewBox="0 0 1780 500" style="width:100%;height:auto;display:block;"></svg>
+<div style="display:flex;gap:44px;align-items:flex-start;margin-top:16px;color:#f2ede1;"><div style="width:520px;flex:none;display:flex;flex-direction:column;gap:12px;"><div style="display:flex;flex-direction:column;gap:2px;"><div id="webOneTL" style="font-family:Kalam,cursive;font-size:34px;color:#d97a63;"></div><input type="range" id="webOneT" min="10" max="30" step="5" value="15" style="width:100%;height:36px;accent-color:#e8c468;"></div><div style="display:flex;flex-direction:column;gap:2px;"><div id="webOneLL" style="font-family:Kalam,cursive;font-size:34px;color:#6bbfab;"></div><input type="range" id="webOneL" min="8" max="20" step="1" value="12" style="width:100%;height:36px;accent-color:#e8c468;"></div></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;min-width:0;"><div style="display:flex;gap:12px;"><button id="webOnePlay" style="font-family:Kalam,cursive;font-size:30px;background:#e8c468;color:#16261f;border:none;border-radius:10px;padding:12px 26px;cursor:pointer;">▶ Avancer d'une période</button><button id="webOneReset" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">↺ Recommencer</button></div><div id="webOneReadout"></div></div></div></div></div>
   </section>
 
   <section>
@@ -181,6 +161,10 @@
       <span class="box-label">📘 Définition</span>
       Une onde est <strong>sinusoïdale</strong> lorsque l'élongation de tout point du milieu est une fonction sinusoïdale du temps. Elle est caractérisée par sa <strong>période</strong> et par son <strong>amplitude</strong>.
     </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Modifie A, T (ou λ) et φ, puis relève le défi de la courbe mystère.</p><div class="ch6-stage"><div class="ch6-stage-inner"><div style="font-family:Kalam,cursive;font-size:46px;font-weight:700;color:#f2ede1;margin-bottom:10px;">🎛️ Le laboratoire de sinusoïdes</div><div style="display:flex;gap:44px;align-items:center;color:#f2ede1;"><svg id="webSineSvg" viewBox="0 0 1100 640" style="width:1000px;height:auto;flex:none;display:block;"></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;min-width:0;"><div style="display:flex;gap:12px;flex-wrap:wrap;"><button id="webSineTime" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">Dans le temps</button><button id="webSineSpace" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">Dans l'espace</button></div>
+<div style="display:flex;flex-direction:column;gap:2px;"><div id="webSineAL" style="font-family:Kalam,cursive;font-size:34px;color:#f2ede1;"></div><input type="range" id="webSineA" min="5" max="30" step="5" value="20" style="width:100%;height:36px;accent-color:#e8c468;"></div><div style="display:flex;flex-direction:column;gap:2px;"><div id="webSinePL" style="font-family:Kalam,cursive;font-size:34px;color:#f2ede1;"></div><input type="range" id="webSineP" min="10" max="50" step="5" value="30" style="width:100%;height:36px;accent-color:#e8c468;"></div><div style="display:flex;flex-direction:column;gap:2px;"><div id="webSineFL" style="font-family:Kalam,cursive;font-size:34px;color:#f2ede1;"></div><input type="range" id="webSineF" min="0" max="7" step="1" value="0" style="width:100%;height:36px;accent-color:#e8c468;"></div>
+<div id="webSineFormula" style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:12px 22px;"></div><div><button id="webSineMyst" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">🎲 Courbe mystère</button></div><div id="webSineStatus" style="font-size:27px;line-height:1.45;color:#f2ede1;border-left:4px solid rgba(242,237,225,0.2);padding:8px 22px;min-height:80px;"></div></div></div></div></div>
   </section>
 
 </div>
@@ -387,10 +371,15 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   if (correct === blanks.length) ProgressStore.record("ch6-1ere", "trous-complet", true);
 });
 
-/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initWaveAnimation({ svgId: "waveSvgCours", tRangeId: "waveTCours", lambdaRangeId: "waveLambdaCours", readoutId: "waveReadoutCours" });
-initWaveDelay({ svgId: "delaySvgCours", distRangeId: "delayDCours", veloRangeId: "delayVCours", playBtnId: "delayPlayCours", readoutId: "delayReadoutCours" });
-initDoublePeriodicity({ svgTimeId: "dpTimeSvgCours", svgSpaceId: "dpSpaceSvgCours", readoutId: "dpReadoutCours", syncBtnId: "dpSyncCours", sourceTId: "waveTCours", sourceLambdaId: "waveLambdaCours" });
+/* ---------- Animations — mode "Cours" (nouvelles animations) ---------- */
+initCh6Stages();
+initWaterBoats({ svgId: "webBoatSvg", dropBtnId: "webBoatDrop", resetBtnId: "webBoatReset", statusId: "webBoatStatus", readoutId: "webBoatReadout" });
+initMicroChain({ svgId: "webChainSvg", udBtnId: "webChainUd", lrBtnId: "webChainLr", pushBtnId: "webChainPush", statusId: "webChainStatus" });
+initDelayAB({ svgId: "webDelaySvg", dRangeId: "webDelayD", vRangeId: "webDelayV", playBtnId: "webDelayPlay", readoutId: "webDelayReadout", dLabelId: "webDelayDL", vLabelId: "webDelayVL" });
+initMediaRace({ svgId: "webRaceSvg", goBtnId: "webRaceGo", slowBtnId: "webRaceSlow", readoutId: "webRaceReadout" });
+initDoublePeriod({ svgSpaceId: "webDpSpace", svgTimeId: "webDpTime", tRangeId: "webDpT", lRangeId: "webDpL", freezeBtnId: "webDpFreeze", readoutId: "webDpReadout", tLabelId: "webDpTL", lLabelId: "webDpLL" });
+initOnePeriod({ svgId: "webOneSvg", tRangeId: "webOneT", lRangeId: "webOneL", playBtnId: "webOnePlay", resetBtnId: "webOneReset", readoutId: "webOneReadout", tLabelId: "webOneTL", lLabelId: "webOneLL" });
+initSineExplorer({ svgId: "webSineSvg", aRangeId: "webSineA", pRangeId: "webSineP", phiRangeId: "webSineF", timeBtnId: "webSineTime", spaceBtnId: "webSineSpace", mysteryBtnId: "webSineMyst", formulaId: "webSineFormula", statusId: "webSineStatus", aLabelId: "webSineAL", pLabelId: "webSinePL", phiLabelId: "webSineFL" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
 initWaveAnimation({ svgId: "waveSvg", tRangeId: "waveT", lambdaRangeId: "waveLambda", readoutId: "waveReadout" });

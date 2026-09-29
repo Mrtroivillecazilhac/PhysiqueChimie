@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 1 — Introduction : la précision en physique-chimie — 2nde</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
 <script src="animations-common.js"></script>
 <script src="animations-ch1-2nde.js"></script>
 <script src="modules-common.js"></script>
@@ -17,7 +20,11 @@
     padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
   }
   .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+  /* ---------- Animations du chapitre : zone agrandie ---------- */
+  .anim-wrap{ width:min(100%, 440px); }
+  .anim-wrap svg{ display:block; width:100%; height:auto; background:rgba(0,0,0,0.14); border:1px solid var(--line); border-radius:12px; }
 </style>
+<template id="__bundler_thumbnail" data-bg-color="#16261f"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#16261f"/><text x="600" y="470" font-size="220" text-anchor="middle" fill="#e8c468" font-family="Georgia, serif">± U</text></svg></template>
 </head>
 <body>
 
@@ -160,7 +167,6 @@
     <div class="toggle-row">
       <button class="toggle-btn" id="snACours">45 000</button>
       <button class="toggle-btn" id="snBCours">0,0032</button>
-      <button class="toggle-btn" id="snCCours">720 000</button>
     </div>
     <div class="anim-zone">
       <div class="anim-wrap">
@@ -413,7 +419,6 @@
     <div class="toggle-row">
       <button class="toggle-btn" id="snA">45 000</button>
       <button class="toggle-btn" id="snB">0,0032</button>
-      <button class="toggle-btn" id="snC">720 000</button>
     </div>
     <div class="anim-zone">
       <div class="anim-wrap">
@@ -577,7 +582,7 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 initImplicitExplicit({ svgId: "ieSvgCours", readoutId: "ieReadoutCours", buttonIds: ["ieTrajetCours", "ieTemperatureCours"] });
 initErrorTypes({ svgId: "etSvgCours", explainId: "etExplainCours", prevBtnId: "etPrevCours", nextBtnId: "etNextCours", stepId: "etStepCours" });
 initSignificantFigures({ svgId: "sfSvgCours", readoutId: "sfReadoutCours", buttonIds: ["sfACours", "sfBCours", "sfCCours"] });
-initScientificNotation({ svgId: "snSvgCours", readoutId: "snReadoutCours", buttonIds: ["snACours", "snBCours", "snCCours"] });
+initScientificNotation({ svgId: "snSvgCours", readoutId: "snReadoutCours", buttonIds: ["snACours", "snBCours"] });
 initSigFigAddition({ svgId: "saSvgCours", dec1RangeId: "saDec1Cours", dec2RangeId: "saDec2Cours", readoutId: "saReadoutCours" });
 initSigFigOperations({ svgId: "soSvgCours", cs1RangeId: "soCS1Cours", cs2RangeId: "soCS2Cours", readoutId: "soReadoutCours" });
 initMixedCalculation({ svgId: "mcSvgCours", explainId: "mcExplainCours", prevBtnId: "mcPrevCours", nextBtnId: "mcNextCours", stepId: "mcStepCours" });
@@ -588,7 +593,7 @@ initConfidenceInterval({ svgId: "ciSvgCours", uRangeId: "ciUCours", readoutId: "
 initImplicitExplicit({ svgId: "ieSvg", readoutId: "ieReadout", buttonIds: ["ieTrajet", "ieTemperature"] });
 initErrorTypes({ svgId: "etSvg", explainId: "etExplain", prevBtnId: "etPrev", nextBtnId: "etNext", stepId: "etStep" });
 initSignificantFigures({ svgId: "sfSvg", readoutId: "sfReadout", buttonIds: ["sfA", "sfB", "sfC"] });
-initScientificNotation({ svgId: "snSvg", readoutId: "snReadout", buttonIds: ["snA", "snB", "snC"] });
+initScientificNotation({ svgId: "snSvg", readoutId: "snReadout", buttonIds: ["snA", "snB"] });
 initSigFigAddition({ svgId: "saSvg", dec1RangeId: "saDec1", dec2RangeId: "saDec2", readoutId: "saReadout" });
 initSigFigOperations({ svgId: "soSvg", cs1RangeId: "soCS1", cs2RangeId: "soCS2", readoutId: "soReadout" });
 initMixedCalculation({ svgId: "mcSvg", explainId: "mcExplain", prevBtnId: "mcPrev", nextBtnId: "mcNext", stepId: "mcStep" });
