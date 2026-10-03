@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 1, Séance 3 : Le capteur photovoltaïque (Terminale ES)</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  /* ---------- Lien vers le diaporama (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+
+  /* ---------- Tableau-bilan (comme au Chapitre 0 / Séances 1 et 2) ---------- */
+  .bilan-table{ width:100%; border-collapse:collapse; margin:16px 0 8px; font-size:0.92rem; }
+  .bilan-table th, .bilan-table td{ border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top; }
+  .bilan-table th{ background:rgba(107,191,171,0.12); color:var(--teal); font-family:var(--font-display); font-weight:700; font-size:0.95rem; }
+  .bilan-table tr:nth-child(even) td{ background:rgba(255,255,255,0.02); }
+  @media (max-width:700px){
+    .bilan-table{ font-size:0.82rem; }
+    .bilan-table th, .bilan-table td{ padding:8px; }
+  }
+
+  /* ---------- Liste de définitions dans les encadrés ---------- */
+  .keyword-list{ margin:8px 0 0; padding-left:18px; }
+  .keyword-list li{ margin-bottom:6px; }
+  .keyword-list li:last-child{ margin-bottom:0; }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="../index.html">Accueil</a>
+  <a href="../4eme.html">4ème</a>
+  <a href="../2nde.html">2nde</a>
+  <a href="../1ere.html">1ère spé PC</a>
+  <a href="../terminale.html" class="current">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique-Chimie</div>
+  <h1>Chapitre 1, Séance 3 : Le capteur photovoltaïque</h1>
+  <p class="sub">Produire de l'électricité directement à partir de la lumière, sans aimant, sans turbine, sans aucune pièce en mouvement. <a href="ch1-seance2.html" style="color:var(--teal);">← Revoir la Séance 2</a></p>
+  <a class="slides-link" href="../slides/ch1-terminale-seance3.html" target="_blank" rel="noopener">📽️ Voir le diaporama de la séance</a>
+</header>
+
+<main>
+
+  <section>
+    <h2>De l'alternateur à la cellule photovoltaïque</h2>
+    <p class="course-text">
+      Aux Séances 1 et 2, toute la production d'électricité reposait sur un mouvement : un aimant qui tourne devant des bobines, entraîné par l'eau, le vent ou la vapeur. La cellule photovoltaïque fonctionne autrement : rien n'y bouge. C'est la lumière elle-même qui fournit l'énergie nécessaire pour mettre des électrons en mouvement. Cette séance reprend les conclusions de l'activité documentaire sur le capteur photovoltaïque, sous forme de trace écrite à relire avant l'évaluation.
+    </p>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs de la séance</span>
+      <ul>
+        <li>Décrire l'effet photoélectrique et la notion de photon</li>
+        <li>Distinguer conducteur, isolant et semi-conducteur</li>
+        <li>Décrire la structure d'une cellule photovoltaïque à jonction</li>
+        <li>Choisir un semi-conducteur en comparant le spectre solaire et un spectre d'absorption</li>
+        <li>Comprendre qu'un choix industriel met en balance performance, coût et abondance</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. L'effet photoélectrique</h2>
+    <p class="course-text">
+      Lorsqu'un matériau est éclairé, il peut libérer des électrons : c'est l'effet photoélectrique. Ce phénomène a une particularité décisive : il ne se produit que si la fréquence de la lumière dépasse une valeur minimale, la fréquence seuil, propre à chaque matériau. En dessous de ce seuil, aucun électron n'est arraché, même avec une lumière très intense. Au-dessus, des électrons sont libérés, même avec une lumière faible.
+    </p>
+    <p class="course-text">
+      Si la lumière n'était qu'une onde continue, une lumière suffisamment intense devrait toujours finir par arracher des électrons. Ce n'est pas ce qu'on observe. On décrit donc la lumière comme un ensemble de particules, les photons, chacun porteur d'une énergie qui dépend de la fréquence de la lumière. Un électron n'est libéré que si le photon reçu possède une énergie suffisante. Augmenter l'intensité de la lumière augmente le nombre de photons, mais pas l'énergie de chacun d'eux.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">🔑 Mots-clés</span>
+      <ul class="keyword-list">
+        <li><strong>Photon</strong> : particule de lumière transportant une quantité d'énergie déterminée. Plus la fréquence de la lumière est élevée, plus l'énergie de chaque photon est grande.</li>
+        <li><strong>Fréquence seuil</strong> : fréquence minimale de la lumière en dessous de laquelle un matériau donné ne libère aucun électron, quelle que soit l'intensité de l'éclairage.</li>
+        <li><strong>Effet photoélectrique</strong> : libération d'électrons par un matériau éclairé par une lumière de fréquence supérieure à sa fréquence seuil.</li>
+      </ul>
+    </div>
+    <div class="recall-box">
+      <span class="box-label">🕰️ Repère historique</span>
+      En 1900, Max Planck propose que la matière et la lumière échangent de l'énergie par quantités indivisibles, appelées « quanta ». En 1905, Albert Einstein explique l'effet photoélectrique en considérant que la lumière elle-même est formée de ces quanta d'énergie, qu'on appellera plus tard photons. C'est pour cette explication, et non pour la théorie de la relativité, qu'Einstein reçoit le prix Nobel de physique 1921.
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Conducteur, isolant, semi-conducteur</h2>
+    <p class="course-text">
+      Les matériaux se distinguent par leur capacité à laisser des électrons se déplacer. Un conducteur possède en permanence des électrons libres ; un isolant n'en possède pas ; un semi-conducteur se situe entre les deux : dans l'obscurité, il conduit très mal le courant, mais il libère des électrons lorsqu'il reçoit de l'énergie de l'extérieur, par exemple sous forme de lumière.
+    </p>
+    <table class="bilan-table">
+      <thead>
+        <tr><th>Matériau</th><th>Électrons libres</th><th>Exemple</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Conducteur</td><td>En permanence</td><td>Cuivre</td></tr>
+        <tr><td>Isolant</td><td>Aucun</td><td>Verre</td></tr>
+        <tr><td>Semi-conducteur</td><td>Seulement sous l'effet d'un apport d'énergie extérieur (lumière)</td><td>Silicium</td></tr>
+      </tbody>
+    </table>
+    <p class="course-text">
+      C'est cette propriété intermédiaire qui rend les semi-conducteurs utilisables pour fabriquer une cellule photovoltaïque : la lumière reçue peut y être convertie en courant électrique.
+    </p>
+  </section>
+
+  <section>
+    <h2>c. La cellule photovoltaïque à jonction</h2>
+    <p class="course-text">
+      Une cellule photovoltaïque associe deux couches de semi-conducteur dopées différemment : on a ajouté à chacune, en très faible quantité, des atomes d'un autre élément, différent d'une couche à l'autre. La zone de contact entre ces deux couches est appelée jonction.
+    </p>
+    <p class="course-text">
+      Lorsque des photons suffisamment énergétiques atteignent la jonction, ils fournissent aux électrons l'énergie nécessaire pour se déplacer dans le circuit électrique extérieur. Ce déplacement organisé d'électrons constitue le courant électrique produit par la cellule : l'énergie lumineuse est convertie directement en énergie électrique, sans passer par un mouvement mécanique.
+    </p>
+  </section>
+
+  <section>
+    <h2>d. Choisir un semi-conducteur : croiser deux spectres</h2>
+    <p class="course-text">
+      Le rayonnement solaire contient de nombreuses longueurs d'onde, mais sa puissance n'est pas répartie uniformément entre elles : elle est maximale sur une plage centrée sur le domaine visible, entre 400 et 700 nm environ. Un semi-conducteur adapté au photovoltaïque doit donc absorber efficacement sur cette même plage.
+    </p>
+    <p class="course-text">
+      Pour choisir, on compare deux spectres : le spectre solaire, qui indique à quelles longueurs d'onde la puissance disponible est la plus grande, et le spectre d'absorption de chaque semi-conducteur, qui indique quelles longueurs d'onde il capte. Le semi-conducteur le mieux adapté est celui dont la zone d'absorption recouvre le mieux la zone où le Soleil fournit le plus de puissance. Sur ce critère, parmi les semi-conducteurs comparés, l'arséniure de gallium (GaAs) est le plus efficace.
+    </p>
+  </section>
+
+  <section>
+    <h2>e. Un compromis entre performance, coût et abondance</h2>
+    <p class="course-text">
+      Pourtant, malgré une absorption moins efficace que celle du GaAs, c'est le silicium qui domine la production mondiale de cellules photovoltaïques. Deux raisons l'expliquent : son coût, bien inférieur, et son abondance naturelle, bien supérieure.
+    </p>
+    <table class="bilan-table">
+      <thead>
+        <tr><th>Critère</th><th>Silicium (Si)</th><th>Arséniure de gallium (GaAs)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Absorption sur 400-700 nm</td><td>Moins efficace</td><td>La plus efficace</td></tr>
+        <tr><td>Coût</td><td>Référence</td><td>≈ 10 fois plus cher</td></tr>
+        <tr><td>Abondance dans la croûte terrestre</td><td>28 % de sa masse</td><td>Gallium en quantités infimes (comme l'indium)</td></tr>
+      </tbody>
+    </table>
+    <div class="warning-box">
+      <span class="box-label">⚖️ Pas de malentendu</span>
+      Le matériau le plus performant n'est pas toujours celui qui est utilisé à grande échelle. Un choix industriel met en balance plusieurs critères (performance, coût, disponibilité des ressources), et pas seulement la performance technique. Le GaAs est réservé aux usages où la performance compte plus que le prix, comme l'alimentation des satellites.
+    </div>
+  </section>
+
+  <section>
+    <h2>f. Les cellules multijonctions</h2>
+    <p class="course-text">
+      Aucun semi-conducteur, pris seul, n'absorbe efficacement l'ensemble du spectre solaire. Pour dépasser cette limite, les cellules multijonctions empilent plusieurs semi-conducteurs différents, chacun choisi pour capter une plage de longueurs d'onde complémentaire de celle des autres : la lumière qu'une couche ne capte pas peut être captée par la suivante.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Empiler plusieurs semi-conducteurs augmente le rendement global de conversion, au prix d'une fabrication plus complexe et plus coûteuse. On retrouve le même compromis qu'avec le choix entre silicium et GaAs : gagner en performance a toujours un coût.
+    </div>
+  </section>
+
+</main>
+
+<footer>Chapitre 1, Séance 3 : Le capteur photovoltaïque (Terminale ES).</footer>
+
+</body>
+</html>
