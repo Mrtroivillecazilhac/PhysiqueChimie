@@ -75,6 +75,17 @@
   }
   .excess-tooltip-btn:hover .tooltip-content, .excess-tooltip-btn:focus .tooltip-content{ display:block; }
 
+  .stage-box{ position:relative; min-width:0; max-width:100%; height:200px; background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-bottom:12px; }
+  .stage-fit{ position:absolute; left:14px; top:12px; transform-origin:0 0; }
+  #panelCours .actions button{ white-space:nowrap; width:auto; min-width:0; height:auto; padding:8px 16px; }
+  .stock-row{ display:flex; flex-wrap:wrap; gap:10px 26px; margin:10px 0; }
+  .beaker-row{ display:flex; align-items:flex-end; gap:16px; margin-bottom:10px; }
+  .beaker{ width:64px; height:80px; border:2px solid rgba(242,237,225,0.6); border-top:none; border-radius:0 0 12px 12px; position:relative; overflow:hidden; flex-shrink:0; }
+  .beaker-liquid{ position:absolute; left:0; right:0; bottom:0; height:78%; background:#b8732e; transition:opacity .5s ease; }
+  .conv-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-bottom:12px; }
+  .conv-card{ background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:10px; padding:12px 16px; display:flex; flex-direction:column; gap:4px; font-size:0.95rem; }
+  .conv-card .t{ font-family:var(--font-display); font-size:1.1rem; }
+
   /* ---------- Défi interactif (Entraînement) ---------- */
   .challenge-field{ margin:12px 0; }
   .challenge-field label{ display:block; font-size:0.9rem; color:var(--chalk-dim); margin-bottom:6px; }
@@ -155,18 +166,16 @@
     </div>
 
     <div class="mini-anim">
-      <p class="course-text reaction-model">👉 Réaction modèle : <strong>A → B + C</strong>, avec n₀(A) = 10 mol. <span class="hint-dim">Fais varier x et observe.</span></p>
-      <div class="anim-zone">
-        <div class="anim-wrap">
-          <svg id="introSvg" viewBox="0 0 260 150"></svg>
-        </div>
-        <div class="anim-controls">
-          <label>Avancement x (mol)</label>
-          <input type="range" id="introX" min="0" max="10" value="0" step="1">
-        </div>
+      <p class="course-text reaction-model">👉 Réaction modèle : <strong>A → B + C</strong>, avec n₀(A) = 6 mol. <span class="hint-dim">Fais avancer la réaction pas à pas.</span></p>
+      <div class="stage-box"><div class="stage-fit" data-w="1000"><div id="introStage"></div></div></div>
+      <div class="anim-readout" id="introCounter" style="font-family:var(--font-display);font-size:1.4rem;color:var(--yellow);"></div>
+      <div class="actions" style="justify-content:flex-start;flex-wrap:wrap;">
+        <button id="introMinus">◀</button>
+        <button id="introPlus">x + 1 mol</button>
+        <button id="introPlay">▶ Jusqu'au bout</button>
+        <button id="introReset">↺</button>
       </div>
-      <div class="mini-readout" id="introReadout"></div>
-      <div class="mini-explain" id="introExplain">Pour 1 mole de A consommée, l'avancement progresse de 1 mole et produit 1 mole de B et 1 mole de C.</div>
+      <div class="mini-explain" id="introMsg"></div>
     </div>
   </section>
 
@@ -181,21 +190,20 @@
     </p>
 
     <div class="mini-anim">
-      <p class="course-text reaction-model">👉 Réaction modèle : <strong>A + 2B → C</strong>, avec n₀(A) = 5 mol et n₀(B) = 8 mol <span class="hint-dim">(x<sub>max</sub> = 4 mol)</span>.</p>
-      <div class="anim-zone">
-        <div class="anim-wrap">
-          <svg id="tableDemoSvg" viewBox="0 0 260 150"></svg>
-        </div>
-        <div class="anim-controls">
-          <label>Avancement x (mol)</label>
-          <input type="range" id="tableDemoX" min="0" max="4" value="0" step="1">
-          <div class="anim-readout" id="tableDemoReadout"></div>
-        </div>
+      <p class="course-text reaction-model">👉 Réaction modèle : <strong>A + 2B → C</strong>. <span class="hint-dim">Prévois l'état final, puis vérifie. Tu peux changer les quantités initiales.</span></p>
+      <div class="stage-box"><div class="stage-fit" data-w="1000"><div id="tableDemoStage"></div></div></div>
+      <div class="anim-readout" id="tableDemoCounter" style="font-family:var(--font-display);font-size:1.4rem;color:var(--yellow);"></div>
+      <div class="actions" style="justify-content:flex-start;flex-wrap:wrap;">
+        <button id="tableDemoMinus">◀</button>
+        <button id="tableDemoPlus">x + 1 mol</button>
+        <button id="tableDemoPlay">▶ Jusqu'au bout</button>
+        <button id="tableDemoReset">↺</button>
       </div>
-      <div class="mini-formulas" id="tableDemoFormulas"></div>
+      <div class="stock-row" id="tableDemoStock"></div>
+      <div class="mini-explain" id="tableDemoMsg"></div>
       <table class="adv-table">
         <thead>
-          <tr><th>État du système</th><th>Avancement</th><th>A</th><th>B</th><th>C</th></tr>
+          <tr><th>État du système</th><th>Avancement (mol)</th><th>A</th><th>+ 2 B</th><th>→ C</th></tr>
         </thead>
         <tbody id="tableDemoBody"></tbody>
       </table>
@@ -217,18 +225,10 @@
     </div>
 
     <div class="mini-anim">
-      <p class="course-text reaction-model">👉 Réaction modèle : <strong>2A + B → P</strong>. <span class="hint-dim">Fais varier n₀(A) et n₀(B) : chaque hypothèse propose son x<sub>max</sub>, seule la plus petite est retenue.</span></p>
-      <div class="anim-zone">
-        <div class="anim-wrap">
-          <svg id="limitingSvg" viewBox="0 0 260 150"></svg>
-        </div>
-        <div class="anim-controls">
-          <label>n₀(A) en mol</label>
-          <input type="range" id="limitingN0A" min="1" max="10" value="4" step="1">
-          <label>n₀(B) en mol</label>
-          <input type="range" id="limitingN0B" min="1" max="10" value="6" step="1">
-        </div>
-      </div>
+      <p class="course-text reaction-model">👉 Réaction modèle : <strong>2A + B → P</strong>. <span class="hint-dim">Chaque barre indique jusqu'où la réaction pourrait aller si ce réactif était seul à compter. La réaction s'arrête sur la première atteinte.</span></p>
+      <div class="stage-box"><div class="stage-fit" data-w="1300"><div id="limitingRoot"></div></div></div>
+      <div class="stock-row" id="limitingStock"></div>
+      <div class="actions" style="justify-content:flex-start;"><button id="limitingRun">▶ Relancer</button></div>
       <div class="mini-readout" id="limitingReadout"></div>
     </div>
   </section>
@@ -249,7 +249,7 @@
       Dans le cas d'une transformation totale et pour un mélange stœchiométrique, les quantités finales des réactifs sont <strong>nulles</strong>. Seuls les <strong>produits</strong> de la réaction et éventuellement les espèces <strong>spectatrices</strong> sont présents à l'état final.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier n₀ et x : observe le réactif limitant, et repère le cas particulier du mélange stœchiométrique.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle les quantités initiales et fais avancer la réaction : observe le réactif limitant, et repère le cas particulier du mélange stœchiométrique.</p>
     <h3 style="font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-bottom:10px;">Réaction entre le diiode et les ions thiosulfate — une oxydo-réduction</h3>
     <div class="big-equation">
       <span class="coef">1</span> <span style="color:var(--yellow);">I₂</span>
@@ -260,28 +260,24 @@
       &nbsp;+&nbsp;
       <span class="coef">1</span> <span style="color:var(--chalk);">S₄O₆²⁻</span>
     </div>
-    <div class="actions" style="justify-content:flex-start; margin-bottom:14px;">
-      <button id="atViewToggle">🔵 Voir les molécules</button>
+    <div class="stage-box"><div class="stage-fit" data-w="1000"><div id="atStage"></div></div></div>
+    <div class="beaker-row">
+      <div class="beaker"><div class="beaker-liquid" id="atLiquid"></div></div>
+      <div class="anim-readout" id="atCounter" style="font-family:var(--font-display);font-size:1.4rem;color:var(--yellow);"></div>
     </div>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="atSvg" viewBox="0 0 260 150"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>n₀(I₂) en mmol</label>
-        <input type="range" id="atN0A" min="1" max="8" value="2" step="0.5">
-        <label>n₀(S₂O₃²⁻) en mmol</label>
-        <input type="range" id="atN0B" min="1" max="8" value="4" step="0.5">
-        <label>Avancement x (mmol)</label>
-        <input type="range" id="atX" min="0" max="60" value="0" step="1">
-        <div class="anim-readout" id="atReadout"></div>
-      </div>
+    <div class="actions" style="justify-content:flex-start;flex-wrap:wrap;">
+      <button id="atMinus">◀</button>
+      <button id="atPlus">x + 1 mmol</button>
+      <button id="atPlay">▶ Jusqu'au bout</button>
+      <button id="atReset">↺</button>
     </div>
+    <div class="stock-row" id="atStock"></div>
+    <div class="mini-explain" id="atMsg"></div>
 
     <table class="adv-table">
       <caption style="caption-side:top; text-align:left; font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-bottom:10px; padding:0;">Tableau d'avancement de la réaction</caption>
       <thead>
-        <tr><th>État du système</th><th>Avancement</th><th>I₂</th><th>S₂O₃²⁻</th><th>I⁻</th><th>S₄O₆²⁻</th></tr>
+        <tr><th>État du système</th><th>Avancement (mmol)</th><th>I₂</th><th>+ 2 S₂O₃²⁻</th><th>→ 2 I⁻</th><th>+ S₄O₆²⁻</th></tr>
       </thead>
       <tbody id="atTableBody"></tbody>
     </table>
@@ -295,21 +291,23 @@
     </div>
 
     <div class="mini-anim">
-      <div class="excess-wrap">
-        <div class="anim-wrap">
-          <svg id="excessSvg" viewBox="0 0 260 150"></svg>
+      <p class="course-text reaction-model">👉 En TP : quelques grammes d'acide éthanoïque dans <strong>250 mL d'eau</strong>. <span class="hint-dim">CH₃COOH + H₂O → CH₃COO⁻ + H₃O⁺</span></p>
+      <div class="conv-grid">
+        <div class="conv-card">
+          <span class="t" style="color:var(--teal);">💧 L'eau</span>
+          <span>V = 250 mL et ρ = 1 g·mL⁻¹ donc m = 250 g</span>
+          <span>M(H₂O) = 18 g·mol⁻¹</span>
+          <span>n = 250 / 18 ≈ <strong style="color:var(--yellow);">13,9 mol</strong></span>
         </div>
-        <div class="anim-controls">
-          <label>Quantité de réactif dissous (mol)</label>
-          <input type="range" id="excessN" min="1" max="10" value="4" step="1">
-          <div style="margin-top:8px;">
-            <span class="excess-tooltip-btn" tabindex="0">ⓘ
-              <span class="tooltip-content">La quantité d'eau est tellement gigantesque devant les réactifs qu'elle ne peut jamais bloquer la réaction.</span>
-            </span>
-            <span style="font-size:0.82rem; color:var(--chalk-dim); margin-left:6px;">pourquoi l'eau ne peut-elle jamais être limitante ?</span>
-          </div>
+        <div class="conv-card">
+          <span class="t" style="color:var(--coral);">🧪 L'acide éthanoïque</span>
+          <label for="excessN">m = <span id="excessMass" style="color:var(--yellow);"></span></label>
+          <input type="range" id="excessN" min="5" max="100" step="5" value="30">
+          <span>M(CH₃COOH) = 60 g·mol⁻¹</span>
+          <span id="excessCalc"></span>
         </div>
       </div>
+      <div class="stage-box"><div class="stage-fit" data-w="1300"><div id="excessRoot"></div></div></div>
       <div class="mini-readout" id="excessReadout"></div>
     </div>
   </section>
@@ -469,14 +467,91 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   if (correct === blanks.length) ProgressStore.record("ch4-1ere", "trous-complet", true);
 });
 
-/* ---------- Mini-animations du Cours (une par sous-partie) ---------- */
-initAvancementIntro({ svgId: "introSvg", xId: "introX", readoutId: "introReadout", explainId: "introExplain" });
-initAvancementTableDemo({ svgId: "tableDemoSvg", xId: "tableDemoX", readoutId: "tableDemoReadout", tableBodyId: "tableDemoBody", formulasId: "tableDemoFormulas" });
-initLimitingReagentDemo({ svgId: "limitingSvg", n0AId: "limitingN0A", n0BId: "limitingN0B", readoutId: "limitingReadout" });
-initExcessSpeciesDemo({ svgId: "excessSvg", nId: "excessN", readoutId: "excessReadout" });
+/* ---------- Animations du Cours ---------- */
+(function () {
+  const Y = "#e8c468", T = "#6bbfab", C = "#d97a63", K = "#f2ede1";
+  const dot = (color, size, txt) => '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + color +
+    ';color:#16261f;font-family:Kalam,cursive;font-weight:700;font-size:' + Math.round(size * 0.55) + 'px;display:flex;align-items:center;justify-content:center;flex:none;">' + (txt || "") + "</div>";
+  const pair = (a, b, s) => '<div style="display:flex;align-items:center;">' + dot(a, s) + '<div style="margin-left:-6px;">' + dot(b, s) + "</div></div>";
+  const ids = (p, extra) => Object.assign({ stageId: p + "Stage", counterId: p + "Counter", msgId: p + "Msg", plusId: p + "Plus", minusId: p + "Minus", playId: p + "Play", resetId: p + "Reset" }, extra);
+  const small = { stockBtn: 36, stockFont: 20, stockLabelW: 70, labelSize: 24, playLabel: "▶ Jusqu'au bout" };
 
-/* ---------- Simulateur complet — mélange stœchiométrique (Cours, sous-partie d) ---------- */
-initAdvancementTable({ svgId: "atSvg", n0AId: "atN0A", n0BId: "atN0B", xId: "atX", readoutId: "atReadout", viewToggleId: "atViewToggle", tableBodyId: "atTableBody" });
+  initRecipeStage(Object.assign(ids("intro"), small, {
+    width: 980, rowH: 84, labelW: 200, tokenSize: 52, unit: "mol",
+    reactants: [{ label: "A", html: dot(Y, 46, "A"), color: Y, coef: 1, n0: 6 }],
+    products: [
+      { label: "B", html: dot(T, 40, "B"), color: T, coef: 1 },
+      { label: "C", html: dot(C, 40, "C"), color: C, coef: 1 }
+    ],
+    counterText: (x) => "x = " + x + " mol",
+    msgStart: "Quand l'avancement augmente de 1 mol, 1 mol de A est consommée et 1 mol de B et 1 mol de C sont formées.",
+    msgStep: (x) => "x = " + x + " mol : " + x + " mol de A consommées, " + x + " mol de B et " + x + " mol de C formées.",
+    msgLimit: (xm) => "A est épuisé : la réaction s'arrête à x = " + xm + " mol.",
+    msgStoich: (xm) => "A est épuisé : la réaction s'arrête à x = " + xm + " mol."
+  }));
+
+  initRecipeStage(Object.assign(ids("tableDemo", { tableBodyId: "tableDemoBody", stockId: "tableDemoStock" }), small, {
+    width: 980, rowH: 90, labelW: 200, tokenSize: 50, unit: "mol",
+    reactants: [
+      { label: "A", stockLabel: "n₀(A)", html: dot(Y, 44, "A"), color: Y, coef: 1, n0: 5, min: 1, max: 8, step: 1 },
+      { label: "B", stockLabel: "n₀(B)", html: dot(T, 44, "B"), color: T, coef: 2, n0: 8, min: 2, max: 12, step: 2 }
+    ],
+    products: [{ label: "C", color: C, coef: 1, html: '<div style="display:flex;align-items:center;">' + dot(T, 20) + '<div style="margin:0 -4px;position:relative;">' + dot(Y, 30) + "</div>" + dot(T, 20) + "</div>" }],
+    counterText: (x) => "x = " + x + " mol",
+    msgStart: "Quand x augmente de 1 mol : 1 mol de A et <strong>2 mol de B</strong> donnent 1 mol de C.",
+    msgStep: (x) => "x = " + x + " mol : " + x + " mol de A et " + 2 * x + " mol de B consommées.",
+    msgLimit: (xm, out, left) => '<strong style="color:' + C + ';">' + out.map((o) => o.label).join(" et ") + " est épuisé</strong> : la réaction s'arrête à x<sub>max</sub> = " + xm + " mol." +
+      (left.length ? " Il reste " + left.map((l) => l.n + " mol de " + l.label).join(" et ") + "." : ""),
+    msgStoich: (xm) => '<strong style="color:' + Y + ';">A et B sont épuisés ensemble</strong> à x<sub>max</sub> = ' + xm + " mol."
+  }));
+
+  initLimitRace({
+    rootId: "limitingRoot", readoutId: "limitingReadout", stockId: "limitingStock", runId: "limitingRun",
+    width: 1280, scaleMax: 12, stockBtn: 36, stockFont: 20, stockLabelW: 70, stockValW: 70,
+    reactants: [
+      { label: "A", coef: 2, n0: 8, color: Y, min: 1, max: 12 },
+      { label: "B", coef: 1, n0: 3, color: T, min: 1, max: 12 }
+    ]
+  });
+
+  const liquid = document.getElementById("atLiquid");
+  initRecipeStage(Object.assign(ids("at", { tableBodyId: "atTableBody", stockId: "atStock" }), small, {
+    width: 980, rowH: 72, labelW: 200, tokenSize: 42, labelSize: 22, unit: "mmol", stockLabelW: 110,
+    reactants: [
+      { label: "I₂", stockLabel: "n₀(I₂)", html: pair("#b8732e", "#b8732e", 22), color: Y, coef: 1, n0: 2, min: 1, max: 8, step: 1 },
+      { label: "S₂O₃²⁻", stockLabel: "n₀(S₂O₃²⁻)", html: dot(T, 32), color: T, coef: 2, n0: 4, min: 2, max: 12, step: 2 }
+    ],
+    products: [
+      { label: "I⁻", html: dot(C, 22), color: C, coef: 2 },
+      { label: "S₄O₆²⁻", html: pair(K, K, 20), color: K, coef: 1 }
+    ],
+    counterText: (x) => "x = " + x + " mmol",
+    msgStart: "Le diiode I₂ colore la solution en brun-orangé. Les autres espèces sont incolores.",
+    msgStep: (x) => "x = " + x + " mmol : la couleur s'éclaircit.",
+    msgLimit: (xm, out, left) => '<strong style="color:' + C + ';">Réactif limitant : ' + out.map((o) => o.label).join(" et ") + ".</strong> Il reste " +
+      left.map((l) => l.n + " mmol de " + l.label).join(" et ") + (left.some((l) => l.label === "I₂") ? " : la solution reste colorée." : " : la solution est incolore."),
+    msgStoich: () => '<strong style="color:' + Y + ';">Mélange stœchiométrique :</strong> les deux réactifs sont épuisés, la solution est incolore.',
+    onUpdate: (st) => { if (liquid) liquid.style.opacity = st.counts[0] === 0 ? "0.08" : String(0.3 + 0.7 * Math.min(1, st.counts[0] / 5)); }
+  }));
+
+  initExcessTP({ rootId: "excessRoot", sliderId: "excessN", readoutId: "excessReadout", massId: "excessMass", calcId: "excessCalc", width: 1280 });
+
+  function fitStages() {
+    document.querySelectorAll(".stage-fit").forEach((el) => {
+      const w = Number(el.dataset.w), avail = el.parentElement.clientWidth - 28;
+      if (avail <= 0) return;
+      const k = Math.min(1, avail / w);
+      el.style.width = w + "px";
+      el.style.transform = "scale(" + k + ")";
+      el.parentElement.style.height = el.offsetHeight * k + 26 + "px";
+    });
+  }
+  fitStages();
+  window.addEventListener("resize", fitStages);
+  if (window.ResizeObserver) { const ro = new ResizeObserver(fitStages); document.querySelectorAll(".stage-box").forEach((b) => ro.observe(b)); }
+  new MutationObserver(fitStages).observe(document.getElementById("panelCours"), { attributes: true, attributeFilter: ["class", "style", "hidden"] });
+  document.querySelectorAll(".mode-tab").forEach((t) => t.addEventListener("click", () => setTimeout(fitStages, 30)));
+})();
 
 /* ---------- Entraînement — Défi interactif : bilan de matière ---------- */
 initBilanChallenge({ containerId: "bilanChallenge", chapterId: "ch4-1ere", activityId: "defi-bilan" });
@@ -484,7 +559,7 @@ initBilanChallenge({ containerId: "bilanChallenge", chapterId: "ch4-1ere", activ
 /* ---------- Activités liées à l'animation du Cours ---------- */
 initQCM({
   containerId: "actLimitingReagent", chapterId: "ch4-1ere", activityId: "qcm-limiting-reagent",
-  prompt: "Règle n₀(I₂) = 3 mmol et n₀(S₂O₃²⁻) = 4 mmol sur l'animation. Quel est le réactif limitant ?",
+  prompt: "Règle n₀(I₂) = 3 mmol et n₀(S₂O₃²⁻) = 4 mmol sur l'animation, puis fais avancer la réaction jusqu'au bout. Quel est le réactif limitant ?",
   options: [
     { text: "I₂", correct: false },
     { text: "S₂O₃²⁻", correct: true },

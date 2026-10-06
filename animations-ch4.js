@@ -440,3 +440,389 @@ function initBilanChallenge(cfg) {
 
   drawExercise();
 }
+
+
+/* ================================================================== */
+/* Diapos v2 — moteur « recette » : des jetons qui se combinent        */
+/* (sandwich, A + 2B → C, I₂ / S₂O₃²⁻). Les fonctions plus haut restent */
+/* utilisées par le site.                                              */
+/* ================================================================== */
+function initRecipeStage(cfg) {
+  const $ = (id) => (id ? document.getElementById(id) : null);
+  const stage = $(cfg.stageId), tbody = $(cfg.tableBodyId), counter = $(cfg.counterId), msg = $(cfg.msgId);
+  const bPlus = $(cfg.plusId), bMinus = $(cfg.minusId), bPlay = $(cfg.playId), bReset = $(cfg.resetId), stock = $(cfg.stockId);
+  if (!stage) return;
+  const W = cfg.width || 1000, ROW_H = cfg.rowH || 96, LABEL_W = cfg.labelW || 230, TOK = cfg.tokenSize || 56;
+  const MAX_STEP = cfg.maxStep || 76, LBL = cfg.labelSize || 30;
+  const R = cfg.reactants.map((r) => Object.assign({ step: 1, min: 1, max: 12 }, r));
+  const P = cfg.products.map((p) => Object.assign({}, p));
+  const ALL = R.concat(P);
+  const CHALK = "#f2ede1", YEL = "#e8c468", CORAL = "#d97a63";
+  const EASE = "cubic-bezier(.55,0,.25,1)";
+  const unit = cfg.unit ? " " + cfg.unit : "";
+  let x = 0, xmax = 0, busy = false, playing = false, rows = [], timers = [];
+
+  const calcXmax = () => Math.min.apply(null, R.map((r) => Math.floor(r.n0 / r.coef)));
+  const tokenHTML = (sp) => sp.html || '<span style="font-size:' + Math.round(TOK * 0.84) + 'px;line-height:1;">' + sp.token + "</span>";
+  const slot = (row, j) => ({ left: LABEL_W + j * row.step + (row.step - TOK) / 2, top: row.top + (ROW_H - TOK) / 2 });
+  const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+
+  function makeToken(sp, pos, pop) {
+    const el = document.createElement("div");
+    el.style.cssText = "position:absolute;left:" + pos.left + "px;top:" + pos.top + "px;width:" + TOK + "px;height:" + TOK +
+      "px;display:flex;align-items:center;justify-content:center;transition:left .5s " + EASE + ",top .5s " + EASE +
+      ",opacity .3s ease,transform .35s " + EASE + ";";
+    el.innerHTML = tokenHTML(sp);
+    if (pop) { el.style.opacity = "0"; el.style.transform = "scale(.3)"; }
+    stage.appendChild(el);
+    if (pop) { void el.offsetWidth; requestAnimationFrame(() => { el.style.opacity = "1"; el.style.transform = "scale(1)"; }); }
+    return el;
+  }
+  const moveTo = (el, pos) => { el.style.left = pos.left + "px"; el.style.top = pos.top + "px"; };
+
+  function build() {
+    timers.forEach(clearTimeout); timers = [];
+    playing = false; busy = false; x = 0; xmax = calcXmax();
+    stage.innerHTML = "";
+    stage.style.position = "relative";
+    stage.style.height = ALL.length * ROW_H + 18 + "px";
+    const caps = ALL.map((sp, i) => (i < R.length ? sp.n0 : sp.coef * xmax));
+    const step = Math.min(MAX_STEP, (W - LABEL_W) / Math.max(1, Math.max.apply(null, caps)));
+    const sep = document.createElement("div");
+    sep.style.cssText = "position:absolute;left:0;right:0;top:" + (R.length * ROW_H + 8) + "px;border-top:2px dashed rgba(242,237,225,0.18);";
+    stage.appendChild(sep);
+    rows = ALL.map((sp, i) => {
+      const isP = i >= R.length;
+      const top = i * ROW_H + (isP ? 18 : 0);
+      const lab = document.createElement("div");
+      lab.style.cssText = "position:absolute;left:0;top:" + top + "px;height:" + ROW_H + "px;width:" + (LABEL_W - 16) +
+        "px;display:flex;flex-direction:column;justify-content:center;font-family:Kalam,cursive;line-height:1.1;font-size:" + LBL + "px;";
+      lab.innerHTML = '<span style="color:' + sp.color + ';transition:color .3s ease;">' + sp.label + '</span><span style="color:' + CHALK + ';transition:color .3s ease;"></span>';
+      stage.appendChild(lab);
+      const row = { sp, top, step, tokens: [], name: lab.children[0], nEl: lab.children[1] };
+      if (!isP) for (let j = 0; j < sp.n0; j++) row.tokens.push(makeToken(sp, slot(row, j), false));
+      return row;
+    });
+    update();
+  }
+
+  function fR(r, v) {
+    const k = r.coef > 1 ? r.coef : "";
+    if (v === null) return r.n0 + " − " + k + "<em>x</em>";
+    return r.n0 + " − " + (r.coef > 1 ? r.coef + "×" : "") + v + ' = <strong style="color:' + YEL + ';">' + (r.n0 - r.coef * v) + "</strong>";
+  }
+  function fP(p, v) {
+    if (v === null) return (p.coef > 1 ? p.coef : "") + "<em>x</em>";
+    return p.coef > 1 ? p.coef + "×" + v + ' = <strong style="color:' + YEL + ';">' + p.coef * v + "</strong>"
+      : '<strong style="color:' + YEL + ';">' + v + "</strong>";
+  }
+  function tableHTML(done) {
+    const L = cfg.rowLabels || ["État initial", "État intermédiaire", "État final"];
+    const mid = x > 0 && !done;
+    const q = '<span style="color:rgba(242,237,225,0.4);">?</span>';
+    const tr = (on, cells) => '<tr class="' + (on ? "row-active" : "") + '">' + cells.map((c) => "<td>" + c + "</td>").join("") + "</tr>";
+    return tr(x === 0, [L[0], "<em>x</em> = 0"].concat(R.map((r) => r.n0), P.map(() => 0))) +
+      tr(mid, [L[1], mid ? "<em>x</em> = " + x : "<em>x</em>"].concat(R.map((r) => fR(r, mid ? x : null)), P.map((p) => fP(p, mid ? x : null)))) +
+      tr(done && x > 0, [L[2], "<em>x</em><sub>max</sub> = " + (done ? xmax : q)].concat(
+        R.map((r) => (done ? fR(r, xmax) : q)), P.map((p) => (done ? fP(p, xmax) : q))));
+  }
+
+  function update() {
+    const c = ALL.map((sp, i) => (i < R.length ? sp.n0 - sp.coef * x : sp.coef * x));
+    const done = x >= xmax;
+    rows.forEach((row, i) => {
+      row.nEl.textContent = c[i] + unit;
+      if (i < R.length) {
+        const out = done && c[i] < R[i].coef;
+        row.name.style.color = out ? CORAL : R[i].color;
+        row.nEl.style.color = out ? CORAL : CHALK;
+      }
+    });
+    if (counter) counter.innerHTML = cfg.counterText ? cfg.counterText(x, xmax, done) : "<em>x</em> = " + x + unit;
+    if (tbody) tbody.innerHTML = tableHTML(done);
+    if (msg) {
+      let html;
+      if (x === 0 && !done) html = cfg.msgStart;
+      else if (!done) html = cfg.msgStep(x);
+      else {
+        const left = R.map((r, i) => ({ label: r.label, n: c[i], out: c[i] < r.coef }));
+        html = left.every((l) => l.n === 0) ? cfg.msgStoich(xmax) : cfg.msgLimit(xmax, left.filter((l) => l.out), left.filter((l) => l.n > 0));
+      }
+      msg.innerHTML = html;
+      msg.style.borderLeftColor = done ? CORAL : "rgba(242,237,225,0.2)";
+    }
+    if (bMinus) { bMinus.disabled = x === 0; bMinus.style.opacity = x === 0 ? "0.35" : "1"; }
+    if (bPlus) { bPlus.disabled = done; bPlus.style.opacity = done ? "0.35" : "1"; }
+    if (cfg.onUpdate) cfg.onUpdate({ x, xmax, counts: c, reactants: R });
+  }
+
+  function step() {
+    if (busy || x >= xmax) return false;
+    busy = true;
+    const p0 = rows[R.length];
+    const target = slot(p0, p0.tokens.length);
+    const moving = [];
+    R.forEach((r, i) => { for (let k = 0; k < r.coef; k++) { const t = rows[i].tokens.pop(); if (t) moving.push(t); } });
+    moving.forEach((t, k) => {
+      t.style.zIndex = "3";
+      moveTo(t, { left: target.left + (k - (moving.length - 1) / 2) * TOK * 0.32, top: target.top });
+    });
+    later(() => {
+      moving.forEach((t) => { t.style.opacity = "0"; t.style.transform = "scale(.5)"; });
+      x++;
+      P.forEach((p, pi) => {
+        const row = rows[R.length + pi];
+        for (let k = 0; k < p.coef; k++) row.tokens.push(makeToken(p, slot(row, row.tokens.length), true));
+      });
+      update();
+    }, 520);
+    later(() => { moving.forEach((t) => t.remove()); busy = false; }, 860);
+    return true;
+  }
+
+  function back() {
+    if (busy || x <= 0) return;
+    stopPlay();
+    busy = true;
+    const p0 = rows[R.length];
+    const last = p0.tokens[p0.tokens.length - 1];
+    const origin = { left: parseFloat(last.style.left), top: parseFloat(last.style.top) };
+    P.forEach((p, pi) => {
+      const row = rows[R.length + pi];
+      for (let k = 0; k < p.coef; k++) {
+        const t = row.tokens.pop();
+        if (!t) continue;
+        t.style.opacity = "0"; t.style.transform = "scale(.3)";
+        later(() => t.remove(), 360);
+      }
+    });
+    x--;
+    R.forEach((r, i) => {
+      const row = rows[i];
+      for (let k = 0; k < r.coef; k++) {
+        const j = row.tokens.length;
+        const t = makeToken(r, origin, false);
+        row.tokens.push(t);
+        later(() => moveTo(t, slot(row, j)), 30);
+      }
+    });
+    update();
+    later(() => { busy = false; }, 580);
+  }
+
+  function setPlayLabel() { if (bPlay) bPlay.textContent = playing ? "⏸ Pause" : (cfg.playLabel || "▶ Tout faire"); }
+  function stopPlay() { playing = false; setPlayLabel(); }
+  function tick() {
+    if (!playing) return;
+    if (!step()) {
+      if (busy) { later(tick, 120); return; }
+      stopPlay(); return;
+    }
+    later(tick, 920);
+  }
+  function play() {
+    if (playing) { stopPlay(); return; }
+    if (x >= xmax) build();
+    playing = true; setPlayLabel(); tick();
+  }
+
+  if (stock) {
+    stock.innerHTML = "";
+    R.forEach((r) => {
+      const g = document.createElement("div");
+      g.style.cssText = "display:flex;align-items:center;gap:12px;";
+      const BS = cfg.stockBtn || 52, FS = cfg.stockFont || 30;
+      const btn = "font-family:Kalam,cursive;font-size:" + FS + "px;width:" + BS + "px;height:" + BS + "px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;cursor:pointer;line-height:1;padding:0;";
+      g.innerHTML = '<span style="font-family:Kalam,cursive;font-size:' + FS + 'px;color:' + r.color + ';min-width:' + (cfg.stockLabelW || 120) + 'px;">' + (r.stockLabel || r.label) +
+        '</span><button style="' + btn + '">−</button><span style="font-family:Kalam,cursive;font-size:' + FS + 'px;min-width:44px;text-align:center;"></span><button style="' + btn + '">+</button>';
+      const [minus, val, plus] = [g.children[1], g.children[2], g.children[3]];
+      const show = () => { val.textContent = r.n0; };
+      minus.addEventListener("click", () => { r.n0 = Math.max(r.min, r.n0 - r.step); show(); build(); });
+      plus.addEventListener("click", () => { r.n0 = Math.min(r.max, r.n0 + r.step); show(); build(); });
+      show();
+      stock.appendChild(g);
+    });
+  }
+  if (bPlus) bPlus.addEventListener("click", () => { stopPlay(); step(); });
+  if (bMinus) bMinus.addEventListener("click", back);
+  if (bPlay) bPlay.addEventListener("click", play);
+  if (bReset) bReset.addEventListener("click", build);
+  setPlayLabel();
+  build();
+}
+
+/* ================================================================== */
+/* Diapos v2 — réactif limitant : chaque réactif annonce jusqu'où il   */
+/* peut tenir, la réaction s'arrête au premier épuisé (2 A + B → P)    */
+/* ================================================================== */
+function initLimitRace(cfg) {
+  const $ = (id) => (id ? document.getElementById(id) : null);
+  const root = $(cfg.rootId), readout = $(cfg.readoutId), stock = $(cfg.stockId), bRun = $(cfg.runId);
+  if (!root) return;
+  const R = cfg.reactants.map((r) => Object.assign({ min: 1, max: 12 }, r));
+  const W = cfg.width || 1000, LABEL_W = 230, LANE_H = 100, SMAX = cfg.scaleMax || 12;
+  const TRACK = W - LABEL_W - 30;
+  const px = (v) => (TRACK * v) / SMAX;
+  const CORAL = "#d97a63", YEL = "#e8c468", TEAL = "#6bbfab";
+  const nf = (v) => v.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
+  let timer = null;
+
+  root.style.position = "relative";
+  root.style.height = (R.length + 1) * LANE_H + 60 + "px";
+  root.innerHTML = "";
+  const lanes = R.concat([{ label: "Réaction", color: CORAL, isRx: true }]).map((r, i) => {
+    const top = i * LANE_H;
+    const lab = document.createElement("div");
+    lab.style.cssText = "position:absolute;left:0;top:" + top + "px;height:" + LANE_H + "px;width:" + (LABEL_W - 16) + "px;display:flex;flex-direction:column;justify-content:center;line-height:1.15;";
+    lab.innerHTML = r.isRx
+      ? '<span style="font-family:Kalam,cursive;font-size:32px;color:' + CORAL + ';">Réaction</span><span style="font-size:24px;color:#c9c2b0;">avancement <em>x</em></span>'
+      : '<span style="font-family:Kalam,cursive;font-size:32px;color:' + r.color + ';">Si ' + r.label + ' limitant</span><span style="font-size:24px;color:#c9c2b0;">n₀(' + r.label + ') / ' + r.coef + "</span>";
+    const track = document.createElement("div");
+    track.style.cssText = "position:absolute;left:" + LABEL_W + "px;top:" + (top + 24) + "px;width:" + TRACK + "px;height:52px;border-radius:10px;background:rgba(0,0,0,0.25);border:2px solid rgba(242,237,225,0.12);transition:border-color .3s ease,background .3s ease;";
+    const fill = document.createElement("div");
+    fill.style.cssText = "position:absolute;left:0;top:0;bottom:0;width:0;border-radius:8px;background:" + r.color + ";opacity:" + (r.isRx ? 0.9 : 0.35) + ";";
+    const end = document.createElement("div");
+    end.style.cssText = "position:absolute;top:-8px;bottom:-8px;width:5px;margin-left:-2px;border-radius:3px;background:" + r.color + ";transition:left .35s ease;";
+    const val = document.createElement("div");
+    val.style.cssText = "position:absolute;top:8px;font-family:Kalam,cursive;font-size:28px;color:#f2ede1;white-space:nowrap;transition:left .35s ease;";
+    track.appendChild(fill);
+    if (!r.isRx) { track.appendChild(end); track.appendChild(val); fill.style.transition = "width .35s ease"; }
+    root.appendChild(lab); root.appendChild(track);
+    return { r, lab, track, fill, end, val };
+  });
+  const cursor = document.createElement("div");
+  cursor.style.cssText = "position:absolute;top:6px;height:" + ((R.length + 1) * LANE_H - 12) + "px;width:0;border-left:3px dashed " + CORAL + ";left:" + LABEL_W + "px;";
+  root.appendChild(cursor);
+  const axis = document.createElement("div");
+  axis.style.cssText = "position:absolute;left:" + LABEL_W + "px;top:" + ((R.length + 1) * LANE_H + 6) + "px;width:" + TRACK + "px;height:50px;border-top:2px solid rgba(242,237,225,0.3);";
+  for (let v = 0; v <= SMAX; v += 2) {
+    axis.innerHTML += '<span style="position:absolute;left:' + px(v) + 'px;top:6px;transform:translateX(-50%);font-size:24px;color:#c9c2b0;">' + v + "</span>";
+  }
+  axis.innerHTML += '<span style="position:absolute;right:-6px;top:-40px;font-size:24px;color:#c9c2b0;">mol</span>';
+  root.appendChild(axis);
+
+  function values() {
+    const xm = R.map((r) => r.n0 / r.coef);
+    const xmax = Math.min.apply(null, xm);
+    const stoich = xm.every((v) => Math.abs(v - xmax) < 1e-9);
+    return { xm, xmax, stoich };
+  }
+
+  function formulas(v, showEnd) {
+    let h = R.map((r, i) => '<div>Si <span style="color:' + r.color + ';">' + r.label + "</span> limitant : <em>x</em><sub>max</sub> = " + r.n0 + " / " + r.coef + " = <strong>" + nf(v.xm[i]) + " mol</strong></div>").join("");
+    if (showEnd) {
+      const badge = v.stoich
+        ? '<span class="limiting-badge stoich">mélange stœchiométrique : les deux s\'épuisent ensemble</span>'
+        : '<span class="limiting-badge">réactif limitant : ' + R[v.xm.indexOf(v.xmax)].label + "</span>";
+      h += '<div style="margin-top:8px;color:#f2ede1;"><em>x</em><sub>max</sub> = min(' + v.xm.map(nf).join(" ; ") + ') = <strong style="color:' + YEL + ';">' + nf(v.xmax) + " mol</strong></div><div style=\"margin-top:10px;\">" + badge + "</div>";
+    } else {
+      h += '<div style="margin-top:8px;color:#c9c2b0;">La réaction avance…</div>';
+    }
+    readout.innerHTML = h;
+  }
+
+  function run() {
+    clearTimeout(timer);
+    const v = values();
+    lanes.forEach((l, i) => {
+      if (l.r.isRx) return;
+      l.fill.style.width = px(v.xm[i]) + "px";
+      l.end.style.left = px(v.xm[i]) + "px";
+      l.val.style.left = px(v.xm[i]) + 14 + "px";
+      l.val.textContent = nf(v.xm[i]) + " mol";
+      l.track.style.borderColor = "rgba(242,237,225,0.12)";
+      l.track.style.background = "rgba(0,0,0,0.25)";
+    });
+    const rx = lanes[lanes.length - 1];
+    rx.fill.style.transition = "none"; rx.fill.style.width = "0";
+    cursor.style.transition = "none"; cursor.style.left = LABEL_W + "px";
+    void rx.fill.offsetWidth;
+    const dur = Math.max(0.6, v.xmax * 0.28);
+    rx.fill.style.transition = "width " + dur + "s linear";
+    cursor.style.transition = "left " + dur + "s linear";
+    requestAnimationFrame(() => {
+      rx.fill.style.width = px(v.xmax) + "px";
+      cursor.style.left = LABEL_W + px(v.xmax) + "px";
+    });
+    formulas(v, false);
+    timer = setTimeout(() => {
+      lanes.forEach((l, i) => {
+        if (l.r.isRx) return;
+        const hit = Math.abs(v.xm[i] - v.xmax) < 1e-9;
+        if (hit) { l.track.style.borderColor = CORAL; l.track.style.background = "rgba(217,122,99,0.14)"; }
+      });
+      formulas(v, true);
+    }, dur * 1000 + 80);
+  }
+
+  if (stock) {
+    stock.innerHTML = "";
+    R.forEach((r) => {
+      const g = document.createElement("div");
+      g.style.cssText = "display:flex;align-items:center;gap:12px;";
+      const BS = cfg.stockBtn || 52, FS = cfg.stockFont || 30;
+      const btn = "font-family:Kalam,cursive;font-size:" + FS + "px;width:" + BS + "px;height:" + BS + "px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;cursor:pointer;line-height:1;padding:0;";
+      g.innerHTML = '<span style="font-family:Kalam,cursive;font-size:' + FS + 'px;color:' + r.color + ';min-width:' + (cfg.stockLabelW || 130) + 'px;">n₀(' + r.label + ')</span><button style="' + btn + '">−</button><span style="font-family:Kalam,cursive;font-size:' + FS + 'px;min-width:' + (cfg.stockValW || 110) + 'px;text-align:center;"></span><button style="' + btn + '">+</button>';
+      const [minus, val, plus] = [g.children[1], g.children[2], g.children[3]];
+      const show = () => { val.textContent = r.n0 + " mol"; };
+      minus.addEventListener("click", () => { r.n0 = Math.max(r.min, r.n0 - 1); show(); run(); });
+      plus.addEventListener("click", () => { r.n0 = Math.min(r.max, r.n0 + 1); show(); run(); });
+      show();
+      stock.appendChild(g);
+    });
+  }
+  if (bRun) bRun.addEventListener("click", run);
+  run();
+}
+
+/* Diapos v2 — eau en excès, version TP : 250 mL d'eau + m g d'acide éthanoïque */
+function initExcessTP(cfg) {
+  const $ = (id) => document.getElementById(id);
+  const root = $(cfg.rootId), slider = $(cfg.sliderId);
+  if (!root || !slider) return;
+  const M_AC = 60, NW = 250 / 18, W = cfg.width || 1700, LABEL_W = 290, SMAX = 15;
+  const TRACK = W - LABEL_W - 200;
+  const px = (v) => (TRACK * v) / SMAX;
+  const nf = (v, d) => v.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+  root.style.position = "relative";
+  root.style.height = "236px";
+  root.innerHTML = "";
+  const lane = (top, label, sub, color) => {
+    const lab = document.createElement("div");
+    lab.style.cssText = "position:absolute;left:0;top:" + top + "px;height:92px;width:" + (LABEL_W - 16) + "px;display:flex;flex-direction:column;justify-content:center;line-height:1.15;";
+    lab.innerHTML = '<span style="font-family:Kalam,cursive;font-size:32px;color:' + color + ';">' + label + '</span><span style="font-size:24px;color:#c9c2b0;">' + sub + "</span>";
+    const bar = document.createElement("div");
+    bar.style.cssText = "position:absolute;left:" + LABEL_W + "px;top:" + (top + 20) + "px;height:52px;border-radius:8px;background:" + color + ";opacity:.85;transition:width .3s ease;";
+    const val = document.createElement("div");
+    val.style.cssText = "position:absolute;top:" + (top + 26) + "px;font-family:Kalam,cursive;font-size:32px;color:#f2ede1;white-space:nowrap;transition:left .3s ease;";
+    root.appendChild(lab); root.appendChild(bar); root.appendChild(val);
+    return { bar, val };
+  };
+  const a = lane(0, "Acide éthanoïque", "CH₃COOH", "#d97a63");
+  const w = lane(100, "Eau", "H₂O · 250 mL", "#6bbfab");
+  const axis = document.createElement("div");
+  axis.style.cssText = "position:absolute;left:" + LABEL_W + "px;top:200px;width:" + TRACK + "px;border-top:2px solid rgba(242,237,225,0.3);";
+  for (let v = 0; v <= SMAX; v += 5) axis.innerHTML += '<span style="position:absolute;left:' + px(v) + 'px;top:4px;transform:translateX(-50%);font-size:24px;color:#c9c2b0;">' + v + "</span>";
+  axis.innerHTML += '<span style="position:absolute;left:' + (TRACK + 30) + 'px;top:4px;font-size:24px;color:#c9c2b0;">mol</span>';
+  root.appendChild(axis);
+  w.bar.style.width = px(NW) + "px";
+  w.val.style.left = LABEL_W + px(NW) + 16 + "px";
+  w.val.textContent = "13,9 mol";
+  const set = (id, h) => { const el = $(id); if (el) el.innerHTML = h; };
+  function draw() {
+    const m = Number(slider.value) / 10;
+    const n = m / M_AC;
+    const wa = Math.max(3, px(n));
+    a.bar.style.width = wa + "px";
+    a.val.style.left = LABEL_W + wa + 16 + "px";
+    a.val.textContent = nf(n, 3) + " mol";
+    set(cfg.massId, nf(m, 1) + " g");
+    set(cfg.calcId, "<em>n</em> = " + nf(m, 1) + " / 60 = <strong style=\"color:#e8c468;\">" + nf(n, 3) + " mol</strong>");
+    set(cfg.readoutId,
+      "<div>Au maximum, l'eau consommée vaut <strong style=\"color:#e8c468;\">" + nf(n, 3) + " mol</strong>, soit " + nf((100 * n) / NW, 1) + " % de l'eau.</div>" +
+      "<div>Eau restante : " + nf(NW, 2) + " − " + nf(n, 2) + " = <strong style=\"color:#e8c468;\">" + nf(NW - n, 2) + " mol</strong> au lieu de " + nf(NW, 2) + " mol</div>" +
+      "<div style=\"margin-top:8px;color:#c9c2b0;\">Il y a environ " + Math.round(NW / n) + " fois plus d'eau que d'acide : l'eau ne peut pas être limitante.</div>");
+  }
+  slider.addEventListener("input", draw);
+  draw();
+}
