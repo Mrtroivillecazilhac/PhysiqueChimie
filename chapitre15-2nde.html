@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 15 — Lentilles minces convergentes — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch15-2nde.js"></script>
+<script src="modules-common.js"></script>
+<style>
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique</div>
+  <h1>Chapitre 15 — Lentilles minces convergentes</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch15-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch15-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch15-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- MODE_COURS -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Caractériser une lentille mince convergente : centre optique, foyers, distance focale</li>
+        <li>Construire graphiquement l'image réelle d'un objet plan</li>
+        <li>Calculer et interpréter la valeur absolue du grandissement</li>
+        <li>Modéliser l'œil par le modèle de l'œil réduit et expliquer l'accommodation</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1a. Caractéristiques d'une lentille mince convergente</h2>
+    <p class="course-text">Les lentilles sont présentes dans de nombreux systèmes optiques de la vie courante et du laboratoire : lunettes, loupe binoculaire, appareil photo…</p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définitions</span>
+      Les <strong>lentilles minces</strong> sont des milieux transparents délimités par deux surfaces, dont l'une au moins n'est pas plane.<br>
+      Les <strong>lentilles convergentes</strong> sont plus minces aux bords qu'au centre.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique sur chaque type de rayon.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="lr1Cours">Par O</button>
+      <button class="toggle-btn" id="lr2Cours">Parallèle à l'axe</button>
+      <button class="toggle-btn" id="lr3Cours">Par F</button>
+      <button class="toggle-btn" id="lr4Cours">Les trois</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="lrSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="lrReadoutCours"></div>
+      </div>
+    </div>
+
+    <div class="recall-box" style="margin-top:20px;">
+      <span class="box-label">📌 À retenir</span>
+      Une lentille mince est caractérisée par trois points particuliers : son <strong>centre optique O</strong>, son <strong>foyer image F'</strong> et son <strong>foyer objet F</strong>.<br>
+      La <strong>distance focale f'</strong> est définie comme la distance entre le centre optique O et chacun des foyers F et F'.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Point maths : F et F' sont symétriques par rapport à O, donc O est le milieu de [FF'] et OF = OF' = f'.
+    </p>
+  </section>
+
+  <section>
+    <h2>1b. Production d'une image réelle</h2>
+    <p class="course-text">L'image d'un point B situé avant la lentille est un point B' situé à l'intersection de tous les rayons lumineux issus de B et traversant la lentille.</p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'image d'un objet produite par une lentille est qualifiée de <strong>réelle</strong> si elle est visible sur un écran.<br>
+      Lorsque la distance entre l'objet et la lentille est supérieure à la distance focale f' de la lentille, l'image produite est réelle.
+    </div>
+    <p class="course-text">
+      En optique, un objet AB et son image A'B' sont modélisés par des segments fléchés perpendiculaires à l'axe optique. L'image A'B' réelle est <strong>renversée</strong> ; elle devient plus petite si l'objet s'éloigne de la lentille et plus grande s'il s'en rapproche.
+    </p>
+  </section>
+
+  <section>
+    <h2>1c. Construction d'une image réelle</h2>
+    <div class="method-box">
+      <span class="box-label">🔧 Méthode</span>
+      ① Pour obtenir l'image B' de B, tracer deux des trois rayons particuliers : le rayon passant par O (non dévié), le rayon parallèle à l'axe optique (il émerge en passant par F'), le rayon passant par F (il émerge parallèlement à l'axe optique).<br>
+      ② Le point image B' est situé à l'intersection des rayons émergents.<br>
+      ③ Pour obtenir A', on projette orthogonalement B' sur l'axe optique.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Déplace l'objet et construis l'image étape par étape.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ib1Cours">① Deux rayons</button>
+      <button class="toggle-btn" id="ib2Cours">+ Troisième rayon</button>
+      <button class="toggle-btn" id="ib3Cours">②③ Image A'B'</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="ibSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Distance objet-lentille OA (cm)</label>
+        <input type="range" id="ibDCours" min="6" max="40" value="25" step="1">
+        <div class="anim-readout" id="ibReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>1d. Grandissement</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La valeur absolue du <strong>grandissement γ</strong> permet de comparer la taille de l'image formée par une lentille à celle de l'objet (sans unité, longueurs dans la même unité) :
+    </div>
+    <div class="formula">|γ| = A'B' / AB = OA' / OA</div>
+    <p class="course-text">Si |γ| &gt; 1, l'image A'B' est plus grande que l'objet AB. Si |γ| &lt; 1, l'image A'B' est plus petite que l'objet AB.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Point maths : cette relation découle du théorème de Thalès, les droites (AA') et (BB') étant sécantes en O et (AB) parallèle à (A'B').
+    </p>
+  </section>
+
+  <section>
+    <h2>2. Le fonctionnement de l'œil</h2>
+    <p class="course-text">
+      La quantité de lumière pénétrant dans l'œil est régulée par l'ouverture de l'<strong>iris</strong>. L'ensemble des <strong>milieux transparents</strong> (cornée, humeur aqueuse, cristallin, humeur vitrée) peut être assimilé à une lentille mince convergente. Pour une vision nette, l'image de l'objet se forme sur la <strong>rétine</strong>.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 Modèle de l'œil réduit</span>
+      Iris → un <strong>diaphragme</strong> ; milieux transparents → une <strong>lentille mince convergente de distance focale f' variable</strong> ; rétine → un <strong>écran</strong>.
+    </div>
+    <p class="course-text">
+      La distance cristallin-rétine reste toujours constante (environ 17 mm). L'image formée sur la rétine est renversée : c'est le cerveau qui l'interprète à l'endroit. Pour un objet proche, le cristallin se déforme et sa distance focale f' change : l'œil <strong>accommode</strong>. Si l'objet est suffisamment éloigné, l'œil est <strong>au repos</strong>.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Rapproche l'objet et compare l'œil qui accommode et l'œil au repos.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ey1Cours">Œil qui accommode</button>
+      <button class="toggle-btn" id="ey2Cours">Œil au repos</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="eySvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Distance de l'objet</label>
+        <input type="range" id="eyDCours" min="0" max="8" value="0" step="1">
+        <div class="anim-readout" id="eyReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- MODE_ENTRAINEMENT -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+      <h3>1a. Lentille mince convergente</h3>
+      <p>Une lentille convergente est plus mince aux <input class="blank" data-answer="bords" size="10"> qu'au centre.</p>
+      <p>Un rayon passant par le centre optique O n'est pas <input class="blank" data-answer="dévié|devie" size="10">.</p>
+      <p>Un rayon parallèle à l'axe optique émerge en passant par le foyer <input class="blank" data-answer="image" size="10"> F'.</p>
+      <p>La distance entre O et chacun des foyers est la distance <input class="blank" data-answer="focale" size="10"> f'.</p>
+
+      <h3>1b–1d. Image et grandissement</h3>
+      <p>Une image visible sur un écran est une image <input class="blank" data-answer="réelle|reelle" size="10">.</p>
+      <p>L'image réelle d'un objet est <input class="blank" data-answer="renversée|renversee" size="12"> par rapport à l'objet.</p>
+      <div class="formula">|γ| = A'B' / AB = OA' / OA</div>
+      <p>Si |γ| &gt; 1, l'image est plus <input class="blank" data-answer="grande" size="10"> que l'objet.</p>
+
+      <h3>2. L'œil</h3>
+      <p>Dans le modèle de l'œil réduit, la rétine est représentée par un <input class="blank" data-answer="écran|ecran" size="10">.</p>
+      <p>Quand le cristallin se déforme pour voir net un objet proche, on dit que l'œil <input class="blank" data-answer="accommode" size="12">.</p>
+    </div>
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Rayons particuliers</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Clique sur chaque type de rayon.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="lr1">Par O</button>
+      <button class="toggle-btn" id="lr2">Parallèle à l'axe</button>
+      <button class="toggle-btn" id="lr3">Par F</button>
+      <button class="toggle-btn" id="lr4">Les trois</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="lrSvg" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="lrReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actFocal"></div></div>
+  </section>
+
+  <section>
+    <h2>Construction de l'image</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Déplace l'objet devant la lentille.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ib1">① Deux rayons</button>
+      <button class="toggle-btn" id="ib2">+ Troisième rayon</button>
+      <button class="toggle-btn" id="ib3">②③ Image A'B'</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="ibSvg" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Distance objet-lentille OA (cm)</label>
+        <input type="range" id="ibD" min="6" max="40" value="25" step="1">
+        <div class="anim-readout" id="ibReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actRealImage"></div></div>
+  </section>
+
+  <section>
+    <h2>Grandissement</h2>
+    <div class="activity-block"><div id="actGamma"></div></div>
+    <div class="activity-block"><div id="actImageSize"></div></div>
+  </section>
+
+  <section>
+    <h2>L'œil</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Compare l'œil qui accommode et l'œil au repos.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ey1">Œil qui accommode</button>
+      <button class="toggle-btn" id="ey2">Œil au repos</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="eySvg" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Distance de l'objet</label>
+        <input type="range" id="eyD" min="0" max="8" value="0" step="1">
+        <div class="anim-readout" id="eyReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actAccommodation"></div></div>
+  </section>
+
+</div>
+
+<!-- MODE_SYNTHESE -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Rayon incident</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Rayon émergent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">passant par le centre optique O</td><td style="padding:10px 8px; color:var(--yellow);">non dévié</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">parallèle à l'axe optique</td><td style="padding:10px 8px; color:var(--yellow);">passe par le foyer image F'</td></tr>
+          <tr><td style="padding:10px 8px;">passant par le foyer objet F</td><td style="padding:10px 8px; color:var(--yellow);">parallèle à l'axe optique</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Formules et repères</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li><strong>Distance focale</strong> : OF = OF' = f' (F et F' symétriques par rapport à O)</li>
+        <li><strong>Image réelle</strong> : visible sur un écran, obtenue si OA &gt; f' ; elle est renversée</li>
+        <li><strong>Grandissement</strong> : |γ| = A'B' / AB = OA' / OA (sans unité)</li>
+        <li><strong>Œil réduit</strong> : iris → diaphragme ; milieux transparents → lentille de f' variable ; rétine → écran</li>
+        <li><strong>Accommodation</strong> : distance cristallin-rétine fixe (≈ 17 mm), c'est f' qui varie</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 15 — Lentilles minces convergentes (2nde).</footer>
+
+<script>
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch15-2nde", "trous-complet", true);
+});
+
+/* Animations — Cours */
+initLensRays({ svgId: "lrSvgCours", readoutId: "lrReadoutCours", buttonIds: ["lr1Cours", "lr2Cours", "lr3Cours", "lr4Cours"] });
+initImageBuild({ svgId: "ibSvgCours", readoutId: "ibReadoutCours", rangeId: "ibDCours", buttonIds: ["ib1Cours", "ib2Cours", "ib3Cours"] });
+initEyeModel({ svgId: "eySvgCours", readoutId: "eyReadoutCours", rangeId: "eyDCours", buttonIds: ["ey1Cours", "ey2Cours"] });
+
+/* Animations — Entraînement */
+initLensRays({ svgId: "lrSvg", readoutId: "lrReadout", buttonIds: ["lr1", "lr2", "lr3", "lr4"] });
+initImageBuild({ svgId: "ibSvg", readoutId: "ibReadout", rangeId: "ibD", buttonIds: ["ib1", "ib2", "ib3"] });
+initEyeModel({ svgId: "eySvg", readoutId: "eyReadout", rangeId: "eyD", buttonIds: ["ey1", "ey2"] });
+
+/* Activités */
+initQCM({
+  containerId: "actFocal", chapterId: "ch15-2nde", activityId: "qcm-distance-focale",
+  prompt: "Une lentille a une distance focale f' = 5,0 cm. Quelle est la distance entre ses deux foyers F et F' ?",
+  options: [
+    { text: "5,0 cm", correct: false },
+    { text: "10 cm", correct: true },
+    { text: "2,5 cm", correct: false }
+  ],
+  explanation: "F et F' sont de part et d'autre de O : FF' = OF + OF' = 2 × f' = 10 cm."
+});
+
+initVraiFaux({
+  containerId: "actRealImage", chapterId: "ch15-2nde", activityId: "vf-image-reelle",
+  prompt: "Un objet placé à 6 cm d'une lentille de distance focale f' = 10 cm donne une image réelle sur un écran.",
+  correct: false,
+  explanation: "Faux : l'objet est plus proche de la lentille que la distance focale (6 cm < 10 cm), il n'y a pas d'image réelle."
+});
+
+initEstimation({
+  containerId: "actGamma", chapterId: "ch15-2nde", activityId: "est-gamma",
+  prompt: "Un objet est placé à 30 cm d'une lentille ; son image nette se forme à 15 cm de la lentille. Calcule |γ|.",
+  answer: 0.5, tolerance: 0.02, unit: "",
+  explanation: "|γ| = OA' / OA = 15 cm / 30 cm = 0,50 : l'image est deux fois plus petite que l'objet."
+});
+
+initQCM({
+  containerId: "actImageSize", chapterId: "ch15-2nde", activityId: "qcm-taille-image",
+  prompt: "Un objet de 1,5 cm donne une image avec |γ| = 3,0. Quelle est la hauteur de l'image ?",
+  options: [
+    { text: "0,50 cm", correct: false },
+    { text: "4,5 cm", correct: true },
+    { text: "1,5 cm", correct: false }
+  ],
+  explanation: "A'B' = |γ| × AB = 3,0 × 1,5 cm = 4,5 cm."
+});
+
+initVraiFaux({
+  containerId: "actAccommodation", chapterId: "ch15-2nde", activityId: "vf-accommodation",
+  prompt: "Pour lire un livre de près, l'œil modifie la distance entre le cristallin et la rétine.",
+  correct: false,
+  explanation: "Faux : la distance cristallin-rétine reste égale à 17 mm. C'est la distance focale du cristallin qui diminue : l'œil accommode."
+});
+
+initModeTabs("ch15-2nde");
+initProgressBar("ch15-2nde", 6); // texte à trous complet + 5 activités
+</script>
+</body>
+</html>

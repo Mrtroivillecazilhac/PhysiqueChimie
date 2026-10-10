@@ -42,6 +42,10 @@
 <script src="animations-common.js"></script>
 <script src="animations-ch4-2nde.js"></script>
 <script src="modules-common.js"></script>
+<style>
+#vmBox:fullscreen{padding:36px 56px;font-size:1.3rem}
+#vmBox:fullscreen .anim-wrap{max-width:760px!important}
+</style>
 </head>
 <body>
 
@@ -95,6 +99,65 @@
   </section>
 
   <section>
+    <div id="vmBox" style="border:2px solid rgba(242,237,225,0.45); background:#1b2c25; border-radius:12px; padding:18px 22px; overflow:auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span class="box-label" style="color:var(--chalk);">📐 Point maths : les vecteurs</span>
+        <button class="toggle-btn" id="vmFull">⛶ Plein écran</button>
+      </div>
+      <p class="course-text">Une vitesse ou un déplacement ne se résument pas à un nombre : il faut aussi savoir dans quelle direction et dans quel sens on va. En physique, on les représente par une flèche appelée <strong>vecteur</strong>.</p>
+      <h3 style="font-family:Kalam,cursive; color:var(--teal); font-size:1.35rem; margin:22px 0 6px;">1. Pourquoi un nombre ne suffit pas</h3>
+      <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique sur la question, puis sur « Avec une flèche ».</p>
+      <div class="toggle-row">
+        <button class="toggle-btn" id="vhAsk">Où sera la voiture dans 10 s ?</button>
+        <button class="toggle-btn" id="vhArrow">➡️ Avec une flèche</button>
+      </div>
+      <div class="anim-zone">
+        <div class="anim-wrap" style="width:100%; max-width:420px;">
+          <svg id="vhSvg" viewBox="0 0 240 150"></svg>
+        </div>
+        <div class="anim-controls">
+          <div class="anim-readout" id="vhReadout"></div>
+        </div>
+      </div>
+      <h3 style="font-family:Kalam,cursive; color:var(--teal); font-size:1.35rem; margin:22px 0 6px;">2. Les 4 caractéristiques d'un vecteur</h3>
+      <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis une caractéristique pour la voir sur le schéma, puis essaie « Sens opposé ».</p>
+      <div class="toggle-row">
+        <button class="toggle-btn" id="vaPoint">Point d'application</button>
+        <button class="toggle-btn" id="vaDir">Direction</button>
+        <button class="toggle-btn" id="vaSens">Sens</button>
+        <button class="toggle-btn" id="vaVal">Valeur</button>
+        <button class="toggle-btn" id="vaFlip">⇄ Sens opposé</button>
+      </div>
+      <div class="anim-zone">
+        <div class="anim-wrap" style="width:100%; max-width:420px;">
+          <svg id="vaSvg" viewBox="0 0 240 150"></svg>
+        </div>
+        <div class="anim-controls">
+          <label>Valeur v (m/s)</label>
+          <input type="range" id="vaV" min="10" max="50" step="10" value="30">
+          <div class="anim-readout" id="vaReadout"></div>
+        </div>
+      </div>
+      <h3 style="font-family:Kalam,cursive; color:var(--teal); font-size:1.35rem; margin:22px 0 6px;">3. Le vecteur vitesse en action</h3>
+      <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Observe la flèche pendant le mouvement. Affiche les caractéristiques pour les suivre en direct.</p>
+      <div class="toggle-row">
+        <button class="toggle-btn" id="vlPlay">⏸ Pause</button>
+        <button class="toggle-btn" id="vlSlow">🐢 Ralenti</button>
+        <button class="toggle-btn" id="vlReset">↺ Réinitialiser</button>
+        <button class="toggle-btn" id="vlShow">Afficher les caractéristiques</button>
+      </div>
+      <div class="anim-zone">
+        <div class="anim-wrap" style="width:100%; max-width:420px;">
+          <svg id="vlSvg" viewBox="0 0 240 150"></svg>
+        </div>
+        <div class="anim-controls">
+          <div class="anim-readout" id="vlReadout"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2>1a. Système et référentiel</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
@@ -103,9 +166,36 @@
     <p class="course-text">
       Les positions successives du système au cours du temps sont déterminées dans un <strong>repère</strong> d'espace ; le temps est mesuré à l'aide d'une <strong>horloge</strong>. L'association du repère et de l'horloge constitue le référentiel.
     </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Observe le ballon : retire le repère, puis l'horloge. Que peut-on encore dire de ses positions ?</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="frRepereCours">📐 Repère</button>
+      <button class="toggle-btn" id="frHorlogeCours">⏱ Horloge</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="frSvgCours" viewBox="0 0 240 152"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="frReadoutCours"></div>
+      </div>
+    </div>
     <div class="warning-box">
       <span class="box-label">⚠️ Attention</span>
       Les échelles temporelle et spatiale de description doivent être adaptées au mouvement étudié (par exemple, pour une plaque tectonique : année et centimètre, ou million d'années et kilomètre).
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Une plaque tectonique avance d'environ 2 cm par an. Choisis les unités de temps et de longueur pour l'observer.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="scSCours">seconde &amp; mètre</button>
+      <button class="toggle-btn" id="scAnCours">année &amp; centimètre</button>
+      <button class="toggle-btn" id="scMaCours">million d'années &amp; kilomètre</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="scSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="scReadoutCours"></div>
+      </div>
     </div>
     <p class="course-text">
       Pour simplifier, au lycée, on se limite souvent à l'étude d'un seul point du système. Cette modélisation entraîne une perte d'informations lorsque les dimensions du système ne sont pas négligeables devant les distances étudiées.
@@ -113,6 +203,20 @@
     <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
       Exemple : le rayon de la Terre (6,4×10³ km) est très petit devant le rayon de son orbite autour du Soleil (1,5×10⁸ km). Modéliser la Terre par son centre permet de décrire son mouvement autour du Soleil, mais pas sa rotation sur elle-même.
     </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Compare la Terre agrandie, la Terre à l'échelle et le modèle du point.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pmSphereCours">🌍 Terre agrandie</button>
+      <button class="toggle-btn" id="pmScaleCours">📏 À l'échelle</button>
+      <button class="toggle-btn" id="pmPointCours">• Modèle du point</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="pmSvgCours" viewBox="0 0 240 176"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="pmReadoutCours"></div>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -183,17 +287,16 @@
       Le vecteur vitesse moyenne est <strong>indépendant de la trajectoire</strong> du système entre M et M'. Il est colinéaire au vecteur déplacement <span class="vec">MM'</span> et de même sens.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la distance parcourue et la durée du parcours.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Deux systèmes vont de M à M' par deux trajets différents, pendant la même durée Δt. Compare leurs vecteurs vitesse moyenne.</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:230px;">
-        <svg id="avSvgCours" viewBox="0 0 230 120"></svg>
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="av2SvgCours" viewBox="0 0 230 200"></svg>
       </div>
       <div class="anim-controls">
-        <label>Distance MM' (m)</label>
-        <input type="range" id="avDCours" min="1" max="30" value="15" step="1">
-        <label>Durée Δt (s)</label>
-        <input type="range" id="avTCours" min="1" max="10" value="3" step="1">
-        <div class="anim-readout" id="avReadoutCours"></div>
+        <label>Durée Δt du parcours (s)</label>
+        <input type="range" id="av2TCours" min="2" max="10" value="4" step="1">
+        <div class="actions" style="margin-top:6px;"><button class="toggle-btn" id="av2PlayCours">▶ Rejouer</button></div>
+        <div class="anim-readout" id="av2ReadoutCours"></div>
       </div>
     </div>
   </section>
@@ -338,6 +441,24 @@
   </section>
 
   <section>
+    <h2>Repère et horloge</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Retire le repère, puis l'horloge : que peut-on encore dire des positions du ballon ?</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="frRepere">📐 Repère</button>
+      <button class="toggle-btn" id="frHorloge">⏱ Horloge</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="frSvg" viewBox="0 0 240 152"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="frReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actFrame"></div></div>
+  </section>
+
+  <section>
     <h2>Types de trajectoire</h2>
     <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les 3 types de trajectoire.</p>
     <div class="toggle-row">
@@ -375,18 +496,17 @@
   </section>
 
   <section>
-    <h2>Calculateur de vitesse moyenne</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle la distance parcourue et la durée du parcours.</p>
+    <h2>Deux trajets, une seule vitesse moyenne</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Deux systèmes vont de M à M' par deux trajets différents, pendant la même durée Δt. Compare leurs vecteurs vitesse moyenne.</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:230px;">
-        <svg id="avSvg" viewBox="0 0 230 120"></svg>
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="av2Svg" viewBox="0 0 230 200"></svg>
       </div>
       <div class="anim-controls">
-        <label>Distance MM' (m)</label>
-        <input type="range" id="avD" min="1" max="30" value="15" step="1">
-        <label>Durée Δt (s)</label>
-        <input type="range" id="avT" min="1" max="10" value="3" step="1">
-        <div class="anim-readout" id="avReadout"></div>
+        <label>Durée Δt du parcours (s)</label>
+        <input type="range" id="av2T" min="2" max="10" value="4" step="1">
+        <div class="actions" style="margin-top:6px;"><button class="toggle-btn" id="av2Play">▶ Rejouer</button></div>
+        <div class="anim-readout" id="av2Readout"></div>
       </div>
     </div>
     <div class="activity-block"><div id="actAverageVelocity"></div></div>
@@ -522,22 +642,44 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 });
 
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
+initVecHook({ svgId: "vhSvg", readoutId: "vhReadout", btnAskId: "vhAsk", btnArrowId: "vhArrow" });
+initVecAnatomy({ svgId: "vaSvg", readoutId: "vaReadout", btnPointId: "vaPoint", btnDirId: "vaDir", btnSensId: "vaSens", btnValId: "vaVal", btnFlipId: "vaFlip", vRangeId: "vaV" });
+initVecLive({ svgId: "vlSvg", readoutId: "vlReadout", btnPlayId: "vlPlay", btnSlowId: "vlSlow", btnResetId: "vlReset", btnShowId: "vlShow" });
+document.getElementById("vmFull").addEventListener("click", () => {
+  const box = document.getElementById("vmBox");
+  if (document.fullscreenElement) document.exitFullscreen(); else if (box.requestFullscreen) box.requestFullscreen();
+});
+initFrameOfReference({ svgId: "frSvgCours", readoutId: "frReadoutCours", btnRepereId: "frRepereCours", btnHorlogeId: "frHorlogeCours" });
+initScales({ svgId: "scSvgCours", readoutId: "scReadoutCours", btnSId: "scSCours", btnAnId: "scAnCours", btnMaId: "scMaCours" });
+initPointModel({ svgId: "pmSvgCours", readoutId: "pmReadoutCours", btnSphereId: "pmSphereCours", btnScaleId: "pmScaleCours", btnPointId: "pmPointCours" });
 initTrajectoryTypes({ svgId: "ttSvgCours", readoutId: "ttReadoutCours", btnLineId: "ttLineCours", btnCircleId: "ttCircleCours", btnCurvyId: "ttCurvyCours" });
 initDisplacementVector({ svgId: "dvSvgCours", readoutId: "dvReadoutCours", btn1Id: "dv1Cours", btn2Id: "dv2Cours" });
-initAverageVelocity({ svgId: "avSvgCours", dRangeId: "avDCours", tRangeId: "avTCours", readoutId: "avReadoutCours" });
+initAverageVelocityTwoPaths({ svgId: "av2SvgCours", tRangeId: "av2TCours", readoutId: "av2ReadoutCours", btnPlayId: "av2PlayCours" });
 initVelocityTangent({ svgId: "vtSvgCours", gapRangeId: "vtGapCours", readoutId: "vtReadoutCours", formulaId: "vtFormulaCours", btnPlayId: "vtPlayCours" });
 initRelativity({ svgId: "relSvgCours", readoutId: "relReadoutCours", btnQuaiId: "relQuaiCours", btnTrainId: "relTrainCours", ghostToggleId: "relGhostCours" });
 initMotionNature({ svgId: "mnSvgCours", readoutId: "mnReadoutCours", btnAccelId: "mnAccelCours", btnDecelId: "mnDecelCours", btnUniformId: "mnUniformCours", ghostToggleId: "mnGhostCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
+initFrameOfReference({ svgId: "frSvg", readoutId: "frReadout", btnRepereId: "frRepere", btnHorlogeId: "frHorloge" });
 initTrajectoryTypes({ svgId: "ttSvg", readoutId: "ttReadout", btnLineId: "ttLine", btnCircleId: "ttCircle", btnCurvyId: "ttCurvy" });
 initDisplacementVector({ svgId: "dvSvg", readoutId: "dvReadout", btn1Id: "dv1", btn2Id: "dv2" });
-initAverageVelocity({ svgId: "avSvg", dRangeId: "avD", tRangeId: "avT", readoutId: "avReadout" });
+initAverageVelocityTwoPaths({ svgId: "av2Svg", tRangeId: "av2T", readoutId: "av2Readout", btnPlayId: "av2Play" });
 initVelocityTangent({ svgId: "vtSvg", gapRangeId: "vtGap", readoutId: "vtReadout", formulaId: "vtFormula", btnPlayId: "vtPlay" });
 initRelativity({ svgId: "relSvg", readoutId: "relReadout", btnQuaiId: "relQuai", btnTrainId: "relTrain", ghostToggleId: "relGhost" });
 initMotionNature({ svgId: "mnSvg", readoutId: "mnReadout", btnAccelId: "mnAccel", btnDecelId: "mnDecel", btnUniformId: "mnUniform", ghostToggleId: "mnGhost" });
 
 /* ---------- Activités liées à chaque animation ---------- */
+initQCM({
+  containerId: "actFrame", chapterId: "ch4-2nde", activityId: "qcm-frame",
+  prompt: "Pour situer ET dater chaque position d'un ballon, il faut…",
+  options: [
+    { text: "Un repère d'espace et une horloge", correct: true },
+    { text: "Un repère d'espace seulement", correct: false },
+    { text: "Une horloge seulement", correct: false }
+  ],
+  explanation: "Le repère donne les coordonnées de chaque position, l'horloge donne l'instant. Leur association constitue le référentiel."
+});
+
 initQCM({
   containerId: "actTrajectory", chapterId: "ch4-2nde", activityId: "qcm-trajectory",
   prompt: "Une trajectoire qui est une portion de cercle correspond à un mouvement…",
@@ -598,7 +740,7 @@ initQCM({
 
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch4-2nde");
-initProgressBar("ch4-2nde", 7); // texte à trous complet + 6 activités liées aux animations
+initProgressBar("ch4-2nde", 8); // texte à trous complet + 7 activités liées aux animations
 </script>
 </body>
 </html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 14 — Réfraction et réflexion de la lumière — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch14-2nde.js"></script>
+<script src="modules-common.js"></script>
+<style>
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique</div>
+  <h1>Chapitre 14 — Réfraction et réflexion de la lumière</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch14-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch14-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch14-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- MODE_COURS -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Définir la réfraction et la réflexion, et repérer les angles par rapport à la normale</li>
+        <li>Utiliser les lois de Snell-Descartes pour calculer un angle ou un indice de réfraction</li>
+        <li>Interpréter la dispersion de la lumière blanche par un prisme</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1a. Propagation de la lumière</h2>
+    <p class="course-text">
+      Dans un milieu transparent et homogène, la lumière se propage en ligne droite. Un étroit faisceau lumineux est appelé <strong>rayon lumineux</strong>. Lorsqu'un rayon lumineux arrive à la frontière séparant deux milieux de propagation distincts, il peut changer de milieu ou rester dans le même milieu.
+    </p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définitions</span>
+      La <strong>réfraction</strong> est le changement de direction de propagation d'un rayon lumineux passant d'un milieu de propagation à un autre.<br>
+      La <strong>réflexion</strong> est le changement de direction de propagation d'un rayon lumineux atteignant la surface séparant deux milieux de propagation et qui reste dans le premier milieu.
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Chaque angle est défini entre la normale et son rayon, et pas entre le rayon et la surface de séparation.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique sur chaque élément du schéma.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="rv1Cours">Normale</button>
+      <button class="toggle-btn" id="rv2Cours">Angle d'incidence</button>
+      <button class="toggle-btn" id="rv3Cours">Angle de réflexion</button>
+      <button class="toggle-btn" id="rv4Cours">Angle de réfraction</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="rvSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="rvReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>1b. Lois de Snell-Descartes</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 Réfraction</span>
+      Le rayon incident et le rayon réfracté sont situés dans un même plan, de part et d'autre de la normale, elle-même dans ce plan. Les angles d'incidence i₁ et de réfraction i₂ vérifient la relation :
+    </div>
+    <div class="formula">n₁ × sin i₁ = n₂ × sin i₂</div>
+    <p class="course-text">
+      L'<strong>indice de réfraction</strong> d'un milieu est un nombre sans unité et caractéristique du milieu. Il est toujours supérieur ou égal à 1 : vide 1 (exactement), air 1,00, eau 1,33, verre 1,50, diamant 2,52. Il traduit les changements de la valeur de la vitesse de la lumière quand celle-ci change de milieu de propagation.
+    </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Point maths : si n₁ × sin i₁ = n₂ × sin i₂, alors n₂ = n₁ × sin i₁ / sin i₂. Exemple : i₁ = 40°, i₂ = 29° donne n₂ = 1,00 × sin 40° / sin 29° ≈ 1,33 (eau).
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle l'angle d'incidence et change de milieu.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="sn1Cours">Eau · 1,33</button>
+      <button class="toggle-btn" id="sn2Cours">Verre · 1,50</button>
+      <button class="toggle-btn" id="sn3Cours">Diamant · 2,52</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="snSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Angle d'incidence i₁ (°)</label>
+        <input type="range" id="snICours" min="0" max="85" value="40" step="1">
+        <div class="anim-readout" id="snReadoutCours"></div>
+      </div>
+    </div>
+
+    <div class="recall-box" style="margin-top:20px;">
+      <span class="box-label">📌 Réflexion</span>
+      Le rayon incident et le rayon réfléchi sont situés dans un même plan, de part et d'autre de la normale, elle-même dans ce plan. Les angles d'incidence i₁ et de réflexion i<sub>R</sub> vérifient : <strong>i₁ = i<sub>R</sub></strong>.
+    </div>
+  </section>
+
+  <section>
+    <h2>2a. Phénomène de dispersion</h2>
+    <p class="course-text">
+      Un prisme ou un réseau permettent de décomposer un faisceau de lumière blanche en un faisceau comportant toutes les radiations du violet (400 nm) au rouge (800 nm) : c'est le spectre de la lumière blanche.
+    </p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>dispersion d'une lumière</strong> est la séparation des différentes radiations qui composent cette lumière.
+    </div>
+  </section>
+
+  <section>
+    <h2>2b. Interprétation par un prisme</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      L'indice de réfraction d'un <strong>milieu dispersif</strong> dépend de la longueur d'onde de la radiation qui le traverse. L'application des lois de Snell-Descartes pour la réfraction permet alors d'interpréter le phénomène de dispersion.
+    </div>
+    <p class="course-text">
+      Les composantes colorées de la lumière blanche arrivent sur le prisme avec le même angle d'incidence i₁. Comme n<sub>violet</sub> &gt; n<sub>rouge</sub> dans le verre, elles sont réfractées avec des angles différents et sont séparées. La seconde réfraction, à la sortie du prisme, accentue le phénomène.
+    </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Compare la lumière blanche et une lumière d'une seule couleur.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pr1Cours">Lumière blanche</button>
+      <button class="toggle-btn" id="pr2Cours">Rouge seule</button>
+      <button class="toggle-btn" id="pr3Cours">Violette seule</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="prSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Angle d'incidence i₁ (°)</label>
+        <input type="range" id="prICours" min="40" max="75" value="50" step="1">
+        <div class="anim-readout" id="prReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- MODE_ENTRAINEMENT -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+      <h3>1a. Propagation de la lumière</h3>
+      <p>Dans un milieu transparent et homogène, la lumière se propage en <input class="blank" data-answer="ligne droite" size="14">.</p>
+      <p>La <input class="blank" data-answer="réfraction|refraction" size="14"> est le changement de direction d'un rayon lumineux qui passe d'un milieu à un autre.</p>
+      <p>La <input class="blank" data-answer="réflexion|reflexion" size="14"> est le changement de direction d'un rayon lumineux qui reste dans le premier milieu.</p>
+      <p>Chaque angle est mesuré par rapport à la <input class="blank" data-answer="normale" size="12">.</p>
+
+      <h3>1b. Lois de Snell-Descartes</h3>
+      <p>Le rayon incident et le rayon réfracté sont situés dans un même <input class="blank" data-answer="plan" size="10">.</p>
+      <p>L'indice de réfraction d'un milieu est un nombre sans <input class="blank" data-answer="unité|unite" size="10">, toujours supérieur ou égal à <input class="blank" data-answer="1" size="4">.</p>
+      <div class="formula">n₁ × sin i₁ = n₂ × sin i₂</div>
+      <p>Pour la réflexion, l'angle de réflexion est <input class="blank" data-answer="égal|egal" size="10"> à l'angle d'incidence.</p>
+
+      <h3>2. Dispersion</h3>
+      <p>Dans un milieu <input class="blank" data-answer="dispersif" size="12">, l'indice de réfraction dépend de la longueur d'onde.</p>
+      <p>Dans le verre d'un prisme, la radiation <input class="blank" data-answer="violette|violet" size="12"> est la plus déviée.</p>
+    </div>
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Normale et angles</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Clique sur chaque élément du schéma.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="rv1">Normale</button>
+      <button class="toggle-btn" id="rv2">Angle d'incidence</button>
+      <button class="toggle-btn" id="rv3">Angle de réflexion</button>
+      <button class="toggle-btn" id="rv4">Angle de réfraction</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="rvSvg" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="rvReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actRayVocab"></div></div>
+  </section>
+
+  <section>
+    <h2>Loi de la réfraction</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle l'angle d'incidence et change de milieu.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="sn1">Eau · 1,33</button>
+      <button class="toggle-btn" id="sn2">Verre · 1,50</button>
+      <button class="toggle-btn" id="sn3">Diamant · 2,52</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="snSvg" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Angle d'incidence i₁ (°)</label>
+        <input type="range" id="snI" min="0" max="85" value="40" step="1">
+        <div class="anim-readout" id="snReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actSnellAngle"></div></div>
+    <div class="activity-block"><div id="actSnellIndex"></div></div>
+  </section>
+
+  <section>
+    <h2>Loi de la réflexion</h2>
+    <div class="activity-block"><div id="actReflection"></div></div>
+  </section>
+
+  <section>
+    <h2>Dispersion par un prisme</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Compare la lumière blanche et une lumière d'une seule couleur.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="pr1">Lumière blanche</button>
+      <button class="toggle-btn" id="pr2">Rouge seule</button>
+      <button class="toggle-btn" id="pr3">Violette seule</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="prSvg" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Angle d'incidence i₁ (°)</label>
+        <input type="range" id="prI" min="40" max="75" value="50" step="1">
+        <div class="anim-readout" id="prReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actPrism"></div></div>
+  </section>
+
+</div>
+
+<!-- MODE_SYNTHESE -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Phénomène</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Ce qui se passe</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--chalk-dim); font-family:var(--font-display); font-size:1rem;">Loi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réfraction</td><td style="padding:10px 8px;">le rayon change de milieu et de direction</td><td style="padding:10px 8px; color:var(--yellow);">n₁ × sin i₁ = n₂ × sin i₂</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réflexion</td><td style="padding:10px 8px;">le rayon reste dans le premier milieu</td><td style="padding:10px 8px; color:var(--yellow);">i₁ = i<sub>R</sub></td></tr>
+          <tr><td style="padding:10px 8px;">Dispersion</td><td style="padding:10px 8px;">les radiations de la lumière blanche sont séparées</td><td style="padding:10px 8px; color:var(--yellow);">n dépend de λ (milieu dispersif)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Formules et repères</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li><strong>Angles</strong> : toujours mesurés par rapport à la normale</li>
+        <li><strong>Calculer un indice</strong> : n₂ = n₁ × sin i₁ / sin i₂</li>
+        <li><strong>Indices</strong> : vide 1 ; air 1,00 ; eau 1,33 ; verre 1,50 ; diamant 2,52 (sans unité, n ≥ 1)</li>
+        <li><strong>Prisme en verre</strong> : n<sub>violet</sub> &gt; n<sub>rouge</sub>, le violet est le plus dévié</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 14 — Réfraction et réflexion de la lumière (2nde).</footer>
+
+<script>
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch14-2nde", "trous-complet", true);
+});
+
+/* Animations — Cours */
+initRayVocab({ svgId: "rvSvgCours", readoutId: "rvReadoutCours", buttonIds: ["rv1Cours", "rv2Cours", "rv3Cours", "rv4Cours"] });
+initSnellRefraction({ svgId: "snSvgCours", readoutId: "snReadoutCours", rangeId: "snICours", buttonIds: ["sn1Cours", "sn2Cours", "sn3Cours"] });
+initPrismDispersion({ svgId: "prSvgCours", readoutId: "prReadoutCours", rangeId: "prICours", buttonIds: ["pr1Cours", "pr2Cours", "pr3Cours"] });
+
+/* Animations — Entraînement */
+initRayVocab({ svgId: "rvSvg", readoutId: "rvReadout", buttonIds: ["rv1", "rv2", "rv3", "rv4"] });
+initSnellRefraction({ svgId: "snSvg", readoutId: "snReadout", rangeId: "snI", buttonIds: ["sn1", "sn2", "sn3"] });
+initPrismDispersion({ svgId: "prSvg", readoutId: "prReadout", rangeId: "prI", buttonIds: ["pr1", "pr2", "pr3"] });
+
+/* Activités */
+initQCM({
+  containerId: "actRayVocab", chapterId: "ch14-2nde", activityId: "qcm-angle-incidence",
+  prompt: "Un rayon arrive sur l'eau en faisant un angle de 30° avec la surface. Que vaut l'angle d'incidence ?",
+  options: [
+    { text: "30°", correct: false },
+    { text: "60°", correct: true },
+    { text: "90°", correct: false }
+  ],
+  explanation: "L'angle d'incidence se mesure par rapport à la normale : i₁ = 90° − 30° = 60°."
+});
+
+initQCM({
+  containerId: "actSnellAngle", chapterId: "ch14-2nde", activityId: "qcm-snell-angle",
+  prompt: "Un rayon passe de l'air (n₁ = 1,00) dans l'eau (n₂ = 1,33) avec i₁ = 30°. Que vaut i₂ ?",
+  options: [
+    { text: "22°", correct: true },
+    { text: "30°", correct: false },
+    { text: "42°", correct: false }
+  ],
+  explanation: "sin i₂ = 1,00 × sin 30° / 1,33 = 0,376, donc i₂ ≈ 22°."
+});
+
+initEstimation({
+  containerId: "actSnellIndex", chapterId: "ch14-2nde", activityId: "est-snell-index",
+  prompt: "Un rayon passe de l'air (n₁ = 1,00) dans un liquide avec i₁ = 40° et i₂ = 29°. Calcule l'indice n₂ du liquide.",
+  answer: 1.33, tolerance: 0.02, unit: "",
+  explanation: "n₂ = 1,00 × sin 40° / sin 29° = 0,643 / 0,485 ≈ 1,33 : c'est de l'eau."
+});
+
+initVraiFaux({
+  containerId: "actReflection", chapterId: "ch14-2nde", activityId: "vf-reflection",
+  prompt: "Un rayon arrive sur un miroir avec un angle d'incidence de 35°. Le rayon réfléchi fait un angle de 55° avec la normale.",
+  correct: false,
+  explanation: "Faux : d'après la loi de la réflexion, i_R = i₁ = 35°. Les 55° sont mesurés par rapport à la surface du miroir."
+});
+
+initQCM({
+  containerId: "actPrism", chapterId: "ch14-2nde", activityId: "qcm-prism",
+  prompt: "Dans le verre, n(violet) > n(rouge). Quelle radiation est la plus déviée par le prisme ?",
+  options: [
+    { text: "La rouge", correct: false },
+    { text: "La violette", correct: true },
+    { text: "Toutes de la même façon", correct: false }
+  ],
+  explanation: "Pour un même i₁, un indice plus grand donne un angle i₂ plus petit : la radiation violette est la plus déviée."
+});
+
+initModeTabs("ch14-2nde");
+initProgressBar("ch14-2nde", 6); // texte à trous complet + 5 activités
+</script>
+</body>
+</html>

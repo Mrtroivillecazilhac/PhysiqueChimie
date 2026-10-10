@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 16 — Transformation nucléaire — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch16-2nde.js"></script>
+<script src="modules-common.js"></script>
+<style>
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+  .nuc{ display:inline-flex; align-items:center; gap:2px; vertical-align:middle; }
+  .nuc .az{ display:inline-flex; flex-direction:column; align-items:flex-end; font-size:0.6em; line-height:1.02; }
+  .eq-box{ border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin-top:12px; display:flex; flex-direction:column; gap:8px; }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Chapitre 16 — Transformation nucléaire</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch16-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch16-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch16-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- MODE_COURS -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Identifier des isotopes à partir de l'écriture conventionnelle de leurs noyaux</li>
+        <li>Écrire l'équation d'une réaction nucléaire en utilisant les lois de conservation</li>
+        <li>Savoir qu'une transformation nucléaire libère de grandes quantités d'énergie</li>
+        <li>Identifier la nature physique, chimique ou nucléaire d'une transformation</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1a. Élément chimique</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Un élément chimique est caractérisé par son <strong>numéro atomique Z</strong>.<br>
+      Tous les représentants, atomes ou ions, d'un élément chimique donné ont donc des noyaux contenant le <strong>même nombre de protons</strong> et le <strong>même symbole chimique X</strong>.
+    </div>
+  </section>
+
+  <section>
+    <h2>1b. Isotopes</h2>
+    <p class="course-text">Le noyau d'un atome ou d'un ion de symbole chimique X qui comporte Z protons et A nucléons est noté <span class="nuc"><span class="az"><span>A</span><span>Z</span></span>X</span>. Le nombre de neutrons est N = A − Z.</p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Des atomes ou des ions <strong>isotopes</strong> possèdent le même nombre de protons Z et un nombre de neutrons N différent. Ils ont donc le même numéro atomique Z, mais un nombre de nucléons A différent (A = Z + N).
+    </div>
+    <p class="course-text">Les atomes isotopes portent le nom de l'élément chimique auquel ils appartiennent, suivi de leur nombre de nucléons A. Exemple : le cuivre 63 <span class="nuc"><span class="az"><span>63</span><span>29</span></span>Cu</span> (34 neutrons) et le cuivre 65 <span class="nuc"><span class="az"><span>65</span><span>29</span></span>Cu</span> (36 neutrons).</p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique sur deux noyaux pour savoir s'ils sont isotopes.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="nu0Cours"><span class="nuc"><span class="az"><span>1</span><span>1</span></span>H</span></button>
+      <button class="toggle-btn" id="nu1Cours"><span class="nuc"><span class="az"><span>2</span><span>1</span></span>H</span></button>
+      <button class="toggle-btn" id="nu2Cours"><span class="nuc"><span class="az"><span>3</span><span>1</span></span>H</span></button>
+      <button class="toggle-btn" id="nu3Cours"><span class="nuc"><span class="az"><span>12</span><span>6</span></span>C</span></button>
+      <button class="toggle-btn" id="nu4Cours"><span class="nuc"><span class="az"><span>13</span><span>6</span></span>C</span></button>
+      <button class="toggle-btn" id="nu5Cours"><span class="nuc"><span class="az"><span>14</span><span>6</span></span>C</span></button>
+      <button class="toggle-btn" id="nu6Cours"><span class="nuc"><span class="az"><span>63</span><span>29</span></span>Cu</span></button>
+      <button class="toggle-btn" id="nu7Cours"><span class="nuc"><span class="az"><span>65</span><span>29</span></span>Cu</span></button>
+      <button class="toggle-btn" id="nu8Cours"><span class="nuc"><span class="az"><span>235</span><span>92</span></span>U</span></button>
+      <button class="toggle-btn" id="nu9Cours"><span class="nuc"><span class="az"><span>238</span><span>92</span></span>U</span></button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="nuSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="nuReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>1c. Réactivité chimique</h2>
+    <p class="course-text">Les propriétés chimiques d'un atome sont déterminées par la structure de son cortège électronique.</p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Des atomes <strong>isotopes</strong> ont la <strong>même réactivité chimique</strong> car leurs cortèges électroniques sont identiques.
+    </div>
+  </section>
+
+  <section>
+    <h2>2. La transformation nucléaire</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Lors d'une <strong>transformation nucléaire</strong> : un ou plusieurs noyaux réactifs se transforment en de nouveaux noyaux ; les éléments chimiques ne sont pas conservés ; un rayonnement, dit « gamma » (γ), est émis.
+    </div>
+    <h3>2a. Équation de réaction nucléaire</h3>
+    <p class="course-text">Une transformation nucléaire est modélisée par une réaction dans laquelle interviennent les particules qui réagissent et les particules formées. Une particule est caractérisée par son nombre de masse A et son nombre de charge Z : électron <span class="nuc"><span class="az"><span>0</span><span>−1</span></span>e</span>, positon <span class="nuc"><span class="az"><span>0</span><span>1</span></span>e</span>, neutron <span class="nuc"><span class="az"><span>1</span><span>0</span></span>n</span>, proton <span class="nuc"><span class="az"><span>1</span><span>1</span></span>p</span>.</p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      L'équation nucléaire traduit la <strong>conservation du nombre de masse A</strong> et du <strong>nombre de charge Z</strong> au cours de la transformation (lois de Soddy).
+    </div>
+    <p class="course-text">Exemple : <span class="nuc"><span class="az"><span>14</span><span>6</span></span>C</span> → <span class="nuc"><span class="az"><span>14</span><span>7</span></span>N</span> + <span class="nuc"><span class="az"><span>0</span><span>−1</span></span>e</span> (14 = 14 + 0 et 6 = 7 + (−1)).</p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis une réaction puis la particule qui la complète.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="eqR0Cours">Réaction ①</button>
+      <button class="toggle-btn" id="eqR1Cours">Réaction ②</button>
+      <button class="toggle-btn" id="eqR2Cours">Réaction ③</button>
+      <button class="toggle-btn" id="eqR3Cours">Réaction ④</button>
+    </div>
+    <div class="eq-box" id="eqBoxCours"></div>
+    <div class="toggle-row" style="margin-top:12px;">
+      <button class="toggle-btn" id="eqP0Cours"><span class="nuc"><span class="az"><span>0</span><span>−1</span></span>e</span> électron</button>
+      <button class="toggle-btn" id="eqP1Cours"><span class="nuc"><span class="az"><span>0</span><span>1</span></span>e</span> positon</button>
+      <button class="toggle-btn" id="eqP2Cours"><span class="nuc"><span class="az"><span>1</span><span>0</span></span>n</span> neutron</button>
+      <button class="toggle-btn" id="eqP3Cours"><span class="nuc"><span class="az"><span>1</span><span>1</span></span>p</span> proton</button>
+      <button class="toggle-btn" id="eqP4Cours"><span class="nuc"><span class="az"><span>4</span><span>2</span></span>He</span> hélium</button>
+    </div>
+    <div class="anim-readout" id="eqReadoutCours"></div>
+
+    <h3>2b. Conversion d'énergie</h3>
+    <p class="course-text">Lors d'une transformation nucléaire, une partie de l'énergie nucléaire contenue dans les noyaux réactifs est transformée en <strong>énergie rayonnante</strong>. Dans le Soleil ou dans les réacteurs des centrales nucléaires, les transformations nucléaires libèrent de grandes quantités d'énergie : environ 10⁹ J par seconde pour un réacteur, 3,9 × 10²⁶ J par seconde pour le Soleil.</p>
+  </section>
+
+  <section>
+    <h2>3. L'identification de la nature d'une transformation</h2>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Pour identifier la nature de la transformation, une analyse des <strong>réactifs</strong> et des <strong>produits</strong> est nécessaire.
+    </div>
+    <p class="course-text"><strong>Transformation physique</strong> : réactif(s) et produit(s) correspondent à des espèces chimiques identiques dont seuls les états physiques diffèrent. Exemple : H₂O(ℓ) → H₂O(g).</p>
+    <p class="course-text"><strong>Transformation chimique</strong> : réactif(s) et produit(s) correspondent à des espèces chimiques différentes, mais avec conservation des éléments chimiques et de la charge électrique. Exemple : CH₄(g) + 2 O₂(g) → CO₂(g) + 2 H₂O(g).</p>
+    <p class="course-text"><strong>Transformation nucléaire</strong> : réactif(s) et produit(s) correspondent à des éléments chimiques différents. Exemple : <span class="nuc"><span class="az"><span>218</span><span>84</span></span>Po</span> → <span class="nuc"><span class="az"><span>214</span><span>82</span></span>Pb</span> + <span class="nuc"><span class="az"><span>4</span><span>2</span></span>He</span>.</p>
+  </section>
+
+</div>
+
+<!-- MODE_ENTRAINEMENT -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+      <h3>1. Les isotopes</h3>
+      <p>Un élément chimique est caractérisé par son numéro <input class="blank" data-answer="atomique" size="10"> Z.</p>
+      <p>Dans l'écriture <span class="nuc"><span class="az"><span>A</span><span>Z</span></span>X</span>, A est le nombre de <input class="blank" data-answer="nucléons|nucleons" size="10">.</p>
+      <p>Des isotopes ont le même nombre de <input class="blank" data-answer="protons" size="10"> mais un nombre de <input class="blank" data-answer="neutrons" size="10"> différent.</p>
+      <p>Des isotopes ont la même réactivité <input class="blank" data-answer="chimique" size="10">.</p>
+
+      <h3>2. La transformation nucléaire</h3>
+      <p>Lors d'une transformation nucléaire, les éléments chimiques ne sont pas <input class="blank" data-answer="conservés|conserves" size="10">.</p>
+      <p>Une équation nucléaire conserve le nombre de masse A et le nombre de <input class="blank" data-answer="charge" size="10"> Z.</p>
+
+      <h3>3. Nature d'une transformation</h3>
+      <p>Si seuls les états physiques diffèrent, la transformation est <input class="blank" data-answer="physique" size="10">.</p>
+    </div>
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Isotopes</h2>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Clique sur deux noyaux pour les comparer.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="nu0"><span class="nuc"><span class="az"><span>1</span><span>1</span></span>H</span></button>
+      <button class="toggle-btn" id="nu1"><span class="nuc"><span class="az"><span>2</span><span>1</span></span>H</span></button>
+      <button class="toggle-btn" id="nu2"><span class="nuc"><span class="az"><span>3</span><span>1</span></span>H</span></button>
+      <button class="toggle-btn" id="nu3"><span class="nuc"><span class="az"><span>12</span><span>6</span></span>C</span></button>
+      <button class="toggle-btn" id="nu4"><span class="nuc"><span class="az"><span>13</span><span>6</span></span>C</span></button>
+      <button class="toggle-btn" id="nu5"><span class="nuc"><span class="az"><span>14</span><span>6</span></span>C</span></button>
+      <button class="toggle-btn" id="nu6"><span class="nuc"><span class="az"><span>63</span><span>29</span></span>Cu</span></button>
+      <button class="toggle-btn" id="nu7"><span class="nuc"><span class="az"><span>65</span><span>29</span></span>Cu</span></button>
+      <button class="toggle-btn" id="nu8"><span class="nuc"><span class="az"><span>235</span><span>92</span></span>U</span></button>
+      <button class="toggle-btn" id="nu9"><span class="nuc"><span class="az"><span>238</span><span>92</span></span>U</span></button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:300px;">
+        <svg id="nuSvg" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="anim-readout" id="nuReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actIsotopes"></div></div>
+    <div class="activity-block"><div id="actNeutrons"></div></div>
+  </section>
+
+  <section>
+    <h2>Équations nucléaires</h2>
+    <div class="activity-block"><div id="actEquation"></div></div>
+    <div class="activity-block"><div id="actElements"></div></div>
+  </section>
+
+  <section>
+    <h2>Nature d'une transformation</h2>
+    <div class="activity-block"><div id="actNature"></div></div>
+  </section>
+
+</div>
+
+<!-- MODE_SYNTHESE -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Transformation</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Réactifs et produits</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">physique</td><td style="padding:10px 8px; color:var(--yellow);">mêmes espèces chimiques, états physiques différents</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">chimique</td><td style="padding:10px 8px; color:var(--yellow);">espèces différentes, éléments et charge conservés</td></tr>
+          <tr><td style="padding:10px 8px;">nucléaire</td><td style="padding:10px 8px; color:var(--yellow);">éléments chimiques différents</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Formules et repères</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li><strong>Écriture conventionnelle</strong> : <span class="nuc"><span class="az"><span>A</span><span>Z</span></span>X</span> ; A nucléons, Z protons, N = A − Z neutrons</li>
+        <li><strong>Isotopes</strong> : même Z, N différent ; même réactivité chimique</li>
+        <li><strong>Transformation nucléaire</strong> : nouveaux noyaux, éléments non conservés, rayonnement γ émis</li>
+        <li><strong>Lois de Soddy</strong> : conservation de A et de Z</li>
+        <li><strong>Particules</strong> : électron <span class="nuc"><span class="az"><span>0</span><span>−1</span></span>e</span>, positon <span class="nuc"><span class="az"><span>0</span><span>1</span></span>e</span>, neutron <span class="nuc"><span class="az"><span>1</span><span>0</span></span>n</span>, proton <span class="nuc"><span class="az"><span>1</span><span>1</span></span>p</span></li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 16 — Transformation nucléaire (2nde).</footer>
+
+<script>
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch16-2nde", "trous-complet", true);
+});
+
+const nuIds = s => [0,1,2,3,4,5,6,7,8,9].map(i => "nu" + i + s);
+/* Animations — Cours */
+initNucleus({ svgId: "nuSvgCours", readoutId: "nuReadoutCours", buttonIds: nuIds("Cours"), scale: 0.4 });
+initNuclearEq({ boxId: "eqBoxCours", readoutId: "eqReadoutCours", reactionIds: ["eqR0Cours","eqR1Cours","eqR2Cours","eqR3Cours"], particleIds: ["eqP0Cours","eqP1Cours","eqP2Cours","eqP3Cours","eqP4Cours"], scale: 0.5 });
+/* Animations — Entraînement */
+initNucleus({ svgId: "nuSvg", readoutId: "nuReadout", buttonIds: nuIds(""), scale: 0.4 });
+
+/* Activités */
+initQCM({
+  containerId: "actIsotopes", chapterId: "ch16-2nde", activityId: "qcm-isotopes",
+  prompt: "Quels noyaux sont isotopes ?",
+  options: [
+    { text: "³⁵₁₇Cl et ³⁷₁₇Cl", correct: true },
+    { text: "³⁷₁₇Cl et ³⁷₁₈Ar", correct: false },
+    { text: "³⁵₁₇Cl, ³⁷₁₇Cl et ³⁷₁₈Ar", correct: false }
+  ],
+  explanation: "Le chlore 35 et le chlore 37 ont le même Z = 17 et des N différents. L'argon 37 a le même A mais Z = 18 : c'est un autre élément."
+});
+
+initEstimation({
+  containerId: "actNeutrons", chapterId: "ch16-2nde", activityId: "est-neutrons",
+  prompt: "Combien de neutrons contient le noyau d'uranium 238 (Z = 92) ?",
+  answer: 146, tolerance: 0, unit: "neutrons",
+  explanation: "N = A − Z = 238 − 92 = 146 neutrons."
+});
+
+initQCM({
+  containerId: "actEquation", chapterId: "ch16-2nde", activityId: "qcm-equation",
+  prompt: "Compléter : ²³⁸₉₂U → ²³⁴₉₀Th + ?",
+  options: [
+    { text: "⁴₂He", correct: true },
+    { text: "⁰₋₁e", correct: false },
+    { text: "¹₀n", correct: false }
+  ],
+  explanation: "Conservation de A : 238 = 234 + 4. Conservation de Z : 92 = 90 + 2. La particule émise est un noyau d'hélium."
+});
+
+initVraiFaux({
+  containerId: "actElements", chapterId: "ch16-2nde", activityId: "vf-elements",
+  prompt: "Lors d'une transformation nucléaire, les éléments chimiques sont conservés.",
+  correct: false,
+  explanation: "Faux : de nouveaux noyaux se forment, les éléments chimiques ne sont pas conservés. Ce sont A et Z qui sont conservés."
+});
+
+initQCM({
+  containerId: "actNature", chapterId: "ch16-2nde", activityId: "qcm-nature",
+  prompt: "La transformation ¹³¹₅₃I → ¹³¹₅₄Xe + ⁰₋₁e est :",
+  options: [
+    { text: "physique", correct: false },
+    { text: "chimique", correct: false },
+    { text: "nucléaire", correct: true }
+  ],
+  explanation: "L'iode devient du xénon : l'élément chimique change, la transformation est nucléaire."
+});
+
+initModeTabs("ch16-2nde");
+initProgressBar("ch16-2nde", 6); // texte à trous complet + 5 activités
+</script>
+</body>
+</html>

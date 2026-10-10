@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 17 — Lois de l'électricité — 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<script src="animations-common.js"></script>
+<script src="animations-ch17-2nde.js"></script>
+<script src="modules-common.js"></script>
+<style>
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+  .formula{ font-family:var(--font-display); font-size:1.5rem; color:var(--yellow); text-align:center; margin:12px 0; }
+  .slider-row{ display:flex; flex-direction:column; gap:4px; margin-bottom:8px; }
+  .meter{ display:flex; flex-wrap:wrap; gap:4px 16px; margin:6px 0; }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique</div>
+  <h1>Chapitre 17 — Lois de l'électricité</h1>
+  <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch17-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progression du chapitre</span>
+    <span id="progressLabel_ch17-2nde">0 / 0 activités réussies</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill_ch17-2nde"></div>
+  </div>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab" data-panel="panelCours">📖 Cours</button>
+  <button class="mode-tab" data-panel="panelEntrainement">✏️ Entraînement</button>
+  <button class="mode-tab" data-panel="panelSynthese">🗂️ Synthèse</button>
+</div>
+
+<main>
+
+<!-- MODE_COURS -->
+<div class="mode-panel" id="panelCours">
+
+  <section>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Exploiter la loi des mailles et la loi des nœuds dans un circuit électrique</li>
+        <li>Mesurer une tension et une intensité avec un multimètre</li>
+        <li>Exploiter la loi d'Ohm et la caractéristique tension-intensité d'un dipôle</li>
+        <li>Utiliser un capteur résistif et sa courbe d'étalonnage</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>1a. Loi des mailles</h2>
+    <p class="course-text">Entre deux points A et B, la tension peut être positive ou négative. Pour tenir compte du fait que la tension électrique est une grandeur algébrique, on la représente par un segment fléché qui pointe vers la première lettre du symbole de cette tension. Les tensions <em>U</em><sub>AB</sub> et <em>U</em><sub>BA</sub> sont opposées : <em>U</em><sub>AB</sub> = −<em>U</em><sub>BA</sub>.</p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Une tension électrique s'exprime en <strong>volt (V)</strong> et se mesure avec un <strong>voltmètre</strong> branché en <strong>dérivation</strong>. Pour mesurer <em>U</em><sub>AB</sub>, la borne V du voltmètre est branchée sur la borne A du dipôle et la borne COM sur la borne B.
+    </div>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Une <strong>maille</strong> est un parcours fermé sur un circuit électrique auquel on associe un sens de parcours.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      <strong>Loi des mailles :</strong> dans une maille orientée, la somme des tensions fléchées dans le sens de parcours est égale à la somme des tensions fléchées dans l'autre sens.
+    </div>
+    <p class="course-text">Exemple : dans une maille A → B → C → D → E → A, on a <em>U</em><sub>AB</sub> + <em>U</em><sub>BC</sub> + <em>U</em><sub>CD</sub> + <em>U</em><sub>DE</sub> = <em>U</em><sub>AE</sub>. On considère que la tension aux bornes d'un fil de connexion est nulle.</p>
+  </section>
+
+  <section>
+    <h2>1b. Loi des nœuds</h2>
+    <p class="course-text">Par convention, à l'extérieur du générateur, le courant électrique circule de la borne positive vers la borne négative.</p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      L'intensité du courant électrique s'exprime en <strong>ampère (A)</strong> et se mesure avec un <strong>ampèremètre</strong> associé en <strong>série</strong>. Pour mesurer une intensité positive, le courant doit entrer par la borne A de l'ampèremètre et sortir par la borne COM.
+    </div>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Dans un circuit comportant des dérivations, un <strong>nœud</strong> est un point auquel sont connectés au moins trois fils de connexion.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      <strong>Loi des nœuds :</strong> la somme des intensités des courants qui arrivent à un nœud est égale à la somme des intensités des courants qui en repartent. Exemple : <em>I</em> = <em>I</em><sub>1</sub> + <em>I</em><sub>2</sub>.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier les réglages : vérifie la loi des nœuds au point A et l'égalité des tensions dans les deux branches.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:340px;">
+        <svg id="ciSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="slider-row"><label>Tension du générateur : <span id="ciEOutCours"></span></label><input type="range" id="ciECours" min="1.5" max="12" value="6" step="0.5"></div>
+        <div class="slider-row"><label>Résistance R₁ : <span id="ciR1OutCours"></span></label><input type="range" id="ciR1Cours" min="47" max="470" value="100" step="1"></div>
+        <div class="slider-row"><label>Résistance R₂ : <span id="ciR2OutCours"></span></label><input type="range" id="ciR2Cours" min="47" max="470" value="220" step="1"></div>
+        <div class="anim-readout" id="ciReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. La loi d'Ohm</h2>
+    <p class="course-text">Un conducteur ohmique est caractérisé par sa résistance <em>R</em>, qui s'exprime en ohm (Ω) et se mesure avec un ohmmètre.</p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      <strong>Loi d'Ohm :</strong> la tension <em>U</em><sub>AB</sub> aux bornes d'un conducteur ohmique de résistance <em>R</em> et l'intensité <em>I</em> du courant qui le traverse sont <strong>proportionnelles</strong>. Lorsque le courant circule de A vers B :
+      <div class="formula"><em>U</em><sub>AB</sub> = <em>R</em> × <em>I</em></div>
+      avec <em>U</em> en volt (V), <em>R</em> en ohm (Ω) et <em>I</em> en ampère (A).
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      L'intensité doit être convertie en ampères : 25 mA = 0,025 A. Exemple : <em>U</em> = 220 × 0,025 = 5,5 V.
+    </div>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      La <strong>caractéristique</strong> tension-intensité d'un dipôle est la courbe donnant la tension <em>U</em> à ses bornes en fonction de l'intensité <em>I</em> du courant qui le traverse.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      On peut modéliser la caractéristique d'un conducteur ohmique par une <strong>droite passant par l'origine</strong>, d'équation <em>U</em><sub>AB</sub> = <em>R</em> × <em>I</em>. La résistance <em>R</em> est le <strong>coefficient directeur</strong> de la droite.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis un conducteur, règle l'intensité et mesure au moins deux points.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ohR0Cours">Conducteur ①</button>
+      <button class="toggle-btn" id="ohR1Cours">Conducteur ②</button>
+      <button class="toggle-btn" id="ohR2Cours">Conducteur ③</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:340px;">
+        <svg id="ohSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="slider-row"><label>Intensité I : <span id="ohIOutCours"></span></label><input type="range" id="ohICours" min="0" max="50" value="20" step="1"></div>
+        <div class="meter" id="ohMeterCours"></div>
+        <div class="toggle-row"><button class="toggle-btn" id="ohMCours">📏 Mesurer</button><button class="toggle-btn" id="ohCCours">Effacer</button></div>
+        <div class="anim-readout" id="ohReadoutCours"></div>
+      </div>
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      La tension aux bornes d'un dipôle et l'intensité du courant qui le traverse dépendent de tous les dipôles du circuit. Les coordonnées du <strong>point de fonctionnement P</strong>, intersection des caractéristiques de deux dipôles, indiquent la tension aux bornes de chacun et l'intensité du courant qui les traverse quand le circuit fonctionne.
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Les capteurs électriques</h2>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un <strong>capteur électrique</strong> permet de convertir une grandeur physique (température, luminosité…) en signal électrique.
+    </div>
+    <p class="course-text">De nombreux capteurs sont basés sur la modification de la résistance des matériaux en fonction de paramètres extérieurs. Un dipôle résistif est un dipôle possédant une résistance électrique. Pour l'utiliser comme capteur, il faut connaître la variation de sa résistance en fonction du paramètre mesuré (<strong>étalonnage</strong>) et réaliser un circuit permettant d'obtenir une tension qui dépend de cette résistance.</p>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead><tr style="border-bottom:2px solid var(--line);">
+          <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display);">Paramètre</th>
+          <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display);">Dipôle</th>
+          <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display);">Capteur</th>
+          <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display);">Objet du quotidien</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Température</td><td style="padding:10px 8px;">Thermistance</td><td style="padding:10px 8px;">Capteur de température</td><td style="padding:10px 8px;">Thermomètre électronique</td></tr>
+          <tr><td style="padding:10px 8px;">Luminosité</td><td style="padding:10px 8px;">Photorésistance</td><td style="padding:10px 8px;">Capteur de lumière</td><td style="padding:10px 8px;">Veilleuse à allumage automatique</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem; margin-top:14px;">👉 Fais varier la température et lis la résistance sur la courbe d'étalonnage.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:340px;">
+        <svg id="thSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="slider-row"><label>Température : <span id="thTOutCours"></span></label><input type="range" id="thTCours" min="0" max="80" value="20" step="1"></div>
+        <div class="anim-readout" id="thReadoutCours"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- MODE_ENTRAINEMENT -->
+<div class="mode-panel" id="panelEntrainement">
+
+  <section>
+    <h2>Cours à trous</h2>
+    <div class="course-text" id="courseText">
+      <h3>1. Tension et intensité</h3>
+      <p>Une tension se mesure avec un voltmètre branché en <input class="blank" data-answer="dérivation|derivation" size="10">.</p>
+      <p>Une intensité se mesure avec un ampèremètre branché en <input class="blank" data-answer="série|serie" size="10">.</p>
+      <p>Un parcours fermé orienté sur un circuit est une <input class="blank" data-answer="maille" size="10">.</p>
+      <p>Un point où sont connectés au moins trois fils est un <input class="blank" data-answer="nœud|noeud" size="10">.</p>
+
+      <h3>2. La loi d'Ohm</h3>
+      <p>La résistance s'exprime en <input class="blank" data-answer="ohm|ohms" size="10">.</p>
+      <p>La caractéristique d'un conducteur ohmique est une droite passant par l'<input class="blank" data-answer="origine" size="10">.</p>
+
+      <h3>3. Les capteurs</h3>
+      <p>Une thermistance est un capteur de <input class="blank" data-answer="température|temperature" size="10">.</p>
+    </div>
+    <div class="score-line" id="scoreLine"></div>
+    <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
+  </section>
+
+  <section>
+    <h2>Loi des mailles et loi des nœuds</h2>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:340px;">
+        <svg id="ciSvg" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="slider-row"><label>Tension du générateur : <span id="ciEOut"></span></label><input type="range" id="ciE" min="1.5" max="12" value="6" step="0.5"></div>
+        <div class="slider-row"><label>Résistance R₁ : <span id="ciR1Out"></span></label><input type="range" id="ciR1" min="47" max="470" value="100" step="1"></div>
+        <div class="slider-row"><label>Résistance R₂ : <span id="ciR2Out"></span></label><input type="range" id="ciR2" min="47" max="470" value="220" step="1"></div>
+        <div class="anim-readout" id="ciReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actMailles"></div></div>
+    <div class="activity-block"><div id="actNoeuds"></div></div>
+  </section>
+
+  <section>
+    <h2>Loi d'Ohm</h2>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ohR0">Conducteur ①</button>
+      <button class="toggle-btn" id="ohR1">Conducteur ②</button>
+      <button class="toggle-btn" id="ohR2">Conducteur ③</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap" style="width:100%; max-width:340px;">
+        <svg id="ohSvg" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="slider-row"><label>Intensité I : <span id="ohIOut"></span></label><input type="range" id="ohI" min="0" max="50" value="20" step="1"></div>
+        <div class="meter" id="ohMeter"></div>
+        <div class="toggle-row"><button class="toggle-btn" id="ohM">📏 Mesurer</button><button class="toggle-btn" id="ohC">Effacer</button></div>
+        <div class="anim-readout" id="ohReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actOhm"></div></div>
+    <div class="activity-block"><div id="actVoltmetre"></div></div>
+  </section>
+
+  <section>
+    <h2>Capteurs</h2>
+    <div class="activity-block"><div id="actCapteur"></div></div>
+  </section>
+
+</div>
+
+<!-- MODE_SYNTHESE -->
+<div class="mode-panel" id="panelSynthese">
+  <section>
+    <h2>Tableau récapitulatif</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left; padding:10px 8px; color:var(--teal); font-family:var(--font-display); font-size:1rem;">Grandeur</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Unité</th>
+            <th style="text-align:left; padding:10px 8px; color:var(--yellow); font-family:var(--font-display); font-size:1rem;">Appareil de mesure</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Tension <em>U</em></td><td style="padding:10px 8px; color:var(--yellow);">volt (V)</td><td style="padding:10px 8px;">voltmètre, en dérivation</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Intensité <em>I</em></td><td style="padding:10px 8px; color:var(--yellow);">ampère (A)</td><td style="padding:10px 8px;">ampèremètre, en série</td></tr>
+          <tr><td style="padding:10px 8px;">Résistance <em>R</em></td><td style="padding:10px 8px; color:var(--yellow);">ohm (Ω)</td><td style="padding:10px 8px;">ohmmètre</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="method-box" style="margin-top:20px;">
+      <span class="box-label">🔧 Formules et repères</span>
+      <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
+        <li><strong>Tension algébrique</strong> : <em>U</em><sub>AB</sub> = −<em>U</em><sub>BA</sub> ; la flèche pointe vers la première lettre</li>
+        <li><strong>Loi des mailles</strong> : somme des tensions fléchées dans un sens = somme des tensions fléchées dans l'autre</li>
+        <li><strong>Loi des nœuds</strong> : somme des intensités qui arrivent = somme des intensités qui repartent</li>
+        <li><strong>Loi d'Ohm</strong> : <em>U</em><sub>AB</sub> = <em>R</em> × <em>I</em> (V, Ω, A) ; caractéristique : droite passant par l'origine</li>
+        <li><strong>Point de fonctionnement</strong> : intersection des caractéristiques des dipôles du circuit</li>
+        <li><strong>Capteur</strong> : convertit une grandeur physique en signal électrique ; étalonnage nécessaire</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>Chapitre 17 — Lois de l'électricité (2nde).</footer>
+<script>
+function normalize(str) {
+  return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById("checkCourseBtn").addEventListener("click", () => {
+  const blanks = document.querySelectorAll(".blank");
+  let correct = 0;
+  blanks.forEach(input => {
+    const accepted = input.dataset.answer.split("|").map(normalize);
+    const value = normalize(input.value);
+    input.classList.remove("ok", "ko");
+    const existingReveal = input.nextElementSibling;
+    if (existingReveal && existingReveal.classList.contains("reveal")) existingReveal.remove();
+    if (accepted.includes(value)) {
+      input.classList.add("ok");
+      correct++;
+    } else {
+      input.classList.add("ko");
+      const span = document.createElement("span");
+      span.className = "reveal";
+      span.textContent = "→ " + input.dataset.answer.split("|")[0];
+      input.insertAdjacentElement("afterend", span);
+    }
+  });
+  document.getElementById("scoreLine").textContent = `${correct} / ${blanks.length} bonnes réponses`;
+  if (correct === blanks.length) ProgressStore.record("ch17-2nde", "trous-complet", true);
+});
+
+/* Animations — Cours */
+initBranches({ svgId: "ciSvgCours", readoutId: "ciReadoutCours", eId: "ciECours", r1Id: "ciR1Cours", r2Id: "ciR2Cours", eOutId: "ciEOutCours", r1OutId: "ciR1OutCours", r2OutId: "ciR2OutCours", scale: 0.5 });
+initOhm({ svgId: "ohSvgCours", readoutId: "ohReadoutCours", iId: "ohICours", iOutId: "ohIOutCours", meterId: "ohMeterCours", resIds: ["ohR0Cours","ohR1Cours","ohR2Cours"], measureId: "ohMCours", clearId: "ohCCours", scale: 0.5 });
+initThermistor({ svgId: "thSvgCours", readoutId: "thReadoutCours", tId: "thTCours", tOutId: "thTOutCours", scale: 0.5 });
+/* Animations — Entraînement */
+initBranches({ svgId: "ciSvg", readoutId: "ciReadout", eId: "ciE", r1Id: "ciR1", r2Id: "ciR2", eOutId: "ciEOut", r1OutId: "ciR1Out", r2OutId: "ciR2Out", scale: 0.5 });
+initOhm({ svgId: "ohSvg", readoutId: "ohReadout", iId: "ohI", iOutId: "ohIOut", meterId: "ohMeter", resIds: ["ohR0","ohR1","ohR2"], measureId: "ohM", clearId: "ohC", scale: 0.5 });
+
+/* Activités */
+initEstimation({
+  containerId: "actMailles", chapterId: "ch17-2nde", activityId: "est-mailles",
+  prompt: "Un générateur impose 12 V à deux dipôles en série. La tension aux bornes du premier vaut 4,5 V. Quelle est la tension aux bornes du second ?",
+  answer: 7.5, tolerance: 0.05, unit: "V",
+  explanation: "Loi des mailles : 12 = 4,5 + U₂, donc U₂ = 7,5 V."
+});
+
+initQCM({
+  containerId: "actNoeuds", chapterId: "ch17-2nde", activityId: "qcm-noeuds",
+  prompt: "Au nœud A arrive I = 250 mA ; il repart I₁ = 100 mA et I₂. Que vaut I₂ ?",
+  options: [
+    { text: "150 mA", correct: true },
+    { text: "100 mA", correct: false },
+    { text: "350 mA", correct: false }
+  ],
+  explanation: "Loi des nœuds : I = I₁ + I₂, donc I₂ = 250 − 100 = 150 mA."
+});
+
+initEstimation({
+  containerId: "actOhm", chapterId: "ch17-2nde", activityId: "est-ohm",
+  prompt: "Un conducteur ohmique de résistance 220 Ω est traversé par un courant de 25 mA. Quelle est la tension à ses bornes ?",
+  answer: 5.5, tolerance: 0.05, unit: "V",
+  explanation: "I = 25 mA = 0,025 A, donc U = R × I = 220 × 0,025 = 5,5 V."
+});
+
+initVraiFaux({
+  containerId: "actVoltmetre", chapterId: "ch17-2nde", activityId: "vf-voltmetre",
+  prompt: "Un voltmètre se branche en série avec le dipôle dont on mesure la tension.",
+  correct: false,
+  explanation: "Faux : le voltmètre se branche en dérivation. C'est l'ampèremètre qui se branche en série."
+});
+
+initQCM({
+  containerId: "actCapteur", chapterId: "ch17-2nde", activityId: "qcm-capteur",
+  prompt: "Une photorésistance permet de réaliser un capteur de :",
+  options: [
+    { text: "température", correct: false },
+    { text: "lumière", correct: true },
+    { text: "intensité", correct: false }
+  ],
+  explanation: "La résistance d'une photorésistance varie avec la luminosité : c'est un capteur de lumière (veilleuse à allumage automatique)."
+});
+
+initModeTabs("ch17-2nde");
+initProgressBar("ch17-2nde", 6); // texte à trous complet + 5 activités
+</script>
+</body>
+</html>
