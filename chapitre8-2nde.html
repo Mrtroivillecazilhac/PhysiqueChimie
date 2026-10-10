@@ -5,9 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 8 — Vers des entités plus stables — 2nde</title>
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* Animations du chapitre 8 : plus larges que la valeur par défaut (260 px) */
+  .anim-wrap.wide{ width:100%; max-width:380px; }
+  .anim-wrap svg{ width:100%; height:auto; display:block; }
+  .anim-readout > div{ margin-bottom:4px; }
+  .range-out{ color:var(--yellow); font-family:var(--font-display); margin-left:6px; }
+
+  /* ---------- Lien vers les slides du cours (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+</style>
 <script src="animations-common.js"></script>
 <script src="animations-ch8-2nde.js"></script>
 <script src="modules-common.js"></script>
+<script>
+/* Aperçu uniquement : si l'URL porte un jeton (?…), recharge les fichiers voisins avec ce jeton.
+   Sur le site réel (pas de query string), rien ne change. */
+(function () {
+  var q = location.search || "";
+  window.__ch8Ready = function (fn) {
+    if (typeof initElectronConfig === "function" && typeof ch8sLoop === "function" && typeof initModeTabs === "function") return fn();
+    if (!q) return;
+    var files = ["animations-common.js", "animations-ch8-2nde.js", "modules-common.js"];
+    var l = document.createElement("link");
+    l.rel = "stylesheet"; l.href = "styles.css" + q;
+    document.head.appendChild(l);
+    (function next(i) {
+      if (i >= files.length) return fn();
+      var s = document.createElement("script");
+      s.src = files[i] + q;
+      s.onload = s.onerror = function () { next(i + 1); };
+      document.head.appendChild(s);
+    })(0);
+  };
+})();
+</script>
 </head>
 <body>
 
@@ -23,6 +61,7 @@
   <div class="badge-inline chimie">Chimie</div>
   <h1>Chapitre 8 — Vers des entités plus stables</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch8-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -78,11 +117,11 @@
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle Z : observe la configuration se construire, sous-couche par sous-couche (électrons de valence en jaune).</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:280px;">
-        <svg id="ecSvgCours" viewBox="0 0 260 70"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ecSvgCours" viewBox="0 0 240 150"></svg>
       </div>
       <div class="anim-controls">
-        <label>Numéro atomique Z</label>
+        <label>Numéro atomique <span class="range-out" id="ecZOutCours"></span></label>
         <input type="range" id="ecZCours" min="1" max="18" value="14" step="1">
         <div class="anim-readout" id="ecReadoutCours"></div>
       </div>
@@ -100,7 +139,7 @@
     </div>
     <div class="warning-box">
       <span class="box-label">⚠️ Attention</span>
-      L'hélium (1s²) est une exception : il est placé dans le bloc p (colonne 18) car ses propriétés sont celles d'un gaz noble, malgré sa configuration électronique de type bloc s.
+      L'hélium (1s²) est une exception : sa configuration est de type bloc s, mais il est placé dans la colonne 18, avec les gaz nobles, car ses propriétés sont celles d'un gaz noble.
     </div>
   </section>
 
@@ -115,11 +154,11 @@
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle Z : observe la case correspondante s'allumer dans le tableau simplifié.</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:260px;">
-        <svg id="ppSvgCours" viewBox="0 0 220 100"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ppSvgCours" viewBox="0 0 240 142"></svg>
       </div>
       <div class="anim-controls">
-        <label>Numéro atomique Z</label>
+        <label>Numéro atomique <span class="range-out" id="ppZOutCours"></span></label>
         <input type="range" id="ppZCours" min="1" max="18" value="15" step="1">
         <div class="anim-readout" id="ppReadoutCours"></div>
       </div>
@@ -154,8 +193,8 @@
       <button class="toggle-btn" id="siSCours">Soufre S</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="siSvgCours" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="siSvgCours" viewBox="0 0 240 170"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="siReadoutCours"></div>
@@ -177,14 +216,14 @@
       Une liaison covalente peut être simple ou multiple (double, triple). Dans une liaison double, 4 électrons sont mis en commun ; dans une triple, 6 électrons.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre une liaison simple (eau) et une liaison double (C=C).</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre une liaison simple (eau) et une liaison double (C=C, éthène).</p>
     <div class="toggle-row">
       <button class="toggle-btn" id="lsSimpleCours">Liaison simple (H₂O)</button>
       <button class="toggle-btn" id="lsDoubleCours">Liaison double (C=C)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="lsSvgCours" viewBox="0 0 220 140"></svg>
+      <div class="anim-wrap wide">
+        <svg id="lsSvgCours" viewBox="0 0 240 150"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="lsReadoutCours"></div>
@@ -205,11 +244,11 @@
       <button class="toggle-btn" id="beCCdCours">C=C (614 USI)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:200px;">
-        <svg id="beSvgCours" viewBox="0 0 160 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="beSvgCours" viewBox="0 0 240 150"></svg>
       </div>
       <div class="anim-controls">
-        <label>Nombre de liaisons</label>
+        <label>Nombre de liaisons <span class="range-out" id="beNOutCours"></span></label>
         <input type="range" id="beNCours" min="1" max="6" value="4" step="1">
         <div class="anim-readout" id="beReadoutCours"></div>
       </div>
@@ -288,11 +327,11 @@
     <h2>Configuration électronique</h2>
     <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle Z : observe la configuration se construire (électrons de valence en jaune).</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:280px;">
-        <svg id="ecSvg" viewBox="0 0 260 70"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ecSvg" viewBox="0 0 240 150"></svg>
       </div>
       <div class="anim-controls">
-        <label>Numéro atomique Z</label>
+        <label>Numéro atomique <span class="range-out" id="ecZOut"></span></label>
         <input type="range" id="ecZ" min="1" max="18" value="14" step="1">
         <div class="anim-readout" id="ecReadout"></div>
       </div>
@@ -304,11 +343,11 @@
     <h2>Position dans le tableau périodique</h2>
     <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle Z : observe la case correspondante s'allumer.</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:260px;">
-        <svg id="ppSvg" viewBox="0 0 220 100"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ppSvg" viewBox="0 0 240 142"></svg>
       </div>
       <div class="anim-controls">
-        <label>Numéro atomique Z</label>
+        <label>Numéro atomique <span class="range-out" id="ppZOut"></span></label>
         <input type="range" id="ppZ" min="1" max="18" value="15" step="1">
         <div class="anim-readout" id="ppReadout"></div>
       </div>
@@ -324,8 +363,8 @@
       <button class="toggle-btn" id="siS">Soufre S</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="siSvg" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="siSvg" viewBox="0 0 240 170"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="siReadout"></div>
@@ -336,14 +375,14 @@
 
   <section>
     <h2>Schéma de Lewis</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre une liaison simple (eau) et une liaison double (C=C).</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre une liaison simple (eau) et une liaison double (C=C, éthène).</p>
     <div class="toggle-row">
       <button class="toggle-btn" id="lsSimple">Liaison simple (H₂O)</button>
       <button class="toggle-btn" id="lsDouble">Liaison double (C=C)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="lsSvg" viewBox="0 0 220 140"></svg>
+      <div class="anim-wrap wide">
+        <svg id="lsSvg" viewBox="0 0 240 150"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="lsReadout"></div>
@@ -361,11 +400,11 @@
       <button class="toggle-btn" id="beCCd">C=C (614 USI)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:200px;">
-        <svg id="beSvg" viewBox="0 0 160 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="beSvg" viewBox="0 0 240 150"></svg>
       </div>
       <div class="anim-controls">
-        <label>Nombre de liaisons</label>
+        <label>Nombre de liaisons <span class="range-out" id="beNOut"></span></label>
         <input type="range" id="beN" min="1" max="6" value="4" step="1">
         <div class="anim-readout" id="beReadout"></div>
       </div>
@@ -417,6 +456,7 @@
 <footer>Chapitre 8 — Vers des entités plus stables (2nde).</footer>
 
 <script>
+window.__ch8Ready(function () {
 /* ---------- Correction du texte à trous (mode entraînement) ---------- */
 function normalize(str) {
   return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -446,18 +486,18 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 });
 
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initElectronConfig({ svgId: "ecSvgCours", zRangeId: "ecZCours", readoutId: "ecReadoutCours" });
-initPeriodicPosition({ svgId: "ppSvgCours", zRangeId: "ppZCours", readoutId: "ppReadoutCours" });
+initElectronConfig({ svgId: "ecSvgCours", zRangeId: "ecZCours", readoutId: "ecReadoutCours", zOutId: "ecZOutCours" });
+initPeriodicPosition({ svgId: "ppSvgCours", zRangeId: "ppZCours", readoutId: "ppReadoutCours", zOutId: "ppZOutCours" });
 initStableIon({ svgId: "siSvgCours", readoutId: "siReadoutCours", btnAlId: "siAlCours", btnSId: "siSCours" });
 initLewisSchema({ svgId: "lsSvgCours", readoutId: "lsReadoutCours", btnSimpleId: "lsSimpleCours", btnDoubleId: "lsDoubleCours" });
-initBondEnergy({ svgId: "beSvgCours", nRangeId: "beNCours", readoutId: "beReadoutCours", btnCHId: "beCHCours", btnCCId: "beCCCours", btnCCdoubleId: "beCCdCours" });
+initBondEnergy({ svgId: "beSvgCours", nRangeId: "beNCours", readoutId: "beReadoutCours", nOutId: "beNOutCours", btnCHId: "beCHCours", btnCCId: "beCCCours", btnCCdoubleId: "beCCdCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initElectronConfig({ svgId: "ecSvg", zRangeId: "ecZ", readoutId: "ecReadout" });
-initPeriodicPosition({ svgId: "ppSvg", zRangeId: "ppZ", readoutId: "ppReadout" });
+initElectronConfig({ svgId: "ecSvg", zRangeId: "ecZ", readoutId: "ecReadout", zOutId: "ecZOut" });
+initPeriodicPosition({ svgId: "ppSvg", zRangeId: "ppZ", readoutId: "ppReadout", zOutId: "ppZOut" });
 initStableIon({ svgId: "siSvg", readoutId: "siReadout", btnAlId: "siAl", btnSId: "siS" });
 initLewisSchema({ svgId: "lsSvg", readoutId: "lsReadout", btnSimpleId: "lsSimple", btnDoubleId: "lsDouble" });
-initBondEnergy({ svgId: "beSvg", nRangeId: "beN", readoutId: "beReadout", btnCHId: "beCH", btnCCId: "beCC", btnCCdoubleId: "beCCd" });
+initBondEnergy({ svgId: "beSvg", nRangeId: "beN", readoutId: "beReadout", nOutId: "beNOut", btnCHId: "beCH", btnCCId: "beCC", btnCCdoubleId: "beCCd" });
 
 /* ---------- Activités liées à chaque animation ---------- */
 initEstimation({
@@ -502,6 +542,7 @@ initEstimation({
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch8-2nde");
 initProgressBar("ch8-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+});
 </script>
 </body>
 </html>

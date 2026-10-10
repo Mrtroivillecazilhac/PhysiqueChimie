@@ -5,9 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 7 — De l'atome à l'élément chimique — 2nde</title>
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* Animations du chapitre 7 : plus larges que la valeur par défaut (260 px) */
+  .anim-wrap.wide{ width:100%; max-width:380px; }
+  .anim-wrap svg{ width:100%; height:auto; display:block; }
+  .anim-readout > div{ margin-bottom:4px; }
+  .range-out{ color:var(--yellow); font-family:var(--font-display); margin-left:6px; }
+
+  /* ---------- Lien vers les slides du cours (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+</style>
 <script src="animations-common.js"></script>
 <script src="animations-ch7-2nde.js"></script>
 <script src="modules-common.js"></script>
+<script>
+/* Aperçu uniquement : si l'URL porte un jeton (?…), recharge les fichiers voisins avec ce jeton.
+   Sur le site réel (pas de query string), rien ne change. */
+(function () {
+  var q = location.search || "";
+  window.__ch7Ready = function (fn) {
+    if (typeof initAtomScale === "function" && typeof initModeTabs === "function") return fn();
+    if (!q) return;
+    var files = ["animations-common.js", "animations-ch7-2nde.js", "modules-common.js"];
+    var l = document.createElement("link");
+    l.rel = "stylesheet"; l.href = "styles.css" + q;
+    document.head.appendChild(l);
+    (function next(i) {
+      if (i >= files.length) return fn();
+      var s = document.createElement("script");
+      s.src = files[i] + q;
+      s.onload = s.onerror = function () { next(i + 1); };
+      document.head.appendChild(s);
+    })(0);
+  };
+})();
+</script>
 </head>
 <body>
 
@@ -23,6 +61,7 @@
   <div class="badge-inline chimie">Chimie</div>
   <h1>Chapitre 7 — De l'atome à l'élément chimique</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch7-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -73,13 +112,13 @@
       Un atome est <strong>électriquement neutre</strong> car il possède autant de protons que d'électrons.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier le nombre de protons/neutrons/électrons (toujours égaux dans un atome neutre).</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier le numéro atomique : le nombre d'électrons suit toujours celui des protons.</p>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="amSvgCours" viewBox="0 0 220 180"></svg>
+      <div class="anim-wrap wide">
+        <svg id="amSvgCours" viewBox="0 0 240 180"></svg>
       </div>
       <div class="anim-controls">
-        <label>Nombre de protons (= neutrons = électrons)</label>
+        <label>Numéro atomique <span class="range-out" id="amZOutCours"></span></label>
         <input type="range" id="amZCours" min="1" max="12" value="6" step="1">
         <div class="anim-readout" id="amReadoutCours"></div>
       </div>
@@ -97,6 +136,19 @@
     <div class="warning-box">
       <span class="box-label">⚠️ Attention</span>
       L'espace existant entre les électrons, ainsi qu'entre les électrons et le noyau, est vide. On dit que l'atome a une <strong>structure lacunaire</strong>. (Si le noyau avait la taille d'une tête d'épingle de 1 mm, l'atome aurait la taille d'un terrain de football de 100 m !)
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Zoome de l'atome entier jusqu'à son noyau.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap wide">
+        <svg id="asSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
+        <div class="toggle-row"><button class="toggle-btn" id="asPlayCours">▶ Lancer le zoom</button></div>
+        <label>Grossissement <span class="range-out" id="asKOutCours"></span></label>
+        <input type="range" id="asKCours" min="0" max="5" value="0" step="0.05">
+        <div class="anim-readout" id="asReadoutCours"></div>
+      </div>
     </div>
   </section>
 
@@ -119,13 +171,13 @@
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle A et Z : observe le nombre de neutrons se calculer.</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:200px;">
-        <svg id="ncSvgCours" viewBox="0 0 200 110"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ncSvgCours" viewBox="0 0 240 132"></svg>
       </div>
       <div class="anim-controls">
-        <label>Nombre de nucléons A</label>
+        <label>Nombre de nucléons <span class="range-out" id="ncAOutCours"></span></label>
         <input type="range" id="ncACours" min="1" max="80" value="63" step="1">
-        <label>Numéro atomique Z</label>
+        <label>Numéro atomique <span class="range-out" id="ncZOutCours"></span></label>
         <input type="range" id="ncZCours" min="1" max="80" value="29" step="1">
         <div class="anim-readout" id="ncReadoutCours"></div>
       </div>
@@ -146,18 +198,18 @@
       Exemple : lorsqu'un atome de lithium Li (3 protons) perd un électron, l'ion formé Li⁺ porte une charge électrique positive +e car il possède 3 protons et seulement 2 électrons.
     </p>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis perte ou gain d'électrons, puis règle combien.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis perte ou gain d'électrons, puis règle combien : observe le noyau.</p>
     <div class="toggle-row">
       <button class="toggle-btn" id="ifLoseCours">Perte d'électrons (cation)</button>
       <button class="toggle-btn" id="ifGainCours">Gain d'électrons (anion)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ifSvgCours" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ifSvgCours" viewBox="0 0 240 176"></svg>
       </div>
       <div class="anim-controls">
         <label>Nombre d'électrons échangés</label>
-        <input type="range" id="ifNCours" min="1" max="2" value="1" step="1">
+        <div class="toggle-row"><button class="toggle-btn" id="ifN1Cours">1 électron</button><button class="toggle-btn" id="ifN2Cours">2 électrons</button></div>
         <div class="anim-readout" id="ifReadoutCours"></div>
       </div>
     </div>
@@ -177,7 +229,10 @@
       <button class="toggle-btn" id="seAtom2Cours">Autre atome de cuivre Cu</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:400px;">
+      <div class="anim-wrap wide">
+        <svg id="seSvgCours" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
         <div class="anim-readout" id="seReadoutCours"></div>
       </div>
     </div>
@@ -201,8 +256,8 @@
       <button class="toggle-btn" id="mmIonicCours">Chlorure de sodium (ionique)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="mmSvgCours" viewBox="0 0 220 180"></svg>
+      <div class="anim-wrap wide">
+        <svg id="mmSvgCours" viewBox="0 0 240 160"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="mmReadoutCours"></div>
@@ -283,13 +338,13 @@
 
   <section>
     <h2>Modèle de l'atome : neutralité électrique</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier le nombre de protons/neutrons/électrons (toujours égaux dans un atome neutre).</p>
+    <p style="color:var(--chalk-dim); margin-bottom:10px;">Fais varier le numéro atomique : le nombre d'électrons suit toujours celui des protons.</p>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="amSvg" viewBox="0 0 220 180"></svg>
+      <div class="anim-wrap wide">
+        <svg id="amSvg" viewBox="0 0 240 180"></svg>
       </div>
       <div class="anim-controls">
-        <label>Nombre de protons (= neutrons = électrons)</label>
+        <label>Numéro atomique <span class="range-out" id="amZOut"></span></label>
         <input type="range" id="amZ" min="1" max="12" value="6" step="1">
         <div class="anim-readout" id="amReadout"></div>
       </div>
@@ -301,13 +356,13 @@
     <h2>Écriture du noyau : A, Z → neutrons</h2>
     <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle A et Z : observe le nombre de neutrons se calculer.</p>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:200px;">
-        <svg id="ncSvg" viewBox="0 0 200 110"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ncSvg" viewBox="0 0 240 132"></svg>
       </div>
       <div class="anim-controls">
-        <label>Nombre de nucléons A</label>
+        <label>Nombre de nucléons <span class="range-out" id="ncAOut"></span></label>
         <input type="range" id="ncA" min="1" max="80" value="63" step="1">
-        <label>Numéro atomique Z</label>
+        <label>Numéro atomique <span class="range-out" id="ncZOut"></span></label>
         <input type="range" id="ncZ" min="1" max="80" value="29" step="1">
         <div class="anim-readout" id="ncReadout"></div>
       </div>
@@ -323,12 +378,12 @@
       <button class="toggle-btn" id="ifGain">Gain d'électrons (anion)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ifSvg" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ifSvg" viewBox="0 0 240 176"></svg>
       </div>
       <div class="anim-controls">
         <label>Nombre d'électrons échangés</label>
-        <input type="range" id="ifN" min="1" max="2" value="1" step="1">
+        <div class="toggle-row"><button class="toggle-btn" id="ifN1">1 électron</button><button class="toggle-btn" id="ifN2">2 électrons</button></div>
         <div class="anim-readout" id="ifReadout"></div>
       </div>
     </div>
@@ -344,7 +399,10 @@
       <button class="toggle-btn" id="seAtom2">Autre atome de cuivre Cu</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:400px;">
+      <div class="anim-wrap wide">
+        <svg id="seSvg" viewBox="0 0 240 150"></svg>
+      </div>
+      <div class="anim-controls">
         <div class="anim-readout" id="seReadout"></div>
       </div>
     </div>
@@ -360,8 +418,8 @@
       <button class="toggle-btn" id="mmIonic">Chlorure de sodium (ionique)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="mmSvg" viewBox="0 0 220 180"></svg>
+      <div class="anim-wrap wide">
+        <svg id="mmSvg" viewBox="0 0 240 160"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="mmReadout"></div>
@@ -413,6 +471,7 @@
 <footer>Chapitre 7 — De l'atome à l'élément chimique (2nde).</footer>
 
 <script>
+window.__ch7Ready(function () {
 /* ---------- Correction du texte à trous (mode entraînement) ---------- */
 function normalize(str) {
   return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -442,17 +501,18 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 });
 
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initAtomModel({ svgId: "amSvgCours", zRangeId: "amZCours", readoutId: "amReadoutCours" });
-initNucleusCalculator({ svgId: "ncSvgCours", aRangeId: "ncACours", zRangeId: "ncZCours", readoutId: "ncReadoutCours" });
-initIonFormation({ svgId: "ifSvgCours", nRangeId: "ifNCours", readoutId: "ifReadoutCours", btnLoseId: "ifLoseCours", btnGainId: "ifGainCours" });
-initSameElement({ readoutId: "seReadoutCours", btnAtom1Id: "seAtom1Cours", btnIonId: "seIonCours", btnAtom2Id: "seAtom2Cours" });
+initAtomModel({ svgId: "amSvgCours", zRangeId: "amZCours", readoutId: "amReadoutCours", zOutId: "amZOutCours" });
+initAtomScale({ svgId: "asSvgCours", zoomRangeId: "asKCours", readoutId: "asReadoutCours", zoomOutId: "asKOutCours", btnPlayId: "asPlayCours" });
+initNucleusCalculator({ svgId: "ncSvgCours", aRangeId: "ncACours", zRangeId: "ncZCours", readoutId: "ncReadoutCours", aOutId: "ncAOutCours", zOutId: "ncZOutCours" });
+initIonFormation({ svgId: "ifSvgCours", readoutId: "ifReadoutCours", btnN1Id: "ifN1Cours", btnN2Id: "ifN2Cours", btnLoseId: "ifLoseCours", btnGainId: "ifGainCours" });
+initSameElement({ svgId: "seSvgCours", readoutId: "seReadoutCours", btnAtom1Id: "seAtom1Cours", btnIonId: "seIonCours", btnAtom2Id: "seAtom2Cours" });
 initMicroMacro({ svgId: "mmSvgCours", readoutId: "mmReadoutCours", btnAtomicId: "mmAtomicCours", btnMolecularId: "mmMolecularCours", btnIonicId: "mmIonicCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initAtomModel({ svgId: "amSvg", zRangeId: "amZ", readoutId: "amReadout" });
-initNucleusCalculator({ svgId: "ncSvg", aRangeId: "ncA", zRangeId: "ncZ", readoutId: "ncReadout" });
-initIonFormation({ svgId: "ifSvg", nRangeId: "ifN", readoutId: "ifReadout", btnLoseId: "ifLose", btnGainId: "ifGain" });
-initSameElement({ readoutId: "seReadout", btnAtom1Id: "seAtom1", btnIonId: "seIon", btnAtom2Id: "seAtom2" });
+initAtomModel({ svgId: "amSvg", zRangeId: "amZ", readoutId: "amReadout", zOutId: "amZOut" });
+initNucleusCalculator({ svgId: "ncSvg", aRangeId: "ncA", zRangeId: "ncZ", readoutId: "ncReadout", aOutId: "ncAOut", zOutId: "ncZOut" });
+initIonFormation({ svgId: "ifSvg", readoutId: "ifReadout", btnN1Id: "ifN1", btnN2Id: "ifN2", btnLoseId: "ifLose", btnGainId: "ifGain" });
+initSameElement({ svgId: "seSvg", readoutId: "seReadout", btnAtom1Id: "seAtom1", btnIonId: "seIon", btnAtom2Id: "seAtom2" });
 initMicroMacro({ svgId: "mmSvg", readoutId: "mmReadout", btnAtomicId: "mmAtomic", btnMolecularId: "mmMolecular", btnIonicId: "mmIonic" });
 
 /* ---------- Activités liées à chaque animation ---------- */
@@ -502,6 +562,7 @@ initVraiFaux({
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch7-2nde");
 initProgressBar("ch7-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+});
 </script>
 </body>
 </html>

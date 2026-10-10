@@ -5,9 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 6 — Principe d'inertie — 2nde</title>
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* Notation vectorielle (même bloc que les chapitres 4 et 5) */
+  .vec { position: relative; display: inline-block; padding-top: 0.42em; }
+  .vec::before { content: ""; position: absolute; top: 0.06em; left: 0; right: 3px; border-top: 1.3px solid currentColor; }
+  .vec::after { content: ""; position: absolute; top: -0.09em; right: -1px; width: 0; height: 0; border-style: solid; border-width: 2.6px 0 2.6px 4.2px; border-color: transparent transparent transparent currentColor; }
+  .vw { white-space: nowrap; }
+
+  /* Animations du chapitre 6 : plus larges que la valeur par défaut (260 px) */
+  .anim-wrap.wide{ width:100%; max-width:380px; }
+  .anim-wrap svg{ width:100%; height:auto; display:block; }
+  .anim-readout > div{ margin-bottom:4px; }
+  .range-out{ color:var(--yellow); font-family:var(--font-display); margin-left:6px; }
+
+  /* ---------- Lien vers les slides du cours (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+</style>
 <script src="animations-common.js"></script>
 <script src="animations-ch6-2nde.js"></script>
 <script src="modules-common.js"></script>
+<script>
+/* Aperçu uniquement : si l'URL porte un jeton (?…), recharge les fichiers voisins avec ce jeton.
+   Sur le site réel (pas de query string), rien ne change. */
+(function () {
+  var q = location.search || "";
+  window.__ch6Ready = function (fn) {
+    if (typeof initForceBalance === "function" && typeof initModeTabs === "function") return fn();
+    if (!q) return;
+    var files = ["animations-common.js", "animations-ch6-2nde.js", "modules-common.js"];
+    var l = document.createElement("link");
+    l.rel = "stylesheet"; l.href = "styles.css" + q;
+    document.head.appendChild(l);
+    (function next(i) {
+      if (i >= files.length) return fn();
+      var s = document.createElement("script");
+      s.src = files[i] + q;
+      s.onload = s.onerror = function () { next(i + 1); };
+      document.head.appendChild(s);
+    })(0);
+  };
+})();
+</script>
 </head>
 <body>
 
@@ -23,6 +67,7 @@
   <div class="badge-inline physique">Physique</div>
   <h1>Chapitre 6 — Principe d'inertie</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch6-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -63,7 +108,7 @@
     <h2>1a. Effets d'une force sur le mouvement d'un système</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Une force s'exerçant sur un système peut modifier la <strong>valeur</strong> et/ou la <strong>direction</strong> du mouvement de ce système. Elle peut donc modifier le vecteur vitesse v de ce système.
+      Une force s'exerçant sur un système peut modifier la <strong>valeur</strong> et/ou la <strong>direction</strong> du mouvement de ce système. Elle peut donc modifier le vecteur vitesse <span class="vw"><span class="vec">v</span></span> de ce système.
     </div>
     <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
       Exemple : au moment de la frappe, la raquette de tennis exerce une action de contact sur la balle. Cette action modifie la valeur ET la direction de son mouvement.
@@ -75,8 +120,8 @@
       <button class="toggle-btn" id="feAfterCours">Après la frappe</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="feSvgCours" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="feSvgCours" viewBox="0 0 240 152"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="feReadoutCours"></div>
@@ -88,11 +133,25 @@
     <h2>1b. Principe d'inertie</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Deux forces se compensent si elles ont la <strong>même</strong> droite d'action, des sens <strong>opposés</strong> et une <strong>même</strong> valeur. La somme des vecteurs représentant ces forces est égale au vecteur nul.
+      Deux forces se compensent si elles ont la <strong>même</strong> droite d'action, des sens <strong>opposés</strong> et une <strong>même</strong> valeur. La somme des vecteurs représentant ces forces est égale au vecteur nul : <span class="vw"><span class="vec">F</span><sub>1</sub></span> + <span class="vw"><span class="vec">F</span><sub>2</sub></span> = <span class="vw"><span class="vec">0</span></span>.
+    </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la valeur et l'orientation de <span class="vw"><span class="vec">F</span><sub>2</sub></span> : les deux forces se compensent-elles ?</p>
+    <div class="anim-zone">
+      <div class="anim-wrap wide">
+        <svg id="fbSvgCours" viewBox="0 0 240 152"></svg>
+      </div>
+      <div class="anim-controls">
+        <label>Valeur de F₂ <span class="range-out" id="fbVOutCours"></span></label>
+        <input type="range" id="fbVCours" min="1" max="5" value="2" step="0.5">
+        <label>Orientation de F₂ (0° : sens opposé à F₁) <span class="range-out" id="fbAOutCours"></span></label>
+        <input type="range" id="fbACours" min="-180" max="180" value="20" step="5">
+        <div class="anim-readout" id="fbReadoutCours"></div>
+      </div>
     </div>
     <div class="recall-box">
       <span class="box-label">📌 Principe d'inertie</span>
-      Lorsque <strong>les forces qui s'exercent sur un système se compensent</strong>, alors le vecteur vitesse v <strong>ne varie pas</strong>. Autrement dit, le système reste immobile ou reste en mouvement rectiligne uniforme. Réciproquement, si le vecteur vitesse v ne varie pas, alors le système est soumis à des forces qui se compensent.
+      Lorsque <strong>les forces qui s'exercent sur un système se compensent</strong>, alors le vecteur vitesse <span class="vw"><span class="vec">v</span></span> <strong>ne varie pas</strong>. Autrement dit, le système reste immobile ou reste en mouvement rectiligne uniforme. Réciproquement, si le vecteur vitesse <span class="vw"><span class="vec">v</span></span> ne varie pas, alors le système est soumis à des forces qui se compensent.
     </div>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre deux exemples où les forces se compensent.</p>
@@ -101,8 +160,8 @@
       <button class="toggle-btn" id="cfBowlingCours">Boule de bowling</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="cfSvgCours" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="cfSvgCours" viewBox="0 0 240 152"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="cfReadoutCours"></div>
@@ -114,16 +173,19 @@
     <h2>1c. Contraposée du principe d'inertie</h2>
     <div class="recall-box">
       <span class="box-label">📌 Contraposée</span>
-      Lorsque, entre deux instants voisins, le vecteur vitesse v d'un système <strong>varie</strong>, alors les forces qui s'exercent sur ce système <strong>ne se compensent pas</strong>. Réciproquement, lorsque les forces ne se compensent pas, le vecteur vitesse v varie.
+      Lorsque, entre deux instants voisins, le vecteur vitesse <span class="vw"><span class="vec">v</span></span> d'un système <strong>varie</strong>, alors les forces qui s'exercent sur ce système <strong>ne se compensent pas</strong>. Réciproquement, lorsque les forces ne se compensent pas, le vecteur vitesse <span class="vw"><span class="vec">v</span></span> varie.
     </div>
     <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
-      Exemple : un ballon de beach-volley se déplaçant sur le sable est soumis à des forces (poids, réaction du sable, force de l'air) qui ne se compensent pas — son mouvement n'est pas rectiligne uniforme.
+      Exemple : un ballon de beach-volley qui roule sur le sable est soumis à des forces (son poids, l'action du sable, l'action de l'air) qui ne se compensent pas. Il ralentit : son mouvement n'est pas rectiligne uniforme.
     </p>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Observe les trois forces qui ne se compensent pas, et le vecteur vitesse qui varie.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ncSumCours">Afficher la somme des forces</button>
+    </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ncSvgCours" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ncSvgCours" viewBox="0 0 240 160"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="ncReadoutCours"></div>
@@ -135,7 +197,7 @@
     <h2>2a. Systèmes en chute libre verticale</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Un système est en <strong>chute libre</strong> lorsqu'il n'est soumis qu'à son poids P.
+      Un système est en <strong>chute libre</strong> lorsqu'il n'est soumis qu'à son poids <span class="vw"><span class="vec">P</span></span>.
     </div>
     <p class="course-text">
       En toute rigueur, l'étude de la chute libre ne peut avoir lieu que dans le vide. Dans l'air, une chute sera considérée comme libre si l'on peut négliger les forces exercées par l'air sur le système par rapport à son poids.
@@ -151,8 +213,8 @@
       <button class="toggle-btn" id="ffNotFreeCours">Pas chute libre (air)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ffSvgCours" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ffSvgCours" viewBox="0 0 240 170"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="ffReadoutCours"></div>
@@ -164,7 +226,7 @@
     <h2>2b. Variation du vecteur vitesse d'un système en chute libre verticale</h2>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      Le vecteur vitesse v d'un système en chute libre verticale <strong>varie</strong> entre deux instants voisins. Le mouvement d'un système en chute libre <strong>n'est pas</strong> rectiligne uniforme.
+      Le vecteur vitesse <span class="vw"><span class="vec">v</span></span> d'un système en chute libre verticale <strong>varie</strong> entre deux instants voisins. Le mouvement d'un système en chute libre <strong>n'est pas</strong> rectiligne uniforme.
     </div>
     <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
       Exemple du jonglage : lors de la montée de la balle, le vecteur vitesse est vertical vers le haut et sa valeur diminue. Lors de la descente, le vecteur vitesse est vertical vers le bas et sa valeur augmente.
@@ -176,8 +238,8 @@
       <button class="toggle-btn" id="fvDownCours">Descente</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="fvSvgCours" viewBox="0 0 220 180"></svg>
+      <div class="anim-wrap wide">
+        <svg id="fvSvgCours" viewBox="0 0 240 180"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="fvReadoutCours"></div>
@@ -244,8 +306,8 @@
       <button class="toggle-btn" id="feAfter">Après la frappe</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="feSvg" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="feSvg" viewBox="0 0 240 152"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="feReadout"></div>
@@ -262,8 +324,8 @@
       <button class="toggle-btn" id="cfBowling">Boule de bowling</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="cfSvg" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="cfSvg" viewBox="0 0 240 152"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="cfReadout"></div>
@@ -275,9 +337,12 @@
   <section>
     <h2>Forces qui ne se compensent pas</h2>
     <p style="color:var(--chalk-dim); margin-bottom:10px;">Observe les trois forces qui ne se compensent pas, et le vecteur vitesse qui varie.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="ncSum">Afficher la somme des forces</button>
+    </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ncSvg" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ncSvg" viewBox="0 0 240 160"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="ncReadout"></div>
@@ -294,8 +359,8 @@
       <button class="toggle-btn" id="ffNotFree">Pas chute libre (air)</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ffSvg" viewBox="0 0 220 170"></svg>
+      <div class="anim-wrap wide">
+        <svg id="ffSvg" viewBox="0 0 240 170"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="ffReadout"></div>
@@ -312,8 +377,8 @@
       <button class="toggle-btn" id="fvDown">Descente</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="fvSvg" viewBox="0 0 220 180"></svg>
+      <div class="anim-wrap wide">
+        <svg id="fvSvg" viewBox="0 0 240 180"></svg>
       </div>
       <div class="anim-controls">
         <div class="anim-readout" id="fvReadout"></div>
@@ -340,9 +405,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Principe d'inertie</td><td style="padding:10px 8px;">forces se compensent ⟹ v ne varie pas</td><td style="padding:10px 8px; color:var(--chalk-dim);">système immobile ou en MRU</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réciproque</td><td style="padding:10px 8px;">v ne varie pas ⟹ forces se compensent</td><td style="padding:10px 8px; color:var(--chalk-dim);">valable dans les deux sens</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Contraposée</td><td style="padding:10px 8px;">v varie ⟹ forces ne se compensent pas</td><td style="padding:10px 8px; color:var(--chalk-dim);">équivalente au principe d'inertie</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Principe d'inertie</td><td style="padding:10px 8px;">forces se compensent ⟹ <span class="vw"><span class="vec">v</span></span> ne varie pas</td><td style="padding:10px 8px; color:var(--chalk-dim);">système immobile ou en MRU</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réciproque</td><td style="padding:10px 8px;"><span class="vw"><span class="vec">v</span></span> ne varie pas ⟹ forces se compensent</td><td style="padding:10px 8px; color:var(--chalk-dim);">valable dans les deux sens</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Contraposée</td><td style="padding:10px 8px;"><span class="vw"><span class="vec">v</span></span> varie ⟹ forces ne se compensent pas</td><td style="padding:10px 8px; color:var(--chalk-dim);">équivalente au principe d'inertie</td></tr>
           <tr><td style="padding:10px 8px;">Chute libre</td><td style="padding:10px 8px;">soumis uniquement au poids</td><td style="padding:10px 8px; color:var(--chalk-dim);">mouvement jamais rectiligne uniforme</td></tr>
         </tbody>
       </table>
@@ -351,9 +416,9 @@
     <div class="method-box" style="margin-top:20px;">
       <span class="box-label">🔧 La logique du principe d'inertie</span>
       <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li><strong>Si</strong> les forces se compensent, <strong>alors</strong> v ne varie pas (implication directe)</li>
-        <li><strong>Réciproquement</strong>, si v ne varie pas, alors les forces se compensent</li>
-        <li><strong>Contraposée</strong> : si v varie, alors les forces ne se compensent pas</li>
+        <li><strong>Si</strong> les forces se compensent, <strong>alors</strong> <span class="vw"><span class="vec">v</span></span> ne varie pas (implication directe)</li>
+        <li><strong>Réciproquement</strong>, si <span class="vw"><span class="vec">v</span></span> ne varie pas, alors les forces se compensent</li>
+        <li><strong>Contraposée</strong> : si <span class="vw"><span class="vec">v</span></span> varie, alors les forces ne se compensent pas</li>
       </ul>
     </div>
   </section>
@@ -364,6 +429,7 @@
 <footer>Chapitre 6 — Principe d'inertie (2nde).</footer>
 
 <script>
+window.__ch6Ready(function () {
 /* ---------- Correction du texte à trous (mode entraînement) ---------- */
 function normalize(str) {
   return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -395,14 +461,15 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
 /* ---------- Animations — instance "Cours" (exploration libre) ---------- */
 initForceEffect({ svgId: "feSvgCours", readoutId: "feReadoutCours", btnBeforeId: "feBeforeCours", btnAfterId: "feAfterCours" });
 initCompensatingForces({ svgId: "cfSvgCours", readoutId: "cfReadoutCours", btnPaletId: "cfPaletCours", btnBowlingId: "cfBowlingCours" });
-initNonCompensatingForces({ svgId: "ncSvgCours", readoutId: "ncReadoutCours" });
+initNonCompensatingForces({ svgId: "ncSvgCours", readoutId: "ncReadoutCours", btnSumId: "ncSumCours" });
+initForceBalance({ svgId: "fbSvgCours", readoutId: "fbReadoutCours", valueRangeId: "fbVCours", angleRangeId: "fbACours", valueOutId: "fbVOutCours", angleOutId: "fbAOutCours" });
 initFreeFall({ svgId: "ffSvgCours", readoutId: "ffReadoutCours", btnFreeId: "ffFreeCours", btnNotFreeId: "ffNotFreeCours" });
 initFallVelocity({ svgId: "fvSvgCours", readoutId: "fvReadoutCours", btnUpId: "fvUpCours", btnDownId: "fvDownCours" });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
 initForceEffect({ svgId: "feSvg", readoutId: "feReadout", btnBeforeId: "feBefore", btnAfterId: "feAfter" });
 initCompensatingForces({ svgId: "cfSvg", readoutId: "cfReadout", btnPaletId: "cfPalet", btnBowlingId: "cfBowling" });
-initNonCompensatingForces({ svgId: "ncSvg", readoutId: "ncReadout" });
+initNonCompensatingForces({ svgId: "ncSvg", readoutId: "ncReadout", btnSumId: "ncSum" });
 initFreeFall({ svgId: "ffSvg", readoutId: "ffReadout", btnFreeId: "ffFree", btnNotFreeId: "ffNotFree" });
 initFallVelocity({ svgId: "fvSvg", readoutId: "fvReadout", btnUpId: "fvUp", btnDownId: "fvDown" });
 
@@ -457,6 +524,7 @@ initVraiFaux({
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch6-2nde");
 initProgressBar("ch6-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+});
 </script>
 </body>
 </html>

@@ -3,11 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapitre 9 — Transformation chimique — 2nde</title>
+<title>Chapitre 9 — Émission et perception d'un son — 2nde</title>
 <link rel="stylesheet" href="styles.css">
 <script src="animations-common.js"></script>
 <script src="animations-ch9-2nde.js"></script>
 <script src="modules-common.js"></script>
+<style>
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+  .anim-wrap.wide{ width:100%; max-width:440px; }
+  .freq-axis{ max-width:520px; margin:14px auto 4px; font-size:0.85rem; }
+  .freq-axis .zones{ display:grid; grid-template-columns:1fr 1.6fr 1fr; text-align:center; font-family:var(--font-display); }
+  .freq-axis .zones span{ padding:8px 0; }
+  .freq-axis .ticks{ display:grid; grid-template-columns:1fr 1.6fr 1fr; color:var(--yellow); font-family:var(--font-display); }
+  .freq-axis .ticks > span{ display:flex; justify-content:flex-end; }
+  .freq-axis .ticks > span > b{ display:inline-block; font-weight:400; transform:translateX(50%); }
+  .frac{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; line-height:1.1; }
+  .frac > span:first-child{ border-bottom:2px solid currentColor; padding:0 6px 2px; }
+</style>
 </head>
 <body>
 
@@ -20,9 +38,10 @@
 </nav>
 
 <header class="page-head">
-  <div class="badge-inline chimie">Chimie</div>
-  <h1>Chapitre 9 — Transformation chimique</h1>
+  <div class="badge-inline physique">Physique</div>
+  <h1>Chapitre 9 — Émission et perception d'un son</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch9-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -43,315 +62,306 @@
 
 <main>
 
-<!-- ================================================================ -->
-<!-- MODE_COURS                                                        -->
-<!-- ================================================================ -->
+<!-- MODE_COURS -->
 <div class="mode-panel" id="panelCours">
 
   <section>
     <div class="objectifs-box">
       <span class="box-label">🎯 Objectifs du chapitre</span>
       <ul>
-        <li>Savoir écrire et équilibrer une équation de réaction</li>
-        <li>Savoir déterminer le réactif limitant d'une transformation</li>
-        <li>Connaître les 4 étapes d'une synthèse chimique au laboratoire</li>
+        <li>Décrire l'émission d'un signal sonore et sa propagation dans un milieu matériel</li>
+        <li>Déterminer la période, la fréquence et l'amplitude d'un signal sonore périodique</li>
+        <li>Relier hauteur, timbre et niveau d'intensité sonore aux caractéristiques du signal ; connaître les risques d'une exposition sonore</li>
       </ul>
     </div>
   </section>
 
   <section>
-    <h2>1a. Définition de la transformation chimique</h2>
+    <h2>1a. Émission d'un signal sonore</h2>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Une <strong>transformation chimique</strong> est le passage d'un système chimique d'un <strong>état initial</strong> à un <strong>état final</strong> avec formation de nouvelles espèces chimiques.
+      Mis en <strong>vibration</strong>, un objet émet un signal sonore. Afin que ce signal sonore soit plus audible, il doit être amplifié par une <strong>caisse de résonance</strong>.
     </div>
     <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
-      Exemple : lors de la combustion complète du méthane dans le dioxygène de l'air, CH₄(g) et O₂(g) sont consommés ; il se forme du CO₂(g) et de l'H₂O(g). Le diazote N₂(g) de l'air, présent dans l'état initial, est une espèce spectatrice : il reste présent dans l'état final.
+      Exemples : l'anche d'un saxophone comme les cordes d'une contrebasse vibrent pour produire un son. Le corps de la contrebasse comme celui du saxophone permettent d'amplifier le son produit : ils jouent le rôle de caisse de résonance.
     </p>
   </section>
 
   <section>
-    <h2>1b. Réaction chimique et équation de réaction</h2>
+    <h2>1b. Propagation d'un signal sonore</h2>
     <p class="course-text">
-      Au cours d'une transformation chimique, les <strong>réactifs</strong> sont les espèces chimiques consommées, et les <strong>produits</strong> sont les espèces chimiques formées. Seuls les réactifs et les produits figurent dans l'équation de la réaction ; les espèces spectatrices ne sont pas indiquées.
+      Les vibrations provoquées par un haut-parleur sont transmises à l'air environnant. Les molécules qui constituent l'air vibrent et transmettent ce mouvement de proche en proche aux molécules voisines.
     </p>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      L'équation de la réaction traduit la <strong>conservation des éléments</strong> et de la <strong>charge électrique</strong> entre les réactifs et les produits. Des <strong>nombres stœchiométriques</strong> sont placés devant les formules chimiques (le nombre 1 n'est jamais écrit).
+      Un signal sonore a besoin d'un <strong>milieu matériel</strong> pour se propager ; il ne se propage pas dans le vide. Le milieu matériel transmet une vibration qui se propage de proche en proche. Ce milieu peut être à l'état gazeux, liquide ou solide.
     </div>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre deux équations : vérifie la conservation des éléments (et de la charge).</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Compare la propagation dans l'air et dans le vide.</p>
     <div class="toggle-row">
-      <button class="toggle-btn" id="beMethaneCours">Combustion du méthane</button>
-      <button class="toggle-btn" id="beMgCours">Magnésium + ions H⁺</button>
+      <button class="toggle-btn" id="spAirCours">Dans l'air</button>
+      <button class="toggle-btn" id="spVideCours">Dans le vide</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="beSvgCours" viewBox="0 0 220 155"></svg>
-      </div>
-      <div class="anim-controls">
-        <div class="anim-readout" id="beReadoutCours"></div>
-      </div>
+      <div class="anim-wrap wide"><svg id="spSvgCours" viewBox="0 0 240 130"></svg></div>
+      <div class="anim-controls"><div class="anim-readout" id="spReadoutCours"></div></div>
     </div>
-  </section>
 
-  <section>
-    <h2>1c. Bilan de matière et réactif limitant</h2>
-    <p class="course-text">
-      Une équation de réaction traduit un <strong>bilan de quantités de matière</strong>. Par exemple, pour CH₄(g) + 2 O₂(g) → CO₂(g) + 2 H₂O(g), la quantité de méthane qui réagit est égale à la moitié de la quantité de dioxygène qui réagit : n(CH₄)/1 = n(O₂)/2.
-    </p>
-    <div class="recall-box">
+    <div class="recall-box" style="margin-top:22px;">
       <span class="box-label">📌 À retenir</span>
-      Lors d'une transformation chimique totale, l'un au moins des réactifs est entièrement consommé : il est appelé <strong>réactif limitant</strong>. Si les deux réactifs sont entièrement consommés, le mélange est dit <strong>stœchiométrique</strong>.
+      La <strong>vitesse de propagation d'un signal sonore</strong> dépend du milieu de propagation. La valeur de sa vitesse dans l'air est de l'ordre de <strong>345 m·s⁻¹</strong>.
     </div>
-    <p class="course-text">
-      La transformation s'arrête lorsque l'un, au moins, des réactifs est entièrement consommé.
-    </p>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle les quantités initiales : observe le réactif limitant et l'état final se déterminer.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:220px;">
-        <svg id="lrSvgCours" viewBox="0 0 220 175"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>n₀(CH₄) initial (mol)</label>
-        <input type="range" id="lrN1Cours" min="0.5" max="5" value="2" step="0.5">
-        <label>n₀(O₂) initial (mol)</label>
-        <input type="range" id="lrN2Cours" min="0.5" max="8" value="3" step="0.5">
-        <div class="anim-readout" id="lrReadoutCours"></div>
-      </div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.88rem; text-align:center;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--line); color:var(--chalk-dim);">
+            <th style="padding:8px;"></th><th style="padding:8px;">Faucon en piqué</th><th style="padding:8px;">Avion de ligne</th><th style="padding:8px; color:var(--yellow);">Son dans l'air</th><th style="padding:8px; color:var(--yellow);">Son dans l'eau liquide</th><th style="padding:8px;">Concorde 2</th><th style="padding:8px; color:var(--yellow);">Son dans l'acier solide</th><th style="padding:8px;">Lumière (air, vide)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:8px; text-align:left; color:var(--chalk-dim);"><em>v</em> (m·s⁻¹)</td><td>50</td><td>250</td><td>345</td><td>1 500</td><td>1 530</td><td>5 000</td><td>3,00 × 10⁸</td></tr>
+          <tr><td style="padding:8px; text-align:left; color:var(--chalk-dim);"><span class="frac"><span><em>v</em></span><span><em>v</em><sub>son air</sub></span></span></td><td>0,14</td><td>0,72</td><td>1</td><td>4,3</td><td>4,4</td><td>14</td><td>8,7 × 10⁵</td></tr>
+        </tbody>
+      </table>
     </div>
-  </section>
-
-  <section>
-    <h2>1d. Transformation exothermique et endothermique</h2>
-    <p class="course-text">
-      Certaines transformations s'accompagnent d'un transfert d'énergie.
-    </p>
-    <div class="recall-box">
-      <span class="box-label">📌 À retenir</span>
-      Une transformation est <strong>exothermique</strong> si le système chimique <strong>libère</strong> de l'énergie vers le milieu extérieur, dont la température augmente. Elle est <strong>endothermique</strong> si le système chimique <strong>reçoit</strong> de l'énergie du milieu extérieur, dont la température diminue.
-    </div>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux cas.</p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem; margin-top:14px;">👉 Trois signaux partent en même temps pour parcourir 1 km.</p>
     <div class="toggle-row">
-      <button class="toggle-btn" id="ttExoCours">Exothermique</button>
-      <button class="toggle-btn" id="ttEndoCours">Endothermique</button>
+      <button class="toggle-btn" id="svAirCours">Air</button>
+      <button class="toggle-btn" id="svEauCours">Eau liquide</button>
+      <button class="toggle-btn" id="svAcierCours">Acier solide</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ttSvgCours" viewBox="0 0 220 150"></svg>
-      </div>
-      <div class="anim-controls">
-        <div class="anim-readout" id="ttReadoutCours"></div>
-      </div>
+      <div class="anim-wrap wide"><svg id="svSvgCours" viewBox="0 0 240 130"></svg></div>
+      <div class="anim-controls"><div class="anim-readout" id="svReadoutCours"></div></div>
     </div>
   </section>
 
   <section>
-    <h2>2a. Espèces naturelle et synthétique</h2>
+    <h2>1c. Caractéristiques d'un signal sonore périodique</h2>
+    <p class="course-text">Un signal périodique dans le temps est un signal qui se reproduit à intervalles de temps égaux.</p>
     <div class="definition-box">
       <span class="box-label">📘 Définition</span>
-      Une espèce chimique <strong>naturelle</strong> est issue de la nature. Une espèce chimique <strong>synthétique</strong> est fabriquée par l'homme.
+      La <strong>période <em>T</em></strong> d'un signal sonore périodique est la plus petite durée au bout de laquelle le signal se reproduit identique à lui-même. La période s'exprime en seconde (s).<br>
+      La <strong>fréquence <em>f</em></strong> d'un signal sonore périodique représente le nombre de périodes du signal par seconde ; elle s'exprime en hertz (1 Hz = 1 s⁻¹). La fréquence <em>f</em> d'un signal est l'inverse de la période :
+      <div style="text-align:center; font-family:var(--font-display); font-size:1.5rem; color:var(--yellow); margin-top:8px;"><em>f</em> = <span class="frac"><span>1</span><span><em>T</em></span></span> <span style="font-family:var(--font-body); font-size:0.85rem; color:var(--chalk-dim); margin-left:12px;"><em>f</em> en Hz, <em>T</em> en s</span></div>
     </div>
     <p class="course-text">
-      La chimie de synthèse permet de reproduire des espèces naturelles à moindre coût sans épuiser les ressources naturelles. Elle permet aussi de créer de nouvelles espèces chimiques qui n'existent pas dans la nature : on parle alors d'espèces chimiques <strong>artificielles</strong>.
+      L'enregistrement d'un signal sonore est la représentation temporelle du signal électrique, tension = <em>f</em>(<em>t</em>), obtenue à l'aide d'un microphone. Il fait apparaître l'<strong>amplitude <em>A</em></strong> : écart entre sa valeur maximale et sa valeur moyenne.
     </p>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre les deux origines.</p>
-    <div class="toggle-row">
-      <button class="toggle-btn" id="nsNaturalCours">Naturelle</button>
-      <button class="toggle-btn" id="nsSyntheticCours">Synthétique</button>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Convertir <em>T</em> en secondes avant de calculer <em>f</em>. Exemple : <em>T</em> = 5 ms = 5 × 10⁻³ s, donc <em>f</em> = 1 / (5 × 10⁻³) = 200 Hz.
     </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle la fréquence et l'amplitude : observe la période sur l'oscillogramme.</p>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="nsSvgCours" viewBox="0 0 220 130"></svg>
-      </div>
+      <div class="anim-wrap wide"><svg id="psSvgCours" viewBox="0 0 240 140"></svg></div>
       <div class="anim-controls">
-        <div class="anim-readout" id="nsReadoutCours"></div>
+        <label>Fréquence <span id="psFOutCours" style="color:var(--yellow);"></span></label>
+        <input type="range" id="psFCours" min="150" max="1000" step="10" value="400">
+        <label>Amplitude <span id="psAOutCours" style="color:var(--coral);"></span></label>
+        <input type="range" id="psACours" min="10" max="40" step="5" value="30">
+        <div class="anim-readout" id="psReadoutCours"></div>
       </div>
     </div>
   </section>
 
   <section>
-    <h2>2b. Synthèse chimique</h2>
-    <div class="definition-box">
-      <span class="box-label">📘 Définition</span>
-      Une <strong>synthèse</strong> est la fabrication d'une espèce chimique au laboratoire. Elle s'effectue généralement en <strong>quatre étapes</strong> : prélèvement des réactifs, transformation chimique, isolement du produit brut, analyse du produit brut.
-    </div>
+    <h2>2a. Domaines de fréquences</h2>
     <div class="recall-box">
       <span class="box-label">📌 À retenir</span>
-      La <strong>chromatographie sur couche mince (CCM)</strong> permet la séparation et l'identification des espèces chimiques présentes dans un mélange. Pour un éluant donné, une espèce chimique migre de la même façon, qu'elle soit pure ou dans un mélange.
-    </div>
-
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Parcours les 4 étapes d'une synthèse au laboratoire.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ssSvgCours" viewBox="0 0 200 160"></svg>
+      L'oreille humaine ne peut entendre que les signaux sonores dont les fréquences sont comprises entre <strong>20 Hz</strong> et <strong>20 kHz</strong>.
+      <div class="freq-axis">
+        <div class="zones"><span style="color:var(--coral);">Infrasons</span><span style="color:var(--teal); border-left:2px dashed var(--yellow); border-right:2px dashed var(--yellow);">Sons audibles</span><span style="color:var(--coral);">Ultrasons</span></div>
+        <div style="height:2px; background:var(--chalk);"></div>
+        <div class="ticks"><span><b>20 Hz</b></span><span><b>20 kHz</b></span><span style="color:var(--chalk); padding-top:1.4em;">Fréquence</span></div>
       </div>
-      <div class="anim-controls" style="min-width:280px;">
-        <div class="anim-readout" id="ssExplainCours" style="min-height:5em;"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
-          <button id="ssPrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
-          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="ssStepCours"></span>
-          <button id="ssNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
-        </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2b. Hauteur et timbre</h2>
+    <p class="course-text">Les sons émis par deux cordes différentes d'un même violon n'ont pas la même fréquence. Ils n'ont pas la même hauteur.</p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Plus la hauteur d'un son est grande, plus sa <strong>fréquence</strong> est élevée et plus il est <strong>aigu</strong>. À l'inverse, un son <strong>grave</strong> est associé à une <strong>basse fréquence</strong>.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Balaye les fréquences de 1 Hz à 100 kHz (chaque graduation : × 10).</p>
+    <div class="anim-zone">
+      <div class="anim-wrap wide"><svg id="fdSvgCours" viewBox="0 0 240 120"></svg></div>
+      <div class="anim-controls">
+        <label>Fréquence <span id="fdFOutCours" style="color:var(--yellow);"></span></label>
+        <input type="range" id="fdFCours" min="0" max="5" step="0.02" value="2.64">
+        <div class="anim-readout" id="fdReadoutCours"></div>
+      </div>
+    </div>
+    <div class="recall-box" style="margin-top:22px;">
+      <span class="box-label">📌 À retenir</span>
+      Le <strong>timbre</strong> d'un son est lié à la <strong>forme du signal sonore</strong>.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-style:italic;">
+      Exemple : une guitare et une trompette qui jouent la même note émettent des sons qui ont la même hauteur. Cependant, la perception sonore est différente. Les deux sons émis ont des timbres différents.
+    </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Même note, trois sources : compare les formes.</p>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="tbDiapCours">Diapason</button>
+      <button class="toggle-btn" id="tbFluteCours">Flûte</button>
+      <button class="toggle-btn" id="tbGuitCours">Guitare</button>
+    </div>
+    <div class="anim-zone">
+      <div class="anim-wrap wide"><svg id="tbSvgCours" viewBox="0 0 240 140"></svg></div>
+      <div class="anim-controls"><div class="anim-readout" id="tbReadoutCours"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2c. Intensité et niveau d'intensité sonore</h2>
+    <p class="course-text">
+      Plus l'amplitude d'un signal sonore est élevée, plus l'<strong>intensité sonore <em>I</em></strong> est grande. L'intensité sonore s'exprime en watt par mètre carré (W·m⁻²). Une grandeur liée à la sensibilité de l'oreille humaine et plus facile à manipuler est le <strong>niveau d'intensité sonore <em>L</em></strong>. Il s'exprime en décibel (dB).
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      L'intensité sonore et le niveau d'intensité sonore varient dans le <strong>même sens</strong>. Le niveau d'intensité sonore se mesure à l'aide d'un <strong>sonomètre</strong>.
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      L'intensité sonore n'est pas proportionnelle au niveau d'intensité sonore : si l'intensité sonore <em>I</em> double, le niveau d'intensité sonore <em>L</em> augmente de trois décibels.
+    </div>
+  </section>
+
+  <section>
+    <h2>2d. Exposition sonore</h2>
+    <p class="course-text">Plus le niveau d'intensité sonore et la durée d'exposition sont élevés, plus les risques d'atteinte de l'audition sont importants.</p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      L'<strong>exposition sonore</strong> tient compte du <strong>niveau d'intensité sonore</strong> et de la <strong>durée d'exposition</strong> auxquels l'oreille est soumise. Une exposition sonore trop élevée peut avoir des <strong>conséquences irréversibles</strong>, comme une surdité partielle, voire totale.
+    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">
+      Durée limite d'exposition sans protection : 85 dB : 8 h/jour · 88 dB : 4 h · 91 dB : 2 h · 94 dB : 1 h · 97 dB : 30 min · 100 dB : 15 min · de 120 à 140 dB : quelques secondes suffisent à provoquer des dégâts irréversibles. Législation européenne : 85 dB (travail), 100 dB (baladeurs), 105 dB (discothèques et bars musicaux).
+    </p>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle le niveau sonore et double l'intensité.</p>
+    <div class="anim-zone">
+      <div class="anim-wrap wide"><svg id="slSvgCours" viewBox="0 0 240 150"></svg></div>
+      <div class="anim-controls">
+        <label>Niveau d'intensité sonore <span id="slLOutCours" style="color:var(--yellow);"></span></label>
+        <input type="range" id="slLCours" min="0" max="130" step="1" value="60">
+        <div class="toggle-row" style="margin-top:10px;"><button class="toggle-btn" id="slDoubleCours">Doubler I</button></div>
+        <div class="anim-readout" id="slReadoutCours"></div>
       </div>
     </div>
   </section>
 
 </div>
 
-<!-- ================================================================ -->
-<!-- MODE_ENTRAINEMENT                                                 -->
-<!-- ================================================================ -->
+<!-- MODE_ENTRAINEMENT -->
 <div class="mode-panel" id="panelEntrainement">
 
   <section>
     <h2>Cours à trous</h2>
     <div class="course-text" id="courseText">
-
-      <h3>1a. Définition de la transformation chimique</h3>
-      <p>
-        Une transformation chimique est le passage d'un système chimique d'un état <input class="blank" data-answer="initial" size="14"> à un état <input class="blank" data-answer="final" size="12"> avec formation de nouvelles espèces chimiques.
-      </p>
-
-      <h3>1b. Réaction chimique et équation de réaction</h3>
-      <p>
-        Les <input class="blank" data-answer="réactifs|reactifs" size="14"> sont les espèces chimiques consommées ; les <input class="blank" data-answer="produits" size="14"> sont les espèces chimiques formées.
-      </p>
-      <p>
-        L'équation de la réaction traduit la conservation des <input class="blank" data-answer="éléments|elements" size="14"> et de la <input class="blank" data-answer="charge électrique|charge electrique" size="18">.
-      </p>
-
-      <h3>1c. Bilan de matière et réactif limitant</h3>
-      <p>
-        Lors d'une transformation totale, l'un au moins des réactifs est entièrement consommé : c'est le réactif <input class="blank" data-answer="limitant" size="16">.
-      </p>
-      <p>
-        Si les deux réactifs sont entièrement consommés, le mélange est dit <input class="blank" data-answer="stœchiométrique|stoechiometrique" size="20">.
-      </p>
-
-      <h3>1d. Transformation exothermique et endothermique</h3>
-      <p>
-        Une transformation est <input class="blank" data-answer="exothermique" size="18"> si le système libère de l'énergie vers le milieu extérieur. Elle est <input class="blank" data-answer="endothermique" size="18"> si le système reçoit de l'énergie du milieu extérieur.
-      </p>
-
-      <h3>2a. Espèces naturelle et synthétique</h3>
-      <p>
-        Une espèce chimique <input class="blank" data-answer="naturelle" size="14"> est issue de la nature. Une espèce chimique <input class="blank" data-answer="synthétique|synthetique" size="16"> est fabriquée par l'homme.
-      </p>
-
-      <h3>2b. Synthèse chimique</h3>
-      <p>
-        Une synthèse s'effectue en quatre étapes : prélèvement des réactifs, <input class="blank" data-answer="transformation" size="16"> chimique, isolement du produit brut, <input class="blank" data-answer="analyse" size="14"> du produit brut.
-      </p>
-      <p>
-        La <input class="blank" data-answer="chromatographie sur couche mince|CCM" size="24"> permet la séparation et l'identification des espèces chimiques d'un mélange.
-      </p>
-
+      <h3>1a. Émission d'un signal sonore</h3>
+      <p>Mis en <input class="blank" data-answer="vibration" size="12">, un objet émet un signal sonore. Pour être plus audible, il est amplifié par une caisse de <input class="blank" data-answer="résonance|resonance" size="12">.</p>
+      <h3>1b. Propagation d'un signal sonore</h3>
+      <p>Un signal sonore a besoin d'un milieu <input class="blank" data-answer="matériel|materiel" size="12"> pour se propager ; il ne se propage pas dans le <input class="blank" data-answer="vide" size="8">.</p>
+      <p>Dans l'air, la vitesse du son est de l'ordre de <input class="blank" data-answer="345" size="6"> m·s⁻¹.</p>
+      <h3>1c. Signal sonore périodique</h3>
+      <p>La <input class="blank" data-answer="période|periode" size="10"> <em>T</em> s'exprime en seconde ; la <input class="blank" data-answer="fréquence|frequence" size="12"> <em>f</em> s'exprime en <input class="blank" data-answer="hertz|Hz" size="8">, avec <em>f</em> = 1 / <em>T</em>.</p>
+      <h3>2a. Domaines de fréquences</h3>
+      <p>L'oreille humaine entend les sons de fréquence comprise entre 20 Hz et 20 <input class="blank" data-answer="kHz|kilohertz" size="6">. En dessous : les <input class="blank" data-answer="infrasons" size="12"> ; au-dessus : les <input class="blank" data-answer="ultrasons" size="12">.</p>
+      <h3>2b. Hauteur et timbre</h3>
+      <p>Plus la fréquence d'un son est élevée, plus il est <input class="blank" data-answer="aigu" size="8">. Le <input class="blank" data-answer="timbre" size="10"> d'un son est lié à la forme du signal.</p>
+      <h3>2c–2d. Niveau d'intensité sonore et exposition</h3>
+      <p>Le niveau d'intensité sonore <em>L</em> s'exprime en <input class="blank" data-answer="décibel|decibel|dB|décibels|decibels" size="10"> et se mesure avec un <input class="blank" data-answer="sonomètre|sonometre" size="12">.</p>
+      <p>L'exposition sonore tient compte du niveau d'intensité sonore et de la <input class="blank" data-answer="durée|duree" size="8"> d'exposition.</p>
     </div>
-
     <div class="score-line" id="scoreLine"></div>
     <div class="actions"><button id="checkCourseBtn">✅ Corriger</button></div>
   </section>
 
   <section>
-    <h2>Équation de réaction équilibrée</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre deux équations : vérifie la conservation des éléments (et de la charge).</p>
+    <h2>Propagation : air ou vide</h2>
     <div class="toggle-row">
-      <button class="toggle-btn" id="beMethane">Combustion du méthane</button>
-      <button class="toggle-btn" id="beMg">Magnésium + ions H⁺</button>
+      <button class="toggle-btn" id="spAir">Dans l'air</button>
+      <button class="toggle-btn" id="spVide">Dans le vide</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="beSvg" viewBox="0 0 220 155"></svg>
-      </div>
-      <div class="anim-controls">
-        <div class="anim-readout" id="beReadout"></div>
-      </div>
+      <div class="anim-wrap wide"><svg id="spSvg" viewBox="0 0 240 130"></svg></div>
+      <div class="anim-controls"><div class="anim-readout" id="spReadout"></div></div>
     </div>
-    <div class="activity-block"><div id="actBalancedEquation"></div></div>
+    <div class="activity-block"><div id="actPropagation"></div></div>
   </section>
 
   <section>
-    <h2>Réactif limitant</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Règle les quantités initiales : observe le réactif limitant et l'état final se déterminer.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:220px;">
-        <svg id="lrSvg" viewBox="0 0 220 175"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>n₀(CH₄) initial (mol)</label>
-        <input type="range" id="lrN1" min="0.5" max="5" value="2" step="0.5">
-        <label>n₀(O₂) initial (mol)</label>
-        <input type="range" id="lrN2" min="0.5" max="8" value="3" step="0.5">
-        <div class="anim-readout" id="lrReadout"></div>
-      </div>
-    </div>
-    <div class="activity-block"><div id="actLimitingReagent"></div></div>
-  </section>
-
-  <section>
-    <h2>Transformation exothermique / endothermique</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux cas.</p>
+    <h2>Vitesse du son</h2>
     <div class="toggle-row">
-      <button class="toggle-btn" id="ttExo">Exothermique</button>
-      <button class="toggle-btn" id="ttEndo">Endothermique</button>
+      <button class="toggle-btn" id="svAir">Air</button>
+      <button class="toggle-btn" id="svEau">Eau liquide</button>
+      <button class="toggle-btn" id="svAcier">Acier solide</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ttSvg" viewBox="0 0 220 150"></svg>
-      </div>
-      <div class="anim-controls">
-        <div class="anim-readout" id="ttReadout"></div>
-      </div>
+      <div class="anim-wrap wide"><svg id="svSvg" viewBox="0 0 240 130"></svg></div>
+      <div class="anim-controls"><div class="anim-readout" id="svReadout"></div></div>
     </div>
-    <div class="activity-block"><div id="actThermal"></div></div>
+    <div class="activity-block"><div id="actSpeed"></div></div>
   </section>
 
   <section>
-    <h2>Espèce naturelle ou synthétique</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Bascule entre les deux origines.</p>
+    <h2>Période et fréquence</h2>
+    <div class="anim-zone">
+      <div class="anim-wrap wide"><svg id="psSvg" viewBox="0 0 240 140"></svg></div>
+      <div class="anim-controls">
+        <label>Fréquence <span id="psFOut" style="color:var(--yellow);"></span></label>
+        <input type="range" id="psF" min="150" max="1000" step="10" value="400">
+        <label>Amplitude <span id="psAOut" style="color:var(--coral);"></span></label>
+        <input type="range" id="psA" min="10" max="40" step="5" value="30">
+        <div class="anim-readout" id="psReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actPeriod"></div></div>
+  </section>
+
+  <section>
+    <h2>Domaines de fréquences</h2>
+    <div class="anim-zone">
+      <div class="anim-wrap wide"><svg id="fdSvg" viewBox="0 0 240 120"></svg></div>
+      <div class="anim-controls">
+        <label>Fréquence <span id="fdFOut" style="color:var(--yellow);"></span></label>
+        <input type="range" id="fdF" min="0" max="5" step="0.02" value="2.64">
+        <div class="anim-readout" id="fdReadout"></div>
+      </div>
+    </div>
+    <div class="activity-block"><div id="actDomain"></div></div>
+  </section>
+
+  <section>
+    <h2>Hauteur et timbre</h2>
     <div class="toggle-row">
-      <button class="toggle-btn" id="nsNatural">Naturelle</button>
-      <button class="toggle-btn" id="nsSynthetic">Synthétique</button>
+      <button class="toggle-btn" id="tbDiap">Diapason</button>
+      <button class="toggle-btn" id="tbFlute">Flûte</button>
+      <button class="toggle-btn" id="tbGuit">Guitare</button>
     </div>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="nsSvg" viewBox="0 0 220 130"></svg>
-      </div>
-      <div class="anim-controls">
-        <div class="anim-readout" id="nsReadout"></div>
-      </div>
+      <div class="anim-wrap wide"><svg id="tbSvg" viewBox="0 0 240 140"></svg></div>
+      <div class="anim-controls"><div class="anim-readout" id="tbReadout"></div></div>
     </div>
-    <div class="activity-block"><div id="actNaturalSynthetic"></div></div>
+    <div class="activity-block"><div id="actTimbre"></div></div>
   </section>
 
   <section>
-    <h2>Les 4 étapes d'une synthèse</h2>
-    <p style="color:var(--chalk-dim); margin-bottom:10px;">Parcours les 4 étapes d'une synthèse au laboratoire.</p>
+    <h2>Niveau sonore et exposition</h2>
     <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ssSvg" viewBox="0 0 200 160"></svg>
-      </div>
-      <div class="anim-controls" style="min-width:280px;">
-        <div class="anim-readout" id="ssExplain" style="min-height:5em;"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
-          <button id="ssPrev" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
-          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="ssStep"></span>
-          <button id="ssNext" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
-        </div>
+      <div class="anim-wrap wide"><svg id="slSvg" viewBox="0 0 240 150"></svg></div>
+      <div class="anim-controls">
+        <label>Niveau d'intensité sonore <span id="slLOut" style="color:var(--yellow);"></span></label>
+        <input type="range" id="slL" min="0" max="130" step="1" value="60">
+        <div class="toggle-row" style="margin-top:10px;"><button class="toggle-btn" id="slDouble">Doubler I</button></div>
+        <div class="anim-readout" id="slReadout"></div>
       </div>
     </div>
-    <div class="activity-block"><div id="actSynthesisSteps"></div></div>
+    <div class="activity-block"><div id="actLevel"></div></div>
   </section>
 
 </div>
 
-<!-- ================================================================ -->
-<!-- MODE_SYNTHESE                                                     -->
-<!-- ================================================================ -->
+<!-- MODE_SYNTHESE -->
 <div class="mode-panel" id="panelSynthese">
   <section>
     <h2>Tableau récapitulatif</h2>
@@ -365,20 +375,22 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Équation de réaction</td><td style="padding:10px 8px;">réactifs → produits</td><td style="padding:10px 8px; color:var(--chalk-dim);">conserve éléments et charge ; spectatrices absentes</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Réactif limitant</td><td style="padding:10px 8px;">entièrement consommé le premier</td><td style="padding:10px 8px; color:var(--chalk-dim);">comparer n₀/coefficient stœchiométrique</td></tr>
-          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Exo/endothermique</td><td style="padding:10px 8px;">transfert d'énergie</td><td style="padding:10px 8px; color:var(--chalk-dim);">exo : libère (T↑) ; endo : reçoit (T↓)</td></tr>
-          <tr><td style="padding:10px 8px;">Synthèse (4 étapes)</td><td style="padding:10px 8px;">prélèvement, transformation, isolement, analyse</td><td style="padding:10px 8px; color:var(--chalk-dim);">CCM pour identifier une espèce</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Émission</td><td style="padding:10px 8px;">un objet en vibration émet un signal sonore</td><td style="padding:10px 8px; color:var(--chalk-dim);">amplifié par une caisse de résonance</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Propagation</td><td style="padding:10px 8px;">vibration transmise de proche en proche</td><td style="padding:10px 8px; color:var(--chalk-dim);">milieu matériel nécessaire ; v ≈ 345 m·s⁻¹ dans l'air</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Période, fréquence</td><td style="padding:10px 8px;"><em>T</em> en s ; <em>f</em> en Hz</td><td style="padding:10px 8px; color:var(--chalk-dim);"><em>f</em> = 1 / <em>T</em></td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Domaines</td><td style="padding:10px 8px;">audible : 20 Hz à 20 kHz</td><td style="padding:10px 8px; color:var(--chalk-dim);">infrasons en dessous, ultrasons au-dessus</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Hauteur, timbre</td><td style="padding:10px 8px;">hauteur ↔ fréquence ; timbre ↔ forme</td><td style="padding:10px 8px; color:var(--chalk-dim);">f élevée : son aigu ; f basse : son grave</td></tr>
+          <tr style="border-bottom:1px solid var(--line);"><td style="padding:10px 8px;">Intensité, niveau</td><td style="padding:10px 8px;"><em>I</em> en W·m⁻² ; <em>L</em> en dB (sonomètre)</td><td style="padding:10px 8px; color:var(--chalk-dim);">même sens ; I × 2 → L + 3 dB</td></tr>
+          <tr><td style="padding:10px 8px;">Exposition sonore</td><td style="padding:10px 8px;">niveau + durée d'exposition</td><td style="padding:10px 8px; color:var(--chalk-dim);">conséquences possibles irréversibles</td></tr>
         </tbody>
       </table>
     </div>
-
     <div class="method-box" style="margin-top:20px;">
-      <span class="box-label">🔧 Déterminer le réactif limitant</span>
+      <span class="box-label">🔧 Calculer une fréquence à partir d'un enregistrement</span>
       <ul style="margin:8px 0 0; padding-left:20px; line-height:1.9;">
-        <li>Pour chaque réactif, calculer n₀(réactif) / coefficient stœchiométrique</li>
-        <li>Le réactif ayant le <strong>rapport le plus petit</strong> est le réactif limitant</li>
-        <li>Si les deux rapports sont égaux, le mélange est stœchiométrique (les deux réactifs sont limitants)</li>
+        <li>Mesurer la durée correspondant à plusieurs périodes, puis diviser par leur nombre : on obtient <em>T</em></li>
+        <li>Convertir <em>T</em> en secondes (1 ms = 10⁻³ s)</li>
+        <li>Calculer <em>f</em> = 1 / <em>T</em>, en hertz</li>
       </ul>
     </div>
   </section>
@@ -386,10 +398,9 @@
 
 </main>
 
-<footer>Chapitre 9 — Transformation chimique (2nde).</footer>
+<footer>Chapitre 9 — Émission et perception d'un son (2nde).</footer>
 
 <script>
-/* ---------- Correction du texte à trous (mode entraînement) ---------- */
 function normalize(str) {
   return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
@@ -417,71 +428,79 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   if (correct === blanks.length) ProgressStore.record("ch9-2nde", "trous-complet", true);
 });
 
-/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initBalancedEquation({ svgId: "beSvgCours", readoutId: "beReadoutCours", btnMethaneId: "beMethaneCours", btnMgId: "beMgCours" });
-initLimitingReagent({ svgId: "lrSvgCours", n1RangeId: "lrN1Cours", n2RangeId: "lrN2Cours", readoutId: "lrReadoutCours" });
-initThermalTransformation({ svgId: "ttSvgCours", readoutId: "ttReadoutCours", btnExoId: "ttExoCours", btnEndoId: "ttEndoCours" });
-initNaturalSynthetic({ svgId: "nsSvgCours", readoutId: "nsReadoutCours", btnNaturalId: "nsNaturalCours", btnSyntheticId: "nsSyntheticCours" });
-initSynthesisSteps4({ svgId: "ssSvgCours", explainId: "ssExplainCours", prevBtnId: "ssPrevCours", nextBtnId: "ssNextCours", stepId: "ssStepCours" });
+/* Animations — Cours */
+initSoundPropagation({ svgId: "spSvgCours", readoutId: "spReadoutCours", btnAirId: "spAirCours", btnVideId: "spVideCours" });
+initSoundSpeed({ svgId: "svSvgCours", readoutId: "svReadoutCours", btnAirId: "svAirCours", btnEauId: "svEauCours", btnAcierId: "svAcierCours" });
+initPeriodicSignal({ svgId: "psSvgCours", readoutId: "psReadoutCours", fRangeId: "psFCours", aRangeId: "psACours", fOutId: "psFOutCours", aOutId: "psAOutCours" });
+initFrequencyDomain({ svgId: "fdSvgCours", readoutId: "fdReadoutCours", fRangeId: "fdFCours", fOutId: "fdFOutCours" });
+initTimbre({ svgId: "tbSvgCours", readoutId: "tbReadoutCours", btnDiapasonId: "tbDiapCours", btnFluteId: "tbFluteCours", btnGuitareId: "tbGuitCours" });
+initSoundLevel({ svgId: "slSvgCours", readoutId: "slReadoutCours", lRangeId: "slLCours", lOutId: "slLOutCours", btnDoubleId: "slDoubleCours" });
 
-/* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
-initBalancedEquation({ svgId: "beSvg", readoutId: "beReadout", btnMethaneId: "beMethane", btnMgId: "beMg" });
-initLimitingReagent({ svgId: "lrSvg", n1RangeId: "lrN1", n2RangeId: "lrN2", readoutId: "lrReadout" });
-initThermalTransformation({ svgId: "ttSvg", readoutId: "ttReadout", btnExoId: "ttExo", btnEndoId: "ttEndo" });
-initNaturalSynthetic({ svgId: "nsSvg", readoutId: "nsReadout", btnNaturalId: "nsNatural", btnSyntheticId: "nsSynthetic" });
-initSynthesisSteps4({ svgId: "ssSvg", explainId: "ssExplain", prevBtnId: "ssPrev", nextBtnId: "ssNext", stepId: "ssStep" });
+/* Animations — Entraînement */
+initSoundPropagation({ svgId: "spSvg", readoutId: "spReadout", btnAirId: "spAir", btnVideId: "spVide" });
+initSoundSpeed({ svgId: "svSvg", readoutId: "svReadout", btnAirId: "svAir", btnEauId: "svEau", btnAcierId: "svAcier" });
+initPeriodicSignal({ svgId: "psSvg", readoutId: "psReadout", fRangeId: "psF", aRangeId: "psA", fOutId: "psFOut", aOutId: "psAOut" });
+initFrequencyDomain({ svgId: "fdSvg", readoutId: "fdReadout", fRangeId: "fdF", fOutId: "fdFOut" });
+initTimbre({ svgId: "tbSvg", readoutId: "tbReadout", btnDiapasonId: "tbDiap", btnFluteId: "tbFlute", btnGuitareId: "tbGuit" });
+initSoundLevel({ svgId: "slSvg", readoutId: "slReadout", lRangeId: "slL", lOutId: "slLOut", btnDoubleId: "slDouble" });
 
-/* ---------- Activités liées à chaque animation ---------- */
+/* Activités */
+initVraiFaux({
+  containerId: "actPropagation", chapterId: "ch9-2nde", activityId: "vf-propagation",
+  prompt: "Un signal sonore peut se propager dans le vide.",
+  correct: false,
+  explanation: "Faux : un signal sonore a besoin d'un milieu matériel (gaz, liquide ou solide) pour se propager. Dans le vide, aucune molécule ne transmet la vibration."
+});
+
 initQCM({
-  containerId: "actBalancedEquation", chapterId: "ch9-2nde", activityId: "qcm-balanced-equation",
-  prompt: "Dans l'équation CH₄(g) + 2 O₂(g) → CO₂(g) + 2 H₂O(g), quel est le nombre stœchiométrique du dioxygène ?",
+  containerId: "actSpeed", chapterId: "ch9-2nde", activityId: "qcm-speed",
+  prompt: "Dans quel milieu le son se propage-t-il le plus vite ?",
   options: [
-    { text: "2", correct: true },
-    { text: "1", correct: false },
-    { text: "4", correct: false }
+    { text: "L'acier solide", correct: true },
+    { text: "L'eau liquide", correct: false },
+    { text: "L'air", correct: false }
   ],
-  explanation: "Le nombre stœchiométrique placé devant O₂ est 2 : il faut 2 moles de dioxygène pour 1 mole de méthane."
+  explanation: "Environ 5 000 m·s⁻¹ dans l'acier, 1 500 m·s⁻¹ dans l'eau et 345 m·s⁻¹ dans l'air : la vitesse dépend du milieu."
 });
 
 initEstimation({
-  containerId: "actLimitingReagent", chapterId: "ch9-2nde", activityId: "est-limiting-reagent",
-  prompt: "Avec n₀(CH₄) = 2 mol et n₀(O₂) = 3 mol, quelle est la quantité maximale de dioxyde de carbone formée x_max (en mol) ?",
-  answer: 1.5, tolerance: 0.1, unit: "mol",
-  explanation: "n₀(CH₄)/1 = 2 et n₀(O₂)/2 = 1,5 : O₂ est limitant. x_max = n₀(O₂)/2 = 1,5 mol (autant de CO₂ formé que de CH₄ consommé, dans le rapport 1:1)."
+  containerId: "actPeriod", chapterId: "ch9-2nde", activityId: "est-period",
+  prompt: "Sur un enregistrement, 4 périodes durent 10 ms. Quelle est la fréquence du son (en Hz) ?",
+  answer: 400, tolerance: 5, unit: "Hz",
+  explanation: "T = 10 ms / 4 = 2,5 ms = 2,5 × 10⁻³ s, donc f = 1 / T = 400 Hz."
+});
+
+initQCM({
+  containerId: "actDomain", chapterId: "ch9-2nde", activityId: "qcm-domain",
+  prompt: "Un son de fréquence 40 kHz est…",
+  options: [
+    { text: "un ultrason, inaudible pour l'oreille humaine", correct: true },
+    { text: "un son audible très aigu", correct: false },
+    { text: "un infrason", correct: false }
+  ],
+  explanation: "40 kHz est supérieur à 20 kHz : c'est un ultrason, l'oreille humaine ne l'entend pas."
+});
+
+initQCM({
+  containerId: "actTimbre", chapterId: "ch9-2nde", activityId: "qcm-timbre",
+  prompt: "Deux signaux sonores ont la même période mais des formes différentes. Les deux sons ont…",
+  options: [
+    { text: "la même hauteur et des timbres différents", correct: true },
+    { text: "la même hauteur et le même timbre", correct: false },
+    { text: "des hauteurs différentes et le même timbre", correct: false }
+  ],
+  explanation: "Même période donc même fréquence et même hauteur. Le timbre est lié à la forme du signal : formes différentes, timbres différents."
 });
 
 initVraiFaux({
-  containerId: "actThermal", chapterId: "ch9-2nde", activityId: "vf-thermal",
-  prompt: "Une transformation exothermique reçoit de l'énergie du milieu extérieur.",
+  containerId: "actLevel", chapterId: "ch9-2nde", activityId: "vf-level",
+  prompt: "Si l'intensité sonore double, le niveau d'intensité sonore double aussi.",
   correct: false,
-  explanation: "Faux : une transformation exothermique LIBÈRE de l'énergie vers le milieu extérieur (dont la température augmente). C'est la transformation endothermique qui reçoit de l'énergie."
+  explanation: "Faux : I et L varient dans le même sens mais ne sont pas proportionnels. Si I double, L augmente de 3 dB seulement."
 });
 
-initQCM({
-  containerId: "actNaturalSynthetic", chapterId: "ch9-2nde", activityId: "qcm-natural-synthetic",
-  prompt: "La caféine extraite du café est qualifiée d'espèce chimique…",
-  options: [
-    { text: "Naturelle", correct: true },
-    { text: "Synthétique", correct: false },
-    { text: "Artificielle", correct: false }
-  ],
-  explanation: "Elle est qualifiée de naturelle car elle est extraite directement d'une plante. La même caféine fabriquée en laboratoire serait dite synthétique."
-});
-
-initQCM({
-  containerId: "actSynthesisSteps", chapterId: "ch9-2nde", activityId: "qcm-synthesis-steps",
-  prompt: "Quelle étape de la synthèse permet d'identifier le produit obtenu et de contrôler sa pureté ?",
-  options: [
-    { text: "L'analyse", correct: true },
-    { text: "Le prélèvement des réactifs", correct: false },
-    { text: "L'isolement", correct: false }
-  ],
-  explanation: "C'est la dernière étape (étape 4) : l'analyse du produit brut permet son identification et le contrôle de sa pureté."
-});
-
-/* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch9-2nde");
-initProgressBar("ch9-2nde", 6); // texte à trous complet + 5 activités liées aux animations
+initProgressBar("ch9-2nde", 7); // texte à trous complet + 6 activités
 </script>
 </body>
 </html>
