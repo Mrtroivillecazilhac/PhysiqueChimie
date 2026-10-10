@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 7 — Lentilles minces convergentes — Diapos de cours — 1ère spé PC</title>
+<template id="__bundler_thumbnail" data-bg-color="#16261f"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><rect width="1200" height="800" fill="#16261f"></rect><line x1="600" y1="160" x2="600" y2="640" stroke="#f2ede1" stroke-width="22"></line><line x1="200" y1="400" x2="1000" y2="400" stroke="#e8c468" stroke-width="18"></line></svg></template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap">
+<style>
+  :root{
+    --board:#16261f; --board-2:#1d3229; --chalk:#f2ede1; --chalk-dim:#c9c2b0;
+    --yellow:#e8c468; --teal:#6bbfab; --coral:#d97a63;
+    --line:rgba(242,237,225,0.14);
+  }
+  html,body{margin:0;padding:0;background:#0d1512;}
+  *{box-sizing:border-box;}
+  a{color:#e8c468;text-decoration:none;}
+  a:hover{color:#f2ede1;}
+  input[type=range]{accent-color:#e8c468;}
+  button:disabled{opacity:.4;cursor:default;}
+</style>
+<script src="animations-common.js"></script>
+<script src="animations-ch7.js"></script>
+<script src="deck-stage.js"></script>
+<script>
+(function () {
+  if (window.__ch7Retry) return;
+  window.__ch7Retry = true;
+  var q = location.search || "";
+  if (!q) return;
+  var checks = [
+    ["support.js", function () { return typeof DCLogic !== "undefined"; }],
+    ["animations-common.js", function () { return typeof toSuperscript === "function"; }],
+    ["animations-ch7.js", function () { return typeof initLensExplorer === "function"; }],
+    ["deck-stage.js", function () { return !!customElements.get("deck-stage"); }]
+  ];
+  function step(i) {
+    if (i >= checks.length) return;
+    var name = checks[i][0], ok = checks[i][1];
+    var done = function () { step(i + 1); };
+    var already = false;
+    try { already = ok(); } catch (e) { already = false; }
+    if (already) return done();
+    var s = document.createElement("script");
+    s.src = name + q;
+    s.onload = done;
+    s.onerror = done;
+    document.head.appendChild(s);
+  }
+  setTimeout(function () { step(0); }, 0);
+})();
+</script>
+</helmet>
+
+<x-import component-from-global-scope="deck-stage" width="1920" height="1080" hint-size="100%,100%">
+
+<section data-label="Titre" data-screen-label="01" data-speaker-notes="Fil du chapitre : prévoir par le calcul où se forme l'image et quelle est sa taille, sans refaire le tracé." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:90px 110px;display:flex;flex-direction:column;justify-content:center;gap:34px;">
+  <div style="display:inline-flex;align-self:flex-start;font-family:Kalam,cursive;font-size:30px;color:#16261f;background:#6bbfab;border-radius:999px;padding:8px 28px;letter-spacing:0.04em;">Physique · 1ère spé PC</div>
+  <div style="font-family:Kalam,cursive;font-size:40px;color:#e8c468;">Chapitre 7</div>
+  <h1 style="font-family:Kalam,cursive;font-weight:700;font-size:104px;line-height:1.05;margin:0;max-width:1500px;text-wrap:pretty;">Lentilles minces convergentes</h1>
+  <div style="width:220px;height:4px;background:rgba(242,237,225,0.28);"></div>
+  <p style="font-size:34px;color:#c9c2b0;margin:0;max-width:1200px;">Où se forme l'image, quelle est sa taille, dans quel sens : le calcul confirme le tracé.</p>
+</section>
+
+<section data-label="Objectifs" data-screen-label="02" data-speaker-notes="Trois objectifs : construire, calculer, interpréter." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:70px 92px;display:flex;flex-direction:column;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;margin-bottom:6px;">Ce qu'il faudra savoir faire</div>
+  <h2 style="font-family:Kalam,cursive;font-size:64px;font-weight:700;margin:0 0 44px;line-height:1.1;">🎯 Objectifs du chapitre</h2>
+  <div style="display:flex;flex-direction:column;gap:26px;max-width:1560px;">
+    <div data-reveal="1" style="display:flex;gap:28px;align-items:flex-start;border:2px solid rgba(107,191,171,0.35);background:rgba(107,191,171,0.07);border-radius:16px;padding:30px 36px;">
+      <span style="font-family:Kalam,cursive;font-size:46px;color:#6bbfab;line-height:1;">1</span>
+      <span style="font-size:34px;line-height:1.45;text-wrap:pretty;">Savoir construire l'image d'un objet à l'aide des trois rayons caractéristiques.</span>
+    </div>
+    <div data-reveal="2" style="display:flex;gap:28px;align-items:flex-start;border:2px solid rgba(107,191,171,0.35);background:rgba(107,191,171,0.07);border-radius:16px;padding:30px 36px;">
+      <span style="font-family:Kalam,cursive;font-size:46px;color:#6bbfab;line-height:1;">2</span>
+      <span style="font-size:34px;line-height:1.45;text-wrap:pretty;">Savoir utiliser les relations de conjugaison et de grandissement.</span>
+    </div>
+    <div data-reveal="3" style="display:flex;gap:28px;align-items:flex-start;border:2px solid rgba(107,191,171,0.35);background:rgba(107,191,171,0.07);border-radius:16px;padding:30px 36px;">
+      <span style="font-family:Kalam,cursive;font-size:46px;color:#6bbfab;line-height:1;">3</span>
+      <span style="font-size:34px;line-height:1.45;text-wrap:pretty;">Comprendre la mise au point et les différents cas de figure : image réelle ou virtuelle, effet loupe.</span>
+    </div>
+  </div>
+</section>
+
+<section data-label="§ 1 Conjugaison et grandissement" data-screen-label="03" data-speaker-notes="Première partie : passer du tracé au calcul." style="background:#1d3229;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:70px 92px;display:flex;flex-direction:column;justify-content:center;gap:22px;">
+  <div style="font-family:Kalam,cursive;font-size:190px;color:rgba(232,196,104,0.22);line-height:0.9;">1</div>
+  <h2 style="font-family:Kalam,cursive;font-size:82px;font-weight:700;margin:0;line-height:1.1;">Les relations de conjugaison et de grandissement</h2>
+  <p style="font-size:36px;color:#c9c2b0;margin:0;max-width:1300px;">Position et taille de l'image, mise au point.</p>
+</section>
+
+<section data-label="Repère · abscisses" data-screen-label="04" data-speaker-notes="Insister sur le signe : l'objet est à gauche de O, donc x_A est négatif. L'image réelle est à droite, x_A′ est positif." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:56px 92px;display:flex;flex-direction:column;justify-content:center;gap:24px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">a. Position et taille de l'image</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Un repère centré sur la lentille</h2>
+  <div style="display:flex;flex-direction:column;gap:14px;max-width:1700px;">
+    <div style="font-size:32px;line-height:1.45;text-wrap:pretty;">L'origine du repère est le <strong>centre optique O</strong> de la lentille. L'axe optique Δ est l'axe des <strong>abscisses</strong> <em>x</em> ; l'axe perpendiculaire passant par O est l'axe des <strong>ordonnées</strong> <em>y</em>.</div>
+    <div data-reveal="1" style="font-size:32px;line-height:1.45;text-wrap:pretty;">L'objet AB et l'image A′B′ sont repérés par les abscisses <em>x</em><sub>A</sub> de A et <em>x</em><sub>A′</sub> de A′.</div>
+  </div>
+  <svg id="deckRepX" viewBox="0 0 1780 520" style="width:1500px;height:auto;display:block;"></svg>
+</section>
+
+<section data-label="Anim · trois rayons" data-screen-label="05" data-speaker-notes="Rappel de 2nde. Faire prévoir chaque rayon avant de cliquer. À la dernière étape, on mesure x_A′ sur le schéma : le calcul de la diapo suivante doit donner la même valeur." style="background:#16261f;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:40px 70px 34px;display:flex;flex-direction:column;">
+  <div style="display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:10px;">
+    <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">a. Position et taille de l'image</div>
+    <h2 style="font-family:Kalam,cursive;font-size:50px;font-weight:700;margin:0;">✏️ Construire l'image avec trois rayons</h2>
+  </div>
+  <svg id="deckRaysSvg" viewBox="0 0 1780 640" style="width:100%;height:auto;display:block;flex:none;"></svg>
+  <div style="display:flex;gap:40px;align-items:center;margin-top:18px;">
+    <div style="display:flex;gap:12px;align-items:center;flex:none;">
+      <button id="deckRaysPrev" style="font-family:Kalam,cursive;font-size:30px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:10px 24px;cursor:pointer;">◀ Précédent</button>
+      <button id="deckRaysNext" style="font-family:Kalam,cursive;font-size:30px;background:#e8c468;color:#16261f;border:none;border-radius:10px;padding:12px 26px;cursor:pointer;">Suivant ▶</button>
+      <span id="deckRaysStep" style="font-size:26px;color:#c9c2b0;margin-left:10px;"></span>
+    </div>
+    <div id="deckRaysExplain" style="flex:1;font-size:30px;line-height:1.45;border-left:4px solid rgba(242,237,225,0.2);padding:8px 24px;min-height:100px;"></div>
+  </div>
+</section>
+
+<section data-label="Relation de conjugaison" data-screen-label="06" data-speaker-notes="La relation relie trois grandeurs : connaissant deux d'entre elles, on calcule la troisième. Piège fréquent : mélanger cm et m." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:56px 92px;display:flex;flex-direction:column;justify-content:center;gap:32px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">a. Position et taille de l'image</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Prévoir la position de l'image par le calcul</h2>
+  <div style="border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.07);border-radius:16px;padding:26px 36px;max-width:1700px;">
+    <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#e8c468;letter-spacing:0.06em;margin-bottom:10px;">📘 DÉFINITION</span>
+    <span style="font-size:33px;line-height:1.45;text-wrap:pretty;">Les abscisses <em>x</em><sub>A</sub>, <em>x</em><sub>A′</sub> et la distance focale <em>f</em>′ de la lentille ne sont pas indépendantes : elles sont reliées par la <strong>relation de conjugaison</strong>.</span>
+  </div>
+  <div data-reveal="1" style="display:flex;align-items:center;gap:60px;">
+    <div style="display:flex;align-items:center;gap:22px;font-family:Kalam,cursive;font-size:76px;color:#e8c468;border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.07);border-radius:16px;padding:16px 44px;">
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 14px 6px;">1</span><span style="border-bottom:4px solid #e8c468;width:100%;"></span><span style="padding:6px 14px 0;"><em>x</em><sub>A′</sub></span></div>
+      <span>−</span>
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 14px 6px;">1</span><span style="border-bottom:4px solid #e8c468;width:100%;"></span><span style="padding:6px 14px 0;"><em>x</em><sub>A</sub></span></div>
+      <span>=</span>
+      <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 14px 6px;">1</span><span style="border-bottom:4px solid #e8c468;width:100%;"></span><span style="padding:6px 14px 0;"><em>f</em>′</span></div>
+    </div>
+  </div>
+  <div data-reveal="2" style="border:2px solid rgba(217,122,99,0.5);background:rgba(217,122,99,0.08);border-radius:14px;padding:24px 34px;max-width:1700px;">
+    <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#d97a63;letter-spacing:0.06em;margin-bottom:10px;">⚠️ ATTENTION</span>
+    <span style="font-size:32px;line-height:1.45;text-wrap:pretty;"><em>x</em><sub>A</sub>, <em>x</em><sub>A′</sub> et <em>f</em>′ doivent être exprimées avec la <strong>même unité</strong> de longueur. Ce sont des grandeurs algébriques : <em>x</em><sub>A</sub> est négative pour un objet placé avant la lentille.</span>
+  </div>
+</section>
+
+<section data-label="Relation de grandissement" data-screen-label="07" data-speaker-notes="Le théorème de Thalès (triangles OAB et OA′B′) justifie l'égalité des deux rapports. Notation algébrique possible : x_A = OA barre, y_B = AB barre." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:52px 92px;display:flex;flex-direction:column;justify-content:center;gap:26px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">a. Position et taille de l'image</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Comparer la taille de l'image et celle de l'objet</h2>
+  <p style="font-size:32px;line-height:1.45;margin:0;max-width:1700px;text-wrap:pretty;">La <strong>relation de grandissement</strong> compare la taille de l'image et celle de l'objet. D'après le théorème de Thalès, ce rapport est aussi lié aux abscisses de l'objet et de l'image.</p>
+  <div style="display:flex;align-items:center;gap:40px;">
+    <svg id="deckRepY" viewBox="60 0 1460 520" style="width:1140px;height:auto;flex:none;display:block;"></svg>
+    <div style="flex:1;display:flex;flex-direction:column;gap:24px;min-width:0;">
+      <div data-reveal="1" style="display:flex;align-items:center;gap:18px;font-family:Kalam,cursive;font-size:56px;color:#e8c468;border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.07);border-radius:16px;padding:14px 28px;align-self:flex-start;">
+        <span>γ =</span>
+        <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 12px 5px;"><em>y</em><sub>B′</sub></span><span style="border-bottom:4px solid #e8c468;width:100%;"></span><span style="padding:5px 12px 0;"><em>y</em><sub>B</sub></span></div>
+        <span>=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;"><span style="padding:0 12px 5px;"><em>x</em><sub>A′</sub></span><span style="border-bottom:4px solid #e8c468;width:100%;"></span><span style="padding:5px 12px 0;"><em>x</em><sub>A</sub></span></div>
+      </div>
+      <div data-reveal="2" style="border:2px solid rgba(107,191,171,0.4);background:rgba(107,191,171,0.08);border-radius:14px;padding:22px 30px;">
+        <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#6bbfab;letter-spacing:0.06em;margin-bottom:10px;">📌 À RETENIR</span>
+        <div style="font-size:30px;line-height:1.5;">γ est algébrique et <strong>sans unité</strong>.<br>γ &lt; 0 : image <strong>renversée</strong> · γ &gt; 0 : image <strong>droite</strong><br>|γ| &gt; 1 : plus <strong>grande</strong> · |γ| &lt; 1 : plus <strong>petite</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Exemple · image réelle" data-screen-label="08" data-speaker-notes="Même exemple que la construction : on retrouve x_A′ = 15 cm et une image deux fois plus grande, renversée. Faire écrire la relation littérale isolée avant l'application numérique." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:52px 92px;display:flex;flex-direction:column;justify-content:center;gap:24px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">a. Position et taille de l'image</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Exemple : retrouver l'image par le calcul</h2>
+  <div style="font-size:33px;color:#c9c2b0;">Objet AB d'abscisse <em style="color:#f2ede1;">x</em><sub style="color:#f2ede1;">A</sub><span style="color:#f2ede1;"> = −7,5 cm</span> · lentille de distance focale <em style="color:#f2ede1;">f</em><span style="color:#f2ede1;">′ = 5,0 cm</span></div>
+  <div data-reveal="1" style="display:flex;align-items:center;gap:28px;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:18px 32px;flex-wrap:wrap;">
+    <span style="font-size:28px;color:#6bbfab;font-family:Kalam,cursive;min-width:220px;">Conjugaison</span>
+    <div style="display:flex;align-items:center;gap:14px;font-family:Kalam,cursive;font-size:44px;">
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;"><em>x</em><sub>A′</sub></span></span>
+      <span>=</span>
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;"><em>f</em>′</span></span>
+      <span>+</span>
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;"><em>x</em><sub>A</sub></span></span>
+      <span>=</span>
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;">5,0 cm</span></span>
+      <span>+</span>
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;">−7,5 cm</span></span>
+    </div>
+  </div>
+  <div data-reveal="2" style="display:flex;align-items:center;gap:28px;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:18px 32px;flex-wrap:wrap;">
+    <span style="font-size:28px;color:#6bbfab;font-family:Kalam,cursive;min-width:220px;">Position</span>
+    <span style="font-family:Kalam,cursive;font-size:48px;color:#e8c468;"><em>x</em><sub>A′</sub> = 15 cm</span>
+    <span style="font-size:30px;"><em>x</em><sub>A′</sub> &gt; 0 : l'image est <strong>réelle</strong>.</span>
+  </div>
+  <div data-reveal="3" style="display:flex;align-items:center;gap:28px;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:18px 32px;flex-wrap:wrap;">
+    <span style="font-size:28px;color:#6bbfab;font-family:Kalam,cursive;min-width:220px;">Grandissement</span>
+    <div style="display:flex;align-items:center;gap:14px;font-family:Kalam,cursive;font-size:44px;">
+      <span>γ =</span>
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;"><em>x</em><sub>A′</sub></span><span style="padding:4px 8px 0;"><em>x</em><sub>A</sub></span></span>
+      <span>=</span>
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">15 cm</span><span style="padding:4px 8px 0;">−7,5 cm</span></span>
+      <span style="color:#e8c468;">= −2,0</span>
+    </div>
+  </div>
+  <div data-reveal="4" style="border:2px solid rgba(107,191,171,0.4);background:rgba(107,191,171,0.08);border-radius:14px;padding:20px 32px;font-size:31px;line-height:1.45;">γ &lt; 0 : l'image est <strong>renversée</strong>. |γ| &gt; 1 : l'image est <strong>plus grande</strong> que l'objet (deux fois plus grande).</div>
+</section>
+
+<section data-label="Caractéristiques de l'image" data-screen-label="09" data-speaker-notes="Photo C du manuel : on forme sur un écran l'image d'un paysage lointain. La distance lentille–écran donne directement f′." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:52px 92px;display:flex;flex-direction:column;justify-content:center;gap:28px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">a. Position et taille de l'image</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Les caractéristiques de l'image</h2>
+  <div style="border:2px solid rgba(107,191,171,0.4);background:rgba(107,191,171,0.08);border-radius:14px;padding:24px 34px;max-width:1700px;">
+    <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#6bbfab;letter-spacing:0.06em;margin-bottom:10px;">📌 À RETENIR</span>
+    <span style="font-size:32px;line-height:1.45;text-wrap:pretty;">La <strong>position</strong>, la <strong>taille</strong> et le <strong>sens</strong> de l'image sont les caractéristiques de l'image. Elles sont déterminées graphiquement ou calculées à partir des relations de conjugaison et de grandissement. Elles dépendent donc de la lentille mince utilisée et des caractéristiques de l'objet.</span>
+  </div>
+  <div data-reveal="1" style="display:flex;gap:40px;align-items:center;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:24px 34px;max-width:1700px;">
+    <div style="flex:1;font-size:31px;line-height:1.45;text-wrap:pretty;">Lorsque l'objet est très éloigné de la lentille, 1 / <em>x</em><sub>A</sub> tend vers zéro. La relation de conjugaison devient :</div>
+    <div style="display:flex;align-items:center;gap:16px;font-family:Kalam,cursive;font-size:56px;color:#e8c468;flex:none;">
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 10px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 10px 0;"><em>x</em><sub>A′</sub></span></span>
+      <span>=</span>
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 10px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 10px 0;"><em>f</em>′</span></span>
+    </div>
+  </div>
+  <p data-reveal="2" style="font-size:32px;line-height:1.45;margin:0;max-width:1700px;text-wrap:pretty;">La distance entre la lentille et l'image est alors égale à la distance focale : la relation de conjugaison permet de <strong style="color:#e8c468;">déterminer la distance focale</strong> d'une lentille mince.</p>
+</section>
+
+<section data-label="Déf · mise au point" data-screen-label="10" data-speaker-notes="Œil : le cristallin change de forme, donc f′ change (accommodation). Appareil photo : l'objectif avance ou recule, donc la distance lentille–capteur change." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:56px 92px;display:flex;flex-direction:column;justify-content:center;gap:30px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">b. Mise au point</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Obtenir une image nette</h2>
+  <div style="border:2px solid rgba(232,196,104,0.45);background:rgba(232,196,104,0.07);border-radius:16px;padding:26px 36px;max-width:1700px;">
+    <span style="display:block;font-family:Kalam,cursive;font-size:26px;color:#e8c468;letter-spacing:0.06em;margin-bottom:10px;">📘 DÉFINITION</span>
+    <span style="font-size:33px;line-height:1.45;text-wrap:pretty;">Pour que l'image d'un objet se forme sur la rétine d'un œil ou sur le capteur d'un appareil photographique, il est nécessaire de réaliser une <strong>mise au point</strong>.</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;max-width:1700px;">
+    <div data-reveal="1" style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:26px 32px;display:flex;flex-direction:column;gap:10px;">
+      <span style="font-family:Kalam,cursive;font-size:40px;color:#e8c468;">Modifier <em>f</em>′</span>
+      <span style="font-size:30px;line-height:1.45;">On change la distance focale de la lentille mince convergente.</span>
+    </div>
+    <div data-reveal="2" style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:26px 32px;display:flex;flex-direction:column;gap:10px;">
+      <span style="font-family:Kalam,cursive;font-size:40px;color:#e8c468;">Modifier le montage</span>
+      <span style="font-size:30px;line-height:1.45;">On change la distance objet – lentille ou lentille – écran.</span>
+    </div>
+  </div>
+</section>
+
+<section data-label="Anim · mise au point" data-screen-label="11" data-speaker-notes="Seuls les rayons issus du point B sont tracés. Écran trop près ou trop loin : ils forment une tache, l'image est floue. Montrer les deux méthodes : déplacer l'écran, puis le laisser fixe et changer f′." style="background:#16261f;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:40px 70px 34px;display:flex;flex-direction:column;">
+  <div style="display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:10px;">
+    <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">b. Mise au point</div>
+    <h2 style="font-family:Kalam,cursive;font-size:50px;font-weight:700;margin:0;">🔎 Faire la mise au point</h2>
+  </div>
+  <svg id="deckFocusSvg" viewBox="0 0 1780 480" style="width:100%;height:auto;display:block;flex:none;"></svg>
+  <div style="display:flex;gap:44px;align-items:flex-start;margin-top:18px;">
+    <div style="width:520px;flex:none;display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <div id="deckFocusSL" style="font-family:Kalam,cursive;font-size:34px;color:#f2ede1;"></div>
+        <input type="range" id="deckFocusS" min="30" max="260" step="5" data-init="120" style="width:100%;height:36px;">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <div id="deckFocusFL" style="font-family:Kalam,cursive;font-size:34px;color:#f2ede1;"></div>
+        <input type="range" id="deckFocusF" min="30" max="90" step="5" data-init="50" style="width:100%;height:36px;">
+      </div>
+    </div>
+    <div id="deckFocusReadout" style="flex:1;display:flex;flex-direction:column;gap:8px;min-width:0;"></div>
+    <div style="flex:none;display:flex;flex-direction:column;gap:6px;">
+      <span style="font-size:24px;color:#c9c2b0;">Sur l'écran</span>
+      <svg id="deckFocusPrev" viewBox="0 0 400 300" style="width:300px;height:auto;display:block;"></svg>
+    </div>
+  </div>
+</section>
+
+<section data-label="Flash · conjugaison" data-screen-label="12" data-speaker-notes="Réponse : 20 cm. Pièges : oublier le signe de x_A (6,7 cm), ou répondre l'abscisse de l'objet (−20 cm)." style="background:#1d3229;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:70px 92px;display:flex;flex-direction:column;justify-content:center;gap:36px;">
+  <div style="display:inline-flex;align-self:flex-start;font-family:Kalam,cursive;font-size:28px;color:#16261f;background:#e8c468;border-radius:999px;padding:8px 26px;letter-spacing:0.04em;">Question flash</div>
+  <h2 style="font-family:Kalam,cursive;font-size:58px;font-weight:700;margin:0;line-height:1.15;max-width:1650px;text-wrap:pretty;">Un objet est placé en <em>x</em><sub>A</sub> = −20 cm devant une lentille de distance focale <em>f</em>′ = 10 cm. Où se forme l'image ?</h2>
+  <div data-reveal="1" style="display:flex;gap:26px;flex-wrap:wrap;">
+    <div style="border:2px solid #6bbfab;background:rgba(107,191,171,0.16);border-radius:14px;padding:26px 40px;font-size:36px;"><em>x</em><sub>A′</sub> = 20 cm ✅</div>
+    <div style="border:2px dashed rgba(242,237,225,0.2);border-radius:14px;padding:26px 40px;font-size:36px;color:#c9c2b0;"><em>x</em><sub>A′</sub> = 6,7 cm</div>
+    <div style="border:2px dashed rgba(242,237,225,0.2);border-radius:14px;padding:26px 40px;font-size:36px;color:#c9c2b0;"><em>x</em><sub>A′</sub> = −20 cm</div>
+  </div>
+  <div data-reveal="2" style="display:flex;align-items:center;gap:14px;font-size:34px;color:#c9c2b0;flex-wrap:wrap;">
+    <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;"><em>x</em><sub>A′</sub></span></span>
+    <span>=</span>
+    <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;">10</span></span>
+    <span>+</span>
+    <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;">−20</span></span>
+    <span>=</span>
+    <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;">20</span></span>
+    <span>donc <strong style="color:#e8c468;"><em>x</em><sub>A′</sub> = 20 cm</strong> : image réelle, et γ = 20 / (−20) = −1,0.</span>
+  </div>
+</section>
+
+<section data-label="§ 2 Position de l'objet" data-screen-label="13" data-speaker-notes="Deuxième partie : selon l'endroit où l'on place l'objet, l'image change de nature." style="background:#1d3229;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:70px 92px;display:flex;flex-direction:column;justify-content:center;gap:22px;">
+  <div style="font-family:Kalam,cursive;font-size:190px;color:rgba(232,196,104,0.22);line-height:0.9;">2</div>
+  <h2 style="font-family:Kalam,cursive;font-size:82px;font-weight:700;margin:0;line-height:1.1;">Le lien entre la position de l'objet et les caractéristiques de l'image</h2>
+  <p style="font-size:36px;color:#c9c2b0;margin:0;max-width:1300px;">Image réelle ou virtuelle, droite ou renversée.</p>
+</section>
+
+<section data-label="Deux cas" data-screen-label="14" data-speaker-notes="Situations du manuel : banc d'optique pour le premier cas, loupe pour le second. Pour un objet avant F, l'image peut être plus grande ou plus petite selon la distance." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:52px 92px;display:flex;flex-direction:column;justify-content:center;gap:26px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">Position de l'objet et caractéristiques de l'image</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Avant F ou entre F et O ?</h2>
+  <div style="display:grid;grid-template-columns:260px minmax(0,1fr) minmax(0,1fr);gap:0;border:1px solid rgba(242,237,225,0.16);border-radius:14px;overflow:hidden;max-width:1740px;">
+    <div style="padding:20px 24px;"></div>
+    <div style="padding:20px 28px;background:rgba(107,191,171,0.12);font-family:Kalam,cursive;font-size:36px;color:#6bbfab;">Objet AB avant le foyer objet F</div>
+    <div style="padding:20px 28px;background:rgba(217,122,99,0.12);font-family:Kalam,cursive;font-size:36px;color:#d97a63;">Objet AB entre F et O</div>
+
+    <div data-reveal="1" style="padding:22px 24px;border-top:1px solid rgba(242,237,225,0.16);font-size:26px;color:#c9c2b0;font-family:Kalam,cursive;">Nature</div>
+    <div data-reveal="1" style="padding:22px 28px;border-top:1px solid rgba(242,237,225,0.16);font-size:30px;line-height:1.4;">observable sur un écran : image <strong>réelle</strong>, <em>x</em><sub>A′</sub> &gt; 0</div>
+    <div data-reveal="1" style="padding:22px 28px;border-top:1px solid rgba(242,237,225,0.16);font-size:30px;line-height:1.4;">non observable sur un écran : image <strong>virtuelle</strong>, <em>x</em><sub>A′</sub> &lt; 0</div>
+
+    <div data-reveal="2" style="padding:22px 24px;border-top:1px solid rgba(242,237,225,0.16);font-size:26px;color:#c9c2b0;font-family:Kalam,cursive;">Sens</div>
+    <div data-reveal="2" style="padding:22px 28px;border-top:1px solid rgba(242,237,225,0.16);font-size:30px;line-height:1.4;">γ &lt; 0 : image <strong>renversée</strong></div>
+    <div data-reveal="2" style="padding:22px 28px;border-top:1px solid rgba(242,237,225,0.16);font-size:30px;line-height:1.4;">γ &gt; 0 : image <strong>droite</strong></div>
+
+    <div data-reveal="3" style="padding:22px 24px;border-top:1px solid rgba(242,237,225,0.16);font-size:26px;color:#c9c2b0;font-family:Kalam,cursive;">Taille</div>
+    <div data-reveal="3" style="padding:22px 28px;border-top:1px solid rgba(242,237,225,0.16);font-size:30px;line-height:1.4;">|γ| &gt; 1 : plus grande que l'objet<br>|γ| &lt; 1 : plus petite que l'objet</div>
+    <div data-reveal="3" style="padding:22px 28px;border-top:1px solid rgba(242,237,225,0.16);font-size:30px;line-height:1.4;">|γ| &gt; 1 : <strong>plus grande</strong> que l'objet</div>
+
+    <div data-reveal="4" style="padding:22px 24px;border-top:1px solid rgba(242,237,225,0.16);font-size:26px;color:#c9c2b0;font-family:Kalam,cursive;">Situation</div>
+    <div data-reveal="4" style="padding:22px 28px;border-top:1px solid rgba(242,237,225,0.16);font-size:30px;line-height:1.4;">projection sur un écran (banc d'optique)</div>
+    <div data-reveal="4" style="padding:22px 28px;border-top:1px solid rgba(242,237,225,0.16);font-size:30px;line-height:1.4;">observation à travers une <strong style="color:#e8c468;">loupe</strong></div>
+  </div>
+</section>
+
+<section data-label="Anim · position de l'objet" data-screen-label="15" data-speaker-notes="Partir loin à gauche, rapprocher l'objet pas à pas. Au passage de F, l'image part à l'infini puis réapparaît du même côté que l'objet, droite et agrandie : les rayons émergents divergent, on trace leurs prolongements en pointillés." style="background:#16261f;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:40px 70px 34px;display:flex;flex-direction:column;">
+  <div style="display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:10px;">
+    <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">Position de l'objet</div>
+    <h2 style="font-family:Kalam,cursive;font-size:50px;font-weight:700;margin:0;">🧭 Rapprocher l'objet de la lentille</h2>
+  </div>
+  <svg id="deckExpSvg" viewBox="0 0 1780 600" style="width:100%;height:auto;display:block;flex:none;"></svg>
+  <div style="display:flex;gap:44px;align-items:flex-start;margin-top:16px;">
+    <div style="width:520px;flex:none;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <div id="deckExpXL" style="font-family:Kalam,cursive;font-size:34px;color:#f2ede1;"></div>
+        <input type="range" id="deckExpX" min="-190" max="-10" step="5" data-init="-75" style="width:100%;height:36px;">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <div id="deckExpFL" style="font-family:Kalam,cursive;font-size:34px;color:#f2ede1;"></div>
+        <input type="range" id="deckExpF" min="30" max="80" step="5" data-init="50" style="width:100%;height:36px;">
+      </div>
+    </div>
+    <div id="deckExpReadout" style="flex:1;min-width:0;"></div>
+  </div>
+</section>
+
+<section data-label="Exemple · effet loupe" data-screen-label="16" data-speaker-notes="Même lentille qu'à l'exemple 1, objet rapproché entre F et O. x_A′ négatif : l'image est du même côté que l'objet, on la voit à travers la lentille." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:52px 92px;display:flex;flex-direction:column;justify-content:center;gap:24px;">
+  <div style="font-family:Kalam,cursive;font-size:30px;color:#6bbfab;">Position de l'objet et caractéristiques de l'image</div>
+  <h2 style="font-family:Kalam,cursive;font-size:60px;font-weight:700;margin:0;line-height:1.1;">Exemple : l'effet loupe</h2>
+  <div style="font-size:33px;color:#c9c2b0;">Objet AB d'abscisse <em style="color:#f2ede1;">x</em><sub style="color:#f2ede1;">A</sub><span style="color:#f2ede1;"> = −4,0 cm</span> · lentille de distance focale <em style="color:#f2ede1;">f</em><span style="color:#f2ede1;">′ = 5,0 cm</span></div>
+  <div data-reveal="1" style="display:flex;align-items:center;gap:28px;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:18px 32px;flex-wrap:wrap;">
+    <span style="font-size:28px;color:#6bbfab;font-family:Kalam,cursive;min-width:220px;">Conjugaison</span>
+    <div style="display:flex;align-items:center;gap:14px;font-family:Kalam,cursive;font-size:44px;">
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;"><em>x</em><sub>A′</sub></span></span>
+      <span>=</span>
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;">5,0 cm</span></span>
+      <span>+</span>
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;">−4,0 cm</span></span>
+    </div>
+  </div>
+  <div data-reveal="2" style="display:flex;align-items:center;gap:28px;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:18px 32px;flex-wrap:wrap;">
+    <span style="font-size:28px;color:#6bbfab;font-family:Kalam,cursive;min-width:220px;">Position</span>
+    <span style="font-family:Kalam,cursive;font-size:48px;color:#e8c468;"><em>x</em><sub>A′</sub> = −20 cm</span>
+    <span style="font-size:30px;"><em>x</em><sub>A′</sub> &lt; 0 : l'image est <strong>virtuelle</strong>.</span>
+  </div>
+  <div data-reveal="3" style="display:flex;align-items:center;gap:28px;border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.22);border-radius:14px;padding:18px 32px;flex-wrap:wrap;">
+    <span style="font-size:28px;color:#6bbfab;font-family:Kalam,cursive;min-width:220px;">Grandissement</span>
+    <div style="display:flex;align-items:center;gap:14px;font-family:Kalam,cursive;font-size:44px;">
+      <span>γ =</span>
+      <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">−20 cm</span><span style="padding:4px 8px 0;">−4,0 cm</span></span>
+      <span style="color:#e8c468;">= 5,0</span>
+    </div>
+  </div>
+  <div data-reveal="4" style="border:2px solid rgba(107,191,171,0.4);background:rgba(107,191,171,0.08);border-radius:14px;padding:20px 32px;font-size:31px;line-height:1.45;">γ &gt; 0 : l'image est <strong>droite</strong>. |γ| &gt; 1 : elle est <strong>plus grande</strong> que l'objet. Il s'agit d'un cas d'« <strong style="color:#e8c468;">effet loupe</strong> ».</div>
+</section>
+
+<section data-label="Flash · loupe" data-screen-label="17" data-speaker-notes="Réponse : 4,0. x_A′ = −24 cm. Pièges : oublier que les deux abscisses sont négatives (−4,0), ou inverser le rapport (0,25)." style="background:#1d3229;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:70px 92px;display:flex;flex-direction:column;justify-content:center;gap:36px;">
+  <div style="display:inline-flex;align-self:flex-start;font-family:Kalam,cursive;font-size:28px;color:#16261f;background:#e8c468;border-radius:999px;padding:8px 26px;letter-spacing:0.04em;">Question flash</div>
+  <h2 style="font-family:Kalam,cursive;font-size:58px;font-weight:700;margin:0;line-height:1.15;max-width:1650px;text-wrap:pretty;">Une loupe de distance focale <em>f</em>′ = 8,0 cm donne d'un timbre placé en <em>x</em><sub>A</sub> = −6,0 cm une image en <em>x</em><sub>A′</sub> = −24 cm. Que vaut le grandissement ?</h2>
+  <div data-reveal="1" style="display:flex;gap:26px;flex-wrap:wrap;">
+    <div style="border:2px solid #6bbfab;background:rgba(107,191,171,0.16);border-radius:14px;padding:26px 40px;font-size:36px;">γ = 4,0 ✅</div>
+    <div style="border:2px dashed rgba(242,237,225,0.2);border-radius:14px;padding:26px 40px;font-size:36px;color:#c9c2b0;">γ = −4,0</div>
+    <div style="border:2px dashed rgba(242,237,225,0.2);border-radius:14px;padding:26px 40px;font-size:36px;color:#c9c2b0;">γ = 0,25</div>
+  </div>
+  <p data-reveal="2" style="font-size:34px;line-height:1.5;margin:0;max-width:1560px;color:#c9c2b0;text-wrap:pretty;">γ = <em>x</em><sub>A′</sub> / <em>x</em><sub>A</sub> = (−24) / (−6,0) = <strong style="color:#e8c468;">4,0</strong> : image droite, quatre fois plus grande que le timbre.</p>
+</section>
+
+<section data-label="Récapitulatif" data-screen-label="18" data-speaker-notes="Diapo à photographier." style="background:#16261f;background-image:linear-gradient(rgba(242,237,225,0.09) 1px,transparent 1px),linear-gradient(90deg,rgba(242,237,225,0.09) 1px,transparent 1px);background-size:96px 96px,96px 96px;color:#f2ede1;font-family:'Space Grotesk',sans-serif;padding:56px 80px;display:flex;flex-direction:column;">
+  <h2 style="font-family:Kalam,cursive;font-size:58px;font-weight:700;margin:0 0 30px;line-height:1.1;">🗂️ L'essentiel du chapitre</h2>
+  <div style="flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:24px;">
+    <div style="border:2px solid rgba(232,196,104,0.4);background:rgba(232,196,104,0.07);border-radius:14px;padding:24px 28px;display:flex;flex-direction:column;justify-content:center;gap:12px;">
+      <div style="font-size:26px;color:#6bbfab;font-family:Kalam,cursive;">Relation de conjugaison</div>
+      <div style="display:flex;align-items:center;gap:12px;font-family:Kalam,cursive;font-size:42px;color:#e8c468;">
+        <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;"><em>x</em><sub>A′</sub></span></span>
+        <span>−</span>
+        <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;"><em>x</em><sub>A</sub></span></span>
+        <span>=</span>
+        <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;">1</span><span style="padding:4px 8px 0;"><em>f</em>′</span></span>
+      </div>
+      <div style="font-size:25px;color:#c9c2b0;">même unité de longueur pour les trois grandeurs</div>
+    </div>
+    <div style="border:2px solid rgba(232,196,104,0.4);background:rgba(232,196,104,0.07);border-radius:14px;padding:24px 28px;display:flex;flex-direction:column;justify-content:center;gap:12px;">
+      <div style="font-size:26px;color:#6bbfab;font-family:Kalam,cursive;">Relation de grandissement</div>
+      <div style="display:flex;align-items:center;gap:12px;font-family:Kalam,cursive;font-size:42px;color:#e8c468;">
+        <span>γ =</span>
+        <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;"><em>y</em><sub>B′</sub></span><span style="padding:4px 8px 0;"><em>y</em><sub>B</sub></span></span>
+        <span>=</span>
+        <span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;"><span style="border-bottom:3px solid currentColor;padding:0 8px 4px;align-self:stretch;text-align:center;"><em>x</em><sub>A′</sub></span><span style="padding:4px 8px 0;"><em>x</em><sub>A</sub></span></span>
+      </div>
+      <div style="font-size:25px;color:#c9c2b0;">sans unité</div>
+    </div>
+    <div style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.2);border-radius:14px;padding:24px 28px;display:flex;flex-direction:column;justify-content:center;gap:10px;">
+      <div style="font-size:26px;color:#6bbfab;font-family:Kalam,cursive;">Lire γ</div>
+      <div style="font-size:30px;line-height:1.45;">γ &lt; 0 : renversée · γ &gt; 0 : droite</div>
+      <div style="font-size:30px;line-height:1.45;">|γ| &gt; 1 : plus grande · |γ| &lt; 1 : plus petite</div>
+    </div>
+    <div style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.2);border-radius:14px;padding:24px 28px;display:flex;flex-direction:column;justify-content:center;gap:10px;">
+      <div style="font-size:26px;color:#6bbfab;font-family:Kalam,cursive;">Objet très éloigné</div>
+      <div style="font-family:Kalam,cursive;font-size:42px;color:#e8c468;"><em>x</em><sub>A′</sub> = <em>f</em>′</div>
+      <div style="font-size:25px;color:#c9c2b0;">permet de déterminer la distance focale</div>
+    </div>
+    <div style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.2);border-radius:14px;padding:24px 28px;display:flex;flex-direction:column;justify-content:center;gap:10px;">
+      <div style="font-size:26px;color:#6bbfab;font-family:Kalam,cursive;">Mise au point</div>
+      <div style="font-size:30px;line-height:1.45;">modifier <em>f</em>′ ou la géométrie du montage</div>
+      <div style="font-size:25px;color:#c9c2b0;">distances objet – lentille ou lentille – écran</div>
+    </div>
+    <div style="border:1px solid rgba(242,237,225,0.16);background:rgba(0,0,0,0.2);border-radius:14px;padding:24px 28px;display:flex;flex-direction:column;justify-content:center;gap:10px;">
+      <div style="font-size:26px;color:#6bbfab;font-family:Kalam,cursive;">Position de l'objet</div>
+      <div style="font-size:29px;line-height:1.45;"><strong style="color:#6bbfab;">avant F</strong> : réelle, renversée</div>
+      <div style="font-size:29px;line-height:1.45;"><strong style="color:#d97a63;">entre F et O</strong> : virtuelle, droite, agrandie (loupe)</div>
+    </div>
+  </div>
+</section>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    this.armReveals();
+    this.waitForSlides(0);
+  }
+
+  armReveals() {
+    document.querySelectorAll("[data-reveal]").forEach((el) => {
+      if (el.getAttribute("data-revealed") === "1") return;
+      el.style.opacity = "0";
+      el.style.transform = "translateY(10px)";
+      el.style.transition = "opacity .32s ease, transform .32s ease";
+    });
+    if (this._revealBound) return;
+    this._revealBound = true;
+    window.addEventListener("keydown", this.onRevealKey.bind(this), true);
+  }
+
+  onRevealKey(e) {
+    const t = e.composedPath ? e.composedPath()[0] : e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const fwd = ["ArrowRight", "PageDown", " ", "Spacebar", "ArrowDown"].indexOf(e.key) > -1;
+    const back = ["ArrowLeft", "PageUp", "ArrowUp"].indexOf(e.key) > -1;
+    if (!fwd && !back) return;
+    const slide = document.querySelector("[data-deck-active]");
+    if (!slide) return;
+    const items = Array.prototype.slice.call(slide.querySelectorAll("[data-reveal]"));
+    if (!items.length) return;
+    const group = (el) => el.getAttribute("data-reveal");
+    const shown = (el) => el.getAttribute("data-revealed") === "1";
+    if (fwd) {
+      const next = items.filter((el) => !shown(el))[0];
+      if (!next) return;
+      const g = group(next);
+      items.filter((el) => group(el) === g).forEach((el) => {
+        el.setAttribute("data-revealed", "1");
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+    } else {
+      const on = items.filter(shown);
+      if (!on.length) return;
+      const g = group(on[on.length - 1]);
+      items.filter((el) => group(el) === g).forEach((el) => {
+        el.removeAttribute("data-revealed");
+        el.style.opacity = "0";
+        el.style.transform = "translateY(10px)";
+      });
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }
+
+  waitForSlides(tries) {
+    const ids = ["deckRepX", "deckRepY", "deckRaysSvg", "deckFocusSvg", "deckExpSvg"];
+    const ready = ids.every((id) => document.getElementById(id))
+      && typeof window.initLensRays === "function"
+      && typeof window.initLensExplorer === "function";
+    if (ready) { this.initAnimations(); this.armReveals(); return; }
+    if (tries > 400) return;
+    requestAnimationFrame(() => this.waitForSlides(tries + 1));
+  }
+
+  initAnimations() {
+    if (this._animsDone) return;
+    this._animsDone = true;
+    document.querySelectorAll("input[type=range][data-init]").forEach((el) => { el.value = el.getAttribute("data-init"); });
+    initLensRepere({ svgId: "deckRepX", mode: "x" });
+    initLensRepere({ svgId: "deckRepY", mode: "y" });
+    initLensRays({ svgId: "deckRaysSvg", prevBtnId: "deckRaysPrev", nextBtnId: "deckRaysNext", stepId: "deckRaysStep", explainId: "deckRaysExplain" });
+    initFocusBench({ svgId: "deckFocusSvg", previewId: "deckFocusPrev", screenRangeId: "deckFocusS", fRangeId: "deckFocusF", screenLabelId: "deckFocusSL", fLabelId: "deckFocusFL", readoutId: "deckFocusReadout" });
+    initLensExplorer({ svgId: "deckExpSvg", xaRangeId: "deckExpX", fRangeId: "deckExpF", xaLabelId: "deckExpXL", fLabelId: "deckExpFL", readoutId: "deckExpReadout" });
+  }
+
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
