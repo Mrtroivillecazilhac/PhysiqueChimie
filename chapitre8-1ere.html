@@ -8,6 +8,23 @@
 <script src="animations-common.js"></script>
 <script src="animations-ch8.js"></script>
 <script src="modules-common.js"></script>
+<style>
+  /* ---------- Lien vers les slides du cours (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+  /* Blocs d'animation grand format, mis à l'échelle de la page */
+  .ch8-stage{ width:100%; position:relative; overflow:hidden; margin:10px 0 26px; border-radius:14px; }
+  .ch8-stage-inner{ position:absolute; top:0; left:0; width:1780px; box-sizing:border-box; padding:36px 50px 40px; transform-origin:0 0; background:#16261f; border:2px solid rgba(242,237,225,0.14); border-radius:30px; font-family:'Space Grotesk',sans-serif; color:#f2ede1; }
+  .ch8-stage-inner *{ box-sizing:border-box; }
+  .ch8-stage-inner button{ margin:0; box-shadow:none; }
+  .ch8-stage-inner button:disabled, .ch8-stage-inner input:disabled{ opacity:0.4; cursor:default; }
+  .ch8-stage-inner input[type=range]{ accent-color:#e8c468; }
+</style>
 </head>
 <body>
 
@@ -23,6 +40,7 @@
   <div class="badge-inline physique">Physique</div>
   <h1>Chapitre 8 — Couleurs</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch8-1ere.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -70,21 +88,26 @@
       La synthèse additive de deux lumières colorées de couleurs <strong>complémentaires</strong> donne du <strong>blanc</strong>.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Trois projecteurs colorés qui se superposent — règle leur intensité.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="asSvgCours" viewBox="0 0 220 180"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Rouge</label>
-        <input type="range" id="asRCours" min="0" max="100" value="100" step="5">
-        <label>Vert</label>
-        <input type="range" id="asGCours" min="0" max="100" value="100" step="5">
-        <label>Bleu</label>
-        <input type="range" id="asBCours" min="0" max="100" value="100" step="5">
-        <div class="anim-readout" id="asReadoutCours"></div>
-      </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle l'intensité des trois projecteurs, ou choisis directement une combinaison.</p>
+    <div class="ch8-stage"><div class="ch8-stage-inner">
+<svg id="webAddSvg" viewBox="0 0 1780 600" style="width:100%;height:auto;display:block;flex:none;"></svg>
+  <div style="display:flex;gap:44px;align-items:flex-start;margin-top:18px;">
+    <div style="width:520px;flex:none;display:flex;flex-direction:column;gap:6px;">
+      <div style="display:flex;flex-direction:column;gap:0;"><div id="webAddRL" style="font-family:Kalam,cursive;font-size:32px;"></div><input type="range" id="webAddR" min="0" max="100" step="5" value="100" style="width:100%;height:32px;"></div>
+      <div style="display:flex;flex-direction:column;gap:0;"><div id="webAddGL" style="font-family:Kalam,cursive;font-size:32px;"></div><input type="range" id="webAddG" min="0" max="100" step="5" value="100" style="width:100%;height:32px;"></div>
+      <div style="display:flex;flex-direction:column;gap:0;"><div id="webAddBL" style="font-family:Kalam,cursive;font-size:32px;"></div><input type="range" id="webAddB" min="0" max="100" step="5" value="100" style="width:100%;height:32px;"></div>
     </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:18px;min-width:0;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button id="webAddP0" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Les trois</button>
+        <button id="webAddP1" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Rouge + vert</button>
+        <button id="webAddP2" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Vert + bleu</button>
+        <button id="webAddP3" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Rouge + bleu</button>
+      </div>
+      <div id="webAddReadout"></div>
+    </div>
+  </div>
+</div></div>
   </section>
 
   <section>
@@ -96,6 +119,25 @@
     <p class="course-text">
       Deux types de cellules photoréceptrices : les <strong>bâtonnets</strong> (très sensibles à l'intensité, pas aux couleurs) et les <strong>cônes</strong> (qui détectent les couleurs, il en existe <strong>trois</strong> types).
     </p>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Fais varier la longueur d'onde et observe quels cônes sont stimulés, puis compare avec deux radiations superposées.</p>
+    <div class="ch8-stage"><div class="ch8-stage-inner">
+<svg id="webEyeSvg" viewBox="0 0 1780 560" style="width:100%;height:auto;display:block;flex:none;"></svg>
+  <div style="display:flex;gap:44px;align-items:flex-start;margin-top:18px;">
+    <div style="width:680px;flex:none;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button id="webEyeM0" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Une radiation</button>
+        <button id="webEyeM1" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Deux radiations</button>
+        <button id="webEyeM2" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Lumière blanche</button>
+      </div>
+      <div style="display:flex;gap:24px;">
+        <div style="flex:1;display:flex;flex-direction:column;gap:0;"><div id="webEyeL1L" style="font-family:Kalam,cursive;font-size:32px;"></div><input type="range" id="webEyeL1" min="400" max="700" step="5" value="575" style="width:100%;height:32px;"></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:0;"><div id="webEyeL2L" style="font-family:Kalam,cursive;font-size:32px;"></div><input type="range" id="webEyeL2" min="400" max="700" step="5" value="470" style="width:100%;height:32px;"></div>
+      </div>
+    </div>
+    <div id="webEyeReadout" style="flex:1;min-width:0;border-left:4px solid rgba(242,237,225,0.2);padding:6px 24px;"></div>
+  </div>
+</div></div>
   </section>
 
   <section>
@@ -104,6 +146,22 @@
       <span class="box-label">📘 Définition</span>
       Il y a <strong>absorption</strong> lorsqu'un objet absorbe une partie de la lumière incidente. Il y a <strong>diffusion</strong> lorsqu'un objet renvoie dans toutes les directions une partie de la lumière incidente. Il y a <strong>transmission</strong> lorsqu'un objet est traversé par une partie de la lumière incidente.
     </div>
+
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis un objet : la lumière blanche est représentée par ses composantes rouge, verte et bleue.</p>
+    <div class="ch8-stage"><div class="ch8-stage-inner">
+<svg id="webIntSvg" viewBox="0 0 1780 600" style="width:100%;height:auto;display:block;flex:none;"></svg>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;align-items:center;">
+    <span style="font-size:26px;color:#c9c2b0;margin-right:8px;">Objet éclairé :</span>
+    <button id="webIntO0" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Feuille blanche</button>
+    <button id="webIntO1" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Feuille rouge</button>
+    <button id="webIntO2" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Feuille jaune</button>
+    <button id="webIntO3" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Objet noir</button>
+    <button id="webIntO4" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Filtre rouge</button>
+    <button id="webIntO5" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Filtre cyan</button>
+    <button id="webIntO6" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Vitre</button>
+  </div>
+  <div id="webIntReadout" style="margin-top:16px;"></div>
+</div></div>
   </section>
 
   <section>
@@ -117,21 +175,27 @@
       La synthèse soustractive de deux lumières colorées de couleurs complémentaires donne du <strong>noir</strong>.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Trois filtres colorés superposés sur fond blanc — règle leur intensité.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="ssSvgCours" viewBox="0 0 220 180"></svg>
-      </div>
-      <div class="anim-controls">
-        <label>Cyan</label>
-        <input type="range" id="ssCCours" min="0" max="100" value="100" step="5">
-        <label>Magenta</label>
-        <input type="range" id="ssMCours" min="0" max="100" value="100" step="5">
-        <label>Jaune</label>
-        <input type="range" id="ssYCours" min="0" max="100" value="100" step="5">
-        <div class="anim-readout" id="ssReadoutCours"></div>
-      </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Règle les trois filtres. À droite, suis la lumière blanche composante par composante.</p>
+    <div class="ch8-stage"><div class="ch8-stage-inner">
+<svg id="webSubSvg" viewBox="0 0 1780 600" style="width:100%;height:auto;display:block;flex:none;"></svg>
+  <div style="display:flex;gap:44px;align-items:flex-start;margin-top:18px;">
+    <div style="width:520px;flex:none;display:flex;flex-direction:column;gap:6px;">
+      <div style="display:flex;flex-direction:column;gap:0;"><div id="webSubCL" style="font-family:Kalam,cursive;font-size:32px;"></div><input type="range" id="webSubC" min="0" max="100" step="5" value="100" style="width:100%;height:32px;"></div>
+      <div style="display:flex;flex-direction:column;gap:0;"><div id="webSubML" style="font-family:Kalam,cursive;font-size:32px;"></div><input type="range" id="webSubM" min="0" max="100" step="5" value="0" style="width:100%;height:32px;"></div>
+      <div style="display:flex;flex-direction:column;gap:0;"><div id="webSubYL" style="font-family:Kalam,cursive;font-size:32px;"></div><input type="range" id="webSubY" min="0" max="100" step="5" value="100" style="width:100%;height:32px;"></div>
     </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:18px;min-width:0;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button id="webSubP0" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Cyan + jaune</button>
+        <button id="webSubP1" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Cyan + magenta</button>
+        <button id="webSubP2" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Magenta + jaune</button>
+        <button id="webSubP3" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Les trois</button>
+        <button id="webSubP4" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Aucun</button>
+      </div>
+      <div id="webSubReadout"></div>
+    </div>
+  </div>
+</div></div>
   </section>
 
   <section>
@@ -140,33 +204,32 @@
       La couleur perçue d'un objet dépend de la lumière <strong>incidente</strong> qui l'éclaire, et des lumières colorées qu'il <strong>absorbe</strong>, diffuse et transmet.
     </p>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis un objet et une lumière : la couleur perçue dépend des deux.</p>
-    <p style="color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Lumière incidente</p>
-    <div class="toggle-row">
-      <button class="toggle-btn" id="pcBlancheCours">Blanche</button>
-      <button class="toggle-btn" id="pcRougeCours">Rouge</button>
-      <button class="toggle-btn" id="pcVerteCours">Verte</button>
-      <button class="toggle-btn" id="pcBleueCours">Bleue</button>
-    </div>
-    <p style="color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Couleur de l'objet</p>
-    <div class="toggle-row">
-      <button class="toggle-btn" id="pcObjBlancCours">Blanc</button>
-      <button class="toggle-btn" id="pcObjNoirCours">Noir</button>
-      <button class="toggle-btn" id="pcObjRougeCours">Rouge</button>
-      <button class="toggle-btn" id="pcObjVertCours">Vert</button>
-      <button class="toggle-btn" id="pcObjBleuCours">Bleu</button>
-      <button class="toggle-btn" id="pcObjJauneCours">Jaune</button>
-      <button class="toggle-btn" id="pcObjCyanCours">Cyan</button>
-      <button class="toggle-btn" id="pcObjMagentaCours">Magenta</button>
-    </div>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="pcSvgCours" viewBox="0 0 220 170"></svg>
-      </div>
-      <div class="anim-controls">
-        <div class="anim-readout" id="pcReadoutCours"></div>
-      </div>
-    </div>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis une lumière et un objet : la couleur perçue dépend des deux.</p>
+    <div class="ch8-stage"><div class="ch8-stage-inner">
+<svg id="webPcSvg" viewBox="0 0 1780 580" style="width:100%;height:auto;display:block;flex:none;"></svg>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;align-items:center;">
+    <span style="font-size:26px;color:#c9c2b0;width:120px;">Lumière</span>
+    <button id="webPcL0" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Blanche</button>
+    <button id="webPcL1" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Rouge</button>
+    <button id="webPcL2" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Verte</button>
+    <button id="webPcL3" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Bleue</button>
+    <button id="webPcL4" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Jaune</button>
+    <button id="webPcL5" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Cyan</button>
+    <button id="webPcL6" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Magenta</button>
+  </div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;align-items:center;">
+    <span style="font-size:26px;color:#c9c2b0;width:120px;">Objet</span>
+    <button id="webPcO0" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Blanc</button>
+    <button id="webPcO1" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Noir</button>
+    <button id="webPcO2" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Rouge</button>
+    <button id="webPcO3" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Vert</button>
+    <button id="webPcO4" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Bleu</button>
+    <button id="webPcO5" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Jaune</button>
+    <button id="webPcO6" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Cyan</button>
+    <button id="webPcO7" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:6px 18px;cursor:pointer;">Magenta</button>
+  </div>
+  <div id="webPcReadout" style="margin-top:14px;"></div>
+</div></div>
   </section>
 
 </div>
@@ -366,14 +429,14 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   if (correct === blanks.length) ProgressStore.record("ch8-1ere", "trous-complet", true);
 });
 
-/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initAdditiveSynthesis({ svgId: "asSvgCours", rRangeId: "asRCours", gRangeId: "asGCours", bRangeId: "asBCours", readoutId: "asReadoutCours" });
-initSubtractiveSynthesis({ svgId: "ssSvgCours", cRangeId: "ssCCours", mRangeId: "ssMCours", yRangeId: "ssYCours", readoutId: "ssReadoutCours" });
-initPerceivedColor({
-  svgId: "pcSvgCours", readoutId: "pcReadoutCours",
-  lightButtonIds: ["pcBlancheCours", "pcRougeCours", "pcVerteCours", "pcBleueCours"],
-  objectButtonIds: ["pcObjBlancCours", "pcObjNoirCours", "pcObjRougeCours", "pcObjVertCours", "pcObjBleuCours", "pcObjJauneCours", "pcObjCyanCours", "pcObjMagentaCours"]
-});
+/* ---------- Animations — mode "Cours" (nouvelles animations) ---------- */
+const ids = (p, n) => Array.from({ length: n }, (_, i) => p + i);
+initCh8Stages();
+initCh8Additive({ svgId: "webAddSvg", rId: "webAddR", gId: "webAddG", bId: "webAddB", rLId: "webAddRL", gLId: "webAddGL", bLId: "webAddBL", readoutId: "webAddReadout", presetIds: ids("webAddP", 4) });
+initCh8Eye({ svgId: "webEyeSvg", l1Id: "webEyeL1", l2Id: "webEyeL2", l1LId: "webEyeL1L", l2LId: "webEyeL2L", readoutId: "webEyeReadout", modeIds: ids("webEyeM", 3) });
+initCh8Interaction({ svgId: "webIntSvg", readoutId: "webIntReadout", objIds: ids("webIntO", 7) });
+initCh8Subtractive({ svgId: "webSubSvg", cId: "webSubC", mId: "webSubM", yId: "webSubY", cLId: "webSubCL", mLId: "webSubML", yLId: "webSubYL", readoutId: "webSubReadout", presetIds: ids("webSubP", 5) });
+initCh8Perceived({ svgId: "webPcSvg", readoutId: "webPcReadout", lightIds: ids("webPcL", 7), objIds: ids("webPcO", 8) });
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
 initAdditiveSynthesis({ svgId: "asSvg", rRangeId: "asR", gRangeId: "asG", bRangeId: "asB", readoutId: "asReadout" });

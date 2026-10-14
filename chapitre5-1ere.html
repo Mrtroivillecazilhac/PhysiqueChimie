@@ -45,6 +45,16 @@
   .avant-apres > div{ border:1px solid var(--line); background:rgba(0,0,0,0.18); border-radius:10px; padding:12px 14px; line-height:1.5; }
   .avant-apres .dot{ display:inline-block; width:16px; height:16px; border-radius:50%; vertical-align:-2px; margin-right:8px; border:1.5px solid var(--chalk-dim); }
 </style>
+<style>
+  /* ---------- Lien vers les slides du cours (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+</style>
 </head>
 <body>
 
@@ -60,6 +70,7 @@
   <div class="badge-inline chimie">Chimie</div>
   <h1>Chapitre 5 — Titrages colorimétriques</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch5-1ere.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">

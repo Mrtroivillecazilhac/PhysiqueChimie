@@ -21,6 +21,16 @@
   .ch6-stage-inner button{ margin:0; box-shadow:none; }
 </style>
 <template id="__bundler_thumbnail" data-bg-color="#16261f"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg"><path d="M240 400 Q345 240 450 400 T660 400 T870 400 T960 400" fill="none" stroke="#e8c468" stroke-width="28" stroke-linecap="round"/></svg></template>
+<style>
+  /* ---------- Lien vers les slides du cours (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+</style>
 </head>
 <body>
 
@@ -36,6 +46,7 @@
   <div class="badge-inline physique">Physique</div>
   <h1>Chapitre 6 — Ondes mécaniques</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch6-1ere.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">

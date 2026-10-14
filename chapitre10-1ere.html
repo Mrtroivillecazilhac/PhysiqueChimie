@@ -5,9 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 10 — Cohésion de la matière — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
 <script src="animations-common.js"></script>
 <script src="animations-ch10.js"></script>
 <script src="modules-common.js"></script>
+<style>
+  /* ---------- Lien vers les slides du cours (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+  /* Blocs d'animation grand format, mis à l'échelle de la page */
+  .ch10-stage{ width:100%; position:relative; overflow:hidden; margin:10px 0 26px; border-radius:14px; }
+  .ch10-stage-inner{ position:absolute; top:0; left:0; width:1780px; box-sizing:border-box; padding:36px 50px 40px; transform-origin:0 0; background:#16261f; border:2px solid rgba(242,237,225,0.14); border-radius:30px; font-family:'Space Grotesk',sans-serif; color:#f2ede1; }
+  .ch10-stage-inner *{ box-sizing:border-box; }
+  .ch10-stage-inner button{ margin:0; box-shadow:none; }
+  .ch10-stage-inner button:disabled{ opacity:0.4; cursor:default; }
+</style>
 </head>
 <body>
 
@@ -23,6 +40,7 @@
   <div class="badge-inline chimie">Chimie</div>
   <h1>Chapitre 10 — Cohésion de la matière</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch10-1ere.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -81,23 +99,11 @@
     </p>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Trois types d'interactions, trois intensités très différentes.</p>
-    <div class="toggle-row">
-      <button class="toggle-btn" id="icVdwCours">Van der Waals</button>
-      <button class="toggle-btn" id="icHydCours">Liaison hydrogène</button>
-      <button class="toggle-btn" id="icIonCours">Ionique</button>
-    </div>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="icSvgCours" viewBox="0 0 220 150"></svg>
-      </div>
-      <div class="anim-wrap">
-        <p style="text-align:center; color:var(--chalk-dim); font-size:0.8rem; margin-bottom:4px;">Intensité relative</p>
-        <svg id="icBarsSvgCours" viewBox="0 0 220 130"></svg>
-      </div>
-      <div class="anim-controls">
-        <div class="anim-readout" id="icReadoutCours"></div>
-      </div>
-    </div>
+    <div class="ch10-stage"><div class="ch10-stage-inner">
+      <svg id="icSvgCours" viewBox="0 0 1780 600" style="width:100%;height:auto;display:block;"></svg>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;"><button id="icT0Cours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Van der Waals</button><button id="icT1Cours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Liaison hydrogène</button><button id="icT2Cours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Ionique</button></div>
+      <div id="icReadoutCours" style="margin-top:14px;"></div>
+    </div></div>
   </section>
 
   <section>
@@ -120,31 +126,11 @@
     </div>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Les trois étapes de la dissolution, présentées l'une après l'autre.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="dsSvgCours" viewBox="0 0 220 200"></svg>
-      </div>
-      <div class="anim-controls" style="min-width:280px;">
-        <div class="anim-readout" id="dsExplainCours" style="min-height:4.5em;"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
-          <button id="dsPrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
-          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="dsStepCours"></span>
-          <button id="dsNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
-        </div>
-      </div>
-    </div>
-    <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:16px; font-size:0.78rem; color:var(--chalk-dim);">
-      <span><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--yellow); vertical-align:middle; margin-right:5px;"></span>Na⁺</span>
-      <span><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--teal); vertical-align:middle; margin-right:5px;"></span>Cl⁻</span>
-      <span style="display:inline-flex; align-items:center; gap:1px;">
-        <span style="display:inline-flex; flex-direction:column; gap:1px; margin-right:5px;">
-          <span style="width:7px; height:7px; border-radius:50%; background:var(--chalk); display:inline-block;"></span>
-          <span style="width:7px; height:7px; border-radius:50%; background:var(--chalk); display:inline-block;"></span>
-        </span>
-        <span style="width:14px; height:14px; border-radius:50%; background:var(--coral); display:inline-block; margin-right:5px;"></span>
-        molécule d'eau (H₂O)
-      </span>
-    </div>
+    <div class="ch10-stage"><div class="ch10-stage-inner">
+      <svg id="dsSvgCours" viewBox="0 0 1780 600" style="width:100%;height:auto;display:block;"></svg>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;align-items:center;"><div style="flex:1;"></div><button id="dsPrevCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">◀ Précédent</button><span id="dsStepCours" style="font-family:Kalam,cursive;font-size:30px;color:#c9c2b0;min-width:170px;text-align:center;"></span><button id="dsNextCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#e8c468;border:2px solid #e8c468;border-radius:10px;padding:8px 20px;cursor:pointer;">Suivant ▶</button></div>
+      <div id="dsReadoutCours" style="margin-top:14px;"></div>
+    </div></div>
   </section>
 
   <section>
@@ -170,19 +156,11 @@
     </p>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Un problème à résoudre, du bécher jusqu'au robinet.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="leSvgCours" viewBox="0 0 220 290"></svg>
-      </div>
-      <div class="anim-controls" style="min-width:280px;">
-        <div class="anim-readout" id="leExplainCours" style="min-height:5em;"></div>
-        <div class="actions" style="justify-content:flex-start; margin-top:10px;">
-          <button id="lePrevCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">◀ Précédent</button>
-          <span style="color:var(--chalk-dim); font-size:0.8rem; align-self:center;" id="leStepCours"></span>
-          <button id="leNextCours" style="background:transparent; border:1px solid var(--line); color:var(--chalk-dim); font-family:var(--font-body); font-size:0.85rem; padding:8px 14px;">Suivant ▶</button>
-        </div>
-      </div>
-    </div>
+    <div class="ch10-stage"><div class="ch10-stage-inner">
+      <svg id="leSvgCours" viewBox="0 0 1780 600" style="width:100%;height:auto;display:block;"></svg>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;align-items:center;"><div style="flex:1;"></div><button id="lePrevCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">◀ Précédent</button><span id="leStepCours" style="font-family:Kalam,cursive;font-size:30px;color:#c9c2b0;min-width:170px;text-align:center;"></span><button id="leNextCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#e8c468;border:2px solid #e8c468;border-radius:10px;padding:8px 20px;cursor:pointer;">Suivant ▶</button></div>
+      <div id="leReadoutCours" style="margin-top:14px;"></div>
+    </div></div>
   </section>
 
 </div>
@@ -382,13 +360,11 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   if (correct === blanks.length) ProgressStore.record("ch10-1ere", "trous-complet", true);
 });
 
-/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initInteractionComparator({
-  svgId: "icSvgCours", svgBarsId: "icBarsSvgCours", readoutId: "icReadoutCours",
-  btnIonId: "icIonCours", btnVdwId: "icVdwCours", btnHydId: "icHydCours"
-});
-initDissolutionSteps({ svgId: "dsSvgCours", explainId: "dsExplainCours", prevBtnId: "dsPrevCours", nextBtnId: "dsNextCours", stepId: "dsStepCours" });
-initLiquidExtraction({ svgId: "leSvgCours", explainId: "leExplainCours", prevBtnId: "lePrevCours", nextBtnId: "leNextCours", stepId: "leStepCours" });
+/* ---------- Animations — instance "Cours" (grand format) ---------- */
+initCh10Interactions({ svgId: "icSvgCours", readoutId: "icReadoutCours", typeIds: ["icT0Cours", "icT1Cours", "icT2Cours"] });
+initCh10Dissolution({ svgId: "dsSvgCours", readoutId: "dsReadoutCours", stepId: "dsStepCours", prevId: "dsPrevCours", nextId: "dsNextCours" });
+initCh10Extraction({ svgId: "leSvgCours", readoutId: "leReadoutCours", stepId: "leStepCours", prevId: "lePrevCours", nextId: "leNextCours" });
+initCh10Stages();
 
 /* ---------- Animations — instance "Entraînement" (avec activités) ---------- */
 initInteractionComparator({

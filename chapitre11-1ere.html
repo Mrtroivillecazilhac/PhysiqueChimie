@@ -5,9 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapitre 11 — Forces et champs — 1ère spé PC</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
 <script src="animations-common.js"></script>
-<script src="animations-ch11.js"></script>
+<script src="animations-ch11.js?v=2"></script>
 <script src="modules-common.js"></script>
+<style>
+  /* ---------- Lien vers les slides du cours (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+  /* Blocs d'animation grand format, mis à l'échelle de la page */
+  .ch11-stage{ width:100%; position:relative; overflow:hidden; margin:10px 0 26px; border-radius:14px; }
+  .ch11-stage-inner{ position:absolute; top:0; left:0; width:1780px; box-sizing:border-box; padding:36px 50px 40px; transform-origin:0 0; background:#16261f; border:2px solid rgba(242,237,225,0.14); border-radius:30px; font-family:'Space Grotesk',sans-serif; color:#f2ede1; }
+  .ch11-stage-inner *{ box-sizing:border-box; }
+  .ch11-stage-inner button{ margin:0; box-shadow:none; }
+  .ch11-stage-inner input[type=range]{ height:auto; }
+</style>
 </head>
 <body>
 
@@ -23,6 +40,7 @@
   <div class="badge-inline physique">Physique</div>
   <h1>Chapitre 11 — Forces et champs</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
+  <a class="slides-link" href="slides/ch11-1ere.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
 </header>
 
 <div class="progress-wrap">
@@ -108,32 +126,33 @@
     </p>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Bascule entre gravitation et électrostatique : observe le sens de la force (et son intensité) dans chaque cas.</p>
-    <div class="toggle-row">
-      <button class="toggle-btn" id="fsModeCours">⚛️ Gravitation</button>
-      <button class="toggle-btn" id="fsSignACours">A: +</button>
-      <button class="toggle-btn" id="fsSignBCours">B: +</button>
-    </div>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="fsSvgCours" viewBox="0 0 260 140"></svg>
+    <div class="ch11-stage"><div class="ch11-stage-inner">
+      <svg id="c11FsSvgCours" viewBox="0 0 1780 600" style="width:100%;height:auto;display:block;flex:none;"></svg>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;align-items:center;">
+      <button id="c11FsGravCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Gravitation</button>
+      <button id="c11FsElecCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Électrostatique</button>
+      <button id="c11FsSignACours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;min-width:110px;">A : +</button>
+      <button id="c11FsSignBCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;min-width:110px;">B : +</button>
+      <div style="flex:1;"></div>
+      <div style="display:flex;align-items:center;gap:8px;"><span style="font-family:Kalam,cursive;font-size:30px;color:#c9c2b0;margin-right:4px;">A</span><button id="c11FsAmCours" style="font-family:Kalam,cursive;font-size:32px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;width:52px;height:52px;padding:0;cursor:pointer;line-height:1;">−</button><span id="c11FsAvCours" style="font-family:Kalam,cursive;font-size:32px;color:#e8c468;min-width:52px;text-align:center;">2</span><button id="c11FsApCours" style="font-family:Kalam,cursive;font-size:32px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;width:52px;height:52px;padding:0;cursor:pointer;line-height:1;">+</button></div>
+      <div style="display:flex;align-items:center;gap:8px;"><span style="font-family:Kalam,cursive;font-size:30px;color:#c9c2b0;margin-right:4px;">B</span><button id="c11FsBmCours" style="font-family:Kalam,cursive;font-size:32px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;width:52px;height:52px;padding:0;cursor:pointer;line-height:1;">−</button><span id="c11FsBvCours" style="font-family:Kalam,cursive;font-size:32px;color:#e8c468;min-width:52px;text-align:center;">2</span><button id="c11FsBpCours" style="font-family:Kalam,cursive;font-size:32px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;width:52px;height:52px;padding:0;cursor:pointer;line-height:1;">+</button></div>
+      <div style="display:flex;align-items:center;gap:8px;"><span style="font-family:Kalam,cursive;font-size:30px;color:#c9c2b0;margin-right:4px;">d</span><button id="c11FsDmCours" style="font-family:Kalam,cursive;font-size:32px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;width:52px;height:52px;padding:0;cursor:pointer;line-height:1;">−</button><span id="c11FsDvCours" style="font-family:Kalam,cursive;font-size:32px;color:#e8c468;min-width:52px;text-align:center;">2</span><button id="c11FsDpCours" style="font-family:Kalam,cursive;font-size:32px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;width:52px;height:52px;padding:0;cursor:pointer;line-height:1;">+</button></div>
       </div>
-      <div class="anim-controls">
-        <label>Masse / charge A</label>
-        <input type="range" id="fsACours" min="1" max="10" value="5" step="1">
-        <label>Masse / charge B</label>
-        <input type="range" id="fsBCours" min="1" max="10" value="5" step="1">
-        <label>Distance d</label>
-        <input type="range" id="fsDCours" min="20" max="100" value="50" step="5">
-        <div class="anim-readout" id="fsReadoutCours"></div>
-      </div>
-    </div>
+      <div id="c11FsReadoutCours" style="margin-top:14px;"></div>
+    </div></div>
 
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem; margin-top:20px;">👉 Les deux forces suivent la même loi en 1/d² : voici à quelle vitesse ça diminue avec la distance.</p>
-    <div class="anim-zone">
-      <div class="anim-wrap" style="width:100%; max-width:340px;">
-        <svg id="fdSvgCours" viewBox="0 0 300 140"></svg>
+    <div class="ch11-stage"><div class="ch11-stage-inner">
+      <svg id="c11FdSvgCours" viewBox="0 0 1780 600" style="width:100%;height:auto;display:block;flex:none;"></svg>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;align-items:center;">
+      <button id="c11FdP0Cours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 24px;cursor:pointer;">d</button>
+      <button id="c11FdP1Cours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 24px;cursor:pointer;">2d</button>
+      <button id="c11FdP2Cours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 24px;cursor:pointer;">3d</button>
+      <button id="c11FdP3Cours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 24px;cursor:pointer;">4d</button>
+      <button id="c11FdP4Cours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 24px;cursor:pointer;">5d</button>
       </div>
-    </div>
+      <div id="c11FdReadoutCours" style="margin-top:14px;"></div>
+    </div></div>
   </section>
 
   <section>
@@ -164,20 +183,21 @@
       Les lignes de champ électrostatique <strong>divergent</strong> depuis une charge positive, et <strong>convergent</strong> vers une charge négative.
     </div>
 
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis la source : observe si les lignes de champ convergent ou divergent.</p>
-    <div class="toggle-row">
-      <button class="toggle-btn" id="flMasseCours">⚪ Masse</button>
-      <button class="toggle-btn" id="flPosCours">➕ Charge positive</button>
-      <button class="toggle-btn" id="flNegCours">➖ Charge négative</button>
-    </div>
-    <div class="anim-zone">
-      <div class="anim-wrap">
-        <svg id="flSvgCours" viewBox="0 0 260 200"></svg>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis la source : observe si les lignes de champ convergent ou divergent, puis la force subie par un objet test.</p>
+    <div class="ch11-stage"><div class="ch11-stage-inner">
+      <svg id="c11FmSvgCours" viewBox="0 0 1780 600" style="width:100%;height:auto;display:block;flex:none;"></svg>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;align-items:center;">
+      <button id="c11FmMasseCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Masse</button>
+      <button id="c11FmPosCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Charge +</button>
+      <button id="c11FmNegCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Charge −</button>
+      <div style="width:30px;"></div>
+      <button id="c11FmVecCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Vecteurs champ</button>
+      <button id="c11FmLinesCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">Lignes de champ</button>
+      <div style="flex:1;"></div>
+      <button id="c11FmTestCours" style="font-family:Kalam,cursive;font-size:28px;background:transparent;color:#f2ede1;border:2px solid rgba(242,237,225,0.35);border-radius:10px;padding:8px 20px;cursor:pointer;">objet test : q &gt; 0</button>
       </div>
-      <div class="anim-controls">
-        <div class="anim-readout" id="flReadoutCours"></div>
-      </div>
-    </div>
+      <div id="c11FmReadoutCours" style="margin-top:14px;"></div>
+    </div></div>
   </section>
 
 </div>
@@ -404,13 +424,11 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   if (correct === blanks.length) ProgressStore.record("ch11-1ere", "trous-complet", true);
 });
 
-/* ---------- Animations — instance "Cours" (exploration libre) ---------- */
-initForceSimulator({
-  svgId: "fsSvgCours", modeBtnId: "fsModeCours", sliderAId: "fsACours", sliderBId: "fsBCours",
-  sliderDId: "fsDCours", signABtnId: "fsSignACours", signBBtnId: "fsSignBCours", readoutId: "fsReadoutCours"
-});
-initFieldDistance({ svgId: "fdSvgCours" });
-initFieldLines({ svgId: "flSvgCours", btnMasseId: "flMasseCours", btnPosId: "flPosCours", btnNegId: "flNegCours", readoutId: "flReadoutCours" });
+/* ---------- Animations — instance "Cours" (grand format) ---------- */
+initCh11Interaction({ svgId: "c11FsSvgCours", readoutId: "c11FsReadoutCours", gravId: "c11FsGravCours", elecId: "c11FsElecCours", signAId: "c11FsSignACours", signBId: "c11FsSignBCours", steppers: { A: ["c11FsAmCours", "c11FsApCours", "c11FsAvCours"], B: ["c11FsBmCours", "c11FsBpCours", "c11FsBvCours"], D: ["c11FsDmCours", "c11FsDpCours", "c11FsDvCours"] } });
+initCh11Decay({ svgId: "c11FdSvgCours", readoutId: "c11FdReadoutCours", ptIds: ["c11FdP0Cours", "c11FdP1Cours", "c11FdP2Cours", "c11FdP3Cours", "c11FdP4Cours"] });
+initCh11FieldMap({ svgId: "c11FmSvgCours", readoutId: "c11FmReadoutCours", srcIds: ["c11FmMasseCours", "c11FmPosCours", "c11FmNegCours"], viewIds: ["c11FmVecCours", "c11FmLinesCours"], testId: "c11FmTestCours" });
+initCh11Stages();
 
 /* ---------- Animations — instance "Entraînement" (avec activité) ---------- */
 initForceSimulator({
