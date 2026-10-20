@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte des grandeurs — Chimie 2nde, chapitres 1 à 3</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.carte-wrap{max-width:1140px;margin:0 auto 60px;padding:0 20px;}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:0 0 16px;}
+.tb-left,.tb-right{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.prog{font-family:var(--font-body);font-size:0.95rem;color:var(--chalk);}
+.prog b{color:var(--yellow);font-family:var(--font-display);font-size:1.15rem;}
+.btn{font-family:var(--font-body);font-size:0.92rem;border-radius:999px;padding:8px 16px;cursor:pointer;border:1px solid var(--teal);background:transparent;color:var(--teal);transition:background .2s,color .2s;}
+.btn:hover:not(:disabled){background:var(--teal);color:var(--board);}
+.btn.main{background:var(--yellow);border-color:var(--yellow);color:var(--board);font-weight:600;}
+.btn.main:hover:not(:disabled){background:#f0d488;color:var(--board);}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+.btn.ghost{border-color:var(--line);color:var(--chalk-dim);}
+.btn[hidden]{display:none!important;}
+.seg{display:inline-flex;border:1px solid var(--teal);border-radius:999px;overflow:hidden;}
+.seg[hidden]{display:none!important;}
+.seg button{font-family:var(--font-body);font-size:0.92rem;padding:8px 16px;border:0;background:transparent;color:var(--teal);cursor:pointer;}
+.seg button.on{background:var(--teal);color:var(--board);font-weight:600;}
+.chk{display:inline-flex;gap:6px;align-items:center;font-family:var(--font-body);font-size:0.92rem;color:var(--chalk-dim);cursor:pointer;}
+.msg{font-family:var(--font-body);font-size:0.92rem;color:var(--chalk-dim);margin:-6px 0 14px;min-height:1.3em;}
+.score{font-family:var(--font-display);font-size:1.3rem;color:var(--yellow);}
+.stage{width:100%;overflow-x:auto;overflow-y:hidden;}
+.stage-inner{position:relative;}
+.sheet{width:1100px;height:778px;box-sizing:border-box;padding:18px 36px;display:flex;flex-direction:column;gap:10px;background:#fff;color:#000;font-family:'Space Grotesk',sans-serif;transform-origin:0 0;position:absolute;left:0;top:0;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.35);}
+.sheet input,.sheet button{font-family:'Space Grotesk',sans-serif;color:#000;}
+.sh-head{display:flex;flex-direction:column;gap:4px;border-bottom:2px solid #000;padding-bottom:8px;}
+.sh-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;font-size:16px;}
+.kicker{letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.who{display:flex;gap:20px;align-items:flex-end;}
+.who label{display:flex;gap:6px;align-items:flex-end;white-space:nowrap;}
+input.line{border:0;border-bottom:1px dotted #000;font-size:16px;padding:0 2px;height:20px;background:transparent;outline:none;}
+.sh-title{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;}
+.sh-title h2{margin:0;font-family:'Kalam',cursive;font-weight:700;font-size:40px;line-height:1.05;white-space:nowrap;color:#000;}
+.consigne{font-size:17px;line-height:1.3;max-width:560px;text-align:right;}
+.map{position:relative;width:1028px;height:470px;flex:none;}
+.map svg{position:absolute;left:0;top:0;}
+.map line{stroke:#000;stroke-width:2;}
+.node{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:12px;padding:8px 16px;border:2px solid #000;border-radius:14px;background:#fff;white-space:nowrap;}
+.sym{font-size:34px;font-style:italic;font-weight:600;line-height:1;}
+.sheet sub{font-size:.6em;vertical-align:sub;line-height:0;}
+.nl{display:flex;flex-direction:column;gap:2px;}
+.nm{font-size:19px;line-height:1.15;}
+.nm.b{font-weight:600;}
+.u{font-size:17px;display:flex;gap:4px;align-items:flex-end;}
+.hub{position:absolute;transform:translate(-50%,-50%);height:44px;box-sizing:border-box;border:1.5px solid #000;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;}
+.hint{position:absolute;font-size:17px;font-style:italic;color:#333;white-space:nowrap;line-height:1.15;display:none;}
+.show-hints .hint{display:block;}
+.foot{display:grid;grid-template-columns:1.4fr 1.02fr 1.03fr 1.05fr;gap:12px;margin-top:auto;}
+.box{border:1.5px solid #000;border-radius:10px;padding:8px 12px;display:flex;flex-direction:column;gap:5px;min-width:0;}
+.bt{font-family:'Kalam',cursive;font-weight:700;font-size:18px;line-height:1.1;text-transform:uppercase;letter-spacing:.04em;}
+.bt .up{text-transform:uppercase;} .bt .sg{font-family:'Space Grotesk',sans-serif;text-transform:none;}
+.row{font-size:17px;display:flex;gap:6px;align-items:flex-end;white-space:nowrap;line-height:1.25;}
+.f{position:relative;display:inline-flex;align-items:flex-end;}
+.pick{display:inline-flex;align-items:flex-end;justify-content:space-between;gap:4px;border:0;border-bottom:1px dotted #000;background:#f4f1e8;font-size:16px;font-weight:600;padding:0 3px;height:22px;cursor:pointer;border-radius:3px 3px 0 0;white-space:nowrap;}
+.pick:hover,.pick.open{background:#e6e0cf;}
+.pick:focus-visible{outline:2px solid #000;outline-offset:1px;}
+.pick .car{font-size:11px;color:#555;line-height:20px;font-weight:400;}
+.pick .val:empty::before{content:"choisir";font-weight:400;color:#8a8577;font-style:italic;font-size:14px;}
+.f.fh{width:100%;height:100%;}
+.f.fh .pick{width:100%;height:100%;border:0;justify-content:center;align-items:center;font-size:17px;border-radius:6px;padding:0 6px;}
+.f.fh .pick .car{position:absolute;right:6px;bottom:2px;line-height:1;}
+.f .ans{display:none;font-weight:700;font-size:17px;white-space:nowrap;}
+.f.fh .ans{width:100%;height:100%;align-items:center;justify-content:center;font-size:18px;font-weight:600;}
+.view-corr .f .pick{display:none;}
+.view-corr .f .ans{display:inline;}
+.view-corr .f.fh .ans{display:flex;}
+.view-corr .f .mk{display:none!important;}
+.f .mk{display:none;font-size:15px;font-weight:700;margin-left:2px;line-height:1;}
+.checked .f .mk{display:inline;}
+.f.ok .mk::after{content:"✓";color:#1f7a4d;}
+.f.ko .mk::after{content:"✗";color:#b23a2a;}
+.f.fh .mk{position:absolute;right:-9px;top:-9px;width:18px;height:18px;border-radius:50%;background:#fff;border:1.5px solid #000;display:none;align-items:center;justify-content:center;font-size:12px;margin:0;}
+.checked .f.fh .mk{display:flex;}
+.checked .f.ko .pick .val{text-decoration:line-through;text-decoration-color:#b23a2a;}
+.pop{position:absolute;z-index:20;background:#fff;border:1.5px solid #000;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.25);padding:4px;display:flex;flex-direction:column;min-width:120px;max-height:330px;overflow:auto;}
+.pop[hidden]{display:none;}
+.pop button{border:0;background:transparent;text-align:left;font-size:17px;padding:6px 12px;border-radius:5px;cursor:pointer;white-space:nowrap;}
+.pop button:hover,.pop button:focus{background:#f0ece0;outline:none;}
+.pop button.sel{font-weight:700;background:#e6e0cf;}
+.pop button.clear{font-size:14px;color:#6b665a;font-style:italic;border-top:1px solid #ddd;border-radius:0 0 5px 5px;margin-top:2px;}
+.print-note{font-family:var(--font-body);font-size:0.85rem;color:var(--chalk-dim);margin-top:14px;}
+@media print{
+  @page{size:297mm 210mm;margin:12mm;}
+  html,body{background:#fff!important;margin:0!important;padding:0!important;min-height:0!important;}
+  body>*:not(#carteRoot){display:none!important;}
+  #carteRoot{max-width:none;margin:0;padding:0;width:240mm;height:160mm;overflow:hidden;}
+  #carteRoot>*:not(.stage){display:none!important;}
+  .stage{overflow:visible;width:auto;}
+  .stage-inner{width:220mm!important;height:156mm!important;overflow:hidden;margin:0 auto;break-inside:avoid;page-break-inside:avoid;}
+  .sheet{position:absolute;left:0;top:0;transform:scale(0.756)!important;box-shadow:none;border-radius:0;}
+  .pop{display:none!important;}
+  .pick{background:transparent!important;}
+  .pick .car{display:none;}
+  .pick .val:empty::before{content:"";}
+  .f.ok .mk::after,.f.ko .mk::after{color:#000;}
+  .print-blank .pick .val,.print-blank input.line{visibility:hidden;}
+  .print-blank .f .mk,.print-blank .hint{display:none!important;}
+  .print-blank .f .pick{display:inline-flex!important;}
+  .print-blank .f .ans{display:none!important;}
+  .print-blank .f.fh .pick{border:0;}
+  html,body{height:160mm!important;overflow:hidden!important;}
+}
+
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline chimie">Chimie</div>
+  <h1>Carte des grandeurs — Chapitres 1 à 3</h1>
+  <p class="sub">Clique sur chaque case pour choisir la bonne réponse : les relations dans les cadres, les unités sous chaque grandeur, puis les encadrés du bas. Quand tout est rempli, le corrigé se débloque. Tes réponses restent enregistrées sur cet appareil.</p>
+</header>
+
+<div class="carte-wrap" id="carteRoot">
+  <div class="toolbar">
+    <div class="tb-left">
+      <span class="prog" id="prog"></span>
+      <button class="btn main" id="btnCorr" disabled>Voir le corrigé</button>
+      <div class="seg" id="seg" hidden><button data-v="mine">Mes réponses</button><button data-v="corr">Corrigé</button></div>
+      <label class="chk"><input type="checkbox" id="hintChk"> Indices</label>
+    </div>
+    <div class="tb-right">
+      <button class="btn" id="btnPrintBlank">Imprimer la fiche vierge</button>
+      <button class="btn" id="btnPrint">Imprimer ce que je vois</button>
+      <button class="btn ghost" id="btnReset">Effacer</button>
+    </div>
+  </div>
+  <div class="msg" id="msg"></div>
+  <div class="stage" id="stage"><div class="stage-inner" id="stageInner">
+<div class="sheet" id="sheet">
+  <div class="sh-head">
+    <div class="sh-top">
+      <div class="kicker">Chimie · Seconde · Chapitres 1 à 3</div>
+      <div class="who"><label>Nom :<input id="in-nom" class="line" style="width:190px" autocomplete="off"></label><label>Classe :<input id="in-classe" class="line" style="width:80px" autocomplete="off"></label></div>
+    </div>
+    <div class="sh-title">
+      <h2>Carte des grandeurs</h2>
+      <div class="consigne">Écrire dans chaque cadre la relation entre les grandeurs qu’il relie, puis compléter les unités.</div>
+    </div>
+  </div>
+  <div class="map">
+    <svg viewBox="0 0 1028 470" width="1028" height="470"><line x1="540" y1="130" x2="540" y2="36"></line><line x1="540" y1="130" x2="320" y2="225"></line><line x1="540" y1="130" x2="760" y2="225"></line><line x1="322" y1="36" x2="120" y2="36"></line><line x1="322" y1="36" x2="540" y2="36"></line><line x1="540" y1="330" x2="320" y2="225"></line><line x1="540" y1="330" x2="760" y2="225"></line><line x1="540" y1="330" x2="540" y2="425"></line><line x1="880" y1="330" x2="540" y2="425"></line><line x1="880" y1="330" x2="900" y2="425"></line><line x1="150" y1="330" x2="130" y2="425"></line><line x1="150" y1="330" x2="320" y2="225"></line><line x1="900" y1="130" x2="900" y2="36"></line><line x1="900" y1="130" x2="760" y2="225"></line></svg>
+    <div class="node" style="left:120px;top:36px"><span class="sym">d</span><div class="nl"><span class="nm">densité</span><span class="u">unité :<span class="f " data-id="u-d"><button type="button" class="pick" style="min-width:92px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></span></div></div>
+    <div class="node" style="left:540px;top:36px"><span class="sym">ρ</span><div class="nl"><span class="nm">masse volumique</span><span class="u">unité :<span class="f " data-id="u-rho"><button type="button" class="pick" style="min-width:92px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></span></div></div>
+    <div class="node" style="left:900px;top:36px"><div class="nl"><span class="nm b">proportion volumique de E</span><span class="u">unité :<span class="f " data-id="u-pV"><button type="button" class="pick" style="min-width:92px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></span></div></div>
+    <div class="node" style="left:320px;top:225px"><span class="sym">m</span><div class="nl"><span class="nm">masse</span><span class="u">unité :<span class="f " data-id="u-m"><button type="button" class="pick" style="min-width:92px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></span></div></div>
+    <div class="node" style="left:760px;top:225px"><span class="sym">V</span><div class="nl"><span class="nm">volume</span><span class="u">unité :<span class="f " data-id="u-V"><button type="button" class="pick" style="min-width:92px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></span></div></div>
+    <div class="node" style="left:540px;top:425px"><span class="sym">t</span><div class="nl"><span class="nm">concentration en masse<br>(titre massique)</span><span class="u">unité :<span class="f " data-id="u-t"><button type="button" class="pick" style="min-width:92px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></span></div></div>
+    <div class="node" style="left:900px;top:425px"><span class="sym">t<sub>f</sub></span><div class="nl"><span class="nm">concentration de la<br>solution fille</span><span class="u">unité :<span class="f " data-id="u-tf"><button type="button" class="pick" style="min-width:92px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></span></div></div>
+    <div class="node" style="left:130px;top:425px"><div class="nl"><span class="nm b">proportion massique<br>de E</span><span class="u">unité :<span class="f " data-id="u-pm"><button type="button" class="pick" style="min-width:92px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></span></div></div>
+    <div class="hub" style="left:540px;top:130px;width:170px"><span class="f fh" data-id="H1"><button type="button" class="pick" style="min-width:0px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+    <div class="hint" style="left:435px;top:130px;transform:translate(-100%,-50%);text-align:right">pour un échantillon</div>
+    <div class="hub" style="left:322px;top:36px;width:150px"><span class="f fh" data-id="H2"><button type="button" class="pick" style="min-width:0px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+    <div class="hint" style="left:322px;top:64px;transform:translateX(-50%);text-align:center">réf. : eau ou air</div>
+    <div class="hub" style="left:540px;top:330px;width:240px"><span class="f fh" data-id="H3"><button type="button" class="pick" style="min-width:0px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+    <div class="hint" style="left:410px;top:330px;transform:translate(-100%,-50%);text-align:left">soluté / solution</div>
+    <div class="hub" style="left:880px;top:330px;width:230px"><span class="f fh" data-id="H4"><button type="button" class="pick" style="min-width:0px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+    <div class="hint" style="left:880px;top:304px;transform:translate(-50%,-100%);text-align:center">dilution</div>
+    <div class="hub" style="left:150px;top:330px;width:170px"><span class="f fh" data-id="H5"><button type="button" class="pick" style="min-width:0px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+    <div class="hint" style="left:70px;top:358px;transform:none;text-align:left">en %</div>
+    <div class="hub" style="left:900px;top:130px;width:170px"><span class="f fh" data-id="H6"><button type="button" class="pick" style="min-width:0px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+    <div class="hint" style="left:900px;top:156px;transform:translateX(-50%);text-align:center">en %</div>
+  </div>
+  <div class="foot">
+    <div class="box"><div class="bt">Mesure (ch. 1)</div>
+      <div class="row"><span>Résultat : <i>x</i> = <i>x</i><sub>mesuré</sub> ±</span><span class="f " data-id="ux"><button type="button" class="pick" style="min-width:80px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+      <div class="row"><span>Lecture : <i>U</i>(<i>x</i>) ≈</span><span class="f " data-id="grad"><button type="button" class="pick" style="min-width:130px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+      <div class="row"><span>× ÷ : garder le moins de</span><span class="f " data-id="cs"><button type="button" class="pick" style="min-width:100px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+      <div class="row"><span>+ − : garder le moins de</span><span class="f " data-id="dec"><button type="button" class="pick" style="min-width:100px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+    </div>
+    <div class="box"><div class="bt">Densité</div>
+      <div class="row"><span>Réf. liquide, solide :</span><span class="f " data-id="eau"><button type="button" class="pick" style="min-width:70px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+      <div class="row"><span>Réf. gaz :</span><span class="f " data-id="air"><button type="button" class="pick" style="min-width:70px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+      <div class="row"><span><i>ρ</i><sub>eau</sub> ≈</span><span class="f " data-id="rhoeau"><button type="button" class="pick" style="min-width:96px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span><span>g/L</span></div>
+    </div>
+    <div class="box"><div class="bt"><span class="up">Piège :</span> <i class="sg">ρ</i> ≠ <i class="sg">t</i></div>
+      <div class="row"><span><i>ρ</i> : masse de la</span><span class="f " data-id="sol"><button type="button" class="pick" style="min-width:90px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+      <div class="row"><span><i>t</i> : masse du</span><span class="f " data-id="solute"><button type="button" class="pick" style="min-width:90px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+      <div class="row"><span>Même unité :</span><span class="f " data-id="meme"><button type="button" class="pick" style="min-width:70px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+    </div>
+    <div class="box"><div class="bt">Dilution</div>
+      <div class="row"><span>Se conserve :</span></div>
+      <div class="row"><span class="f " data-id="conserve"><button type="button" class="pick" style="min-width:200px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+      <div class="row"><span><i>F</i> = <i>t</i><sub>m</sub> / <i>t</i><sub>f</sub> =</span><span class="f " data-id="F"><button type="button" class="pick" style="min-width:76px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span></div>
+      <div class="row"><span>et <i>F</i></span><span class="f " data-id="sup"><button type="button" class="pick" style="min-width:44px"><span class="val"></span><span class="car">▾</span></button><span class="ans"></span><span class="mk"></span></span><span>1</span></div>
+    </div>
+  </div>
+  <div class="pop" id="pop" hidden></div>
+</div>
+  </div></div>
+  <p class="print-note">Impression : une seule page A4 en noir et blanc. Choisis « Paysage » dans la fenêtre d’impression.</p>
+</div>
+
+<script>
+(function(){
+  var KEY='carte-grandeurs-2nde-ch1-3-v3';
+  function s(x){return '<sub>'+x+'</sub>';}
+  var UNITS=[['g','g'],['kg','kg'],['L','L'],['mL','mL'],['gL','g/L'],['kgm3','kg/m³'],['molL','mol/L'],['N','N'],['none','sans unité'],['pct','%']];
+  var REL=[['r3','<i>d</i> = <i>ρ</i> / <i>ρ</i>'+s('réf')],['r6','<i>t</i> = <i>V</i> / <i>m</i>'],['r9','<i>m</i>(E) / <i>m</i>'+s('tot')],['r1','<i>ρ</i> = <i>m</i> / <i>V</i>'],['r8','<i>t</i>'+s('m')+' × <i>V</i>'+s('f')+' = <i>t</i>'+s('f')+' × <i>V</i>'+s('m')],['r10','<i>V</i>(E) / <i>V</i>'+s('tot')],['r4','<i>d</i> = <i>ρ</i>'+s('réf')+' / <i>ρ</i>'],['r5','<i>t</i> = <i>m</i>'+s('soluté')+' / <i>V</i>'+s('solution')],['r2','<i>ρ</i> = <i>m</i> × <i>V</i>'],['r11','<i>m</i>'+s('tot')+' / <i>m</i>(E)'],['r7','<i>t</i>'+s('m')+' × <i>V</i>'+s('m')+' = <i>t</i>'+s('f')+' × <i>V</i>'+s('f')]];
+  var MOINS=[['cs','CS'],['dec','décimales']];
+  var REF=[['eau','eau'],['air','air'],['eth','éthanol'],['sol','solution']];
+  var SOL=[['solution','solution'],['solute','soluté'],['solvant','solvant']];
+  var L={
+    'u-d':[UNITS,'none'],'u-rho':[UNITS,'gL',['kgm3']],'u-pV':[UNITS,'none',['pct']],'u-pm':[UNITS,'none',['pct']],
+    'u-m':[UNITS,'g',['kg']],'u-V':[UNITS,'L',['mL']],'u-t':[UNITS,'gL'],'u-tf':[UNITS,'gL'],
+    H1:[REL,'r1'],H2:[REL,'r3'],H3:[REL,'r5'],H4:[REL,'r7'],H5:[REL,'r9'],H6:[REL,'r10'],
+    ux:[[['x','<i>x</i>'],['U','<i>U</i>(<i>x</i>)'],['xm','<i>x</i>'+s('mesuré')],['10','10 %']],'U'],
+    grad:[[['1','1 graduation'],['half','½ graduation'],['2','2 graduations'],['0','0']],'half'],
+    cs:[MOINS,'cs'],dec:[MOINS,'dec'],eau:[REF,'eau'],air:[REF,'air'],
+    rhoeau:[[['a','1,00'],['b','1,00 × 10³'],['c','1,00 × 10⁻³'],['d','1,00 × 10⁶']],'b'],
+    sol:[SOL,'solution'],solute:[SOL,'solute'],meme:[UNITS,'gL'],
+    conserve:[[['vs','le volume de solution'],['ms','la masse de soluté'],['t','la concentration en masse'],['msol','la masse de solution']],'ms'],
+    F:[[['a','<i>V</i>'+s('m')+' / <i>V</i>'+s('f')],['b','<i>V</i>'+s('f')+' / <i>V</i>'+s('m')],['c','<i>t</i>'+s('f')+' / <i>t</i>'+s('m')]],'b'],
+    sup:[[['gt','&gt;'],['lt','&lt;'],['eq','=']],'gt']
+  };
+  function lab(id,k){var o=L[id][0];for(var i=0;i<o.length;i++)if(o[i][0]===k)return o[i][1];return '';}
+  var sheet=document.getElementById('sheet'),pop=document.getElementById('pop');
+  var fields=[].slice.call(sheet.querySelectorAll('.f'));
+  var N=fields.length;
+  var extra=[document.getElementById('in-nom'),document.getElementById('in-classe')];
+  var state={v:{},t:{},unlocked:false,view:'mine',hints:false};
+  try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);state.v=o.v||{};state.t=o.t||{};state.unlocked=!!o.unlocked;state.hints=!!o.hints;}}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({v:state.v,t:state.t,unlocked:state.unlocked,hints:state.hints}));}catch(e){}}
+  fields.forEach(function(f){var id=f.dataset.id;f.querySelector('.ans').innerHTML='<span>'+lab(id,L[id][1])+'</span>';});
+  extra.forEach(function(i){if(state.t[i.id]!=null)i.value=state.t[i.id];i.addEventListener('input',function(){state.t[i.id]=i.value;save();});});
+  var scale=1,openF=null;
+  function closePop(){pop.hidden=true;if(openF)openF.querySelector('.pick').classList.remove('open');openF=null;}
+  function openPop(f){
+    if(state.unlocked&&state.view==='corr')return;
+    closePop();openF=f;var id=f.dataset.id,cur=state.v[id];
+    pop.innerHTML=L[id][0].map(function(o){return '<button type="button" data-k="'+o[0]+'" class="'+(o[0]===cur?'sel':'')+'">'+o[1]+'</button>';}).join('')+(cur?'<button type="button" class="clear" data-k="">effacer</button>':'');
+    pop.hidden=false;
+    var r=f.getBoundingClientRect(),sr=sheet.getBoundingClientRect();
+    var x=(r.left-sr.left)/scale,y=(r.bottom-sr.top)/scale+4;
+    var pw=pop.offsetWidth,ph=pop.offsetHeight;
+    if(x+pw>1090)x=1090-pw;
+    if(y+ph>770)y=(r.top-sr.top)/scale-ph-4;
+    pop.style.left=x+'px';pop.style.top=Math.max(4,y)+'px';
+    f.querySelector('.pick').classList.add('open');
+    var b=pop.querySelector('.sel')||pop.querySelector('button');if(b)b.focus();
+  }
+  fields.forEach(function(f){f.querySelector('.pick').addEventListener('click',function(e){e.stopPropagation();if(openF===f)closePop();else openPop(f);});});
+  pop.addEventListener('click',function(e){e.stopPropagation();var b=e.target.closest('button');if(!b||!openF)return;var id=openF.dataset.id,f=openF;if(b.dataset.k)state.v[id]=b.dataset.k;else delete state.v[id];save();closePop();update();f.querySelector('.pick').focus();});
+  pop.addEventListener('keydown',function(e){var bs=[].slice.call(pop.querySelectorAll('button')),i=bs.indexOf(document.activeElement);if(e.key==='ArrowDown'){e.preventDefault();bs[Math.min(bs.length-1,i+1)].focus();}else if(e.key==='ArrowUp'){e.preventDefault();bs[Math.max(0,i-1)].focus();}else if(e.key==='Escape'){var f=openF;closePop();if(f)f.querySelector('.pick').focus();}});
+  document.addEventListener('click',closePop);
+  var progEl=document.getElementById('prog'),btnC=document.getElementById('btnCorr'),msg=document.getElementById('msg'),seg=document.getElementById('seg'),hintChk=document.getElementById('hintChk');
+  hintChk.checked=state.hints;
+  function update(){
+    var k=0,ok=0;
+    fields.forEach(function(f){var id=f.dataset.id,v=state.v[id];f.querySelector('.val').innerHTML=v?lab(id,v):'';if(v)k++;var good=!!v&&(v===L[id][1]||(L[id][2]||[]).indexOf(v)>=0);f.classList.toggle('ok',good);f.classList.toggle('ko',!good);if(good)ok++;});
+    progEl.innerHTML='<b>'+k+'</b> / '+N+' cases remplies';
+    btnC.disabled=k<N;
+    sheet.classList.toggle('show-hints',state.hints);
+    if(!state.unlocked)state.view='mine';
+    if(state.unlocked){
+      sheet.classList.add('checked');seg.hidden=false;btnC.hidden=true;
+      msg.innerHTML='<span class="score">'+ok+' / '+N+'</span> &nbsp;bonnes réponses.'+(ok<N?' Change les réponses marquées ✗ : le score se met à jour, puis compare avec le corrigé.':' Bravo, tout est juste !');
+    }else{
+      sheet.classList.remove('checked');seg.hidden=true;btnC.hidden=false;
+      msg.innerHTML=k<N?'Remplis toutes les cases pour débloquer le corrigé ('+(N-k)+' restante'+(N-k>1?'s':'')+').':'Tout est rempli : tu peux voir le corrigé.';
+    }
+    sheet.classList.toggle('view-corr',state.view==='corr');
+    [].forEach.call(seg.querySelectorAll('button'),function(b){b.classList.toggle('on',b.dataset.v===state.view);});
+  }
+  btnC.addEventListener('click',function(){if(btnC.disabled)return;state.unlocked=true;state.view='mine';save();update();});
+  seg.addEventListener('click',function(e){if(!state.unlocked)return;var b=e.target.closest('button');if(!b)return;closePop();state.view=b.dataset.v;update();});
+  hintChk.addEventListener('change',function(){state.hints=hintChk.checked;save();update();});
+  document.getElementById('btnReset').addEventListener('click',function(){if(!confirm('Effacer toutes tes réponses ?'))return;extra.forEach(function(i){i.value='';});state.v={};state.t={};state.unlocked=false;state.view='mine';save();update();});
+  window.addEventListener('afterprint',function(){document.body.classList.remove('print-blank');});
+  document.getElementById('btnPrintBlank').addEventListener('click',function(){closePop();document.body.classList.add('print-blank');sheet.classList.remove('view-corr');window.print();setTimeout(function(){document.body.classList.remove('print-blank');update();},500);});
+  document.getElementById('btnPrint').addEventListener('click',function(){closePop();window.print();});
+  var stage=document.getElementById('stage'),inner=document.getElementById('stageInner');
+  function fit(){var w=stage.clientWidth;scale=Math.min(1,w/1100);if(scale<0.62)scale=0.62;sheet.style.transform='scale('+scale+')';inner.style.width=(1100*scale)+'px';inner.style.height=(778*scale)+'px';closePop();}
+  window.addEventListener('resize',fit);fit();update();
+})();
+</script>
+</body>
+</html>
