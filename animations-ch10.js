@@ -1,4 +1,5 @@
-/* Animations du chapitre 12 — 1ère spé PC */
+/* Animations du chapitre 10 — 1ère spé PC — Cohésion de la matière
+   Partie 1 : animations d'origine du site. Partie 2 : animations des diapos. */
 
 /* ---------- 1. Comparateur d'interactions et de cohésion ---------- */
 function initInteractionComparator(cfg) {
@@ -336,4 +337,400 @@ function initLiquidExtraction(cfg) {
   prevBtn.addEventListener("click", () => { if (step > 1) { step--; render(); } });
   nextBtn.addEventListener("click", () => { if (step < STEPS.length) { step++; render(); } });
   render();
+}
+
+
+/* ================================================================== */
+/* Partie 2 : animations grand format (diapos et site, largeur 1780)   */
+/* ================================================================== */
+var CH10 = { chalk: "#f2ede1", dim: "#c9c2b0", y: "#e8c468", t: "#6bbfab", c: "#d97a63", board: "#16261f", b2: "#1d3229", w: "#5a96d2", fh: "Kalam, cursive", fb: "Space Grotesk, sans-serif" };
+var CH10_UID = 0;
+
+function ch10$(id) { return id ? document.getElementById(id) : null; }
+function ch10f(v) { return (+v).toFixed(1); }
+function ch10op(op) { return op != null ? ` opacity="${Math.max(0, Math.min(1, op)).toFixed(2)}"` : ""; }
+function ch10t(x, y, s, o) {
+  o = o || {};
+  return `<text x="${ch10f(x)}" y="${ch10f(y)}" font-size="${o.size || 26}" fill="${o.fill || CH10.dim}" font-family="${o.font || CH10.fh}" text-anchor="${o.anchor || "start"}"${o.weight ? ` font-weight="${o.weight}"` : ""}${ch10op(o.op)}>${s}</text>`;
+}
+function ch10btn(id, fn) {
+  const b = ch10$(id);
+  if (b) b.addEventListener("click", (e) => { fn(e); b.blur(); });
+  return b;
+}
+function ch10setBtn(b, on) {
+  if (!b) return;
+  b.style.background = on ? "#e8c468" : "transparent";
+  b.style.color = on ? "#16261f" : "#f2ede1";
+  b.style.borderColor = on ? "#e8c468" : "rgba(242,237,225,0.35)";
+}
+function ch10clamp(v) { return Math.max(0, Math.min(1, v)); }
+function ch10ease(t) { t = ch10clamp(t); return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+function ch10lerp(a, b, t) { return a + (b - a) * t; }
+function ch10tween(st, from, to, dur, onFrame, onDone) {
+  if (st.raf) cancelAnimationFrame(st.raf);
+  const t0 = performance.now();
+  const step = (now) => {
+    const k = Math.min(1, (now - t0) / dur);
+    onFrame(from + (to - from) * k);
+    if (k < 1) st.raf = requestAnimationFrame(step);
+    else { st.raf = 0; if (onDone) onDone(); }
+  };
+  st.raf = requestAnimationFrame(step);
+}
+function ch10readout(title, body, col) {
+  return `<div style="display:flex;flex-direction:column;gap:6px;"><div style="font-family:Kalam,cursive;font-size:40px;color:${col || "#e8c468"};line-height:1.15;">${title}</div><div style="font-size:28px;line-height:1.45;text-wrap:pretty;color:#f2ede1;">${body}</div></div>`;
+}
+function ch10arrow(x1, y1, x2, y2, col, w, head, op) {
+  const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy);
+  if (L < 2) return "";
+  const ux = dx / L, uy = dy / L, h = Math.min(head || 20, L), bx = x2 - ux * h, by = y2 - uy * h;
+  return `<g${ch10op(op)}><line x1="${ch10f(x1)}" y1="${ch10f(y1)}" x2="${ch10f(bx + ux * 2)}" y2="${ch10f(by + uy * 2)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>` +
+    `<polygon points="${ch10f(x2)},${ch10f(y2)} ${ch10f(bx - uy * h * 0.55)},${ch10f(by + ux * h * 0.55)} ${ch10f(bx + uy * h * 0.55)},${ch10f(by - ux * h * 0.55)}" fill="${col}"/></g>`;
+}
+function ch10line(x1, y1, x2, y2, col, w, dash, op) {
+  return `<line x1="${ch10f(x1)}" y1="${ch10f(y1)}" x2="${ch10f(x2)}" y2="${ch10f(y2)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"${dash ? ` stroke-dasharray="${dash}"` : ""}${ch10op(op)}/>`;
+}
+/* molécule d'eau : O au point (x, y), les deux H du côté « dir » (degrés) */
+function ch10water(x, y, dir, op) {
+  const d = 21, a1 = (dir + 52) * Math.PI / 180, a2 = (dir - 52) * Math.PI / 180;
+  const h1x = x + d * Math.cos(a1), h1y = y + d * Math.sin(a1), h2x = x + d * Math.cos(a2), h2y = y + d * Math.sin(a2);
+  return `<g${ch10op(op)}>` + ch10line(x, y, h1x, h1y, CH10.dim, 4) + ch10line(x, y, h2x, h2y, CH10.dim, 4) +
+    `<circle cx="${ch10f(h1x)}" cy="${ch10f(h1y)}" r="8" fill="${CH10.chalk}" stroke="${CH10.board}" stroke-width="1.5"/>` +
+    `<circle cx="${ch10f(h2x)}" cy="${ch10f(h2y)}" r="8" fill="${CH10.chalk}" stroke="${CH10.board}" stroke-width="1.5"/>` +
+    `<circle cx="${ch10f(x)}" cy="${ch10f(y)}" r="13" fill="${CH10.c}" stroke="${CH10.board}" stroke-width="1.5"/></g>`;
+}
+function ch10ion(x, y, na, op) {
+  const r = na ? 24 : 32;
+  return `<g${ch10op(op)}><circle cx="${ch10f(x)}" cy="${ch10f(y)}" r="${r}" fill="${na ? CH10.y : CH10.t}" stroke="${CH10.board}" stroke-width="2"/>` +
+    `<text x="${ch10f(x)}" y="${ch10f(y + (na ? 10 : 12))}" font-size="${na ? 28 : 36}" fill="${CH10.board}" font-family="${CH10.fb}" font-weight="700" text-anchor="middle">${na ? "+" : "−"}</text></g>`;
+}
+function ch10atom(x, y, r, s, fill, fs) {
+  return `<circle cx="${ch10f(x)}" cy="${ch10f(y)}" r="${r}" fill="${fill}" stroke="${CH10.board}" stroke-width="3"/>` +
+    ch10t(x, y + fs * 0.36, s, { anchor: "middle", size: fs, fill: CH10.board, font: CH10.fb, weight: 700 });
+}
+
+/* ------------------------------------------------------------------ */
+/* 1. Comparateur d'interactions                                       */
+/* ------------------------------------------------------------------ */
+function initCh10Interactions(cfg) {
+  const svg = ch10$(cfg.svgId), readout = ch10$(cfg.readoutId);
+  if (!svg) return;
+  const T = [
+    { lab: "van der Waals", name: "Interactions de van der Waals", bar: 0.2, order: "quelques kJ·mol⁻¹",
+      body: "Interactions électrostatiques attractives qui existent entre toutes les molécules, polaires comme apolaires. Ce sont les plus faibles des trois." },
+    { lab: "liaison H", name: "Liaison hydrogène", bar: 0.5, order: "quelques dizaines de kJ·mol⁻¹",
+      body: "Un atome H lié à un atome A très électronégatif est attiré par le doublet non liant d'un atome B très électronégatif. A et B : essentiellement F, O et N." },
+    { lab: "ionique", name: "Interaction entre ions", bar: 1, order: "quelques centaines de kJ·mol⁻¹",
+      body: "Attraction électrostatique entre ions de charges opposées : elle assure la cohésion des solides ioniques. C'est la plus intense des trois." }
+  ];
+  let cur = cfg.start || 0, p = 1;
+  const st = {};
+  function drawVdw(e) {
+    const g = (1 - e) * 140;
+    const mol = (x) => `<circle cx="${ch10f(x)}" cy="330" r="58" fill="${CH10.b2}" stroke="${CH10.chalk}" stroke-width="3"/><circle cx="${ch10f(x + 84)}" cy="330" r="58" fill="${CH10.b2}" stroke="${CH10.chalk}" stroke-width="3"/>`;
+    let s = mol(250 - g) + mol(708 + g);
+    s += ch10t(250 - g, 245, "−q", { anchor: "middle", size: 38, fill: CH10.t }) + ch10t(334 - g, 245, "+q", { anchor: "middle", size: 38, fill: CH10.c });
+    s += ch10t(708 + g, 245, "−q", { anchor: "middle", size: 38, fill: CH10.t }) + ch10t(792 + g, 245, "+q", { anchor: "middle", size: 38, fill: CH10.c });
+    s += ch10line(404 - g, 330, 638 + g, 330, CH10.y, 5, "14 12", e);
+    s += ch10t(521, 300, "attraction faible", { anchor: "middle", size: 34, fill: CH10.y, op: e });
+    s += ch10t(521, 530, "entre toutes les molécules, polaires ou apolaires", { anchor: "middle", size: 32 });
+    return s;
+  }
+  function drawHyd(e) {
+    const g = (1 - e) * 140, O2x = 690 + g;
+    let s = "";
+    s += ch10line(330, 330, 470, 330, CH10.chalk, 8);
+    s += ch10line(330, 330, 295, 466, CH10.dim, 6);
+    s += ch10line(O2x, 330, O2x + 86, 220, CH10.dim, 6) + ch10line(O2x, 330, O2x + 86, 440, CH10.dim, 6);
+    [160, 200].forEach((a) => {
+      const r = a * Math.PI / 180, cx = O2x + 64 * Math.cos(r), cy = 330 + 64 * Math.sin(r), hx = -Math.sin(r) * 17, hy = Math.cos(r) * 17;
+      s += ch10line(cx - hx, cy - hy, cx + hx, cy + hy, CH10.chalk, 6);
+    });
+    s += ch10line(504, 330, O2x - 72, 330, CH10.y, 5, "12 10", e);
+    s += ch10atom(330, 330, 46, "O", CH10.c, 40) + ch10atom(470, 330, 30, "H", CH10.chalk, 30) + ch10atom(295, 466, 30, "H", CH10.dim, 30);
+    s += ch10atom(O2x, 330, 46, "O", CH10.c, 40) + ch10atom(O2x + 86, 220, 30, "H", CH10.dim, 30) + ch10atom(O2x + 86, 440, 30, "H", CH10.dim, 30);
+    s += ch10t(330, 262, "−2q", { anchor: "middle", size: 34, fill: CH10.t }) + ch10t(470, 282, "+q", { anchor: "middle", size: 34, fill: CH10.c }) + ch10t(O2x, 262, "−2q", { anchor: "middle", size: 34, fill: CH10.t });
+    s += ch10t(270, 344, "A", { anchor: "end", size: 42, fill: CH10.y }) + ch10t(O2x, 450, "B", { anchor: "middle", size: 42, fill: CH10.y });
+    s += ch10t(565, 408, "liaison hydrogène", { anchor: "middle", size: 32, fill: CH10.y, op: e });
+    s += ch10t(521, 548, "A et B : atomes très électronégatifs (F, O ou N)", { anchor: "middle", size: 32 });
+    return s;
+  }
+  function drawIon(e) {
+    const g = (1 - e) * 120;
+    let s = "";
+    s += `<circle cx="${ch10f(380 - g)}" cy="320" r="52" fill="${CH10.y}" stroke="${CH10.board}" stroke-width="3"/>` + ch10t(380 - g, 336, "+", { anchor: "middle", size: 48, fill: CH10.board, font: CH10.fb, weight: 700 });
+    s += `<circle cx="${ch10f(700 + g)}" cy="320" r="74" fill="${CH10.t}" stroke="${CH10.board}" stroke-width="3"/>` + ch10t(700 + g, 338, "−", { anchor: "middle", size: 58, fill: CH10.board, font: CH10.fb, weight: 700 });
+    s += ch10arrow(446 - g, 320, 520, 320, CH10.y, 7, 26, e) + ch10arrow(614 + g, 320, 552, 320, CH10.y, 7, 26, e);
+    s += ch10t(380 - g, 440, "Na⁺", { anchor: "middle", size: 40, fill: CH10.y }) + ch10t(700 + g, 450, "Cl⁻", { anchor: "middle", size: 40, fill: CH10.t });
+    s += ch10t(536, 236, "attraction forte", { anchor: "middle", size: 36, fill: CH10.y, op: e });
+    s += ch10t(521, 548, "entre ions de charges opposées", { anchor: "middle", size: 32 });
+    return s;
+  }
+  function draw() {
+    const e = ch10ease(p);
+    let s = `<g transform="translate(40 0)">` + [drawVdw, drawHyd, drawIon][cur](e) + `</g>`;
+    s += `<rect x="1130" y="20" width="630" height="560" rx="22" fill="rgba(0,0,0,0.22)" stroke="rgba(242,237,225,0.16)" stroke-width="2"/>`;
+    s += ch10t(1160, 74, "Intensité relative", { size: 32 });
+    const base = 470, maxH = 330, xs = [1280, 1445, 1610];
+    s += ch10line(1170, base, 1720, base, "rgba(242,237,225,0.35)", 3);
+    T.forEach((t, i) => {
+      const on = i === cur, h = t.bar * maxH * (on ? e : 1);
+      s += `<rect x="${xs[i] - 50}" y="${ch10f(base - h)}" width="100" height="${ch10f(h)}" rx="8" fill="${on ? CH10.y : CH10.dim}"${ch10op(on ? 1 : 0.3)}/>`;
+      s += ch10t(xs[i], base + 46, t.lab, { anchor: "middle", size: 30, fill: on ? CH10.y : CH10.dim });
+    });
+    s += ch10t(1445, 560, "la plus faible → la plus intense", { anchor: "middle", size: 26 });
+    svg.innerHTML = s;
+  }
+  const bs = (cfg.typeIds || []).map((id, i) => ch10btn(id, () => { cur = i; sync(); ch10tween(st, 0, 1, 900, (x) => { p = x; draw(); }); }));
+  function sync() {
+    bs.forEach((b, i) => ch10setBtn(b, i === cur));
+    if (readout) readout.innerHTML = ch10readout(T[cur].name, T[cur].body + ` Ordre de grandeur : <strong style="color:#e8c468">${T[cur].order}</strong>.`);
+  }
+  draw(); sync();
+}
+
+/* ------------------------------------------------------------------ */
+/* 2. Dissolution de NaCl dans l'eau                                   */
+/* ------------------------------------------------------------------ */
+function initCh10Dissolution(cfg) {
+  const svg = ch10$(cfg.svgId), readout = ch10$(cfg.readoutId), stepEl = ch10$(cfg.stepId);
+  if (!svg) return;
+  const IONS = [];
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) IONS.push({ na: (r + c) % 2 === 0, r, c, leave: c === 3 });
+  const S2 = [[640, 95], [740, 235], [640, 375], [740, 515]];
+  const S3 = [[700, 120], [1010, 190], [820, 430], [1050, 470]];
+  const TXT = [
+    ["Le solide ionique NaCl(s)", "Cations Na⁺ et anions Cl⁻ sont régulièrement disposés, maintenus par l'interaction électrostatique attractive entre ions de charges opposées."],
+    ["1. Dissociation", "Au contact de l'eau, des ions se détachent du solide : les interactions entre ces ions et leurs voisins sont rompues."],
+    ["2. Solvatation", "Chaque ion s'entoure de molécules d'eau. L'atome O (charge partielle −) se tourne vers Na⁺, les atomes H (charges partielles +) vers Cl⁻."],
+    ["3. Dispersion", "Les ions solvatés se répartissent dans toute la solution : on les note Na⁺(aq) et Cl⁻(aq). En réalité, les trois étapes ont lieu <strong style=\"color:#6bbfab\">simultanément</strong>."]
+  ];
+  let s = 0, target = 0;
+  const st = {};
+  function posAt(ion, k) {
+    const gx = 180 + ion.c * 92, gy = 162 + ion.r * 92;
+    if (!ion.leave || k === 0) return [gx, gy];
+    if (k === 1) return [gx + 95, gy + (ion.r - 1.5) * 14];
+    return k === 2 ? S2[ion.r] : S3[ion.r];
+  }
+  function pos(ion) {
+    const k = Math.min(2, Math.floor(s)), t = ch10ease(s - k), a = posAt(ion, k), b = posAt(ion, Math.min(3, k + 1));
+    return [ch10lerp(a[0], b[0], t), ch10lerp(a[1], b[1], t)];
+  }
+  function draw() {
+    let m = `<rect x="20" y="20" width="1120" height="560" rx="22" fill="rgba(90,150,210,0.10)" stroke="rgba(90,150,210,0.4)" stroke-width="2"/>`;
+    m += ch10t(1110, 64, "eau", { anchor: "end", size: 32, fill: CH10.w });
+    const f = ch10ease(ch10clamp(s - 1));
+    IONS.forEach((ion) => {
+      if (!ion.leave || f <= 0) return;
+      const [x, y] = pos(ion), R = ion.na ? 24 : 32;
+      for (let j = 0; j < 6; j++) {
+        const th = j * 60 + 15, rad = th * Math.PI / 180, d = ch10lerp(R + 90, ion.na ? R + 15 : R + 30, f);
+        m += ch10water(x + d * Math.cos(rad), y + d * Math.sin(rad), ion.na ? th : th + 180, ch10clamp(f * 1.6));
+      }
+    });
+    IONS.forEach((ion) => { const [x, y] = pos(ion); m += ch10ion(x, y, ion.na); });
+    m += `<rect x="1170" y="20" width="590" height="560" rx="22" fill="rgba(0,0,0,0.22)" stroke="rgba(242,237,225,0.16)" stroke-width="2"/>`;
+    m += ch10t(1200, 74, "Les étapes de la dissolution", { size: 32 });
+    const near = Math.round(s);
+    ["Le solide NaCl(s)", "1. Dissociation", "2. Solvatation", "3. Dispersion"].forEach((lab, i) => {
+      const y = 150 + i * 70, on = i === near, past = i < near;
+      m += `<circle cx="1214" cy="${y - 12}" r="10" fill="${on ? CH10.y : past ? CH10.chalk : "none"}" stroke="${on ? CH10.y : CH10.dim}" stroke-width="3"/>`;
+      m += ch10t(1242, y, lab, { size: 38, fill: on ? CH10.y : past ? CH10.chalk : CH10.dim, op: on || past ? 1 : 0.55 });
+    });
+    const eq = ch10clamp((s - 2.4) * 1.7);
+    if (eq > 0) m += ch10t(1465, 455, "NaCl(s) → Na⁺(aq) + Cl⁻(aq)", { anchor: "middle", size: 36, fill: CH10.y, op: eq });
+    m += ch10line(1200, 495, 1730, 495, "rgba(242,237,225,0.16)", 2);
+    m += ch10ion(1222, 538, true) + ch10t(1256, 548, "Na⁺", { size: 30, fill: CH10.chalk });
+    m += ch10ion(1366, 538, false) + ch10t(1408, 548, "Cl⁻", { size: 30, fill: CH10.chalk });
+    m += ch10water(1530, 540, 0) + ch10t(1572, 548, "H₂O", { size: 30, fill: CH10.chalk });
+    svg.innerHTML = m;
+  }
+  const prev = ch10btn(cfg.prevId, () => go(target - 1));
+  const next = ch10btn(cfg.nextId, () => go(target + 1));
+  function go(k) {
+    if (k < 0 || k > 3) return;
+    target = k; sync();
+    ch10tween(st, s, k, 1300, (v) => { s = v; draw(); });
+  }
+  function sync() {
+    if (prev) prev.disabled = target === 0;
+    if (next) next.disabled = target === 3;
+    if (stepEl) stepEl.textContent = `Étape ${target + 1} / 4`;
+    if (readout) readout.innerHTML = ch10readout(TXT[target][0], TXT[target][1]);
+  }
+  draw(); sync();
+}
+
+/* ------------------------------------------------------------------ */
+/* 3. Extraction liquide-liquide du diiode par le cyclohexane          */
+/* ------------------------------------------------------------------ */
+function initCh10Extraction(cfg) {
+  const svg = ch10$(cfg.svgId), readout = ch10$(cfg.readoutId), stepEl = ch10$(cfg.stepId);
+  if (!svg) return;
+  const uid = "ch10ex" + (++CH10_UID), cx = 360, BOT = 480;
+  const AQ = "rgba(90,150,210,0.30)", ORG = "rgba(232,196,104,0.28)";
+  function hw(y) {
+    if (y <= 92) return 24;
+    if (y <= 210) { const t = (y - 92) / 118; return 24 + 126 * Math.sqrt(1 - (1 - t) * (1 - t)); }
+    if (y <= 420) return 150 - 134 * (y - 210) / 210;
+    if (y <= 428) return 16 - 9 * (y - 420) / 8;
+    return 7;
+  }
+  const Lp = [], Rp = [];
+  for (let y = 56; y <= BOT; y += 4) { Lp.push(`${ch10f(cx - hw(y))},${y}`); Rp.unshift(`${ch10f(cx + hw(y))},${y}`); }
+  const PATH = "M" + Lp.join(" L") + " L" + Rp.join(" L") + " Z";
+  function vol(a, b) { let v = 0; for (let y = Math.round(a); y < b; y++) v += hw(y) * hw(y); return v; }
+  const yTop = 150;
+  let yInt = 200; while (yInt < 420 && vol(yTop, yInt) < vol(yInt, BOT)) yInt++;
+  const yInt2 = 426, vOrg = vol(yTop, yInt);
+  let yTop2 = yInt2; while (yTop2 > yTop && vol(yTop2, yInt2) < vOrg) yTop2--;
+  const rnd = (i, k) => { const x = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return x - Math.floor(x); };
+  const DOTS = Array.from({ length: 14 }, (_, i) => ({ u: rnd(i, 1), v: rnd(i, 2) }));
+  function inRegion(d, a, b) {
+    const pad = Math.min(14, (b - a) / 3), y = a + pad + d.v * Math.max(0, b - a - 2 * pad);
+    return [cx + (2 * d.u - 1) * Math.max(0, hw(y) - 20), y];
+  }
+  const TXT = [
+    ["Le problème", "Le diiode I₂ est dissous dans l'eau. Pour l'en extraire, on choisit un solvant d'extraction S₂ : ici, le cyclohexane."],
+    ["On verse, puis on ajoute le cyclohexane", "On transvase la solution aqueuse dans l'ampoule à décanter, puis on ajoute le cyclohexane. Les deux liquides ne se mélangent pas : ils sont non miscibles."],
+    ["On agite", "On bouche et on agite, en dégazant régulièrement. Le contact entre les deux phases permet au diiode de passer dans le solvant où il est le plus soluble."],
+    ["On laisse décanter", "Les deux phases se séparent. Le cyclohexane, moins dense, surnage : la phase organique, au-dessus, contient maintenant le diiode."],
+    ["On sépare les deux phases", "On retire le bouchon et on ouvre le robinet : la phase aqueuse, plus dense, s'écoule en premier dans le bécher. La phase organique, avec le diiode extrait, reste dans l'ampoule."]
+  ];
+  const DUR = [700, 2000, 2800, 2000, 2400];
+  let step = 1, p = 1;
+  const st = {};
+  function beakerScene(op) {
+    let s = `<g${ch10op(op)}>`;
+    s += `<path d="M236,286 L236,520 Q236,539 255,539 L465,539 Q484,539 484,520 L484,286 Z" fill="${AQ}"/>`;
+    s += `<path d="M230,200 L230,520 Q230,545 255,545 L465,545 Q490,545 490,520 L490,200" fill="none" stroke="${CH10.dim}" stroke-width="5" stroke-linejoin="round"/>`;
+    DOTS.forEach((d) => { s += `<circle cx="${ch10f(256 + d.u * 208)}" cy="${ch10f(306 + d.v * 214)}" r="9" fill="${CH10.c}"/>`; });
+    s += ch10t(360, 170, "bécher : diiode dissous dans l'eau", { anchor: "middle", size: 32, fill: CH10.chalk });
+    return s + `</g>`;
+  }
+  function panel() {
+    let s = `<rect x="860" y="20" width="900" height="560" rx="22" fill="rgba(0,0,0,0.22)" stroke="rgba(242,237,225,0.16)" stroke-width="2"/>`;
+    s += ch10t(890, 74, "Choisir le solvant d'extraction", { size: 32 });
+    s += ch10t(1380, 132, "eau (S₁)", { anchor: "middle", size: 32, fill: CH10.w }) + ch10t(1610, 132, "cyclohexane (S₂)", { anchor: "middle", size: 32, fill: CH10.y });
+    const rows = [["densité", "1,00", "0,78"], ["solubilité du diiode", "faible", "très grande"]];
+    rows.forEach((r, i) => {
+      const y = 196 + i * 56;
+      s += ch10line(890, y - 38, 1730, y - 38, "rgba(242,237,225,0.14)", 2);
+      s += ch10t(890, y, r[0], { size: 29, fill: CH10.chalk, font: CH10.fb }) + ch10t(1380, y, r[1], { anchor: "middle", size: 29, fill: CH10.chalk, font: CH10.fb }) + ch10t(1610, y, r[2], { anchor: "middle", size: 29, fill: CH10.chalk, font: CH10.fb });
+    });
+    s += ch10line(890, 270, 1730, 270, "rgba(242,237,225,0.14)", 2);
+    s += ch10t(890, 308, "miscibilité", { size: 29, fill: CH10.chalk, font: CH10.fb }) + ch10t(1495, 308, "non miscibles", { anchor: "middle", size: 29, fill: CH10.chalk, font: CH10.fb });
+    const ck = step >= 2 ? (step === 2 ? ch10clamp(p * 2) : 1) : 0;
+    if (ck > 0) {
+      s += ch10t(890, 392, "✓ le diiode est plus soluble dans S₂ que dans S₁", { size: 30, fill: CH10.t, op: ck });
+      s += ch10t(890, 440, "✓ S₂ est non miscible à S₁", { size: 30, fill: CH10.t, op: ck });
+      s += ch10t(890, 488, "→ danger minimal : vérifier les pictogrammes", { size: 30, fill: CH10.dim, op: ck });
+    }
+    const dn = step >= 4 ? (step === 4 ? ch10clamp((p - 0.4) * 2.5) : 1) : 0;
+    if (dn > 0) s += ch10t(890, 552, "0,78 &lt; 1,00 : la phase organique surnage", { size: 32, fill: CH10.y, op: dn });
+    return s;
+  }
+  function draw() {
+    const e = ch10ease(p);
+    let s = "";
+    if (step === 1) { svg.innerHTML = beakerScene(e) + panel(); return; }
+    let aqTop = yInt, orgTop = yTop, intf = yInt, mix = 0, ang = 0, dotOp = 1, stop = 0, open = false, drain = 0;
+    if (step === 2) {
+      aqTop = ch10lerp(BOT, yInt, ch10ease((p - 0.1) / 0.4));
+      orgTop = ch10lerp(yInt, yTop, ch10ease((p - 0.6) / 0.4));
+      dotOp = ch10clamp((p - 0.12) / 0.2);
+    } else if (step === 3) {
+      mix = ch10clamp(p / 0.15); stop = ch10clamp(p / 0.08);
+      ang = 11 * Math.sin(p * Math.PI * 8) * Math.sin(Math.PI * ch10clamp((p - 0.08) / 0.84));
+    } else if (step === 4) {
+      mix = 1 - ch10ease(p / 0.5); stop = 1;
+    } else if (step === 5) {
+      stop = 1 - ch10clamp(p / 0.1); drain = ch10ease((p - 0.12) / 0.8);
+      intf = ch10lerp(yInt, yInt2, drain); aqTop = intf; orgTop = ch10lerp(yTop, yTop2, drain);
+      open = p > 0.1 && p < 0.95;
+    }
+    const fo = step === 2 ? ch10clamp(p / 0.1) : 1;
+    s += `<defs><clipPath id="${uid}"><path d="${PATH}"/></clipPath></defs>`;
+    s += `<g${ch10op(fo)} transform="rotate(${ch10f(ang)} ${cx} 260)">`;
+    s += `<g clip-path="url(#${uid})">`;
+    if (mix < 1) {
+      s += `<g${ch10op(1 - mix)}>`;
+      if (orgTop < intf - 0.5) s += `<rect x="${cx - 160}" y="${ch10f(orgTop)}" width="320" height="${ch10f(intf - orgTop)}" fill="${ORG}"/>`;
+      if (aqTop < BOT) s += `<rect x="${cx - 160}" y="${ch10f(aqTop)}" width="320" height="${ch10f(BOT + 4 - aqTop)}" fill="${AQ}"/>`;
+      if (orgTop < intf - 0.5 && intf < 428) s += ch10line(cx - 160, intf, cx + 160, intf, CH10.dim, 2, "6 6");
+      s += `</g>`;
+    }
+    if (mix > 0) {
+      s += `<g${ch10op(mix)}><rect x="${cx - 160}" y="${yTop}" width="320" height="${BOT + 4 - yTop}" fill="rgba(160,172,160,0.22)"/>`;
+      for (let j = 0; j < 12; j++) {
+        const fr = ((j * 0.137 + p * 0.7 * (j % 2 ? 1 : -1)) % 1 + 1) % 1, y = yTop + 20 + fr * (420 - yTop - 40);
+        const x = cx + Math.sin(j * 2.1 + p * 9) * Math.max(0, hw(y) - 40) * 0.8;
+        s += `<circle cx="${ch10f(x)}" cy="${ch10f(y)}" r="38" fill="${j % 2 ? "rgba(232,196,104,0.30)" : "rgba(90,150,210,0.32)"}"/>`;
+      }
+      s += `</g>`;
+    }
+    DOTS.forEach((d, i) => {
+      let q;
+      const A = inRegion(d, aqTop, 470), O = inRegion(d, orgTop, intf), M = inRegion(d, yTop, 440);
+      if (step === 2) q = A;
+      else if (step === 3) { const j = [M[0] + 8 * Math.sin(p * 40 + i), M[1] + 8 * Math.cos(p * 34 + i)]; q = [ch10lerp(A[0], j[0], mix), ch10lerp(A[1], j[1], mix)]; }
+      else if (step === 4) { const k = ch10ease((p - i * 0.025) / 0.6); q = [ch10lerp(M[0], O[0], k), ch10lerp(M[1], O[1], k)]; }
+      else q = O;
+      s += `<circle cx="${ch10f(q[0])}" cy="${ch10f(q[1])}" r="9" fill="${CH10.c}"${ch10op(dotOp)}/>`;
+    });
+    s += `</g>`;
+    s += `<path d="${PATH}" fill="none" stroke="${CH10.dim}" stroke-width="5" stroke-linejoin="round"/>`;
+    if (stop > 0) s += `<rect x="${cx - 20}" y="30" width="40" height="34" rx="6" fill="${CH10.dim}"${ch10op(stop)}/>`;
+    s += open ? `<rect x="${cx - 6}" y="430" width="12" height="44" rx="4" fill="${CH10.t}"/>` : `<rect x="${cx - 26}" y="446" width="52" height="12" rx="4" fill="${CH10.t}"/>`;
+    s += `</g>`;
+    if (step >= 2) {
+      const bo = step === 2 ? ch10clamp(p / 0.1) : 1, lvl = step === 5 ? ch10lerp(586, 524, drain) : 586;
+      s += `<g${ch10op(bo)}>`;
+      if (lvl < 585) s += `<rect x="${cx - 84}" y="${ch10f(lvl)}" width="168" height="${ch10f(586 - lvl)}" fill="${AQ}"/>`;
+      s += `<path d="M${cx - 90},500 L${cx - 90},588 L${cx + 90},588 L${cx + 90},500" fill="none" stroke="${CH10.dim}" stroke-width="4" stroke-linejoin="round"/></g>`;
+      if (open) s += ch10line(cx, 482, cx, lvl, CH10.w, 7, null, 0.85);
+    }
+    if (mix < 0.5 && (step === 2 ? p > 0.9 : true)) {
+      const lo = step === 2 ? ch10clamp((p - 0.9) * 10) : 1 - mix * 2, withI = step >= 4;
+      s += ch10t(cx + 172, (orgTop + intf) / 2 + 10, withI ? "phase organique + I₂" : "cyclohexane", { size: 30, fill: CH10.y, op: lo });
+      if (intf < 410) s += ch10t(cx + 172, (intf + 420) / 2 + 10, withI ? "phase aqueuse" : "eau + I₂", { size: 30, fill: CH10.w, op: lo });
+    }
+    if (step === 5 && drain > 0.3) s += ch10t(cx + 110, 560, "phase aqueuse", { size: 30, fill: CH10.w, op: ch10clamp((drain - 0.3) * 3) });
+    svg.innerHTML = s + panel();
+  }
+  const prev = ch10btn(cfg.prevId, () => { if (step > 1) { if (st.raf) cancelAnimationFrame(st.raf); st.raf = 0; step--; p = 1; draw(); sync(); } });
+  const next = ch10btn(cfg.nextId, () => { if (step < 5) { step++; p = 0; sync(); ch10tween(st, 0, 1, DUR[step - 1], (x) => { p = x; draw(); }); } });
+  function sync() {
+    if (prev) prev.disabled = step === 1;
+    if (next) next.disabled = step === 5;
+    if (stepEl) stepEl.textContent = `Étape ${step} / 5`;
+    if (readout) readout.innerHTML = ch10readout(TXT[step - 1][0], TXT[step - 1][1]);
+  }
+  draw(); sync();
+}
+
+/* ------------------------------------------------------------------ */
+/* Site web : mise à l'échelle des blocs d'animation (largeur 1780)    */
+/* ------------------------------------------------------------------ */
+function initCh10Stages() {
+  document.querySelectorAll(".ch10-stage").forEach((outer) => {
+    const inner = outer.firstElementChild;
+    if (!inner || outer.__fit) return;
+    outer.__fit = true;
+    let lastS = -1, lastH = -1;
+    const fit = () => {
+      const s = outer.clientWidth / 1780;
+      if (!s) return;
+      const hgt = Math.round(inner.offsetHeight * s);
+      if (s !== lastS) { lastS = s; inner.style.transform = "scale(" + s + ")"; }
+      if (hgt !== lastH) { lastH = hgt; outer.style.height = hgt + "px"; }
+    };
+    new ResizeObserver(fit).observe(inner);
+    fit();
+    window.addEventListener("load", fit);
+    window.addEventListener("resize", fit);
+    document.querySelectorAll(".mode-tab").forEach((b) => b.addEventListener("click", () => setTimeout(fit, 0)));
+  });
 }
