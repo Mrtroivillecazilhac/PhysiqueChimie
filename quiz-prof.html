@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz en direct — Professeur</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="quiz-live.css">
+<style>
+  /* --- Préparation de la partie --- */
+  .niveau-onglets{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .niveau-onglet{
+    font-family:var(--font-body); font-weight:600; font-size:.88rem; cursor:pointer;
+    background:transparent; color:var(--chalk-dim); border:1.5px dashed var(--line);
+    border-radius:999px; padding:7px 15px;
+  }
+  .niveau-onglet.actif{ background:var(--yellow); color:var(--board); border:1.5px solid var(--yellow); }
+  .niveau-onglet .compte{ font-size:.75rem; opacity:.8; margin-left:4px; }
+  .chap-ligne{ display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; padding:10px 0; border-bottom:1px solid var(--line); }
+  .chap-ligne:last-child{ border-bottom:none; }
+  .chap-ligne > input{ margin-top:4px; }
+  .chap-ligne summary{ cursor:pointer; font-weight:600; list-style-position:outside; }
+  .chap-ligne summary .nbq{ color:var(--chalk-dim); font-weight:400; font-size:.85rem; margin-left:6px; }
+  .chap-ligne ul{ list-style:none; padding:8px 0 0; margin:0; display:grid; gap:6px; }
+  .chap-ligne li label{ display:grid; grid-template-columns:auto 1fr; gap:10px; font-size:.92rem; color:var(--chalk-dim); cursor:pointer; line-height:1.4; }
+  .chap-ligne li label:hover{ color:var(--chalk); }
+  .tag-anim{ font-size:.72rem; color:var(--coral); border:1px solid var(--coral); border-radius:999px; padding:0 7px; margin-left:6px; white-space:nowrap; }
+  input[type=checkbox]{ accent-color:var(--yellow); width:17px; height:17px; }
+  .reglages{ display:flex; flex-wrap:wrap; gap:18px 30px; align-items:center; }
+  .reglages label{ display:flex; gap:10px; align-items:center; color:var(--chalk-dim); }
+  .reglages select{
+    font-family:var(--font-body); font-size:.95rem; background:var(--board-2); color:var(--chalk);
+    border:1.5px solid var(--line); border-radius:8px; padding:6px 10px;
+  }
+  .lancement{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+  .lancement .resume{ font-family:var(--font-display); font-size:1.25rem; color:var(--yellow); }
+  .note-demo{ font-size:.88rem; color:var(--chalk-dim); line-height:1.5; margin:14px 0 0; }
+  .erreur{ color:var(--coral); font-weight:600; }
+  .vide{ color:var(--chalk-dim); font-style:italic; }
+</style>
+</head>
+<body>
+
+<!-- ================= Préparation ================= -->
+<div id="config">
+  <nav class="topbar">
+    <a href="index.html">Accueil</a>
+    <a href="4eme.html">4ème</a>
+    <a href="2nde.html">2nde</a>
+    <a href="1ere.html">1ère spé PC</a>
+    <a href="terminale.html">Terminale ES</a>
+  </nav>
+
+  <header class="page-head">
+    <div class="eyebrow">Quiz en direct</div>
+    <h1>Préparer une partie</h1>
+    <p class="sub">Les groupes répondent depuis leur ordinateur sur <strong id="urlJouerConfig">jouer.html</strong>, les questions s'affichent au tableau.</p>
+    <p><span class="quiz-mode" id="modeBadge"></span></p>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Choisir les questions</h2>
+      <div class="niveau-onglets" id="niveauOnglets"></div>
+      <div id="listeChapitres"></div>
+    </section>
+
+    <section>
+      <h2>2. Réglages</h2>
+      <div class="reglages">
+        <label>Temps par question
+          <select id="duree">
+            <option value="10">10 s</option>
+            <option value="20" selected>20 s</option>
+            <option value="30">30 s</option>
+            <option value="45">45 s</option>
+            <option value="60">60 s</option>
+            <option value="90">90 s</option>
+          </select>
+        </label>
+        <label>Nombre de questions
+          <select id="maxQuestions">
+            <option value="0" selected>toutes</option>
+            <option value="5">5 au hasard</option>
+            <option value="10">10 au hasard</option>
+            <option value="15">15 au hasard</option>
+            <option value="20">20 au hasard</option>
+          </select>
+        </label>
+        <label><input type="checkbox" id="melanger"> Mélanger l'ordre des questions</label>
+      </div>
+    </section>
+
+    <section>
+      <div class="lancement">
+        <div class="resume" id="resume">Aucune question sélectionnée</div>
+        <button class="quiz-btn" id="btnCreer" disabled>Créer la partie ▶</button>
+      </div>
+      <p class="erreur" id="erreurCreation"></p>
+      <p class="note-demo" id="noteDemo"></p>
+    </section>
+  </main>
+</div>
+
+<!-- ================= Accueil des équipes ================= -->
+<div class="ecran scene-ecran" id="ecranLobby">
+  <div class="scene-haut">
+    <div class="scene-titre" id="lobbyTitre"></div>
+    <span class="quiz-mode" data-statut></span>
+  </div>
+  <div class="lobby-centre">
+    <div class="lobby-consigne">Sur l'ordinateur du groupe, ouvrez <strong id="urlJouer"></strong> et entrez le code :</div>
+    <div class="lobby-code" id="lobbyCode">····</div>
+    <div class="lobby-equipes" id="lobbyEquipes"></div>
+  </div>
+  <div class="scene-bas">
+    <button class="quiz-btn secondaire" data-quitter>✕ Annuler la partie</button>
+    <span class="scene-compteur" id="lobbyCompteur"></span>
+    <button class="quiz-btn" id="btnLancer" disabled>Lancer le quiz ▶</button>
+  </div>
+</div>
+
+<!-- ================= Question / correction ================= -->
+<div class="ecran scene-ecran" id="ecranQuestion">
+  <div class="scene-haut">
+    <div class="scene-titre" id="questionNumero"></div>
+    <span class="quiz-mode" data-statut></span>
+    <span class="scene-compteur" id="questionReponses"></span>
+  </div>
+  <div class="question-corps">
+    <div class="question-haut">
+      <div class="question-texte" id="questionTexte"></div>
+      <div class="chrono" id="chrono">
+        <svg viewBox="0 0 100 100"><circle class="piste" cx="50" cy="50" r="45"/><circle class="arc" id="chronoArc" cx="50" cy="50" r="45" stroke-dasharray="282.74" stroke-dashoffset="0"/></svg>
+        <div class="chrono-valeur" id="chronoValeur"></div>
+      </div>
+    </div>
+    <div>
+      <div class="reponses-grille" id="questionReponsesGrille"></div>
+      <div class="explication hidden" id="questionExplication" style="margin-top:1.6vh;"></div>
+    </div>
+  </div>
+  <div class="scene-bas">
+    <button class="quiz-btn secondaire" data-quitter>✕ Arrêter</button>
+    <span></span>
+    <button class="quiz-btn" id="btnQuestionAction">Passer ⏭</button>
+  </div>
+</div>
+
+<!-- ================= Classement ================= -->
+<div class="ecran scene-ecran" id="ecranClassement">
+  <div class="scene-haut">
+    <div class="scene-titre">Classement</div>
+    <span class="quiz-mode" data-statut></span>
+    <span class="scene-compteur" id="classementNumero"></span>
+  </div>
+  <div class="classement-liste" id="classementListe"></div>
+  <div class="scene-bas">
+    <button class="quiz-btn secondaire" data-quitter>✕ Arrêter</button>
+    <span></span>
+    <button class="quiz-btn" id="btnSuivante">Question suivante ▶</button>
+  </div>
+</div>
+
+<!-- ================= Fin ================= -->
+<div class="ecran scene-ecran" id="ecranFin">
+  <div class="scene-haut">
+    <div class="scene-titre">Résultats</div>
+    <span></span>
+    <span class="scene-compteur" id="finResume"></span>
+  </div>
+  <div class="podium" id="podium"></div>
+  <div class="scene-bas">
+    <button class="quiz-btn secondaire" id="btnClassementComplet">Classement complet</button>
+    <span></span>
+    <button class="quiz-btn" id="btnTerminer">Terminer la partie</button>
+  </div>
+</div>
+
+<script src="quiz-banques.js"></script>
+<script src="quiz-live.js"></script>
+<script>
+/* ============================================================
+   Écran du professeur : préparation, puis pilotage de la partie.
+   C'est cette page qui calcule les points : les ordinateurs des
+   groupes envoient seulement leur choix et l'heure du serveur.
+   ============================================================ */
+const U = QuizUtil;
+const ALL = QUIZ_PERSO.map(b => Object.assign({ niveau: "Mes quiz" }, b)).concat(QUIZ_BANQUES);
+const NIVEAUX = ["Mes quiz", "4ème", "2nde", "1ère spé PC", "Terminale ES"].filter(n => ALL.some(b => b.niveau === n));
+const selection = new Set();      // clés "indexBanque:indexQuestion"
+let niveauActif = NIVEAUX.includes("Mes quiz") ? "Mes quiz" : NIVEAUX[0];
+
+const $ = id => document.getElementById(id);
+const urlJouer = new URL("jouer.html", location.href).href.replace(/^https?:\/\//, "");
+$("urlJouer").textContent = urlJouer;
+$("urlJouerConfig").textContent = urlJouer;
+
+/* ---------- Mode (démo locale / en ligne) ---------- */
+if (QuizDB.mode === "demo") {
+  $("modeBadge").textContent = "Mode démo — même navigateur uniquement";
+  $("modeBadge").className = "quiz-mode demo";
+  $("noteDemo").innerHTML = "Pour tester : créez la partie, puis ouvrez <strong>jouer.html</strong> dans un ou plusieurs autres onglets de ce navigateur. " +
+    "Pour jouer avec les ordinateurs des groupes, il faut d'abord renseigner l'adresse Firebase en haut de <code>quiz-live.js</code>.";
+} else {
+  $("modeBadge").textContent = "En ligne";
+  $("modeBadge").className = "quiz-mode en-ligne";
+}
+QuizDB.onStatus(s => {
+  document.querySelectorAll("[data-statut]").forEach(el => {
+    if (s === "ok") { el.textContent = ""; el.className = "quiz-mode hidden"; }
+    else {
+      el.textContent = s === "refus" ? "Accès refusé par Firebase (règles ?)" : "Connexion perdue… reconnexion";
+      el.className = "quiz-mode alerte";
+    }
+  });
+});
+
+/* ---------- Sélection des questions ---------- */
+function texteBrut(html) { const d = document.createElement("div"); d.innerHTML = html; return d.textContent; }
+function cleQ(b, q) { return `${b}:${q}`; }
+
+function renderOnglets() {
+  $("niveauOnglets").innerHTML = NIVEAUX.map(n => {
+    const nb = [...selection].filter(k => ALL[+k.split(":")[0]].niveau === n).length;
+    return `<button class="niveau-onglet ${n === niveauActif ? "actif" : ""}" data-niveau="${U.escape(n)}">${U.escape(n)}${nb ? `<span class="compte">(${nb})</span>` : ""}</button>`;
+  }).join("");
+  $("niveauOnglets").querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    niveauActif = b.dataset.niveau; renderOnglets(); renderChapitres();
+  }));
+}
+
+function renderChapitres() {
+  const html = ALL.map((b, bi) => {
+    if (b.niveau !== niveauActif) return "";
+    const items = b.questions.map((q, qi) => `
+      <li><label><input type="checkbox" data-q="${cleQ(bi, qi)}" ${selection.has(cleQ(bi, qi)) ? "checked" : ""}>
+        <span>${U.escape(texteBrut(q.prompt))}${q.contexte ? '<span class="tag-anim">liée à une animation</span>' : ""}</span></label></li>`).join("");
+    return `<div class="chap-ligne">
+      <input type="checkbox" data-chap="${bi}" aria-label="Tout le chapitre">
+      <details><summary>${U.escape(b.titre)}<span class="nbq" data-nb="${bi}"></span></summary><ul>${items}</ul></details>
+    </div>`;
+  }).join("");
+  $("listeChapitres").innerHTML = html || '<p class="vide">Aucun quiz pour ce niveau.</p>';
+
+  $("listeChapitres").querySelectorAll("input[data-chap]").forEach(cb => cb.addEventListener("change", () => {
+    const bi = +cb.dataset.chap;
+    const qs = ALL[bi].questions;
+    // cocher : toutes les questions sauf celles liées à une animation (si possible)
+    let cibles = qs.map((q, qi) => qi).filter(qi => !qs[qi].contexte);
+    if (!cibles.length) cibles = qs.map((q, qi) => qi);
+    qs.forEach((q, qi) => selection.delete(cleQ(bi, qi)));
+    if (cb.checked) cibles.forEach(qi => selection.add(cleQ(bi, qi)));
+    majSelection();
+  }));
+  $("listeChapitres").querySelectorAll("input[data-q]").forEach(cb => cb.addEventListener("change", () => {
+    if (cb.checked) selection.add(cb.dataset.q); else selection.delete(cb.dataset.q);
+    majSelection();
+  }));
+  majSelection();
+}
+
+function majSelection() {
+  $("listeChapitres").querySelectorAll("input[data-chap]").forEach(cb => {
+    const bi = +cb.dataset.chap, n = ALL[bi].questions.length;
+    const k = ALL[bi].questions.filter((q, qi) => selection.has(cleQ(bi, qi))).length;
+    cb.checked = k > 0; cb.indeterminate = k > 0 && k < n;
+    const nb = $("listeChapitres").querySelector(`[data-nb="${bi}"]`);
+    if (nb) nb.textContent = k ? `${k}/${n} question${n > 1 ? "s" : ""}` : `${n} question${n > 1 ? "s" : ""}`;
+  });
+  $("listeChapitres").querySelectorAll("input[data-q]").forEach(cb => { cb.checked = selection.has(cb.dataset.q); });
+  const n = selection.size;
+  const max = +$("maxQuestions").value;
+  const joues = max && max < n ? max : n;
+  $("resume").textContent = n ? `${joues} question${joues > 1 ? "s" : ""}${joues < n ? ` (parmi ${n})` : ""}` : "Aucune question sélectionnée";
+  $("btnCreer").disabled = n === 0;
+  renderOnglets();
+}
+$("maxQuestions").addEventListener("change", majSelection);
+
+function construireQuestions() {
+  let cles = [...selection].sort((a, b) => {
+    const [ab, aq] = a.split(":").map(Number), [bb, bq] = b.split(":").map(Number);
+    return ab - bb || aq - bq;
+  });
+  const max = +$("maxQuestions").value;
+  if (max && max < cles.length) {
+    const garde = new Set(U.shuffle(cles).slice(0, max));
+    cles = cles.filter(k => garde.has(k));
+  }
+  if ($("melanger").checked) cles = U.shuffle(cles);
+  return cles.map(k => {
+    const [bi, qi] = k.split(":").map(Number);
+    const src = ALL[bi].questions[qi];
+    const opts = src.vf ? src.options.slice() : U.shuffle(src.options);
+    return {
+      prompt: src.prompt,
+      options: opts.map(o => o.text),
+      bonnes: opts.map((o, i) => o.correct ? i : -1).filter(i => i >= 0),
+      explanation: src.explanation || "",
+      chapitre: ALL[bi].titre
+    };
+  });
+}
+
+/* ============================================================
+   Déroulé de la partie
+   ============================================================ */
+const P = {
+  code: null, chemin: null, titre: "", questions: [], q: -1, duree: 20,
+  noms: {},        // id -> nom (tel qu'écrit par le groupe)
+  scores: {},      // id -> { score, serie, gain }
+  phase: null, debut: 0, finLocale: 0,
+  stops: [], stopRep: null, timer: null, fermeture: false
+};
+
+function montrer(id) {
+  document.body.classList.toggle("scene", id !== "config");
+  $("config").classList.toggle("hidden", id !== "config");
+  document.querySelectorAll(".ecran").forEach(e => e.classList.toggle("actif", e.id === id));
+}
+
+async function nettoyerAnciennesParties() {
+  // efface les parties de plus de 6 h restées ouvertes (onglet fermé sans « Terminer »)
+  try {
+    const codes = await QuizDB.keys("parties");
+    for (const c of codes) {
+      const cree = await QuizDB.get(`parties/${c}/cree`);
+      if (!cree || Date.now() - cree > 6 * 3600 * 1000) await QuizDB.remove(`parties/${c}`);
+    }
+  } catch (e) { /* sans gravité */ }
+}
+
+async function creerPartie() {
+  $("btnCreer").disabled = true;
+  $("erreurCreation").textContent = "";
+  try {
+    await nettoyerAnciennesParties();
+    P.questions = construireQuestions();
+    P.duree = +$("duree").value;
+    const chapitres = [...new Set(P.questions.map(q => q.chapitre))];
+    P.titre = chapitres.length === 1 ? chapitres[0] : `${chapitres.length} chapitres`;
+    let code = null;
+    for (let essai = 0; essai < 20 && !code; essai++) {
+      const c = String(1000 + Math.floor(Math.random() * 9000));
+      if (await QuizDB.get(`parties/${c}/cree`) == null) code = c;
+    }
+    if (!code) throw new Error("Impossible de trouver un code libre");
+    P.code = code; P.chemin = `parties/${code}`;
+    P.q = -1; P.noms = {}; P.scores = {}; P.fermeture = false;
+    await QuizDB.set(P.chemin, {
+      cree: QuizDB.SERVER_TIME,
+      etat: { phase: "lobby", titre: P.titre, total: P.questions.length }
+    });
+    P.phase = "lobby";
+    P.stops.push(QuizDB.listen(`${P.chemin}/joueurs`, majJoueurs));
+    $("lobbyCode").textContent = code;
+    $("lobbyTitre").textContent = `${P.titre} · ${P.questions.length} question${P.questions.length > 1 ? "s" : ""} · ${P.duree} s`;
+    renderLobby();
+    montrer("ecranLobby");
+  } catch (e) {
+    console.error(e);
+    $("erreurCreation").textContent = "Impossible de créer la partie : vérifiez la connexion Internet et l'adresse Firebase (" + e.message + ").";
+    $("btnCreer").disabled = false;
+  }
+}
+$("btnCreer").addEventListener("click", creerPartie);
+
+function majJoueurs(val) {
+  const noms = {};
+  for (const [id, j] of Object.entries(val || {})) {
+    if (j && typeof j.nom === "string") noms[id] = j.nom.slice(0, 24);
+  }
+  P.noms = noms;
+  for (const id of Object.keys(noms)) if (!P.scores[id]) P.scores[id] = { score: 0, serie: 0, gain: 0 };
+  if (P.phase === "lobby") renderLobby();
+  if (P.phase === "question") majCompteurReponses();
+}
+
+function nbEquipes() { return Object.keys(P.noms).length; }
+
+function renderLobby() {
+  const ids = Object.keys(P.noms);
+  $("lobbyEquipes").innerHTML = ids.length
+    ? ids.map(id => `<button class="lobby-equipe" data-id="${U.escape(id)}" title="Cliquer pour retirer cette équipe">${U.escape(P.noms[id])}</button>`).join("")
+    : '<div class="lobby-vide">En attente des équipes…</div>';
+  $("lobbyEquipes").querySelectorAll(".lobby-equipe").forEach(b => b.addEventListener("click", () => retirerEquipe(b.dataset.id)));
+  $("lobbyCompteur").textContent = ids.length ? `${ids.length} équipe${ids.length > 1 ? "s" : ""} connectée${ids.length > 1 ? "s" : ""}` : "";
+  $("btnLancer").disabled = ids.length === 0;
+}
+
+async function retirerEquipe(id) {
+  if (!confirm(`Retirer l'équipe « ${P.noms[id]} » ?`)) return;
+  delete P.scores[id];
+  await QuizDB.remove(`${P.chemin}/joueurs/${id}`);
+}
+
+/* ---------- Question ---------- */
+function cartesHTML(q, compte, correction) {
+  return q.options.map((txt, i) => {
+    const etat = correction ? (q.bonnes.includes(i) ? "bonne" : "fausse") : "";
+    const nb = compte ? `<span class="nb">${compte[i] || 0}</span>` : "";
+    return `<div class="reponse-carte ${etat}" style="background:${U.FORMES[i].couleur}">${U.formeSVG(i)}<span>${txt}</span>${nb}</div>`;
+  }).join("");
+}
+
+async function lancerQuestion(i) {
+  P.q = i;
+  const q = P.questions[i];
+  P.phase = "question";
+  $("questionNumero").textContent = `Question ${i + 1} / ${P.questions.length}`;
+  $("questionTexte").innerHTML = q.prompt;
+  $("questionReponsesGrille").innerHTML = cartesHTML(q, null, false);
+  $("questionExplication").classList.add("hidden");
+  $("chrono").classList.remove("hidden", "urgent");
+  $("btnQuestionAction").textContent = "Passer ⏭";
+  $("btnQuestionAction").disabled = true;
+  $("questionReponses").textContent = "";
+  montrer("ecranQuestion");
+
+  const etat = {
+    phase: "question", q: i, total: P.questions.length,
+    prompt: q.prompt, options: q.options, duree: P.duree,
+    debut: QuizDB.SERVER_TIME, jeton: U.randomId(8)
+  };
+  const ecrit = await QuizDB.set(`${P.chemin}/etat`, etat);
+  P.debut = (ecrit && typeof ecrit.debut === "number") ? ecrit.debut : await QuizDB.get(`${P.chemin}/etat/debut`);
+  P.finLocale = Date.now() + P.duree * 1000;
+  P.reponses = {};
+  if (P.phase !== "question" || P.q !== i) return;   // arrêtée entre-temps
+  $("btnQuestionAction").disabled = false;
+  P.stopRep = QuizDB.listen(`${P.chemin}/reponses/${i}`, val => {
+    P.reponses = val || {};
+    majCompteurReponses();
+  });
+  tick();
+  P.timer = setInterval(tick, 100);
+}
+
+function tick() {
+  const reste = Math.max(0, P.finLocale - Date.now());
+  const s = Math.ceil(reste / 1000);
+  $("chronoValeur").textContent = s;
+  $("chronoArc").setAttribute("stroke-dashoffset", (282.74 * (1 - reste / (P.duree * 1000))).toFixed(1));
+  $("chrono").classList.toggle("urgent", s <= 5);
+  if (reste <= 0) finQuestion(true);
+}
+
+function majCompteurReponses() {
+  const n = Object.keys(P.reponses || {}).filter(id => P.noms[id]).length;
+  const t = nbEquipes();
+  $("questionReponses").textContent = `${n} / ${t} réponse${n > 1 ? "s" : ""}`;
+  if (P.phase === "question" && t > 0 && n >= t && !P.toutRecu) {
+    P.toutRecu = true;
+    setTimeout(() => finQuestion(false), 700);
+  }
+}
+
+async function finQuestion(parChrono) {
+  if (P.phase !== "question") return;
+  P.phase = "calcul";
+  P.toutRecu = false;
+  clearInterval(P.timer);
+  if (P.stopRep) { P.stopRep(); P.stopRep = null; }
+  $("btnQuestionAction").disabled = true;
+  if (parChrono) await new Promise(r => setTimeout(r, 1200));   // dernières réponses en route
+  if (P.fermeture) return;
+  const q = P.questions[P.q];
+  let reps = {};
+  try { reps = (await QuizDB.get(`${P.chemin}/reponses/${P.q}`)) || {}; } catch (e) { reps = P.reponses || {}; }
+
+  const compte = q.options.map(() => 0);
+  const dureeMs = P.duree * 1000;
+  for (const id of Object.keys(P.noms)) {
+    const s = P.scores[id] || (P.scores[id] = { score: 0, serie: 0, gain: 0 });
+    const r = reps[id];
+    const valide = r && Number.isInteger(r.c) && r.c >= 0 && r.c < q.options.length;
+    if (valide) compte[r.c]++;
+    const ecart = valide && typeof r.t === "number" ? r.t - P.debut : Infinity;
+    const ok = valide && q.bonnes.includes(r.c) && ecart <= dureeMs + U.TOLERANCE_MS;
+    s.serie = ok ? s.serie + 1 : 0;
+    s.gain = ok ? U.points(ecart, dureeMs) + Math.min(U.BONUS_SERIE_MAX, U.BONUS_SERIE * (s.serie - 1)) : 0;
+    s.score += s.gain;
+    s.repondu = !!valide;
+    s.ok = !!ok;
+  }
+  const rangs = classement();
+  const maj = {};
+  rangs.forEach((r, k) => {
+    maj[`${r.id}/score`] = r.score;
+    maj[`${r.id}/dernier`] = { q: P.q, ok: P.scores[r.id].ok, pts: r.gain, serie: r.serie, rang: k + 1, repondu: P.scores[r.id].repondu };
+  });
+  try {
+    if (Object.keys(maj).length) await QuizDB.update(`${P.chemin}/joueurs`, maj);
+    await QuizDB.set(`${P.chemin}/etat`, {
+      phase: "correction", q: P.q, total: P.questions.length,
+      prompt: q.prompt, options: q.options, bonnes: q.bonnes, explication: q.explanation,
+      nbEquipes: rangs.length
+    });
+  } catch (e) { console.error(e); }
+  if (P.fermeture) return;
+
+  P.phase = "correction";
+  $("chrono").classList.add("hidden");
+  $("questionReponsesGrille").innerHTML = cartesHTML(q, compte, true);
+  if (q.explanation) {
+    $("questionExplication").innerHTML = q.explanation;
+    $("questionExplication").classList.remove("hidden");
+  }
+  const nbOk = rangs.filter(r => P.scores[r.id].ok).length;
+  $("questionReponses").textContent = `${nbOk} / ${rangs.length} équipe${rangs.length > 1 ? "s" : ""} correcte${nbOk > 1 ? "s" : ""}`;
+  $("btnQuestionAction").textContent = "Classement ▶";
+  $("btnQuestionAction").disabled = false;
+}
+
+function classement() {
+  return Object.keys(P.noms)
+    .map(id => ({ id, nom: P.noms[id], ...(P.scores[id] || { score: 0, serie: 0, gain: 0 }) }))
+    .sort((a, b) => b.score - a.score || a.nom.localeCompare(b.nom));
+}
+
+$("btnQuestionAction").addEventListener("click", () => {
+  if (P.phase === "question") finQuestion(false);
+  else if (P.phase === "correction") afficherClassement();
+});
+
+/* ---------- Classement ---------- */
+async function afficherClassement() {
+  P.phase = "classement";
+  const derniere = P.q >= P.questions.length - 1;
+  if (derniere) return afficherFin();
+  const rangs = classement();
+  $("classementNumero").textContent = `Après la question ${P.q + 1} / ${P.questions.length}`;
+  $("classementListe").innerHTML = rangs.slice(0, 5).map((r, k) => `
+    <div class="classement-ligne" style="animation-delay:${k * 0.08}s">
+      <span class="rang">${k + 1}</span>
+      <span>${U.escape(r.nom)}${r.serie >= 2 ? `<span class="serie">🔥${r.serie}</span>` : ""}</span>
+      <span class="score">${r.score}${r.gain ? `<span class="gain">+${r.gain}</span>` : ""}</span>
+    </div>`).join("") || '<div class="lobby-vide">Aucune équipe</div>';
+  $("btnSuivante").textContent = "Question suivante ▶";
+  montrer("ecranClassement");
+  QuizDB.set(`${P.chemin}/etat`, { phase: "classement", q: P.q, total: P.questions.length }).catch(console.error);
+}
+$("btnSuivante").addEventListener("click", () => {
+  if (P.phase === "classement") lancerQuestion(P.q + 1);
+});
+
+/* ---------- Fin ---------- */
+async function afficherFin() {
+  P.phase = "fin";
+  const rangs = classement();
+  const places = [rangs[1], rangs[0], rangs[2]];   // ordre visuel : 2e, 1er, 3e
+  const classes = ["p2", "p1", "p3"];
+  $("podium").innerHTML = places.map((r, k) => r ? `
+    <div class="podium-place ${classes[k]}">
+      <div class="podium-nom">${U.escape(r.nom)}</div>
+      <div class="podium-score">${r.score} pts</div>
+      <div class="podium-marche">${classes[k].slice(1)}</div>
+    </div>` : "").join("");
+  $("finResume").textContent = `${P.questions.length} questions · ${rangs.length} équipe${rangs.length > 1 ? "s" : ""}`;
+  montrer("ecranFin");
+  QuizDB.set(`${P.chemin}/etat`, { phase: "fin", total: P.questions.length, nbEquipes: rangs.length }).catch(console.error);
+}
+
+$("btnClassementComplet").addEventListener("click", () => {
+  const rangs = classement();
+  $("classementNumero").textContent = "Classement final";
+  $("classementListe").innerHTML = rangs.map((r, k) => `
+    <div class="classement-ligne" style="animation-delay:${k * 0.05}s; padding:${rangs.length > 8 ? "0.6vh" : "1.4vh"} 1.6vw; font-size:${rangs.length > 8 ? "2.4vh" : ""}">
+      <span class="rang">${k + 1}</span><span>${U.escape(r.nom)}</span><span class="score">${r.score}</span>
+    </div>`).join("");
+  $("btnSuivante").textContent = "Retour au podium";
+  montrer("ecranClassement");
+});
+$("btnSuivante").addEventListener("click", () => { if (P.phase === "fin") montrer("ecranFin"); });
+
+async function fermerPartie() {
+  P.fermeture = true;
+  clearInterval(P.timer);
+  if (P.stopRep) { P.stopRep(); P.stopRep = null; }
+  P.stops.forEach(fn => fn()); P.stops = [];
+  if (P.chemin) { try { await QuizDB.remove(P.chemin); } catch (e) { console.error(e); } }
+  P.phase = null; P.code = null; P.chemin = null;
+  $("btnCreer").disabled = selection.size === 0;
+  montrer("config");
+}
+$("btnTerminer").addEventListener("click", fermerPartie);
+document.querySelectorAll("[data-quitter]").forEach(b => b.addEventListener("click", () => {
+  if (confirm("Arrêter la partie ? Les scores seront effacés.")) fermerPartie();
+}));
+$("btnLancer").addEventListener("click", () => { if (P.phase === "lobby" && nbEquipes() > 0) lancerQuestion(0); });
+
+/* ---------- Clavier : Espace ou → = bouton principal ---------- */
+document.addEventListener("keydown", e => {
+  if (!document.body.classList.contains("scene")) return;
+  if (e.key !== " " && e.key !== "ArrowRight" && e.key !== "Enter") return;
+  e.preventDefault();
+  const btn = document.querySelector(".ecran.actif .scene-bas .quiz-btn:not(.secondaire)");
+  if (btn && !btn.disabled) btn.click();
+});
+window.addEventListener("beforeunload", e => {
+  if (P.chemin) { e.preventDefault(); e.returnValue = ""; }
+});
+
+renderOnglets();
+renderChapitres();
+montrer("config");
+</script>
+</body>
+</html>

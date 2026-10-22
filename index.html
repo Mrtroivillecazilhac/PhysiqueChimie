@@ -51,9 +51,46 @@
       </a>
     </div>
   </section>
+
+  <!-- Quiz en direct : le code affiché au tableau mène à jouer.html -->
+  <section class="quiz-acces">
+    <div>
+      <h2>🎮 Quiz en direct</h2>
+      <p>Un quiz est lancé au tableau ? Entre le code affiché pour rejoindre la partie avec ton groupe.</p>
+    </div>
+    <form id="quizAcces" autocomplete="off">
+      <input id="quizAccesCode" inputmode="numeric" maxlength="4" placeholder="Code" aria-label="Code de la partie">
+      <button class="spin-btn" type="submit">Rejoindre ▶</button>
+    </form>
+  </section>
 </main>
 
 <footer>Site pédagogique — physique-chimie.</footer>
+
+<style>
+  .quiz-acces{ display:flex; align-items:center; justify-content:space-between; gap:18px 28px; flex-wrap:wrap; }
+  .quiz-acces h2{ margin:0 0 6px; }
+  .quiz-acces p{ margin:0; color:var(--chalk-dim); line-height:1.5; max-width:460px; }
+  .quiz-acces form{ display:flex; gap:10px; }
+  .quiz-acces button{ white-space:nowrap; }
+  .quiz-acces input{
+    width:6.5em; font-family:var(--font-display); font-size:1.6rem; font-weight:700; letter-spacing:.15em; text-align:center;
+    background:var(--board-2); color:var(--yellow); border:2px solid var(--line); border-radius:12px; padding:6px 10px;
+  }
+  .quiz-acces input::placeholder{ color:var(--chalk-dim); letter-spacing:normal; font-size:1.1rem; font-weight:400; }
+  .quiz-acces input:focus{ outline:none; border-color:var(--yellow); }
+</style>
+<script>
+  (function () {
+    const champ = document.getElementById("quizAccesCode");
+    champ.addEventListener("input", () => { champ.value = champ.value.replace(/\D/g, "").slice(0, 4); });
+    document.getElementById("quizAcces").addEventListener("submit", e => {
+      e.preventDefault();
+      const code = champ.value;
+      location.href = "jouer.html" + (code.length === 4 ? "?code=" + code : "");
+    });
+  })();
+</script>
 
 </body>
 </html>

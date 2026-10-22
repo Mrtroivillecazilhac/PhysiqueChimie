@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz en direct — Rejoindre</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="quiz-live.css">
+<style>
+  body{ padding:0; }
+  .joueur{
+    min-height:100vh; min-height:100dvh; display:grid; grid-template-rows:auto 1fr;
+    max-width:1100px; margin:0 auto; padding:16px 20px 24px;
+  }
+  .joueur-haut{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; padding-bottom:14px; border-bottom:1px solid var(--line); }
+  .joueur-equipe{ font-family:var(--font-display); font-size:1.3rem; color:var(--yellow); }
+  .joueur-score{ font-weight:700; color:var(--chalk-dim); }
+  .vue{ display:none; }
+  .vue.actif{ display:flex; flex-direction:column; justify-content:center; gap:22px; padding:24px 0; }
+
+  /* Rejoindre */
+  .rejoindre{ width:min(420px,100%); margin:0 auto; display:grid; gap:14px; text-align:center; }
+  .rejoindre h1{ margin:0; }
+  .rejoindre label{ text-align:left; color:var(--chalk-dim); font-weight:600; font-size:.9rem; display:grid; gap:6px; }
+  .rejoindre input{
+    font-family:var(--font-body); font-size:1.3rem; font-weight:600; text-align:center;
+    background:var(--board-2); color:var(--chalk); border:2px solid var(--line); border-radius:12px; padding:12px;
+  }
+  .rejoindre input:focus{ outline:none; border-color:var(--yellow); }
+  #champCode{ font-family:var(--font-display); font-size:2.4rem; letter-spacing:.3em; padding:8px 12px 8px calc(12px + .3em); }
+  .rejoindre .quiz-btn{ font-size:1.4rem; padding:14px; }
+  .message{ min-height:1.4em; font-weight:600; }
+  .message.erreur{ color:var(--coral); }
+  .message.info{ color:var(--teal); }
+
+  /* Attente / résultat */
+  .grand{ text-align:center; display:grid; gap:14px; justify-items:center; }
+  .grand .emoji{ font-size:clamp(3.5rem,12vh,6rem); line-height:1; }
+  .grand .titre{ font-family:var(--font-display); font-size:clamp(1.8rem,5vh,2.8rem); font-weight:700; }
+  .grand .detail{ color:var(--chalk-dim); font-size:1.15rem; max-width:640px; line-height:1.45; }
+  .grand .points{ font-family:var(--font-display); font-size:clamp(2rem,6vh,3.2rem); color:var(--teal); }
+  .titre.ok{ color:var(--teal); }
+  .titre.ko{ color:var(--coral); }
+  .attente-points span{ display:inline-block; animation:attente 1.2s infinite; }
+  .attente-points span:nth-child(2){ animation-delay:.2s; }
+  .attente-points span:nth-child(3){ animation-delay:.4s; }
+  @keyframes attente{ 0%,60%,100%{ opacity:.25; } 30%{ opacity:1; } }
+
+  /* Question */
+  .j-question-haut{ display:grid; grid-template-columns:1fr auto; gap:16px; align-items:center; }
+  .j-question-texte{ font-size:clamp(1.15rem,3vh,1.6rem); font-weight:600; line-height:1.4; }
+  .j-question-num{ color:var(--chalk-dim); font-size:.85rem; font-weight:600; margin-bottom:6px; }
+  .j-chrono{ font-family:var(--font-display); font-weight:700; font-size:2.4rem; color:var(--teal); min-width:2.2em; text-align:center; }
+  .j-chrono.urgent{ color:var(--coral); }
+  .j-reponses{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .j-reponse{
+    display:flex; align-items:center; gap:14px; text-align:left;
+    border:none; border-radius:16px; padding:22px 20px; min-height:min(22vh,180px); cursor:pointer;
+    color:var(--board); font-family:var(--font-body); font-weight:700; font-size:clamp(1.05rem,2.6vh,1.4rem); line-height:1.3;
+    transition:transform .1s ease, opacity .2s ease, box-shadow .2s ease;
+  }
+  .j-reponse .quiz-forme{ font-size:1.8em; opacity:.85; }
+  .j-reponse .touche{ margin-left:auto; font-size:.75em; opacity:.55; font-family:var(--font-display); }
+  .j-reponse:hover:not(:disabled){ transform:translateY(-3px); }
+  .j-reponse:disabled{ cursor:default; }
+  .j-reponses.envoye .j-reponse{ opacity:.3; }
+  .j-reponses.envoye .j-reponse.choisie{ opacity:1; box-shadow:0 0 0 4px var(--chalk); }
+  .j-statut{ text-align:center; font-family:var(--font-display); font-size:1.4rem; color:var(--chalk-dim); min-height:1.6em; }
+  .j-explication{ background:rgba(0,0,0,.2); border-left:4px solid var(--yellow); border-radius:8px; padding:12px 16px; text-align:left; line-height:1.45; max-width:700px; }
+
+  @media (max-width:560px){ .j-reponses{ grid-template-columns:1fr; } .j-reponse{ min-height:auto; } }
+</style>
+</head>
+<body>
+<div class="joueur">
+  <div class="joueur-haut">
+    <a href="index.html" class="quiz-btn secondaire" style="text-decoration:none;">← Site</a>
+    <span class="joueur-equipe" id="hautEquipe"></span>
+    <span class="joueur-score" id="hautScore"></span>
+    <span class="quiz-mode hidden" id="statut"></span>
+  </div>
+
+  <!-- Rejoindre -->
+  <div class="vue" id="vueRejoindre">
+    <form class="rejoindre" id="formRejoindre" autocomplete="off">
+      <div class="eyebrow">Quiz en direct</div>
+      <h1>Rejoindre</h1>
+      <label>Code affiché au tableau
+        <input id="champCode" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="0000" required>
+      </label>
+      <label>Nom de l'équipe
+        <input id="champNom" maxlength="20" placeholder="ex. Les Atomes" required>
+      </label>
+      <button class="quiz-btn" type="submit" id="btnRejoindre">C'est parti !</button>
+      <div class="message" id="messageRejoindre"></div>
+      <div class="quiz-mode demo hidden" id="badgeDemo">Mode démo : fonctionne seulement dans les onglets de ce navigateur</div>
+    </form>
+  </div>
+
+  <!-- Attente -->
+  <div class="vue" id="vueAttente">
+    <div class="grand">
+      <div class="emoji" id="attenteEmoji">👀</div>
+      <div class="titre" id="attenteTitre">Vous êtes dans la partie !</div>
+      <div class="detail" id="attenteDetail">Regardez le tableau, le quiz va commencer<span class="attente-points"><span>.</span><span>.</span><span>.</span></span></div>
+    </div>
+  </div>
+
+  <!-- Question -->
+  <div class="vue" id="vueQuestion">
+    <div class="j-question-haut">
+      <div>
+        <div class="j-question-num" id="jNum"></div>
+        <div class="j-question-texte" id="jTexte"></div>
+      </div>
+      <div class="j-chrono" id="jChrono"></div>
+    </div>
+    <div class="j-reponses" id="jReponses"></div>
+    <div class="j-statut" id="jStatut"></div>
+  </div>
+
+  <!-- Résultat d'une question -->
+  <div class="vue" id="vueResultat">
+    <div class="grand">
+      <div class="emoji" id="resEmoji"></div>
+      <div class="titre" id="resTitre"></div>
+      <div class="points" id="resPoints"></div>
+      <div class="detail" id="resDetail"></div>
+      <div class="j-explication hidden" id="resExplication"></div>
+    </div>
+  </div>
+
+  <!-- Fin -->
+  <div class="vue" id="vueFin">
+    <div class="grand">
+      <div class="emoji" id="finEmoji">🏁</div>
+      <div class="titre">Partie terminée !</div>
+      <div class="points" id="finScore"></div>
+      <div class="detail" id="finDetail"></div>
+      <button class="quiz-btn secondaire" id="btnRejouer">Rejoindre une autre partie</button>
+    </div>
+  </div>
+</div>
+
+<script src="quiz-live.js"></script>
+<script>
+/* ============================================================
+   Page des groupes : rejoindre avec le code, puis répondre.
+   La page n'envoie que le numéro de la réponse ; les points sont
+   calculés par l'écran du professeur.
+   ============================================================ */
+const U = QuizUtil;
+const $ = id => document.getElementById(id);
+const SESSION = "quizLiveJoueur";
+
+const J = {
+  code: null, id: null, nom: null,
+  etat: null, moi: null, rejoint: false,
+  jeton: null, choix: null, finLocale: 0, timer: null,
+  stops: []
+};
+
+if (QuizDB.mode === "demo") $("badgeDemo").classList.remove("hidden");
+QuizDB.onStatus(s => {
+  const el = $("statut");
+  if (s === "ok") { el.classList.add("hidden"); return; }
+  el.textContent = s === "refus" ? "Accès refusé" : "Connexion perdue… reconnexion";
+  el.className = "quiz-mode alerte";
+});
+
+// Le contenu vient de la base : on n'autorise que quelques balises de mise en forme
+function sur(html) {
+  return U.escape(html).replace(/&lt;(\/?)(sub|sup|b|i|em|strong|br)\s*\/?&gt;/gi, "<$1$2>");
+}
+
+function vue(id) {
+  document.querySelectorAll(".vue").forEach(v => v.classList.toggle("actif", v.id === id));
+}
+
+function majHaut() {
+  $("hautEquipe").textContent = J.rejoint ? J.nom : "";
+  $("hautScore").textContent = J.rejoint && J.moi ? `${J.moi.score || 0} pts` : "";
+}
+
+/* ---------- Rejoindre ---------- */
+function message(txt, type) {
+  $("messageRejoindre").textContent = txt || "";
+  $("messageRejoindre").className = "message " + (type || "erreur");
+}
+
+$("champCode").addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4); });
+
+$("formRejoindre").addEventListener("submit", async e => {
+  e.preventDefault();
+  const code = $("champCode").value.trim();
+  const nom = $("champNom").value.replace(/\s+/g, " ").trim().slice(0, 20);
+  if (!/^\d{4}$/.test(code)) return message("Le code fait 4 chiffres.");
+  if (!nom) return message("Choisissez un nom d'équipe.");
+  $("btnRejoindre").disabled = true;
+  message("Connexion…", "info");
+  try {
+    const etat = await QuizDB.get(`parties/${code}/etat`);
+    if (!etat) { message("Ce code ne correspond à aucune partie en cours."); return; }
+    if (etat.phase === "fin") { message("Cette partie est déjà terminée."); return; }
+    const joueurs = (await QuizDB.get(`parties/${code}/joueurs`)) || {};
+    const pris = Object.values(joueurs).some(j => j && String(j.nom).toLowerCase() === nom.toLowerCase());
+    if (pris) { message("Ce nom est déjà pris, choisissez-en un autre."); return; }
+    const id = U.randomId(10);
+    await QuizDB.set(`parties/${code}/joueurs/${id}`, { nom, score: 0 });
+    try { sessionStorage.setItem(SESSION, JSON.stringify({ code, id, nom })); } catch (err) { /* navigation privée */ }
+    message("");
+    demarrer(code, id, nom);
+  } catch (err) {
+    console.error(err);
+    message("Connexion impossible. Vérifiez Internet et réessayez.");
+  } finally {
+    $("btnRejoindre").disabled = false;
+  }
+});
+
+function demarrer(code, id, nom) {
+  Object.assign(J, { code, id, nom, rejoint: true, etat: null, moi: null, jeton: null, choix: null });
+  J.stops.push(QuizDB.listen(`parties/${code}/etat`, val => {
+    if (val == null) return quitter("La partie a été fermée par le professeur.");
+    J.etat = val; render();
+  }));
+  J.stops.push(QuizDB.listen(`parties/${code}/joueurs/${id}`, val => {
+    if (val == null) {
+      // retiré par le professeur (ou partie effacée)
+      if (J.moi) return quitter("Votre équipe a été retirée de la partie. Vous pouvez rejoindre avec un autre nom.");
+      return;
+    }
+    J.moi = val; render();
+  }));
+  majHaut();
+  vue("vueAttente");
+}
+
+function quitter(msg) {
+  J.stops.forEach(fn => fn()); J.stops = [];
+  clearInterval(J.timer);
+  J.rejoint = false; J.moi = null; J.etat = null;
+  try { sessionStorage.removeItem(SESSION); } catch (e) { /* rien */ }
+  majHaut();
+  vue("vueRejoindre");
+  message(msg || "", "erreur");
+}
+
+/* ---------- Affichage selon l'état de la partie ---------- */
+function render() {
+  majHaut();
+  const e = J.etat;
+  if (!e) return;
+  if (e.phase === "lobby") {
+    attente("👀", "Vous êtes dans la partie !", "Regardez le tableau, le quiz va commencer");
+  } else if (e.phase === "question") {
+    renderQuestion(e);
+  } else if (e.phase === "correction") {
+    clearInterval(J.timer);
+    renderResultat(e);
+  } else if (e.phase === "classement") {
+    const d = J.moi && J.moi.dernier;
+    const rang = d && d.q === e.q ? d.rang : null;
+    attente(rang === 1 ? "🥇" : "📊", rang ? `Votre équipe est ${rang === 1 ? "1re" : rang + "e"} !` : "Classement au tableau",
+      `${J.moi ? J.moi.score || 0 : 0} points · la question suivante arrive`);
+  } else if (e.phase === "fin") {
+    clearInterval(J.timer);
+    const d = J.moi && J.moi.dernier;
+    const rang = d ? d.rang : null;
+    $("finEmoji").textContent = rang === 1 ? "🏆" : rang === 2 ? "🥈" : rang === 3 ? "🥉" : "🏁";
+    $("finScore").textContent = `${J.moi ? J.moi.score || 0 : 0} points`;
+    $("finDetail").textContent = rang ? `Votre équipe termine ${rang === 1 ? "1re" : rang + "e"} sur ${e.nbEquipes || "?"}.` : "";
+    try { sessionStorage.removeItem(SESSION); } catch (err) { /* rien */ }
+    vue("vueFin");
+  }
+}
+
+function attente(emoji, titre, detail) {
+  $("attenteEmoji").textContent = emoji;
+  $("attenteTitre").textContent = titre;
+  $("attenteDetail").innerHTML = U.escape(detail) + '<span class="attente-points"><span>.</span><span>.</span><span>.</span></span>';
+  vue("vueAttente");
+}
+
+function cleReponse(e) { return `quizRep_${J.code}_${J.id}_${e.jeton}`; }
+
+function renderQuestion(e) {
+  if (J.jeton !== e.jeton) {
+    // nouvelle question
+    J.jeton = e.jeton;
+    J.finLocale = Date.now() + (e.duree || 20) * 1000;
+    J.choix = null;
+    try { const c = sessionStorage.getItem(cleReponse(e)); if (c != null) J.choix = +c; } catch (err) { /* rien */ }
+    $("jNum").textContent = `Question ${e.q + 1} / ${e.total}`;
+    $("jTexte").innerHTML = sur(e.prompt);
+    const opts = Array.isArray(e.options) ? e.options : Object.values(e.options || {});
+    $("jReponses").innerHTML = opts.map((txt, i) => `
+      <button class="j-reponse" data-i="${i}" style="background:${U.FORMES[i].couleur}">
+        ${U.formeSVG(i)}<span>${sur(txt)}</span><span class="touche">${i + 1}</span>
+      </button>`).join("");
+    $("jReponses").querySelectorAll(".j-reponse").forEach(b => b.addEventListener("click", () => repondre(+b.dataset.i)));
+    clearInterval(J.timer);
+    J.timer = setInterval(tickJoueur, 200);
+    tickJoueur();
+  }
+  majVerrou();
+  vue("vueQuestion");
+}
+
+function tickJoueur() {
+  const reste = Math.max(0, J.finLocale - Date.now());
+  const s = Math.ceil(reste / 1000);
+  $("jChrono").textContent = s;
+  $("jChrono").classList.toggle("urgent", s <= 5);
+  if (reste <= 0) { clearInterval(J.timer); majVerrou(); }
+}
+
+function majVerrou() {
+  const fini = Date.now() >= J.finLocale;
+  const envoye = J.choix != null;
+  $("jReponses").classList.toggle("envoye", envoye || fini);
+  $("jReponses").querySelectorAll(".j-reponse").forEach(b => {
+    b.disabled = envoye || fini;
+    b.classList.toggle("choisie", envoye && +b.dataset.i === J.choix);
+  });
+  $("jStatut").textContent = envoye ? "Réponse envoyée ! On attend les autres équipes…" : fini ? "Temps écoulé !" : "";
+}
+
+async function repondre(i) {
+  const e = J.etat;
+  if (!e || e.phase !== "question" || J.choix != null || Date.now() >= J.finLocale) return;
+  J.choix = i;
+  majVerrou();
+  try { sessionStorage.setItem(cleReponse(e), String(i)); } catch (err) { /* rien */ }
+  try {
+    await QuizDB.set(`parties/${J.code}/reponses/${e.q}/${J.id}`, { c: i, t: QuizDB.SERVER_TIME });
+  } catch (err) {
+    console.error(err);
+    J.choix = null;
+    majVerrou();
+    $("jStatut").textContent = "Envoi impossible, cliquez à nouveau.";
+  }
+}
+
+document.addEventListener("keydown", ev => {
+  if (!$("vueQuestion").classList.contains("actif")) return;
+  const n = Number(ev.key);
+  if (n >= 1 && n <= 4) {
+    const b = $("jReponses").querySelector(`[data-i="${n - 1}"]`);
+    if (b && !b.disabled) b.click();
+  }
+});
+
+function renderResultat(e) {
+  const d = J.moi && J.moi.dernier;
+  if (!d || d.q !== e.q) {   // les points n'ont pas encore été reçus
+    attente("⏳", "Correction…", "Regardez le tableau");
+    return;
+  }
+  const opts = Array.isArray(e.options) ? e.options : Object.values(e.options || {});
+  const bonnes = (Array.isArray(e.bonnes) ? e.bonnes : Object.values(e.bonnes || {})).map(i => sur(opts[i]));
+  if (d.ok) {
+    $("resEmoji").textContent = d.serie >= 3 ? "🔥" : "✅";
+    $("resTitre").textContent = "Bonne réponse !";
+    $("resTitre").className = "titre ok";
+    $("resPoints").textContent = `+${d.pts}`;
+  } else {
+    $("resEmoji").textContent = d.repondu ? "❌" : "⌛";
+    $("resTitre").textContent = d.repondu ? "Raté…" : "Pas de réponse";
+    $("resTitre").className = "titre ko";
+    $("resPoints").textContent = "+0";
+  }
+  const serie = d.ok && d.serie >= 2 ? ` · série de ${d.serie} 🔥` : "";
+  $("resDetail").innerHTML = (d.ok ? "" : `Il fallait répondre : <strong>${bonnes.join(" ou ")}</strong><br>`) +
+    `${J.moi.score || 0} points · ${d.rang === 1 ? "1re" : d.rang + "e"} place sur ${e.nbEquipes || "?"}${serie}`;
+  if (e.explication) {
+    $("resExplication").innerHTML = sur(e.explication);
+    $("resExplication").classList.remove("hidden");
+  } else {
+    $("resExplication").classList.add("hidden");
+  }
+  vue("vueResultat");
+}
+
+$("btnRejouer").addEventListener("click", () => quitter(""));
+
+/* ---------- Reprise après un rechargement de la page ---------- */
+(async function reprise() {
+  const params = new URLSearchParams(location.search);
+  if (params.get("code")) $("champCode").value = params.get("code").replace(/\D/g, "").slice(0, 4);
+  let s = null;
+  try { s = JSON.parse(sessionStorage.getItem(SESSION)); } catch (e) { s = null; }
+  if (s && s.code && s.id) {
+    try {
+      const moi = await QuizDB.get(`parties/${s.code}/joueurs/${s.id}`);
+      if (moi) return demarrer(s.code, s.id, s.nom);
+    } catch (e) { /* hors ligne : on repart de zéro */ }
+    try { sessionStorage.removeItem(SESSION); } catch (e) { /* rien */ }
+  }
+  vue("vueRejoindre");
+  ($("champCode").value ? $("champNom") : $("champCode")).focus();
+})();
+</script>
+</body>
+</html>
