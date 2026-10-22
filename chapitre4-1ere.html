@@ -96,6 +96,14 @@
     border:1px solid var(--line); background:rgba(0,0,0,0.2); color:var(--chalk); width:120px;
   }
   .challenge-feedback{ margin-top:12px; }
+  .mt-step{ font-family:var(--font-display); color:var(--teal); font-size:1.1rem; margin:18px 0 6px; }
+  .mt-table td{ padding:6px; }
+  .mt-table .mt-in{
+    font-family:var(--font-body); font-size:0.95rem; width:92px; padding:5px 6px; text-align:center;
+    border:1px solid var(--line); border-radius:6px; background:rgba(0,0,0,0.2); color:var(--chalk);
+  }
+  .mt-in.ok{ border-color:var(--teal); background:rgba(107,191,171,0.15); }
+  .mt-in.ko{ border-color:var(--coral); background:rgba(217,122,99,0.15); }
 
   /* ---------- Lien de téléchargement des slides (page-head) ---------- */
   .slides-link{
@@ -372,8 +380,8 @@
   </section>
 
   <section>
-    <h2>Défi interactif : Bilan de matière</h2>
-    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 À chaque tirage, une nouvelle réaction aA + bB → cC avec des quantités initiales tirées au hasard. Trouve le réactif limitant et calcule x<sub>max</sub>.</p>
+    <h2>🧪 Le tableau mystère</h2>
+    <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 À chaque tirage, une nouvelle réaction (1 à 3 réactifs, 1 à 3 produits) et de nouvelles quantités initiales. Construis le tableau d'avancement, trouve le réactif limitant et x<sub>max</sub>, puis décide si la transformation est totale.</p>
     <div class="activity-block" id="bilanChallenge"></div>
   </section>
 
@@ -553,8 +561,8 @@ document.getElementById("checkCourseBtn").addEventListener("click", () => {
   document.querySelectorAll(".mode-tab").forEach((t) => t.addEventListener("click", () => setTimeout(fitStages, 30)));
 })();
 
-/* ---------- Entraînement — Défi interactif : bilan de matière ---------- */
-initBilanChallenge({ containerId: "bilanChallenge", chapterId: "ch4-1ere", activityId: "defi-bilan" });
+/* ---------- Entraînement — Tableau mystère (tirage aléatoire) ---------- */
+initTableauMystere({ containerId: "bilanChallenge", chapterId: "ch4-1ere", activityId: "defi-bilan" });
 
 /* ---------- Activités liées à l'animation du Cours ---------- */
 initQCM({
@@ -584,7 +592,7 @@ initVraiFaux({
 
 /* ---------- Onglets + barre de progression ---------- */
 initModeTabs("ch4-1ere");
-initProgressBar("ch4-1ere", 5); // texte à trous complet + défi bilan + 3 activités liées à l'animation
+initProgressBar("ch4-1ere", 5); // texte à trous complet + tableau mystère + 3 activités liées à l'animation
 </script>
 </body>
 </html>

@@ -336,111 +336,266 @@ function initAdvancementTable(cfg) {
 }
 
 /* ================================================================== */
-/* Entraînement — Défi interactif : Bilan de matière (tirage aléatoire) */
+/* Entraînement — Tableau mystère : réaction et quantités tirées au   */
+/* hasard (1 à 3 réactifs, 1 à 3 produits). L'élève construit tout le */
+/* tableau, trouve le réactif limitant et x_max, puis décide si la    */
+/* transformation est totale à partir d'une mesure à l'état final.    */
 /* ================================================================== */
-function initBilanChallenge(cfg) {
-  const container = document.getElementById(cfg.containerId);
-  const chapterId = cfg.chapterId;
-  const activityId = cfg.activityId;
+const CH4_MT_COLORS = ["var(--yellow)", "var(--teal)", "#b9a7e8", "var(--coral)", "var(--chalk)", "#8fc7e8"];
 
-  let state = null;
+function ch4mtFmt(n) {
+  return (Math.round(n * 100) / 100).toLocaleString("fr-FR", { maximumFractionDigits: 2 });
+}
 
-  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+// Lit un nombre écrit par un élève ("2,5", " 3 ") ; NaN sinon.
+function ch4mtNumber(raw) {
+  const t = String(raw ?? "").trim().replace(/\s+/g, "").replace(",", ".").replace(/[−–]/g, "-");
+  if (!/^[+-]?(\d+(\.\d*)?|\.\d+)$/.test(t)) return NaN;
+  return Number(t);
+}
 
-  function drawExercise() {
-    let a, b, n0A, n0B, xmax1, xmax2;
-    // on retire les tirages trop proches d'une égalité pour éviter l'ambiguïté du réactif limitant
-    do {
-      a = randInt(1, 3);
-      b = randInt(1, 3);
-      n0A = randInt(2, 12);
-      n0B = randInt(2, 12);
-      xmax1 = n0A / a;
-      xmax2 = n0B / b;
-    } while (Math.abs(xmax1 - xmax2) < 0.4);
+// Lit une expression affine en x ("5 - 2x", "3x", "0 + x", "-2*x+5") → { k, m } (k + m·x) ; null si illisible.
+function ch4mtLinear(raw) {
+  let t = String(raw ?? "").toLowerCase().replace(/\s+/g, "")
+    .replace(/[−–—]/g, "-").replace(/[×*·.](?=x)/g, "").replace(/,/g, ".");
+  if (!t) return null;
+  if (!/^[+-]/.test(t)) t = "+" + t;
+  const re = /([+-])(\d+(?:\.\d+)?)?(x)?/y;
+  let k = 0, m = 0, pos = 0;
+  while (pos < t.length) {
+    re.lastIndex = pos;
+    const g = re.exec(t);
+    if (!g || g[0].length === 1) return null;       // signe seul ou caractère inconnu
+    if (!g[2] && !g[3]) return null;
+    const sign = g[1] === "-" ? -1 : 1;
+    const val = g[2] !== undefined ? Number(g[2]) : 1;
+    if (g[3]) m += sign * val; else k += sign * val;
+    pos = re.lastIndex;
+  }
+  return { k, m };
+}
 
-    const limiting = xmax1 < xmax2 ? "A" : "B";
-    const xmax = Math.min(xmax1, xmax2);
-    const c = randInt(1, 3);
+function initTableauMystere(cfg) {
+  const root = document.getElementById(cfg.containerId);
+  if (!root) return;
+  const id = cfg.activityId;
+  const TOL = 0.011;
+  let ex = null;
 
-    state = { a, b, c, n0A, n0B, xmax1, xmax2, limiting, xmax, checked: false };
-    renderExercise();
+  const rand = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const pick = (weights) => { let r = Math.random(), acc = 0; for (const [v, w] of weights) { acc += w; if (r < acc) return v; } return weights[weights.length - 1][0]; };
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a);
+
+  function draw() {
+    const nR = pick([[1, 0.25], [2, 0.55], [3, 0.2]]);
+    const nP = pick([[1, 0.35], [2, 0.45], [3, 0.2]]);
+    let coefs;
+    do { coefs = Array.from({ length: nR + nP }, () => pick([[1, 0.4], [2, 0.3], [3, 0.2], [4, 0.1]])); }
+    while (coefs.reduce(gcd) !== 1);                  // équation écrite avec les plus petits entiers
+
+    const letters = "ABCDEF";
+    const species = coefs.map((c, i) => ({ name: letters[i], coef: c, reactant: i < nR, color: CH4_MT_COLORS[i] }));
+    const reactants = species.filter((sp) => sp.reactant);
+
+    // x_max « candidat » de chaque réactif, au dixième près : toutes les valeurs restent décimales simples
+    const stoich = nR >= 2 && Math.random() < 0.2;
+    let r;
+    if (stoich) { const v = rand(5, 60) / 10; r = reactants.map(() => v); }
+    else {
+      do { r = reactants.map(() => rand(5, 60) / 10); }
+      while (nR >= 2 && [...r].sort((a, b) => a - b)[1] - Math.min(...r) < 0.3);
+    }
+    reactants.forEach((sp, i) => { sp.n0 = Math.round(sp.coef * r[i] * 10) / 10; sp.xCand = r[i]; });
+    species.filter((sp) => !sp.reactant).forEach((sp) => { sp.n0 = 0; });
+
+    const xmax = Math.min(...r);
+    const limiting = stoich ? "all" : reactants[r.indexOf(xmax)].name;
+    const total = Math.random() < 0.5;
+    let xf = xmax;
+    if (!total) {
+      const hi = Math.max(1, Math.round(xmax * 9) - 1);   // x_f ≤ 0,9·x_max (au dixième)
+      xf = rand(Math.max(1, Math.round(xmax * 4)), hi) / 10;
+      if (xf >= xmax) xf = Math.round((xmax - 0.1) * 10) / 10;
+    }
+    const measured = species[rand(0, species.length - 1)];
+    const nfMeasured = measured.reactant ? Math.round((measured.n0 - measured.coef * xf) * 10) / 10 : Math.round(measured.coef * xf * 10) / 10;
+
+    ex = { species, reactants, xmax, xf, total, limiting, stoich, measured, nfMeasured,
+           unit: Math.random() < 0.5 ? "mol" : "mmol", revealed: false, done: false };
+    render();
   }
 
-  function renderExercise() {
-    const s = state;
-    container.innerHTML = `
-      <div class="big-equation" style="font-size:1.15rem; margin-bottom:14px;">
-        <span class="coef">${s.a}</span> <span style="color:var(--yellow);">A</span>
-        &nbsp;+&nbsp;
-        <span class="coef">${s.b}</span> <span style="color:var(--teal);">B</span>
-        &nbsp;→&nbsp;
-        <span class="coef">${s.c}</span> <span style="color:var(--coral);">C</span>
-      </div>
-      <p class="course-text">n₀(A) = <strong>${s.n0A} mol</strong> &nbsp;—&nbsp; n₀(B) = <strong>${s.n0B} mol</strong></p>
+  const coefTxt = (c) => (c === 1 ? "" : c + " ");
+  const expected = {
+    init: (sp) => sp.n0,
+    cours: (sp) => ({ k: sp.n0, m: sp.reactant ? -sp.coef : sp.coef }),
+    fin: (sp) => Math.round((sp.n0 + (sp.reactant ? -1 : 1) * sp.coef * ex.xmax) * 100) / 100
+  };
+  const coursTxt = (sp) => sp.reactant
+    ? `${ch4mtFmt(sp.n0)} − ${sp.coef === 1 ? "" : sp.coef}x`
+    : `${sp.coef === 1 ? "" : sp.coef}x`;
 
+  function render() {
+    const e = ex, u = e.unit;
+    const eq = e.species.map((sp, i) => {
+      const sep = i === 0 ? "" : (sp.reactant || i > e.reactants.length ? " + " : " → ");
+      return `${sep}${sp.coef === 1 ? "" : `<span class="coef">${sp.coef}</span> `}<span style="color:${sp.color};">${sp.name}</span>`;
+    }).join("");
+    const head = e.species.map((sp, i) => {
+      const sep = i === 0 ? "" : (sp.reactant || i > e.reactants.length ? "+ " : "→ ");
+      return `<th>${sep}${coefTxt(sp.coef)}<span style="color:${sp.color};">${sp.name}</span></th>`;
+    }).join("");
+    const cells = (row) => e.species.map((sp, i) => `<td><input class="mt-in" data-row="${row}" data-i="${i}" autocomplete="off" spellcheck="false" inputmode="${row === "cours" ? "text" : "decimal"}"></td>`).join("");
+    const data = e.reactants.map((sp) => `n₀(${sp.name}) = <strong>${ch4mtFmt(sp.n0)} ${u}</strong>`).join(" &nbsp;·&nbsp; ");
+    const radios = e.reactants.map((sp) => `<label><input type="radio" name="${id}-lim" value="${sp.name}"> <span style="color:${sp.color};">${sp.name}</span></label>`).join("")
+      + (e.reactants.length >= 2 ? `<label><input type="radio" name="${id}-lim" value="all"> Tous (mélange stœchiométrique)</label>` : "");
+
+    root.innerHTML = `
+      <div class="big-equation" style="font-size:1.25rem; margin-bottom:12px;">${eq}</div>
+      <p class="course-text">${data}. Les produits sont absents à l'état initial.</p>
+
+      <p class="mt-step">1. Construis le tableau d'avancement <span class="hint-dim">(ligne « en cours » : écris par exemple <em>5 − 2x</em> ou <em>3x</em>)</span></p>
+      <div style="overflow-x:auto;">
+        <table class="adv-table mt-table">
+          <thead><tr><th>État du système</th><th>Avancement (${u})</th>${head}</tr></thead>
+          <tbody>
+            <tr><td>État initial</td><td>x = 0</td>${cells("init")}</tr>
+            <tr><td>En cours</td><td>x</td>${cells("cours")}</tr>
+            <tr><td>État final si totale</td><td>x = x<sub>max</sub></td>${cells("fin")}</tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mt-step">2. Réactif limitant et avancement maximal</p>
       <div class="challenge-field">
         <label>Quel est le réactif limitant ?</label>
-        <div class="challenge-radios">
-          <label><input type="radio" name="${cfg.activityId}-limiting" value="A"> A</label>
-          <label><input type="radio" name="${cfg.activityId}-limiting" value="B"> B</label>
+        <div class="challenge-radios" style="flex-wrap:wrap;">${radios}</div>
+      </div>
+      <div class="challenge-field">
+        <label for="${id}-xmax">x<sub>max</sub> (en ${u}) :</label>
+        <input id="${id}-xmax" class="challenge-input mt-in" inputmode="decimal" autocomplete="off">
+      </div>
+
+      <p class="mt-step">3. L'avancement final est-il maximal ?</p>
+      <p class="course-text">À l'état final, on mesure n<sub>f</sub>(<span style="color:${e.measured.color};">${e.measured.name}</span>) = <strong>${ch4mtFmt(e.nfMeasured)} ${u}</strong>.</p>
+      <div class="challenge-field">
+        <label for="${id}-xf">x<sub>f</sub> (en ${u}) :</label>
+        <input id="${id}-xf" class="challenge-input mt-in" inputmode="decimal" autocomplete="off">
+      </div>
+      <div class="challenge-field">
+        <label>Conclusion</label>
+        <div class="challenge-radios" style="flex-wrap:wrap;">
+          <label><input type="radio" name="${id}-tot" value="tot"> <span>x<sub>f</sub> = x<sub>max</sub> : transformation totale</span></label>
+          <label><input type="radio" name="${id}-tot" value="non"> <span>x<sub>f</sub> &lt; x<sub>max</sub> : transformation non totale</span></label>
         </div>
       </div>
 
-      <div class="challenge-field">
-        <label for="${cfg.activityId}-xmax">Valeur de x<sub>max</sub> (en mol) :</label>
-        <input type="number" step="0.1" id="${cfg.activityId}-xmax" class="challenge-input">
+      <div class="actions" style="justify-content:flex-start; margin-top:10px; flex-wrap:wrap;">
+        <button id="${id}-check">✅ Vérifier</button>
+        <button id="${id}-show">👁️ Voir la correction</button>
+        <button id="${id}-new">🎲 Nouveau tableau</button>
       </div>
-
-      <div class="actions" style="justify-content:flex-start; margin-top:10px;">
-        <button id="${cfg.activityId}-check">✅ Vérifier</button>
-        <button id="${cfg.activityId}-redraw">🎲 Nouveau tirage</button>
-      </div>
-      <div class="challenge-feedback" id="${cfg.activityId}-feedback"></div>
+      <div class="challenge-feedback" id="${id}-fb"></div>
     `;
-
-    container.querySelector(`#${cfg.activityId}-check`).addEventListener("click", checkAnswer);
-    container.querySelector(`#${cfg.activityId}-redraw`).addEventListener("click", drawExercise);
+    root.querySelector(`#${id}-check`).addEventListener("click", check);
+    root.querySelector(`#${id}-show`).addEventListener("click", reveal);
+    root.querySelector(`#${id}-new`).addEventListener("click", draw);
+    root.querySelectorAll(".mt-in").forEach((inp) => inp.addEventListener("input", () => inp.classList.remove("ok", "ko")));
   }
 
-  function checkAnswer() {
-    const s = state;
-    const feedback = container.querySelector(`#${cfg.activityId}-feedback`);
-    const radios = container.querySelectorAll(`input[name="${cfg.activityId}-limiting"]`);
-    let chosenLimiting = null;
-    radios.forEach(r => { if (r.checked) chosenLimiting = r.value; });
-    const xmaxInput = container.querySelector(`#${cfg.activityId}-xmax`);
-    const chosenXmax = Number(xmaxInput.value);
+  const mark = (inp, ok) => { inp.classList.remove("ok", "ko"); inp.classList.add(ok ? "ok" : "ko"); };
+  const radioVal = (name) => { const r = root.querySelector(`input[name="${name}"]:checked`); return r ? r.value : null; };
 
-    if (chosenLimiting === null || xmaxInput.value === "") {
-      feedback.innerHTML = `<p style="color:var(--coral);">Réponds aux deux questions avant de vérifier.</p>`;
+  function check() {
+    const e = ex, fb = root.querySelector(`#${id}-fb`);
+    const inputs = [...root.querySelectorAll(".mt-table .mt-in")];
+    const xmaxIn = root.querySelector(`#${id}-xmax`), xfIn = root.querySelector(`#${id}-xf`);
+    const lim = radioVal(`${id}-lim`), tot = radioVal(`${id}-tot`);
+    const all = [...inputs, xmaxIn, xfIn];
+    const empty = all.filter((i) => !i.value.trim()).length + (lim ? 0 : 1) + (tot ? 0 : 1);
+    if (empty === all.length + 2) {
+      fb.innerHTML = `<p style="color:var(--coral);">Commence par remplir au moins une case.</p>`;
       return;
     }
+    const errs = { init: 0, cours: 0, fin: 0 };
+    let coursCoefOnly = 0;
+    inputs.forEach((inp) => {
+      inp.classList.remove("ok", "ko");
+      if (!inp.value.trim()) return;                  // case vide : non corrigée
+      const sp = e.species[+inp.dataset.i], row = inp.dataset.row;
+      let ok;
+      if (row === "cours") {
+        const got = ch4mtLinear(inp.value), want = expected.cours(sp);
+        ok = !!got && Math.abs(got.k - want.k) < TOL && Math.abs(got.m - want.m) < TOL;
+        if (!ok && got && Math.abs(got.k - want.k) < TOL && Math.abs(Math.abs(got.m) - 1) < TOL && sp.coef !== 1) coursCoefOnly++;
+      } else {
+        const v = ch4mtNumber(inp.value);
+        ok = Math.abs(v - expected[row](sp)) < TOL;
+      }
+      mark(inp, ok);
+      if (!ok) errs[row]++;
+    });
+    const grade = (inp, want) => { if (!inp.value.trim()) return null; const ok = Math.abs(ch4mtNumber(inp.value) - want) < TOL; mark(inp, ok); return ok; };
+    xmaxIn.classList.remove("ok", "ko"); xfIn.classList.remove("ok", "ko");
+    const okLim = lim === null ? null : lim === e.limiting;
+    const okXmax = grade(xmaxIn, e.xmax);
+    const okXf = grade(xfIn, e.xf);
+    const okTot = tot === null ? null : (tot === "tot") === e.total;
+    const wrong = errs.init + errs.cours + errs.fin + [okLim, okXmax, okXf, okTot].filter((v) => v === false).length;
+    const allOk = empty === 0 && wrong === 0;
 
-    const limitingOk = chosenLimiting === s.limiting;
-    const xmaxOk = Math.abs(chosenXmax - s.xmax) < 0.05;
-    const allOk = limitingOk && xmaxOk;
+    const tips = [];
+    if (errs.init) tips.push(`État initial : ${errs.init} case(s) fausse(s). Recopie les n₀ de l'énoncé ; les produits valent 0.`);
+    if (errs.cours) tips.push(`Ligne « en cours » : ${errs.cours} case(s) fausse(s). Un réactif perd (coefficient) × x, un produit gagne (coefficient) × x.` + (coursCoefOnly ? " As-tu oublié un coefficient stœchiométrique ?" : ""));
+    if (errs.fin) tips.push(`État final : ${errs.fin} case(s) fausse(s). Remplace x par x<sub>max</sub> dans la ligne « en cours ».`);
+    if (okLim === false || okXmax === false) tips.push("Réactif limitant / x<sub>max</sub> : pour chaque réactif, cherche la valeur de x qui l'épuise (n₀ − a·x = 0). La plus petite est x<sub>max</sub>.");
+    if (okXf === false) tips.push(`x<sub>f</sub> : utilise la case de ${e.measured.name} dans la ligne « en cours » et la valeur mesurée.`);
+    if (okTot === false) tips.push("Conclusion : compare x<sub>f</sub> et x<sub>max</sub>.");
 
-    feedback.innerHTML = `
-      <p style="color:${allOk ? 'var(--teal)' : 'var(--coral)'}; font-weight:700;">
-        ${allOk ? "✅ Bravo, c'est exact !" : "❌ Pas tout à fait."}
-      </p>
-      <p class="course-text" style="font-size:0.88rem;">
-        x<sub>max,1</sub> (A limitant) = ${s.n0A} / ${s.a} = ${fmt1(s.xmax1)} mol<br>
-        x<sub>max,2</sub> (B limitant) = ${s.n0B} / ${s.b} = ${fmt1(s.xmax2)} mol<br>
-        Le plus petit des deux impose x<sub>max</sub> = ${fmt1(s.xmax)} mol : le réactif limitant est <strong>${s.limiting}</strong>.
-      </p>
-    `;
-
-    if (allOk && !s.checked) {
-      s.checked = true;
-      ProgressStore.record(chapterId, activityId, true);
-    }
+    const left = empty ? `<p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">Encore ${empty} réponse(s) à donner.</p>` : "";
+    if (allOk) fb.innerHTML = `<p style="color:var(--teal); font-weight:700;">✅ Bravo, tableau et conclusions exacts !${e.revealed ? " <em style=\"font-weight:400;\">(Correction déjà vue : non compté. Tente un nouveau tableau.)</em>" : ""}</p>`;
+    else if (!wrong) fb.innerHTML = `<p style="color:var(--teal); font-weight:700;">👍 Tout ce que tu as rempli est juste.</p>${left}`;
+    else fb.innerHTML = `<p style="color:var(--coral); font-weight:700;">❌ Corrige les cases en rouge :</p><ul class="course-text" style="font-size:0.9rem; padding-left:20px;">${tips.map((t) => `<li>${t}</li>`).join("")}</ul>${left}`;
+    if (allOk && !e.revealed && !e.done) { e.done = true; ProgressStore.record(cfg.chapterId, cfg.activityId, true); }
   }
 
-  drawExercise();
-}
+  function reveal() {
+    const e = ex, u = e.unit;
+    e.revealed = true;
+    root.querySelectorAll(".mt-table .mt-in").forEach((inp) => {
+      const sp = e.species[+inp.dataset.i], row = inp.dataset.row;
+      inp.value = row === "cours" ? coursTxt(sp) : ch4mtFmt(expected[row](sp));
+      mark(inp, true);
+    });
+    const xmaxIn = root.querySelector(`#${id}-xmax`), xfIn = root.querySelector(`#${id}-xf`);
+    xmaxIn.value = ch4mtFmt(e.xmax); mark(xmaxIn, true);
+    xfIn.value = ch4mtFmt(e.xf); mark(xfIn, true);
+    root.querySelectorAll(`input[name="${id}-lim"]`).forEach((r) => { r.checked = r.value === e.limiting; });
+    root.querySelectorAll(`input[name="${id}-tot"]`).forEach((r) => { r.checked = (r.value === "tot") === e.total; });
 
+    const cand = e.reactants.map((sp) => `Si ${sp.name} est limitant : ${ch4mtFmt(sp.n0)} − ${sp.coef === 1 ? "" : sp.coef}x = 0 ⇒ x = ${sp.coef === 1 ? "" : `${ch4mtFmt(sp.n0)} / ${sp.coef} = `}${ch4mtFmt(sp.xCand)} ${u}`).join("<br>");
+    const limTxt = e.limiting === "all"
+      ? `Toutes les valeurs sont égales : mélange stœchiométrique, tous les réactifs sont épuisés ensemble. x<sub>max</sub> = ${ch4mtFmt(e.xmax)} ${u}.`
+      : (e.reactants.length === 1
+        ? `Seul réactif : ${e.limiting} est limitant et x<sub>max</sub> = ${ch4mtFmt(e.xmax)} ${u}.`
+        : `La plus petite valeur l'emporte : x<sub>max</sub> = ${ch4mtFmt(e.xmax)} ${u}, le réactif limitant est ${e.limiting}.`);
+    const m = e.measured;
+    const xfTxt = m.reactant
+      ? `n<sub>f</sub>(${m.name}) = ${ch4mtFmt(m.n0)} − ${m.coef === 1 ? "" : m.coef}x<sub>f</sub> = ${ch4mtFmt(e.nfMeasured)} ⇒ x<sub>f</sub> = ${m.coef === 1 ? "" : "("}${ch4mtFmt(m.n0)} − ${ch4mtFmt(e.nfMeasured)}${m.coef === 1 ? "" : `) / ${m.coef}`} = ${ch4mtFmt(e.xf)} ${u}`
+      : `n<sub>f</sub>(${m.name}) = ${m.coef === 1 ? "" : m.coef}x<sub>f</sub> = ${ch4mtFmt(e.nfMeasured)} ⇒ x<sub>f</sub> = ${m.coef === 1 ? "" : `${ch4mtFmt(e.nfMeasured)} / ${m.coef} = `}${ch4mtFmt(e.xf)} ${u}`;
+    const concl = e.total
+      ? `x<sub>f</sub> = x<sub>max</sub> : la transformation est <strong>totale</strong>.`
+      : `x<sub>f</sub> = ${ch4mtFmt(e.xf)} ${u} &lt; x<sub>max</sub> = ${ch4mtFmt(e.xmax)} ${u} : la transformation est <strong>non totale</strong>.`;
+    root.querySelector(`#${id}-fb`).innerHTML = `
+      <div class="method-box" style="margin-top:6px;">
+        <span class="box-label">🔧 Correction</span>
+        <div class="course-text" style="line-height:1.9; font-size:0.92rem;">${cand}<br>${limTxt}<br>${xfTxt}<br>${concl}</div>
+      </div>`;
+  }
+
+  draw();
+  return { get exercise() { return ex; }, draw };
+}
 
 /* ================================================================== */
 /* Diapos v2 — moteur « recette » : des jetons qui se combinent        */
