@@ -71,6 +71,7 @@
   <h1>Chapitre 5 — Titrages colorimétriques</h1>
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
   <a class="slides-link" href="slides/ch5-1ere.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
+  <button class="print-btn" type="button" onclick="printCours()">🖨️ Version imprimable du cours</button>
 </header>
 
 <div class="progress-wrap">
@@ -135,6 +136,15 @@
   <section>
     <h2>c. Dispositif de titrage</h2>
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Clique sur un élément du montage ou sur son nom.</p>
+    <div class="print-only">
+      <ul style="margin:4px 0 8px; padding-left:20px; line-height:1.7;">
+        <li><strong>Burette graduée</strong> : elle contient la solution de réactif titrant B, de concentration C<sub>B</sub> connue. On y lit le volume versé V<sub>B</sub>.</li>
+        <li><strong>Potence et pince</strong> : elles maintiennent la burette bien verticale au-dessus du récipient.</li>
+        <li><strong>Erlenmeyer (ou bécher)</strong> : il contient un volume V<sub>A</sub> connu de solution de réactif titré A, de concentration C<sub>A</sub> à déterminer.</li>
+        <li><strong>Barreau aimanté</strong> : il tourne dans la solution et homogénéise le mélange réactionnel après chaque ajout.</li>
+        <li><strong>Agitateur magnétique</strong> : son aimant tournant entraîne le barreau aimanté placé dans la solution.</li>
+      </ul>
+    </div>
     <div class="ch5-bench">
       <svg id="setupSvg" class="bench" viewBox="0 0 420 540"></svg>
       <div class="ch5-side">
@@ -186,6 +196,14 @@
   <section>
     <h2>Qui est limitant, et quand ?</h2>
     <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Déplace le curseur : n₀(I₂) = 0,50 mmol, C<sub>B</sub> = 5,0 × 10⁻² mol·L⁻¹.</p>
+    <div class="print-only">
+      <p class="course-text">Exemple : n₀(I₂) = 0,50 mmol, C<sub>B</sub> = 5,0 × 10⁻² mol·L⁻¹ ; l'équivalence est atteinte pour V<sub>E</sub> = 20,0 mL.</p>
+      <ul style="margin:4px 0 8px; padding-left:20px; line-height:1.7;">
+        <li><strong>Avant l'équivalence</strong> (V<sub>B</sub> &lt; V<sub>E</sub>) : le réactif titrant S₂O₃²⁻ est limitant ; il reste du diiode I₂.</li>
+        <li><strong>À l'équivalence</strong> (V<sub>B</sub> = V<sub>E</sub>) : les deux réactifs sont entièrement consommés, le mélange est stœchiométrique.</li>
+        <li><strong>Après l'équivalence</strong> (V<sub>B</sub> &gt; V<sub>E</sub>) : le réactif titré I₂ est limitant ; S₂O₃²⁻ est en excès.</li>
+      </ul>
+    </div>
     <svg id="graphSvg" viewBox="0 0 620 380" style="width:100%; max-width:680px; height:auto; display:block; margin:0 auto;"></svg>
     <div class="anim-controls" style="max-width:680px; margin:0 auto;">
       <label>Volume versé V<sub>B</sub> (mL)</label>

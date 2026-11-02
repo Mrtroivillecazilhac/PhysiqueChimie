@@ -72,6 +72,7 @@
   <p class="sub">Choisis ton mode : Cours pour apprendre, Entraînement pour t'exercer, Synthèse pour réviser vite.</p>
   <a class="slides-link" href="slides/ch4-2nde.html" target="_blank" rel="noopener">📽️ Voir les slides du cours</a>
   <a class="slides-link" href="tp-pointage-2nde.html" target="_blank" rel="noopener">🎥 TP : pointage vidéo</a>
+  <button class="print-btn" type="button" onclick="printCours()">🖨️ Version imprimable du cours</button>
 </header>
 
 <div class="progress-wrap">
@@ -130,6 +131,14 @@
         </div>
       </div>
       <h3 style="font-family:Kalam,cursive; color:var(--teal); font-size:1.35rem; margin:22px 0 6px;">2. Les 4 caractéristiques d'un vecteur</h3>
+      <div class="print-only">
+        <ul style="margin:4px 0 8px; padding-left:20px; line-height:1.7;">
+          <li><strong>Point d'application</strong> : le point d'où part la flèche (par exemple la position M du système).</li>
+          <li><strong>Direction</strong> : la droite qui porte la flèche.</li>
+          <li><strong>Sens</strong> : le côté vers lequel pointe la flèche (sur une même droite, deux sens sont possibles).</li>
+          <li><strong>Valeur</strong> : représentée par la longueur de la flèche, à une échelle choisie.</li>
+        </ul>
+      </div>
       <p class="course-text" style="color:var(--chalk-dim); font-size:0.9rem;">👉 Choisis une caractéristique pour la voir sur le schéma, puis essaie « Sens opposé ».</p>
       <div class="toggle-row">
         <button class="toggle-btn" id="vaPoint">Point d'application</button>

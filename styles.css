@@ -467,3 +467,48 @@ footer{
   background:rgba(0,0,0,0.15); border:1px solid var(--line); border-radius:8px;
   padding:10px 14px; margin-bottom:8px;
 }
+
+/* ============================================================
+   VERSION IMPRIMABLE DU COURS (noir et blanc, sans animations)
+   Activée par le bouton « Version imprimable » (printCours() dans
+   modules-common.js) : seul le panneau Cours est imprimé.
+   ============================================================ */
+.print-only{ display:none; }
+.print-btn{
+  display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+  font-family:var(--font-body); font-size:0.88rem; cursor:pointer;
+  color:var(--teal); background:transparent; border:1px solid var(--teal); border-radius:999px;
+  padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+}
+.print-btn:hover, .print-btn:focus{ background:var(--teal); color:var(--board); }
+@media print{
+  @page{ margin:14mm 15mm; }
+  body.print-cours{ --board:#fff; --board-2:#fff; --chalk:#000; --chalk-dim:#333; --yellow:#000; --teal:#000; --coral:#000; --line:#000;
+    background:#fff !important; padding:0 !important; font-size:11pt; }
+  body.print-cours *{ color:#000 !important; background:transparent !important; box-shadow:none !important; text-shadow:none !important; border-color:#000 !important; }
+  body.print-cours .topbar, body.print-cours .progress-wrap, body.print-cours .mode-tabs,
+  body.print-cours footer, body.print-cours .page-head .sub, body.print-cours .slides-link,
+  body.print-cours .print-btn, body.print-cours .anim-zone, body.print-cours .toggle-row,
+  body.print-cours .activity-block, body.print-cours button, body.print-cours .actions,
+  body.print-cours .print-hide, body.print-cours .mode-panel:not(#panelCours){ display:none !important; }
+  body.print-cours .print-only{ display:block !important; }
+  body.print-cours svg, body.print-cours img{ filter:grayscale(1); }
+  body.print-cours #panelCours{ display:block !important; }
+  body.print-cours header.page-head{ margin:0 0 6mm; }
+  body.print-cours h1{ font-size:20pt; }
+  body.print-cours .badge-inline{ border:1px solid #000; }
+  body.print-cours main{ display:block; max-width:none; padding:0; }
+  body.print-cours section{ border:none !important; border-radius:0; padding:0; margin:0 0 5mm; }
+  body.print-cours section h2{ font-size:14pt; border-bottom:1px solid #000; padding-bottom:2px; margin:0 0 3mm; break-after:avoid; }
+  body.print-cours h3{ break-after:avoid; }
+  body.print-cours .course-text{ line-height:1.6; }
+  body.print-cours .objectifs-box, body.print-cours .definition-box, body.print-cours .recall-box,
+  body.print-cours .method-box, body.print-cours .warning-box, body.print-cours .formula{
+    border:1px solid #000 !important; border-left-width:4px !important; border-radius:0;
+    padding:2.5mm 4mm; margin:3mm 0; break-inside:avoid;
+  }
+  body.print-cours .warning-box{ border-style:dashed !important; border-left-style:solid !important; }
+  body.print-cours .formula{ border-left-width:1px !important; font-size:12pt; }
+  body.print-cours .box-label{ font-weight:700; }
+  body.print-cours #vmBox{ border:1px solid #000 !important; padding:3mm 4mm !important; overflow:visible !important; }
+}

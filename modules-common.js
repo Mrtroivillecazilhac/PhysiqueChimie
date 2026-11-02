@@ -347,3 +347,59 @@ const TolerantAnswer = (() => {
     window.addEventListener("click", handler, true);
   }
 })();
+
+/* ---------- Version imprimable du cours (noir et blanc, sans animations) ---------- */
+/* N'imprime que le panneau Cours. Masque les animations et widgets (quel que
+   soit le nom de leur conteneur), leurs consignes (« 👉 … ») et les
+   intertitres qui n'introduisaient qu'une animation.
+   - .print-keep : élément à garder à l'impression (ex. schéma statique)
+   - .print-only : contenu écrit uniquement pour la version papier */
+const PRINT_WIDGET_SELECTOR = [
+  ".anim-zone", ".anim-controls", ".anim-readout", ".toggle-row",
+  "[class*='-stage']", "[class*='widget']", ".mini-anim", ".scene", ".scene-row",
+  ".ctrl-zone", ".ptable-wrap", ".eq-box", ".step-eq", ".step-explain", ".step-nav",
+  ".stage-box", ".stock-row", ".mini-explain", ".ch5-box", ".beaker-row"
+].join(",");
+function printCours() {
+  const panel = document.getElementById("panelCours");
+  const marked = [];
+  const hide = el => { if (!el.classList.contains("print-hide")) { el.classList.add("print-hide"); marked.push(el); } };
+  const kept = el => el.closest(".print-keep, .print-only");
+  const BOX = /(^|\s)(definition-box|recall-box|warning-box|method-box|objectifs-box|formula)(\s|$)/;
+  if (panel) {
+    panel.querySelectorAll(PRINT_WIDGET_SELECTOR).forEach(el => { if (!kept(el)) hide(el); });
+    // Éléments interactifs restants (SVG, curseurs…) : on masque le bloc qui les contient,
+    // sans jamais masquer un encadré de cours entier.
+    panel.querySelectorAll("svg, canvas, input, select, textarea").forEach(el => {
+      if (kept(el) || el.closest(".print-hide") || (el.parentElement && el.parentElement.closest("svg"))) return;
+      if (el.parentElement && el.parentElement.closest(".definition-box, .recall-box, .warning-box, .method-box, .objectifs-box, .formula")) { hide(el); return; }
+      let block = el;
+      while (block.parentElement && block.parentElement !== panel && block.parentElement.tagName !== "SECTION" && !BOX.test(block.parentElement.className || "")) block = block.parentElement;
+      hide(block);
+    });
+    panel.querySelectorAll("p, div").forEach(p => {
+      if (p.textContent.trim().startsWith("👉") && !kept(p)) hide(p);
+    });
+    // Intertitres (h3/h4, puis h2) qui n'introduisaient qu'une animation
+    const hasContent = h => {
+      let el = h.nextElementSibling;
+      const stop = h.tagName === "H2" ? /^H2$/ : /^H[234]$/;
+      while (el && !stop.test(el.tagName)) {
+        if (!el.classList.contains("print-hide") && !/^H[234]$/.test(el.tagName) && (el.textContent.trim() || el.querySelector("img"))) return true;
+        if (/^H[34]$/.test(el.tagName) && !el.classList.contains("print-hide")) return true;
+        el = el.nextElementSibling;
+      }
+      return false;
+    };
+    panel.querySelectorAll("h3, h4").forEach(h => { if (!kept(h) && !hasContent(h)) hide(h); });
+    panel.querySelectorAll("h2").forEach(h => { if (!kept(h) && !hasContent(h)) hide(h); });
+  }
+  document.body.classList.add("print-cours");
+  const cleanup = () => {
+    document.body.classList.remove("print-cours");
+    marked.forEach(e => e.classList.remove("print-hide"));
+    window.removeEventListener("afterprint", cleanup);
+  };
+  window.addEventListener("afterprint", cleanup);
+  window.print();
+}
