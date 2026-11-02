@@ -928,3 +928,347 @@ function initVecLive(cfg) {
   sync();
   makePausableAnimation(svg, frame);
 }
+
+/* ================================================================
+   MÉTHODES (mode Entraînement) — tracer un vecteur déplacement,
+   tracer un vecteur vitesse sur une chronophotographie.
+   Document quadrillé : 1 carreau = 1 cm. L'élève trace à la souris
+   ou au doigt (appui sur l'origine, glisser, relâcher sur la pointe).
+   Chaque exercice se déroule par étapes déverrouillées une à une ;
+   « Nouvel exercice » tire de nouvelles données.
+   ================================================================ */
+var C4M = { G: 14, OX: 10, OY: 10, W: 21, H: 11, TAU: 0.1, SD: 0.25, SV: 2, SNAP: 0.45 };
+var C4M_SUB = ["₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"];
+function c4mName(i) { return "M" + String(i).split("").map(d => C4M_SUB[+d]).join(""); }
+function c4mNameH(i) { return "M<sub>" + i + "</sub>"; }
+function c4mPx(p) { return [C4M.OX + p[0] * C4M.G, C4M.OY + (C4M.H - p[1]) * C4M.G]; }
+function c4mDist(a, b) { return Math.hypot(b[0] - a[0], b[1] - a[1]); }
+function c4mParse(str) {
+  const s = String(str == null ? "" : str).trim().replace(/\s/g, "").replace(",", ".");
+  if (!/^[-+]?(\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
+  return Number(s);
+}
+function c4mClose(val, ref, rel) { return Math.abs(val - ref) <= Math.abs(ref) * rel + 1e-9; }
+function c4mR1(x) { return Math.round(x * 10) / 10; }
+
+/* Chronophotographie d'un ballon lancé : 12 positions M0…M11, τ = 0,1 s.
+   Positions renvoyées en cm sur le document (échelle 1 cm ↔ 0,25 m). */
+function c4mThrow(rand) {
+  const vx = 3.6 + 0.8 * rand(), vy = 5.6 + 1.0 * rand(), pts = [];
+  for (let k = 0; k < 12; k++) {
+    const t = k * C4M.TAU;
+    pts.push([1 + vx * t / C4M.SD, 1 + (vy * t - 4.9 * t * t) / C4M.SD]);
+  }
+  return pts;
+}
+
+/* Planche à dessin : quadrillage + points + tracé de l'élève (vecteur ou règle). */
+function c4mBoard(svg, pfx) {
+  const VW = 2 * C4M.OX + C4M.W * C4M.G, VH = 2 * C4M.OY + C4M.H * C4M.G;
+  svg.setAttribute("viewBox", "0 0 " + VW + " " + VH);
+  svg.style.touchAction = "none";
+  svg.style.cursor = "crosshair";
+  const st = { pts: [], labels: [], mode: "vector", user: null, sol: null, snapEnd: true, onMove: null, onEnd: null, locked: false };
+  let drag = null;
+
+  function toCm(ev) {
+    const r = svg.getBoundingClientRect();
+    const x = (ev.clientX - r.left) / (r.width || VW) * VW, y = (ev.clientY - r.top) / (r.height || VH) * VH;
+    return [(x - C4M.OX) / C4M.G, C4M.H - (y - C4M.OY) / C4M.G];
+  }
+  function snap(p) {
+    let best = null, bd = C4M.SNAP;
+    st.pts.forEach(q => { const d = c4mDist(p, q); if (d < bd) { bd = d; best = q; } });
+    return best ? best.slice() : p;
+  }
+  function arrow(a, b, col, w, dash) {
+    const A = c4mPx(a), B = c4mPx(b), L = Math.hypot(B[0] - A[0], B[1] - A[1]);
+    if (L < 1) return "";
+    const ux = (B[0] - A[0]) / L, uy = (B[1] - A[1]) / L, h = dash ? 0 : 8;
+    let s = '<line x1="' + A[0] + '" y1="' + A[1] + '" x2="' + (B[0] - ux * h * 0.8) + '" y2="' + (B[1] - uy * h * 0.8) + '" stroke="' + col + '" stroke-width="' + w + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="4 3"' : "") + '/>';
+    if (!dash) s += '<path d="M' + B[0] + ',' + B[1] + ' L' + (B[0] - ux * h - uy * h * 0.45) + ',' + (B[1] - uy * h + ux * h * 0.45) + ' L' + (B[0] - ux * h + uy * h * 0.45) + ',' + (B[1] - uy * h - ux * h * 0.45) + ' Z" fill="' + col + '"/>';
+    else s += '<circle cx="' + A[0] + '" cy="' + A[1] + '" r="2" fill="' + col + '"/><circle cx="' + B[0] + '" cy="' + B[1] + '" r="2" fill="' + col + '"/>';
+    return s;
+  }
+  function render() {
+    let s = '<rect x="0" y="0" width="' + VW + '" height="' + VH + '" fill="' + C4.board + '"/>';
+    for (let i = 0; i <= C4M.W; i++) { const x = C4M.OX + i * C4M.G; s += '<line x1="' + x + '" y1="' + C4M.OY + '" x2="' + x + '" y2="' + (VH - C4M.OY) + '" stroke="' + C4.line + '" stroke-width="0.5"/>'; }
+    for (let j = 0; j <= C4M.H; j++) { const y = C4M.OY + j * C4M.G; s += '<line x1="' + C4M.OX + '" y1="' + y + '" x2="' + (VW - C4M.OX) + '" y2="' + y + '" stroke="' + C4.line + '" stroke-width="0.5"/>'; }
+    st.pts.forEach((p, i) => {
+      const P = c4mPx(p), hl = st.labels.indexOf(i) >= 0;
+      s += '<circle cx="' + P[0] + '" cy="' + P[1] + '" r="' + (hl ? 3.2 : 2.4) + '" fill="' + (hl ? C4.yellow : C4.chalk) + '"/>';
+      if (hl) s += '<text x="' + P[0] + '" y="' + (P[1] - 7) + '" font-size="11" fill="' + C4.yellow + '" font-family="' + C4.hand + '" text-anchor="middle">' + c4mName(i) + '</text>';
+    });
+    if (st.sol) s += arrow(st.sol[0], st.sol[1], C4.teal, 2.2, false);
+    if (st.user) s += st.mode === "ruler" ? arrow(st.user[0], st.user[1], C4.teal, 1.4, true) : arrow(st.user[0], st.user[1], C4.coral, 2.2, false);
+    svg.innerHTML = s;
+  }
+  svg.addEventListener("pointerdown", ev => {
+    if (st.locked) return;
+    ev.preventDefault();
+    const p = snap(toCm(ev));
+    drag = { a: p };
+    st.user = [p, p];
+    if (svg.setPointerCapture && ev.pointerId != null) { try { svg.setPointerCapture(ev.pointerId); } catch (e) { /* ignore */ } }
+    render();
+    if (st.onMove) st.onMove(st.user);
+  });
+  svg.addEventListener("pointermove", ev => {
+    if (!drag) return;
+    const raw = toCm(ev), b = (st.mode === "ruler" || st.snapEnd) ? snap(raw) : raw;
+    st.user = [drag.a, b];
+    render();
+    if (st.onMove) st.onMove(st.user);
+  });
+  function end() {
+    if (!drag) return;
+    drag = null;
+    render();
+    if (st.onEnd && st.user) st.onEnd(st.user);
+  }
+  svg.addEventListener("pointerup", end);
+  svg.addEventListener("pointercancel", end);
+  st.render = render;
+  return st;
+}
+
+/* Étapes guidées : chaque étape s'ouvre quand la précédente est terminée. */
+function c4mStepsHTML(pfx, steps) {
+  return steps.map((t, k) => {
+    const input = t.input ? '<div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:8px;"><input type="text" inputmode="decimal" class="activity-estimate-input" id="' + pfx + '_in' + k + '" autocomplete="off"><span style="color:var(--chalk-dim);">' + t.unit + '</span><button class="activity-option" style="width:auto;" id="' + pfx + '_ok' + k + '">Valider</button></div>' : "";
+    return '<div class="meth-step locked" id="' + pfx + '_st' + k + '"><div class="meth-step-title"><span class="meth-num">' + (k + 1) + '</span><span>' + t.title + '</span></div>' + input + '<div class="activity-feedback" id="' + pfx + '_fb' + k + '"></div></div>';
+  }).join("");
+}
+function c4mFb(el, ok, html) { el.className = "activity-feedback show " + (ok ? "feedback-ok" : "feedback-ko"); el.innerHTML = html; }
+
+/* ---------- Méthode 1 : vecteur déplacement + valeur + vitesse moyenne ---------- */
+function initMethodDisplacement(cfg) {
+  const root = document.getElementById(cfg.containerId);
+  if (!root) return;
+  const pfx = cfg.containerId, rand = cfg.rand || Math.random;
+  let ex, step, tries, clean, bd;
+
+  function newData() {
+    const pts = c4mThrow(rand);
+    const n = 3 + Math.floor(rand() * 4);              // 3 à 6 intervalles
+    const i = Math.floor(rand() * (12 - n));
+    const j = i + n;
+    const cm = c4mDist(pts[i], pts[j]), cmR = c4mR1(cm);
+    const d = cmR * C4M.SD, dt = n * C4M.TAU;
+    return { pts, i, j, n, cm, cmR, d, dt, v: d / dt };
+  }
+  function build() {
+    ex = newData(); step = 0; tries = 0; clean = true;
+    const Mi = c4mNameH(ex.i), Mj = c4mNameH(ex.j);
+    root.innerHTML =
+      '<div class="activity-prompt">Chronophotographie d\'un ballon. Durée entre deux positions successives : <strong>τ = 0,1 s</strong>. Échelle du document : <strong>1 cm ↔ 0,25 m</strong> (1 carreau = 1 cm).<br>On étudie le déplacement du ballon entre les positions <strong style="color:var(--yellow)">' + Mi + '</strong> et <strong style="color:var(--yellow)">' + Mj + '</strong>.</div>'
+      + '<div class="meth-board"><svg id="' + pfx + '_svg"></svg></div>'
+      + '<div class="anim-readout" id="' + pfx + '_ro" style="text-align:center; margin-top:6px;">Appuie sur l\'origine, glisse, relâche sur la pointe.</div>'
+      + c4mStepsHTML(pfx, [
+        { title: 'Trace le vecteur déplacement <span class="vec">' + Mi + Mj + '</span> sur le document.' },
+        { title: 'Calcule la valeur réelle du déplacement ' + Mi + Mj + '.', input: true, unit: "m" },
+        { title: 'Calcule la valeur de la vitesse moyenne v<sub>moy</sub> du ballon entre ' + Mi + ' et ' + Mj + '.', input: true, unit: "m·s⁻¹" }
+      ])
+      + '<div class="activity-feedback" id="' + pfx + '_end"></div>'
+      + '<div class="actions" style="margin-top:14px;"><button class="toggle-btn" id="' + pfx + '_new">🔄 Nouvel exercice</button></div>';
+
+    bd = c4mBoard(document.getElementById(pfx + "_svg"), pfx);
+    bd.pts = ex.pts; bd.labels = [ex.i, ex.j]; bd.mode = "vector"; bd.snapEnd = true;
+    const ro = document.getElementById(pfx + "_ro");
+    bd.onMove = u => { ro.innerHTML = "Longueur de ton tracé : <strong>" + c4Fr(c4mDist(u[0], u[1]), 1) + " cm</strong>"; };
+    bd.onEnd = u => { if (step === 0) checkDraw(u); };
+    bd.render();
+    [1, 2].forEach(k => {
+      document.getElementById(pfx + "_ok" + k).addEventListener("click", () => checkNum(k));
+      document.getElementById(pfx + "_in" + k).addEventListener("keydown", e => { if (e.key === "Enter") checkNum(k); });
+    });
+    document.getElementById(pfx + "_new").addEventListener("click", build);
+    open(0);
+  }
+  function open(k) {
+    step = k; tries = 0;
+    for (let q = 0; q < 3; q++) document.getElementById(pfx + "_st" + q).classList.toggle("locked", q > k);
+    if (k >= 3) finish();
+  }
+  function solDraw() {
+    bd.sol = [ex.pts[ex.i], ex.pts[ex.j]]; bd.user = null; bd.locked = true; bd.render();
+  }
+  function checkDraw(u) {
+    const fb = document.getElementById(pfx + "_fb0");
+    const A = ex.pts[ex.i], B = ex.pts[ex.j], Mi = c4mNameH(ex.i), Mj = c4mNameH(ex.j);
+    const okA = c4mDist(u[0], A) < 0.05, okB = c4mDist(u[1], B) < 0.05;
+    if (c4mDist(u[0], u[1]) < 0.3) return;               // simple clic : on ignore
+    if (okA && okB) {
+      bd.locked = true;
+      c4mFb(fb, true, "✅ Bien tracé : origine en " + Mi + " (départ), pointe en " + Mj + " (arrivée). Longueur sur le document : <strong>" + c4Fr(ex.cmR, 1) + " cm</strong>.");
+      return open(1);
+    }
+    tries++;
+    let msg;
+    if (c4mDist(u[0], B) < 0.05 && c4mDist(u[1], A) < 0.05) msg = "Vérifie le sens : le vecteur va de la position de départ " + Mi + " vers la position d'arrivée " + Mj + ".";
+    else if (!okA) msg = "L'origine du vecteur déplacement est la position de départ " + Mi + ".";
+    else msg = "La pointe du vecteur déplacement est la position d'arrivée " + Mj + ".";
+    if (tries >= 2) {
+      clean = false; solDraw();
+      c4mFb(fb, false, "❌ " + msg + " Correction en vert : origine en " + Mi + ", pointe en " + Mj + ". Longueur sur le document : <strong>" + c4Fr(ex.cmR, 1) + " cm</strong>.");
+      return open(1);
+    }
+    c4mFb(fb, false, "❌ " + msg + " Recommence le tracé.");
+  }
+  function checkNum(k) {
+    if (step !== k) return;
+    const input = document.getElementById(pfx + "_in" + k), fb = document.getElementById(pfx + "_fb" + k);
+    const val = c4mParse(input.value);
+    if (Number.isNaN(val)) { c4mFb(fb, false, "Écris un nombre (virgule ou point acceptés)."); return; }
+    const ref = k === 1 ? ex.d : ex.v;
+    const Mi = c4mNameH(ex.i), Mj = c4mNameH(ex.j);
+    const calc = k === 1
+      ? Mi + Mj + " = " + c4Fr(ex.cmR, 1) + " cm × 0,25 m/cm = <strong>" + c4Fr(ex.d, 3).replace(/0+$/, "").replace(/,$/, "") + " m</strong>."
+      : "Δt = " + ex.n + " × τ = " + ex.n + " × 0,1 = " + c4Fr(ex.dt, 1) + " s, donc v<sub>moy</sub> = " + Mi + Mj + " / Δt = " + c4Fr(ex.d, 3).replace(/0+$/, "").replace(/,$/, "") + " / " + c4Fr(ex.dt, 1) + " ≈ <strong>" + c4Fr(ex.v, 2) + " m·s⁻¹</strong>.";
+    if (c4mClose(val, ref, 0.05)) {
+      input.disabled = true;
+      c4mFb(fb, true, "✅ " + calc);
+      return open(k + 1);
+    }
+    tries++;
+    const hint = k === 1
+      ? "Multiplie la longueur mesurée sur le document (en cm) par l'échelle (0,25 m par cm)."
+      : "Compte le nombre d'intervalles τ entre " + Mi + " et " + Mj + " pour trouver Δt, puis divise la distance réelle par Δt.";
+    if (tries >= 2) { clean = false; input.disabled = true; c4mFb(fb, false, "❌ " + calc); return open(k + 1); }
+    c4mFb(fb, false, "❌ Pas tout à fait. " + hint);
+  }
+  function finish() {
+    const fb = document.getElementById(pfx + "_end");
+    c4mFb(fb, clean, clean ? "🎉 Méthode maîtrisée ! Refais un exercice pour t'entraîner avec d'autres positions." : "Exercice terminé. Clique sur « Nouvel exercice » pour réessayer avec d'autres positions.");
+    if (cfg.chapterId && cfg.activityId && typeof ProgressStore !== "undefined") {
+      if (clean || !ProgressStore.load(cfg.chapterId)[cfg.activityId]) ProgressStore.record(cfg.chapterId, cfg.activityId, clean);
+    }
+  }
+  build();
+  return { get ex() { return ex; }, get step() { return step; }, get clean() { return clean; }, board: () => bd, checkDraw, rebuild: build };
+}
+
+/* ---------- Méthode 2 : vecteur vitesse en un point d'une chronophotographie ---------- */
+/* v_i ≈ M_iM_(i+1) / τ ; direction (M_iM_(i+1)), sens du mouvement ;
+   échelle des vitesses : 1 cm ↔ 2 m·s⁻¹. */
+function initMethodVelocity(cfg) {
+  const root = document.getElementById(cfg.containerId);
+  if (!root) return;
+  const pfx = cfg.containerId, rand = cfg.rand || Math.random;
+  let ex, step, tries, clean, bd;
+
+  function newData() {
+    const pts = c4mThrow(rand);
+    const i = 1 + Math.floor(rand() * 8);               // M1 … M8
+    const cmR = c4mR1(c4mDist(pts[i], pts[i + 1]));
+    const d = cmR * C4M.SD, v = d / C4M.TAU, L = v / C4M.SV;
+    const ang = Math.atan2(pts[i + 1][1] - pts[i][1], pts[i + 1][0] - pts[i][0]);
+    return { pts, i, cmR, d, v, L, ang };
+  }
+  function build() {
+    ex = newData(); step = 0; tries = 0; clean = true;
+    const Mi = c4mNameH(ex.i), Mn = c4mNameH(ex.i + 1), vi = '<span class="vec">v<sub>' + ex.i + '</sub></span>';
+    root.innerHTML =
+      '<div class="activity-prompt">Chronophotographie d\'un ballon. <strong>τ = 0,1 s</strong> entre deux positions. Échelle des distances : <strong>1 cm ↔ 0,25 m</strong>. Échelle des vitesses : <strong>1 cm ↔ 2 m·s⁻¹</strong>.<br>On veut tracer le vecteur vitesse ' + vi + ' du ballon au point <strong style="color:var(--yellow)">' + Mi + '</strong>.</div>'
+      + '<div class="meth-board"><svg id="' + pfx + '_svg"></svg></div>'
+      + '<div class="anim-readout" id="' + pfx + '_ro" style="text-align:center; margin-top:6px;">📏 Règle : appuie sur un point, glisse jusqu\'à un autre, relâche.</div>'
+      + c4mStepsHTML(pfx, [
+        { title: 'Mesure ' + Mi + Mn + ' sur le document avec la règle, puis calcule la distance réelle ' + Mi + Mn + '.', input: true, unit: "m" },
+        { title: 'Calcule la valeur de la vitesse v<sub>' + ex.i + '</sub> ≈ ' + Mi + Mn + ' / τ.', input: true, unit: "m·s⁻¹" },
+        { title: 'Avec l\'échelle des vitesses, calcule la longueur de la flèche à tracer.', input: true, unit: "cm" },
+        { title: 'Trace le vecteur vitesse ' + vi + ' : origine en ' + Mi + ', direction de la droite (' + Mi + Mn + '), sens du mouvement, longueur calculée.' }
+      ])
+      + '<div class="activity-feedback" id="' + pfx + '_end"></div>'
+      + '<div class="actions" style="margin-top:14px;"><button class="toggle-btn" id="' + pfx + '_new">🔄 Nouvel exercice</button></div>';
+
+    bd = c4mBoard(document.getElementById(pfx + "_svg"), pfx);
+    bd.pts = ex.pts; bd.labels = [ex.i, ex.i + 1]; bd.mode = "ruler";
+    const ro = document.getElementById(pfx + "_ro");
+    bd.onMove = u => {
+      ro.innerHTML = (bd.mode === "ruler" ? "📏 Règle : " : "Longueur de ta flèche : ") + "<strong>" + c4Fr(c4mDist(u[0], u[1]), 1) + " cm</strong>";
+    };
+    bd.onEnd = u => { if (step === 3) checkDraw(u); };
+    bd.render();
+    [0, 1, 2].forEach(k => {
+      document.getElementById(pfx + "_ok" + k).addEventListener("click", () => checkNum(k));
+      document.getElementById(pfx + "_in" + k).addEventListener("keydown", e => { if (e.key === "Enter") checkNum(k); });
+    });
+    document.getElementById(pfx + "_new").addEventListener("click", build);
+    open(0);
+  }
+  function open(k) {
+    step = k; tries = 0;
+    for (let q = 0; q < 4; q++) document.getElementById(pfx + "_st" + q).classList.toggle("locked", q > k);
+    if (k === 3) {
+      bd.mode = "vector"; bd.snapEnd = false; bd.user = null; bd.render();
+      document.getElementById(pfx + "_ro").innerHTML = "✏️ Tracé : appuie sur " + c4mNameH(ex.i) + ", glisse, relâche à la bonne longueur.";
+    }
+    if (k >= 4) finish();
+  }
+  function fmtD() { return c4Fr(ex.d, 3).replace(/0+$/, "").replace(/,$/, ""); }
+  function checkNum(k) {
+    if (step !== k) return;
+    const input = document.getElementById(pfx + "_in" + k), fb = document.getElementById(pfx + "_fb" + k);
+    const val = c4mParse(input.value);
+    if (Number.isNaN(val)) { c4mFb(fb, false, "Écris un nombre (virgule ou point acceptés)."); return; }
+    const Mi = c4mNameH(ex.i), Mn = c4mNameH(ex.i + 1);
+    const ref = [ex.d, ex.v, ex.L][k];
+    const calc = [
+      "Sur le document, " + Mi + Mn + " = " + c4Fr(ex.cmR, 1) + " cm, soit " + c4Fr(ex.cmR, 1) + " × 0,25 = <strong>" + fmtD() + " m</strong>.",
+      "v<sub>" + ex.i + "</sub> ≈ " + fmtD() + " / 0,1 ≈ <strong>" + c4Fr(ex.v, 2) + " m·s⁻¹</strong>.",
+      "1 cm représente 2 m·s⁻¹, donc la flèche mesure " + c4Fr(ex.v, 2) + " / 2 ≈ <strong>" + c4Fr(ex.L, 1) + " cm</strong>."
+    ][k];
+    const hint = [
+      "Utilise la règle de " + Mi + " à " + Mn + ", puis multiplie par l'échelle (0,25 m par cm).",
+      "Divise la distance réelle " + Mi + Mn + " (en m) par τ = 0,1 s.",
+      "Divise la valeur de la vitesse par 2 m·s⁻¹ (valeur représentée par 1 cm)."
+    ][k];
+    if (c4mClose(val, ref, k === 2 ? 0.07 : 0.05)) {
+      input.disabled = true;
+      c4mFb(fb, true, "✅ " + calc);
+      return open(k + 1);
+    }
+    tries++;
+    if (tries >= 2) { clean = false; input.disabled = true; c4mFb(fb, false, "❌ " + calc); return open(k + 1); }
+    c4mFb(fb, false, "❌ Pas tout à fait. " + hint);
+  }
+  function solution() {
+    const A = ex.pts[ex.i];
+    return [A, [A[0] + ex.L * Math.cos(ex.ang), A[1] + ex.L * Math.sin(ex.ang)]];
+  }
+  function checkDraw(u) {
+    const fb = document.getElementById(pfx + "_fb3");
+    const A = ex.pts[ex.i], Mi = c4mNameH(ex.i), Mn = c4mNameH(ex.i + 1);
+    const len = c4mDist(u[0], u[1]);
+    if (len < 0.3) return;
+    const a = Math.atan2(u[1][1] - u[0][1], u[1][0] - u[0][0]);
+    let dA = Math.abs(a - ex.ang) * 180 / Math.PI; if (dA > 180) dA = 360 - dA;
+    const okO = c4mDist(u[0], A) < 0.05, okDir = dA <= 6, okLen = Math.abs(len - ex.L) <= Math.max(0.2, 0.06 * ex.L);
+    if (okO && okDir && okLen) {
+      bd.locked = true;
+      c4mFb(fb, true, "✅ Bien tracé : origine en " + Mi + ", même direction et même sens que " + Mi + Mn + ", longueur " + c4Fr(len, 1) + " cm.");
+      return open(4);
+    }
+    tries++;
+    let msg;
+    if (!okO) msg = "Le vecteur vitesse au point " + Mi + " a pour origine le point " + Mi + ".";
+    else if (dA >= 150) msg = "Vérifie le sens : il est celui du mouvement, de " + Mi + " vers " + Mn + ".";
+    else if (!okDir) msg = "Vérifie la direction : la flèche doit suivre la droite (" + Mi + Mn + ").";
+    else msg = "Vérifie la longueur : ta flèche mesure " + c4Fr(len, 1) + " cm, elle doit mesurer " + c4Fr(ex.L, 1) + " cm (étape 3).";
+    if (tries >= 2) {
+      clean = false; bd.sol = solution(); bd.user = null; bd.locked = true; bd.render();
+      c4mFb(fb, false, "❌ " + msg + " Correction en vert : origine en " + Mi + ", vers " + Mn + ", longueur " + c4Fr(ex.L, 1) + " cm.");
+      return open(4);
+    }
+    c4mFb(fb, false, "❌ " + msg + " Recommence le tracé.");
+  }
+  function finish() {
+    const fb = document.getElementById(pfx + "_end");
+    c4mFb(fb, clean, clean ? "🎉 Méthode maîtrisée ! Refais un exercice pour t'entraîner en un autre point." : "Exercice terminé. Clique sur « Nouvel exercice » pour réessayer en un autre point.");
+    if (cfg.chapterId && cfg.activityId && typeof ProgressStore !== "undefined") {
+      if (clean || !ProgressStore.load(cfg.chapterId)[cfg.activityId]) ProgressStore.record(cfg.chapterId, cfg.activityId, clean);
+    }
+  }
+  build();
+  return { get ex() { return ex; }, get step() { return step; }, get clean() { return clean; }, board: () => bd, checkDraw, solution, rebuild: build };
+}
