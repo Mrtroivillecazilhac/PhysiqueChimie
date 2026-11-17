@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TP chute libre ou non ? (2nde)</title>
+
+<!--
+  =====================================================================
+  POINTAGE VIDÉO : TP « Chute libre ou non ? » (classe de 2nde, chapitre 6)
+  =====================================================================
+  Même principe que tp-pointage-2nde.html (chapitre 4), avec deux objets :
+  la bille et le filtre à café. Chaque objet a son propre film, son
+  étalonnage et son pointage. L'étape « Comparer » place les deux
+  chronophotographies côte à côte, à la même échelle.
+
+  Différences avec la page du chapitre 4 :
+    - pas d'étape « origine » : le premier point pointé est M0 (d = 0) ;
+    - la page donne directement la distance de chute d (vers le bas),
+      mesurée le long de la règle (une webcam un peu penchée ne fausse
+      donc pas les mesures) ;
+    - l'étalon de la bille est repris pour le filtre si la caméra n'a
+      pas bougé (les élèves le vérifient simplement).
+
+  Page autonome : aucune bibliothèque externe, aucune donnée envoyée.
+  =====================================================================
+-->
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+/* ---------------------------------------------------------------
+   1. COULEURS ET POLICES : les mêmes variables que styles.css,
+      recopiées ici pour que la page reste autonome.
+   --------------------------------------------------------------- */
+:root {
+  --board: #16261f;
+  --board-2: #1d3229;
+  --chalk: #f2ede1;
+  --chalk-dim: #c9c2b0;
+  --yellow: #e8c468;
+  --teal: #6bbfab;
+  --coral: #d97a63;
+  --line: rgba(242,237,225,0.14);
+  --font-display: 'Kalam', 'Segoe Print', cursive;
+  --font-body: 'Space Grotesk', 'Segoe UI', sans-serif;
+  --rayon: 14px;
+}
+
+* { box-sizing: border-box; }
+
+/* Fond « tableau noir » quadrillé, comme sur le reste du site */
+html, body { margin: 0; }
+body {
+  min-height: 100vh;
+  background: var(--board);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px),
+    radial-gradient(ellipse at top left, rgba(255,255,255,0.05), transparent 60%);
+  background-size: 42px 42px, 42px 42px, 100% 100%;
+  color: var(--chalk);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* ---------- En-tête : titre et barre des 5 étapes ---------- */
+header {
+  border-bottom: 1px solid var(--line);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+header h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  margin: 0;
+  white-space: nowrap;
+  color: var(--chalk);
+  text-shadow: 0 0 18px rgba(232,196,104,0.15);
+}
+.etapes { display: flex; gap: 8px; flex-wrap: wrap; }
+.etape {                      /* même allure que la barre de navigation du site */
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--chalk-dim);
+  background: transparent;
+  border: 1.5px dashed var(--line);
+  border-radius: 999px;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.etape:hover:not(:disabled) { border-color: var(--yellow); color: var(--chalk); }
+.etape:disabled { opacity: 0.35; cursor: not-allowed; }   /* pas encore accessible */
+.etape.faite::after { content: " ✓"; color: var(--teal); } /* étape terminée */
+.etape.active {               /* étape courante mise en évidence */
+  background: var(--yellow);
+  border: 1.5px solid var(--yellow);
+  color: var(--board);
+}
+.etape.active.faite::after { color: var(--board); }
+
+/* ---------- Disposition : panneau à gauche, image à droite ---------- */
+main {
+  display: flex;
+  gap: 16px;
+  padding: 14px 16px;
+  align-items: flex-start;
+}
+aside {
+  width: 320px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08));
+  border: 1px solid var(--line);
+  border-radius: var(--rayon);
+  padding: 16px;
+}
+aside h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin: 0 0 8px;
+  color: var(--teal);
+}
+aside p { margin: 6px 0 10px; }
+.aide { color: var(--chalk-dim); font-size: 14px; }
+.separateur { border: none; border-top: 1px solid var(--line); margin: 14px 0; }
+#scene { flex: 1; min-width: 0; }   /* permet à la zone de rétrécir sans déborder */
+
+/* ---------- Boutons ---------- */
+button.btn, label.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 14px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 2px solid var(--yellow);
+  background: var(--yellow);          /* bouton principal : jaune craie */
+  color: var(--board);
+  cursor: pointer;
+  width: 100%;
+  margin: 4px 0;
+  transition: all .15s ease;
+}
+button.btn:hover, label.btn:hover { filter: brightness(1.08); }
+button.btn.secondaire, label.btn.secondaire {   /* bouton secondaire : contour */
+  background: transparent;
+  color: var(--chalk);
+  border: 1.5px dashed var(--chalk-dim);
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+}
+button.btn.secondaire:hover, label.btn.secondaire:hover {
+  border-color: var(--yellow);
+  border-style: solid;
+  filter: none;
+}
+button.btn.enregistrer { background: var(--coral); border-color: var(--coral); }
+button.btn:disabled, button.btn:disabled:hover {   /* bouton inactif */
+  opacity: 0.35;
+  filter: none;
+  cursor: not-allowed;
+}
+
+/* ---------- Champs de saisie ---------- */
+.ligne-champ { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+.ligne-champ label { flex: 1; }
+input[type="text"], input[type="number"], select {
+  font-size: 16px;
+  font-family: var(--font-body);
+  padding: 7px 10px;
+  background: var(--board-2);
+  color: var(--chalk);
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  width: 110px;
+}
+input:focus, select:focus { outline: 2px solid var(--yellow); outline-offset: 1px; }
+input::placeholder { color: rgba(201,194,176,0.55); }
+input.large { width: 100%; margin-top: 4px; }
+input[type="range"], input[type="checkbox"] { accent-color: var(--yellow); }
+.case { display: flex; align-items: center; gap: 8px; margin: 8px 0; cursor: pointer; }
+.case input { width: 20px; height: 20px; cursor: pointer; }
+
+/* ---------- Messages ---------- */
+.message {
+  border-left: 3px solid var(--teal);
+  border-radius: 0 8px 8px 0;
+  padding: 8px 12px;
+  margin: 8px 0;
+  font-size: 15px;
+}
+.message:empty { display: none; }
+.message.info   { background: rgba(107,191,171,0.06); border-color: var(--chalk-dim); color: var(--chalk-dim); }
+.message.ok     { background: rgba(107,191,171,0.10); border-color: var(--teal); }
+.message.alerte { background: rgba(232,196,104,0.12); border-color: var(--yellow); color: var(--yellow); font-weight: 600; }
+.message.erreur { background: rgba(217,122,99,0.12); border-color: var(--coral); color: #f0a08c; font-weight: 600; }
+
+/* ---------- Zone d'image (aperçu caméra, images enregistrées) ---------- */
+.cadre-image {
+  position: relative;          /* repère pour la loupe et le compte à rebours */
+  background: #0c1511;
+  border: 1px solid var(--line);
+  border-radius: var(--rayon);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  overflow: hidden;
+}
+#apercu, #videoFichier, #ecran {
+  display: block;
+  max-width: 100%;
+  /* hauteur limitée pour que l'image tienne sur un écran de 13 pouces */
+  max-height: calc(100vh - 220px);
+  width: auto;
+  height: auto;
+}
+#apercu.miroir { transform: scaleX(-1); }   /* aperçu inversé (miroir) */
+#ecran { cursor: crosshair; touch-action: none; }
+#ecran.deplacer { cursor: grab; }
+.vide {
+  color: var(--chalk-dim);
+  font-family: var(--font-display);
+  padding: 40px;
+  text-align: center;
+  font-size: 22px;
+}
+
+/* Grand compte à rebours au-dessus de l'aperçu */
+#compteur {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 160px;
+  font-weight: 700;
+  color: var(--yellow);
+  text-shadow: 0 0 24px rgba(0,0,0,.85);
+  pointer-events: none;
+}
+#bandeauEnreg {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: none;
+  background: var(--coral);
+  color: var(--board);
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+/* Loupe : petit canvas rond qui suit la souris */
+#loupe {
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  border: 3px solid var(--chalk);
+  border-radius: 50%;
+  box-shadow: 0 2px 12px rgba(0,0,0,.7);
+  pointer-events: none;      /* la loupe ne doit pas intercepter les clics */
+  display: none;
+  background: #000;
+}
+
+/* ---------- Navigation entre les images ---------- */
+.navigation { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.navigation button.btn { width: auto; margin: 0; }
+.navigation input[type="range"] { flex: 1; height: 30px; }
+#numImage {
+  min-width: 120px;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Tableau des positions ---------- */
+#zoneTableau { margin-top: 14px; }
+.tableau-defilant {
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(0,0,0,0.18);
+}
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 12px; border-bottom: 1px solid var(--line); text-align: right; }
+th:first-child, td:first-child { text-align: left; }
+th { background: var(--board-2); color: var(--teal); position: sticky; top: 0; }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: rgba(242,237,225,0.05); }
+tbody tr.courante { background: rgba(232,196,104,0.16); color: var(--yellow); font-weight: 700; }
+.barre-tableau {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.barre-tableau strong { font-family: var(--font-display); font-size: 20px; color: var(--teal); }
+.barre-tableau button.btn { width: auto; margin: 0; }
+
+
+/* ---------- Choix de l'objet (bille / filtre) ---------- */
+.objets {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(0,0,0,0.18);
+}
+.objet {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--chalk-dim);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 4px 16px;
+  cursor: pointer;
+}
+.objet:hover { color: var(--chalk); }
+.objet.active { background: var(--teal); color: var(--board); }
+.objet.faite::after { content: " ✓"; }
+.objet:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Rappel de l'objet en cours, en haut du panneau de gauche */
+.rappel-objet {
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--board);
+  background: var(--teal);
+  border-radius: 999px;
+  display: inline-block;
+  padding: 1px 12px;
+  margin-bottom: 6px;
+}
+
+/* ---------- Feuille de comparaison (étapes 4 et 5) : A4 portrait ---------- */
+#feuille {
+  background: #fff;
+  color: #000;
+  height: calc(100vh - 130px);
+  min-height: 420px;
+  aspect-ratio: 210 / 297;
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.45);
+  padding: 4.8% 4.8% 3%;         /* imite les marges de 10 mm */
+  display: flex;
+  flex-direction: column;
+}
+#svgChrono { flex: 1; width: 100%; min-height: 0; display: block; }
+#piedFeuille {
+  white-space: pre-wrap;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  color: #000;
+  padding-top: 5px;
+  border-top: 1px solid #000;
+}
+#zoneComparaison { margin-top: 14px; }
+#zoneComparaison .tableau-defilant { max-height: 320px; }
+.vide-cellule { color: rgba(201,194,176,0.45); }
+
+.cache { display: none !important; }
+
+/* ---------------------------------------------------------------
+   IMPRESSION : A4 portrait, noir et blanc, seule la feuille
+   --------------------------------------------------------------- */
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+@media print {
+  html, body { background: #fff !important; background-image: none !important; color: #000; }
+  header, aside, .pas-imprime { display: none !important; }
+  main { padding: 0; display: block; }
+  #feuille {
+    width: 190mm;
+    height: 272mm;
+    min-height: 0;
+    max-width: none;
+    aspect-ratio: auto;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  #piedFeuille { font-size: 10pt; }
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- =================================================================
+     EN-TÊTE : titre, choix de l'objet, étapes
+     ================================================================= -->
+<header>
+  <h1>Chute libre ou non ?</h1>
+  <nav class="objets" aria-label="Objet étudié">
+    <button class="objet" data-objet="bille">Bille</button>
+    <button class="objet" data-objet="filtre">Filtre</button>
+  </nav>
+  <nav class="etapes" aria-label="Étapes">
+    <button class="etape" data-etape="1">1. Filmer</button>
+    <button class="etape" data-etape="2">2. Étalonner</button>
+    <button class="etape" data-etape="3">3. Pointer</button>
+    <button class="etape" data-etape="4">4. Comparer</button>
+    <button class="etape" data-etape="5">5. Envoyer</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ===============================================================
+       PANNEAU DE GAUCHE : une section par étape (une seule visible)
+       =============================================================== -->
+  <aside>
+
+    <!-- ---------- Étape 1 : Filmer ---------- -->
+    <section id="panneau1">
+      <span class="rappel-objet nomObjet">Bille</span>
+      <h2>1. Filmer la chute</h2>
+
+      <button class="btn" id="btnCamera">Activer la caméra</button>
+      <label class="case"><input type="checkbox" id="caseMiroir"> Image inversée (miroir)</label>
+      <div class="message" id="msgCamera"></div>
+
+      <div class="ligne-champ">
+        <label for="choixDuree">Durée de l'enregistrement</label>
+        <select id="choixDuree">
+          <option value="2">2 s</option>
+          <option value="3" selected>3 s</option>
+          <option value="4">4 s</option>
+        </select>
+      </div>
+      <button class="btn enregistrer" id="btnEnregistrer" disabled>● Enregistrer</button>
+      <p class="aide">Après un compte à rebours de 3 secondes, l'enregistrement commence : lâchez l'objet sans le lancer, juste devant la règle.</p>
+
+      <div id="blocResultat" class="cache">
+        <div class="message ok" id="msgFrequence"></div>
+        <div class="message alerte" id="msgAlerteFrequence"></div>
+        <button class="btn secondaire" id="btnRecommencer">Recommencer l'enregistrement</button>
+        <button class="btn" data-aller="2">Étape suivante : étalonner →</button>
+      </div>
+
+      <hr class="separateur">
+
+      <p class="aide">Pas de caméra ? Vous pouvez ouvrir un fichier vidéo.</p>
+      <label class="btn secondaire" for="fichierVideo">Ouvrir une vidéo</label>
+      <input type="file" id="fichierVideo" accept="video/*" class="cache">
+      <div id="blocFichier" class="cache">
+        <p class="aide">Placez la vidéo juste avant la chute avec la barre de lecture, puis extrayez les images.</p>
+        <div class="ligne-champ">
+          <label for="champFreqFichier">Images par seconde</label>
+          <input type="number" id="champFreqFichier" value="30" min="5" max="120" step="1">
+        </div>
+        <button class="btn" id="btnExtraire">Extraire les images</button>
+        <div class="message info" id="msgFichier"></div>
+      </div>
+    </section>
+
+    <!-- ---------- Étape 2 : Étalonner ---------- -->
+    <section id="panneau2" class="cache">
+      <span class="rappel-objet nomObjet">Bille</span>
+      <h2>2. Étalonner</h2>
+      <p>Cliquez sur une extrémité de la règle, puis sur l'autre extrémité.</p>
+      <p class="aide">Vous pouvez ensuite déplacer chaque extrémité avec la souris pour l'ajuster.</p>
+      <div class="ligne-champ">
+        <label for="champLongueur">Longueur de l'étalon (m)</label>
+        <input type="text" id="champLongueur" value="1,00" inputmode="decimal">
+      </div>
+      <div class="message info" id="msgEtalon"></div>
+      <label class="case"><input type="checkbox" class="caseLoupe" checked> Loupe (×3)</label>
+      <button class="btn secondaire" id="btnEffacerEtalon">Effacer l'étalon</button>
+      <button class="btn" data-aller="3">Étape suivante : pointer →</button>
+    </section>
+
+    <!-- ---------- Étape 3 : Pointer ---------- -->
+    <section id="panneau3" class="cache">
+      <span class="rappel-objet nomObjet">Bille</span>
+      <h2>3. Pointer l'objet</h2>
+      <p>Allez à la <strong>première image où l'objet est lâché</strong> et cliquez sur son centre : c'est M<sub>0</sub>, où d = 0. La page passe ensuite seule à l'image suivante.</p>
+      <label class="case"><input type="checkbox" id="caseUneSurDeux"> Pointer une image sur deux</label>
+      <label class="case"><input type="checkbox" class="caseLoupe" checked> Loupe (×3)</label>
+      <div class="message info" id="msgPointage"></div>
+      <button class="btn secondaire" id="btnAnnuler">Annuler le dernier point</button>
+      <button class="btn" id="btnObjetSuivant">Passer au filtre →</button>
+      <button class="btn secondaire" data-aller="4">Comparer les deux chutes →</button>
+    </section>
+
+    <!-- ---------- Étape 4 : Comparer ---------- -->
+    <section id="panneau4" class="cache">
+      <h2>4. Comparer</h2>
+      <p>Les deux chronophotographies sont tracées <strong>à la même échelle</strong>, avec le même intervalle de temps entre deux positions.</p>
+      <label class="case" id="ligneModele"><input type="checkbox" id="caseModele"> Superposer le modèle de chute libre</label>
+      <p class="aide" id="aideModele">Ronds vides : positions qu'aurait la bille si elle était en chute libre, d = ½ × g × t², aux mêmes instants.</p>
+      <div class="message info" id="msgComparer"></div>
+      <button class="btn secondaire" id="btnCSV">Exporter le tableau (CSV)</button>
+      <button class="btn" data-aller="5">Étape suivante : envoyer →</button>
+    </section>
+
+    <!-- ---------- Étape 5 : Envoyer ---------- -->
+    <section id="panneau5" class="cache">
+      <h2>5. Envoyer au professeur</h2>
+      <div class="ligne-champ" style="display:block">
+        <label for="champNoms">Noms du groupe</label>
+        <input type="text" id="champNoms" class="large" placeholder="Prénom NOM, Prénom NOM">
+      </div>
+      <button class="btn" id="btnEnvoyerWeb">✉ Envoyer avec Outlook</button>
+      <p class="aide">Le fichier PDF est téléchargé, puis Outlook s'ouvre avec le message déjà écrit. Il reste à joindre le fichier.</p>
+      <div class="message info" id="msgEnvoi"></div>
+      <button class="btn secondaire" id="btnEnvoyerAppli">Outlook installé sur l'ordinateur</button>
+      <button class="btn secondaire" id="btnPDF">Télécharger le PDF seulement</button>
+      <button class="btn secondaire" id="btnImprimer">Imprimer</button>
+      <hr class="separateur">
+      <button class="btn secondaire" data-aller="4">← Retour à la comparaison</button>
+    </section>
+
+  </aside>
+
+  <!-- ===============================================================
+       ZONE DE DROITE
+       =============================================================== -->
+  <section id="scene">
+
+    <div class="cadre-image pas-imprime" id="cadreImage">
+      <div class="vide" id="messageVide">Activez la caméra ou ouvrez une vidéo.</div>
+      <video id="apercu" class="cache" autoplay muted playsinline></video>
+      <video id="videoFichier" class="cache" controls muted playsinline></video>
+      <canvas id="ecran" class="cache"></canvas>
+      <canvas id="loupe"></canvas>
+      <div id="compteur"></div>
+      <div id="bandeauEnreg">● Enregistrement… lâchez !</div>
+    </div>
+
+    <div class="navigation pas-imprime cache" id="barreNavigation">
+      <button class="btn secondaire" id="btnPrecedente">◀ Image précédente</button>
+      <input type="range" id="curseurImage" min="0" max="0" value="0" aria-label="Choisir l'image">
+      <span id="numImage">Image 1 / 1</span>
+      <button class="btn secondaire" id="btnSuivante">Image suivante ▶</button>
+    </div>
+
+    <!-- Tableau des positions de l'objet en cours (étape 3) -->
+    <div id="zoneTableau" class="pas-imprime cache">
+      <div class="barre-tableau">
+        <strong id="titreTableau">Positions de la bille</strong>
+      </div>
+      <div class="tableau-defilant">
+        <table>
+          <thead><tr><th>Point</th><th>t (s)</th><th>d (m)</th></tr></thead>
+          <tbody id="corpsTableau"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Feuille A4 de comparaison (étapes 4 et 5, seule partie imprimée) -->
+    <div id="feuille" class="cache">
+      <svg id="svgChrono" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+      <div id="piedFeuille"></div>
+    </div>
+
+    <!-- Tableau de comparaison (étapes 4 et 5) -->
+    <div id="zoneComparaison" class="pas-imprime cache">
+      <div class="barre-tableau"><strong>Positions des deux objets</strong></div>
+      <div class="tableau-defilant">
+        <table>
+          <thead><tr><th>Point</th><th>t bille (s)</th><th>d bille (m)</th><th>t filtre (s)</th><th>d filtre (m)</th></tr></thead>
+          <tbody id="corpsComparaison"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+
+<script>
+"use strict";
+
+/* =====================================================================
+   PARAMÈTRES que vous pouvez modifier facilement
+   ===================================================================== */
+const LARGEUR_MAX = 1280;          // taille maximale d'une image stockée (pixels)
+const HAUTEUR_MAX = 720;
+const DUREE_MAX = 4;               // durée maximale d'enregistrement (s)
+const FREQUENCE_MIN = 20;          // en dessous : avertissement (images par seconde)
+const ECART_MAX = 0.15;            // écart toléré entre intervalles (15 %)
+const QUALITE_JPEG = 0.92;
+const ZOOM_LOUPE = 3;
+const G = 9.8;                     // intensité de la pesanteur (m·s⁻²)
+const AFFICHER_MODELE = true;      // false : cache la case « modèle de chute libre »
+const EMAIL_PROF = "robin.troiville@eficasablanca.org";
+
+const OBJETS = {
+  bille:  { nom: "Bille",  le: "la bille" },
+  filtre: { nom: "Filtre", le: "le filtre" },
+};
+
+const $ = (id) => document.getElementById(id);
+
+/* =====================================================================
+   ÉTAT DE L'APPLICATION
+   ---------------------------------------------------------------------
+   app : ce qui est commun (étape affichée, caméra, objet en cours)
+   essais.bille, essais.filtre : un enregistrement complet par objet
+   E() : l'essai de l'objet en cours
+   ===================================================================== */
+function nouvelEssai() {
+  return {
+    images: [],           // [{ blob, t }] : images JPEG et instants (s)
+    largeur: 0, hauteur: 0,
+    frequence: 0,
+    texteFrequence: "", alerteFrequence: "",
+    courante: 0,          // image affichée
+    etalonA: null, etalonB: null,   // extrémités de la règle (pixels)
+    longueur: 1.0,                  // longueur réelle de l'étalon (m)
+    etalonRepris: false,
+    points: new Map(),    // numéro d'image -> { x, y }
+    historique: [],
+  };
+}
+
+const app = {
+  objet: "bille",
+  etape: 1,
+  flux: null,
+  enregistrement: false,
+  fichierEnCours: false,   // une vidéo est ouverte mais pas encore extraite
+};
+const essais = { bille: nouvelEssai(), filtre: nouvelEssai() };
+const E = () => essais[app.objet];
+const autreObjet = () => (app.objet === "bille" ? "filtre" : "bille");
+
+/* =====================================================================
+   OUTILS GÉNÉRAUX
+   ===================================================================== */
+function afficherMessage(id, texte, type) {
+  const zone = $(id);
+  zone.textContent = texte || "";
+  if (type) zone.className = "message " + type;
+}
+function lireNombre(texte) {
+  const n = parseFloat(String(texte).replace(",", ".").trim());
+  return isFinite(n) ? n : NaN;
+}
+/* 3 chiffres significatifs, virgule décimale */
+function format3cs(v) {
+  if (v === 0 || Math.abs(v) < 5e-5) return "0";
+  let s = v.toPrecision(3);
+  if (s.includes("e")) s = Number(s).toString();
+  return s.replace(".", ",").replace("-", "−");
+}
+/* t avec 3 décimales (0,033 ; 0,267…) : plus lisible qu'en chiffres significatifs */
+function formatTemps(t) {
+  return Math.abs(t) < 5e-4 ? "0" : t.toFixed(3).replace(".", ",");
+}
+const distance = (p, q) => Math.hypot(p.x - q.x, p.y - q.y);
+const attendre = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function tailleStockage(l, h) {
+  const k = Math.min(1, LARGEUR_MAX / Math.max(l, h),
+                     Math.sqrt((LARGEUR_MAX * HAUTEUR_MAX) / (l * h)));
+  return { l: Math.round(l * k), h: Math.round(h * k) };
+}
+function copierImage(video, l, h) {
+  const c = document.createElement("canvas");
+  c.width = l; c.height = h;
+  const ctx = c.getContext("2d");
+  if ($("caseMiroir").checked) { ctx.translate(l, 0); ctx.scale(-1, 1); }
+  ctx.drawImage(video, 0, 0, l, h);
+  return c;
+}
+const canvasVersBlob = (c) => new Promise((ok) => c.toBlob(ok, "image/jpeg", QUALITE_JPEG));
+
+/* =====================================================================
+   ÉTAPES ET OBJETS
+   ===================================================================== */
+
+/* Étapes 1 à 3 : propres à un essai. Étapes 4 et 5 : communes. */
+function etapeFaite(n, e = E()) {
+  if (n === 1) return e.images.length > 0;
+  if (n === 2) return etapeFaite(1, e) && etalonnageValide(e);
+  if (n === 3) return etapeFaite(2, e) && e.points.size >= 2;
+  return false;
+}
+const essaiPointe = (o) => etapeFaite(3, essais[o]);
+
+function etapeAccessible(n) {
+  if (n >= 4) return essaiPointe("bille") || essaiPointe("filtre");
+  for (let i = 1; i < n; i++) if (!etapeFaite(i)) return false;
+  return true;
+}
+
+function majBarreEtapes() {
+  document.querySelectorAll(".etape").forEach((b) => {
+    const n = Number(b.dataset.etape);
+    b.disabled = app.enregistrement || !etapeAccessible(n);
+    b.classList.toggle("active", n === app.etape);
+    b.classList.toggle("faite", n <= 3 && etapeFaite(n));
+  });
+  document.querySelectorAll("[data-aller]").forEach((b) => {
+    b.disabled = !etapeAccessible(Number(b.dataset.aller));
+  });
+  document.querySelectorAll(".objet").forEach((b) => {
+    const o = b.dataset.objet;
+    b.classList.toggle("active", app.etape <= 3 && o === app.objet);
+    b.classList.toggle("faite", essaiPointe(o));
+    b.disabled = app.enregistrement;
+  });
+  document.querySelectorAll(".nomObjet").forEach((s) => (s.textContent = OBJETS[app.objet].nom));
+  // Bouton « Passer au … » de l'étape 3
+  const autre = autreObjet();
+  $("btnObjetSuivant").textContent = essaiPointe(autre)
+    ? "Revenir " + (autre === "bille" ? "à la bille" : "au filtre") + " →"
+    : "Passer " + (autre === "bille" ? "à la bille" : "au filtre") + " →";
+  $("btnObjetSuivant").disabled = !etapeFaite(3);
+}
+
+function allerEtape(n) {
+  if (!etapeAccessible(n)) return;
+  app.etape = n;
+  for (let i = 1; i <= 5; i++) $("panneau" + i).classList.toggle("cache", i !== n);
+  // Étalon de l'autre objet repris automatiquement (même caméra, même position)
+  if (n === 2) reprendreEtalon();
+  majScene();
+  $("loupe").style.display = "none";
+  majBarreEtapes();
+  majMessagesEtapes();
+  if (n >= 4) { dessinerComparaison(); majTableauComparaison(); }
+  afficherImage();
+}
+
+document.querySelectorAll(".etape").forEach((b) =>
+  b.addEventListener("click", () => allerEtape(Number(b.dataset.etape))));
+document.querySelectorAll("[data-aller]").forEach((b) =>
+  b.addEventListener("click", () => allerEtape(Number(b.dataset.aller))));
+
+/* Changer d'objet : on retrouve son film, son étalon et ses points */
+function changerObjet(o) {
+  if (app.enregistrement) return;
+  if (o === app.objet && app.etape <= 3) return;
+  app.objet = o;
+  app.fichierEnCours = false;
+  $("blocFichier").classList.add("cache");
+  viderCacheImages();
+  imageAffichee = null;
+  const e = E();
+  $("champLongueur").value = e.longueur.toFixed(2).replace(".", ",");
+  if (e.images.length) {
+    $("ecran").width = e.largeur;
+    $("ecran").height = e.hauteur;
+    $("curseurImage").max = e.images.length - 1;
+  }
+  majBlocResultat();
+  majTableau();
+  // On reprend là où l'objet en était
+  const cible = etapeFaite(2) ? 3 : etapeFaite(1) ? 2 : 1;
+  allerEtape(cible);
+}
+document.querySelectorAll(".objet").forEach((b) =>
+  b.addEventListener("click", () => changerObjet(b.dataset.objet)));
+$("btnObjetSuivant").addEventListener("click", () => changerObjet(autreObjet()));
+
+/* Choisit ce qui est visible dans la zone de droite */
+function majScene() {
+  const e = E();
+  const enDirect = app.etape === 1 && app.flux && (e.images.length === 0 || app.enregistrement) && !app.fichierEnCours;
+  const fichierOuvert = app.etape === 1 && app.fichierEnCours;
+  const avecImages = e.images.length > 0 && !enDirect && !fichierOuvert && app.etape <= 3;
+  const comparaison = app.etape >= 4;
+
+  $("apercu").classList.toggle("cache", !enDirect);
+  $("videoFichier").classList.toggle("cache", !fichierOuvert);
+  $("ecran").classList.toggle("cache", !avecImages);
+  $("messageVide").classList.toggle("cache", enDirect || fichierOuvert || avecImages || comparaison);
+  $("barreNavigation").classList.toggle("cache", !avecImages);
+  $("cadreImage").classList.toggle("cache", comparaison);
+  $("feuille").classList.toggle("cache", !comparaison);
+  $("zoneComparaison").classList.toggle("cache", !comparaison);
+  $("zoneTableau").classList.toggle("cache", !(app.etape === 3 && e.points.size > 0));
+  $("ecran").classList.remove("deplacer");
+  $("messageVide").textContent = app.flux
+    ? "Cliquez sur « Enregistrer » pour filmer " + OBJETS[app.objet].le + "."
+    : "Activez la caméra ou ouvrez une vidéo.";
+}
+
+/* =====================================================================
+   ÉTAPE 1 a : CAMÉRA
+   ===================================================================== */
+$("btnCamera").addEventListener("click", activerCamera);
+
+async function activerCamera() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    afficherMessage("msgCamera",
+      "Ce navigateur ne permet pas d'utiliser la caméra ici. Ouvrez la page avec Chrome ou Edge, depuis une adresse en https.",
+      "erreur");
+    return;
+  }
+  afficherMessage("msgCamera", "Autorisez l'accès à la caméra dans la fenêtre du navigateur…", "info");
+  try {
+    const flux = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 } },
+      audio: false,
+    });
+    if (app.flux) app.flux.getTracks().forEach((p) => p.stop());
+    app.flux = flux;
+    const video = $("apercu");
+    video.srcObject = flux;
+    await video.play();
+    for (let i = 0; i < 50 && !video.videoWidth; i++) await attendre(50);
+    afficherMessage("msgCamera",
+      "Caméra active (" + video.videoWidth + " × " + video.videoHeight + " pixels).", "ok");
+    $("btnCamera").textContent = "Caméra active";
+    $("btnCamera").disabled = true;
+    $("btnEnregistrer").disabled = false;
+    app.fichierEnCours = false;
+    majScene();
+  } catch (err) {
+    let texte = "Impossible d'utiliser la caméra. Vérifiez qu'elle est autorisée et qu'aucun autre logiciel ne l'utilise, ou ouvrez une vidéo.";
+    if (err.name === "NotAllowedError" || err.name === "SecurityError") {
+      texte = "L'accès à la caméra a été refusé. Cliquez sur l'icône de caméra à droite de la barre d'adresse, choisissez « Autoriser », puis rechargez la page.";
+    } else if (err.name === "NotFoundError" || err.name === "OverconstrainedError") {
+      texte = "Aucune caméra n'a été trouvée sur cet ordinateur. Vous pouvez ouvrir une vidéo à la place.";
+    } else if (err.name === "NotReadableError") {
+      texte = "La caméra est déjà utilisée par un autre logiciel (Teams, Zoom…). Fermez-le, puis réessayez.";
+    }
+    afficherMessage("msgCamera", texte, "erreur");
+  }
+}
+$("caseMiroir").addEventListener("change", () => {
+  $("apercu").classList.toggle("miroir", $("caseMiroir").checked);
+});
+
+/* =====================================================================
+   ÉTAPE 1 b : ENREGISTREMENT IMAGE PAR IMAGE
+   (chaque image est copiée avec son instant exact de capture)
+   ===================================================================== */
+$("btnEnregistrer").addEventListener("click", lancerEnregistrement);
+$("btnRecommencer").addEventListener("click", () => {
+  if (E().points.size > 0 &&
+      !confirm("Le film, l'étalonnage et les points de " + OBJETS[app.objet].le + " seront effacés. Continuer ?")) return;
+  effacerEssai();
+  if (app.flux) $("btnEnregistrer").disabled = false;
+  majScene();
+  majBarreEtapes();
+});
+
+/* Efface l'essai de l'objet en cours (l'autre objet n'est pas touché) */
+function effacerEssai() {
+  essais[app.objet] = nouvelEssai();
+  viderCacheImages();
+  imageAffichee = null;
+  $("champLongueur").value = "1,00";
+  majBlocResultat();
+  majTableau();
+}
+
+async function lancerEnregistrement() {
+  const video = $("apercu");
+  if (!app.flux || app.enregistrement) return;
+  if (E().points.size > 0 &&
+      !confirm("Le film et les points de " + OBJETS[app.objet].le + " seront effacés. Continuer ?")) return;
+  effacerEssai();
+  app.enregistrement = true;
+  app.fichierEnCours = false;
+  majScene();
+  majBarreEtapes();
+  $("btnEnregistrer").disabled = true;
+  $("btnRecommencer").disabled = true;
+
+  const compteur = $("compteur");
+  compteur.style.display = "flex";
+  for (let s = 3; s >= 1; s--) { compteur.textContent = s; await attendre(1000); }
+  compteur.style.display = "none";
+  $("bandeauEnreg").style.display = "block";
+
+  const duree = Math.min(DUREE_MAX, Number($("choixDuree").value));
+  const taille = tailleStockage(video.videoWidth, video.videoHeight);
+  const brutes = await capturerImages(video, duree, taille);
+
+  $("bandeauEnreg").style.display = "none";
+  afficherMessage("msgCamera", "Préparation des images…", "info");
+  const blobs = await Promise.all(brutes.map((b) => b.promesse));
+  const t0 = brutes.length ? brutes[0].instant : 0;
+  const e = E();
+  e.images = brutes.map((b, i) => ({ blob: blobs[i], t: (b.instant - t0) / 1000 }));
+  e.largeur = taille.l;
+  e.hauteur = taille.h;
+  app.enregistrement = false;
+  afficherMessage("msgCamera", "Caméra active.", "ok");
+  $("btnRecommencer").disabled = false;
+  $("btnEnregistrer").disabled = false;
+  apresChargementImages(true);
+}
+
+function capturerImages(video, duree, taille) {
+  return new Promise((fin) => {
+    const resultats = [];
+    const debut = performance.now();
+    const MAX_IMAGES = duree * 120;
+    let fini = false;
+    function finir() { if (!fini) { fini = true; fin(resultats); } }
+    setTimeout(finir, duree * 1000 + 1500);
+    function garder(instant) {
+      const c = copierImage(video, taille.l, taille.h);
+      resultats.push({ instant, promesse: canvasVersBlob(c) });
+    }
+    function termine() {
+      return performance.now() - debut >= duree * 1000 || resultats.length >= MAX_IMAGES;
+    }
+    if ("requestVideoFrameCallback" in HTMLVideoElement.prototype) {
+      function surImage(maintenant, metadata) {
+        if (fini) return;
+        if (termine()) { finir(); return; }
+        garder(metadata.captureTime ?? metadata.expectedDisplayTime ?? maintenant);
+        video.requestVideoFrameCallback(surImage);
+      }
+      video.requestVideoFrameCallback(surImage);
+    } else {
+      const mini = document.createElement("canvas");
+      mini.width = 32; mini.height = 18;
+      const mctx = mini.getContext("2d", { willReadFrequently: true });
+      let empreintePrecedente = "";
+      function boucle() {
+        if (fini) return;
+        if (termine()) { finir(); return; }
+        mctx.drawImage(video, 0, 0, 32, 18);
+        const d = mctx.getImageData(0, 0, 32, 18).data;
+        let empreinte = "";
+        for (let i = 0; i < d.length; i += 16) empreinte += d[i];
+        if (empreinte !== empreintePrecedente) {
+          empreintePrecedente = empreinte;
+          garder(performance.now());
+        }
+        requestAnimationFrame(boucle);
+      }
+      requestAnimationFrame(boucle);
+    }
+  });
+}
+
+/* =====================================================================
+   ÉTAPE 1 c : CONTRÔLE DE LA FRÉQUENCE
+   ===================================================================== */
+function apresChargementImages(camera) {
+  const e = E();
+  const N = e.images.length;
+  if (N < 2) {
+    afficherMessage("msgCamera", "Aucune image n'a été enregistrée. Réessayez.", "erreur");
+    return;
+  }
+  const intervalleMoyen = (e.images[N - 1].t - e.images[0].t) / (N - 1);
+  e.frequence = 1 / intervalleMoyen;
+  let ecart = 0;
+  for (let i = 1; i < N; i++) {
+    const dt = e.images[i].t - e.images[i - 1].t;
+    ecart = Math.max(ecart, Math.abs(dt - intervalleMoyen) / intervalleMoyen);
+  }
+  e.texteFrequence = N + " images " + (camera ? "capturées" : "extraites") +
+    ". Fréquence moyenne : f = " + Math.round(e.frequence) + " images par seconde.";
+  e.alerteFrequence = (ecart > ECART_MAX || e.frequence < FREQUENCE_MIN)
+    ? "Fréquence trop basse ou irrégulière : éclairez davantage la pièce (ou approchez-vous de la fenêtre) et recommencez."
+    : "";
+  majBlocResultat();
+
+  e.courante = 0;
+  $("ecran").width = e.largeur;
+  $("ecran").height = e.hauteur;
+  $("curseurImage").max = N - 1;
+  app.fichierEnCours = false;
+  majScene();
+  majBarreEtapes();
+  afficherImage();
+}
+
+/* Bloc « résultat de l'enregistrement » de l'étape 1, pour l'objet en cours */
+function majBlocResultat() {
+  const e = E();
+  $("blocResultat").classList.toggle("cache", e.images.length === 0);
+  afficherMessage("msgFrequence", e.texteFrequence, "ok");
+  afficherMessage("msgAlerteFrequence", e.alerteFrequence, "alerte");
+}
+
+/* =====================================================================
+   ÉTAPE 1 d : REPLI SANS CAMÉRA, OUVRIR UN FICHIER VIDÉO
+   ===================================================================== */
+let urlFichier = null;
+
+$("fichierVideo").addEventListener("change", () => {
+  const fichier = $("fichierVideo").files[0];
+  if (!fichier) return;
+  if (E().points.size > 0 &&
+      !confirm("Les images, l'étalonnage et les points de " + OBJETS[app.objet].le + " seront effacés. Continuer ?")) return;
+  effacerEssai();
+  if (urlFichier) URL.revokeObjectURL(urlFichier);
+  urlFichier = URL.createObjectURL(fichier);
+  $("videoFichier").src = urlFichier;
+  app.fichierEnCours = true;
+  if (app.etape !== 1) allerEtape(1);
+  $("blocFichier").classList.remove("cache");
+  afficherMessage("msgFichier", "", "info");
+  majScene();
+  majBarreEtapes();
+  $("fichierVideo").value = "";
+});
+$("videoFichier").addEventListener("error", () => {
+  afficherMessage("msgFichier", "Ce fichier vidéo ne peut pas être lu par le navigateur (essayez un fichier .mp4 ou .webm).", "erreur");
+});
+$("btnExtraire").addEventListener("click", extraireImagesFichier);
+
+function allerA(video, t) {
+  return new Promise((ok) => {
+    const fini = () => { video.removeEventListener("seeked", fini); ok(); };
+    video.addEventListener("seeked", fini);
+    video.currentTime = t;
+    setTimeout(fini, 2000);
+  });
+}
+
+async function extraireImagesFichier() {
+  const v = $("videoFichier");
+  if (!v.videoWidth) {
+    afficherMessage("msgFichier", "La vidéo n'est pas encore prête. Attendez un instant.", "erreur");
+    return;
+  }
+  const f = lireNombre($("champFreqFichier").value);
+  if (!(f >= 5 && f <= 120)) {
+    afficherMessage("msgFichier", "Entrez une fréquence entre 5 et 120 images par seconde.", "erreur");
+    return;
+  }
+  v.pause();
+  const debut = v.currentTime;
+  const duree = Math.min(DUREE_MAX, Number($("choixDuree").value), v.duration - debut);
+  const N = Math.floor(duree * f);
+  if (N < 2) {
+    afficherMessage("msgFichier", "Il ne reste pas assez de vidéo après cet instant.", "erreur");
+    return;
+  }
+  const taille = tailleStockage(v.videoWidth, v.videoHeight);
+  $("btnExtraire").disabled = true;
+  const images = [];
+  for (let i = 0; i < N; i++) {
+    await allerA(v, debut + (i + 0.25) / f);
+    const c = copierImage(v, taille.l, taille.h);
+    images.push({ blob: await canvasVersBlob(c), t: i / f });
+    afficherMessage("msgFichier", "Extraction : " + (i + 1) + " / " + N, "info");
+  }
+  $("btnExtraire").disabled = false;
+  const e = E();
+  e.images = images;
+  e.largeur = taille.l;
+  e.hauteur = taille.h;
+  afficherMessage("msgFichier", "Extraction terminée (" + N + " images, valeur saisie f = " + f + ").", "ok");
+  $("blocFichier").classList.add("cache");
+  apresChargementImages(false);
+}
+
+/* =====================================================================
+   AFFICHAGE ET NAVIGATION IMAGE PAR IMAGE
+   ===================================================================== */
+const cacheImages = new Map();
+const TAILLE_CACHE = 24;
+function viderCacheImages() {
+  cacheImages.forEach((img) => img.close && img.close());
+  cacheImages.clear();
+}
+async function obtenirImage(n) {
+  if (cacheImages.has(n)) return cacheImages.get(n);
+  const img = await createImageBitmap(E().images[n].blob);
+  cacheImages.set(n, img);
+  if (cacheImages.size > TAILLE_CACHE) {
+    const premiere = cacheImages.keys().next().value;
+    if (premiere !== n) { cacheImages.get(premiere).close(); cacheImages.delete(premiere); }
+  }
+  return img;
+}
+
+let jetonAffichage = 0;
+let imageAffichee = null;
+
+async function afficherImage() {
+  const e = E();
+  if (e.images.length === 0 || app.etape >= 4) return;
+  const n = Math.max(0, Math.min(e.courante, e.images.length - 1));
+  e.courante = n;
+  $("curseurImage").value = n;
+  $("numImage").textContent = "Image " + (n + 1) + " / " + e.images.length;
+  const jeton = ++jetonAffichage;
+  const objet = app.objet;
+  const img = await obtenirImage(n);
+  if (jeton !== jetonAffichage || objet !== app.objet) return;
+  imageAffichee = img;
+  dessinerEcran();
+  majTableauSelection();
+}
+function changerImage(n) {
+  const e = E();
+  e.courante = Math.max(0, Math.min(n, e.images.length - 1));
+  afficherImage();
+}
+$("btnPrecedente").addEventListener("click", () => changerImage(E().courante - 1));
+$("btnSuivante").addEventListener("click", () => changerImage(E().courante + 1));
+$("curseurImage").addEventListener("input", () => changerImage(Number($("curseurImage").value)));
+
+document.addEventListener("keydown", (ev) => {
+  const cible = ev.target;
+  const saisie = cible.tagName === "INPUT" && cible.type !== "checkbox";
+  if (saisie || cible.tagName === "SELECT") return;
+  if (E().images.length === 0 || app.etape >= 4) return;
+  if (ev.key === "ArrowLeft")  { changerImage(E().courante - 1); ev.preventDefault(); }
+  if (ev.key === "ArrowRight") { changerImage(E().courante + 1); ev.preventDefault(); }
+  if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === "z" && app.etape === 3) {
+    annulerPoint(); ev.preventDefault();
+  }
+});
+
+/* =====================================================================
+   DESSIN SUR L'IMAGE : étalon et points
+   ===================================================================== */
+function pixelsParPixelEcran() {
+  const r = $("ecran").getBoundingClientRect();
+  return r.width > 0 ? $("ecran").width / r.width : 1;
+}
+function dessinerEcran() {
+  const c = $("ecran");
+  const ctx = c.getContext("2d");
+  if (imageAffichee) ctx.drawImage(imageAffichee, 0, 0, c.width, c.height);
+  const k = pixelsParPixelEcran();
+  if (app.etape >= 2) dessinerEtalon(ctx, k);
+  if (app.etape >= 3) dessinerPoints(ctx, k);
+  majLoupe();
+}
+function texteContour(ctx, texte, x, y, k, couleur) {
+  ctx.font = "bold " + (15 * k) + "px system-ui, sans-serif";
+  ctx.lineWidth = 4 * k;
+  ctx.lineJoin = "round";
+  ctx.strokeStyle = "rgba(0,0,0,0.85)";
+  ctx.strokeText(texte, x, y);
+  ctx.fillStyle = couleur;
+  ctx.fillText(texte, x, y);
+}
+function trait(ctx, x1, y1, x2, y2, k, couleur, epaisseur) {
+  ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+  ctx.strokeStyle = "rgba(0,0,0,0.8)"; ctx.lineWidth = (epaisseur + 2) * k; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+  ctx.strokeStyle = couleur; ctx.lineWidth = epaisseur * k; ctx.stroke();
+}
+function dessinerEtalon(ctx, k) {
+  const e = E(), A = e.etalonA, B = e.etalonB, jaune = "#e8c468";
+  if (A && B) {
+    trait(ctx, A.x, A.y, B.x, B.y, k, jaune, 3);
+    texteContour(ctx, "étalon : " + texteLongueur(e), (A.x + B.x) / 2 + 10 * k, (A.y + B.y) / 2 - 10 * k, k, jaune);
+  }
+  for (const P of [A, B]) {
+    if (!P) continue;
+    ctx.beginPath();
+    ctx.arc(P.x, P.y, 7 * k, 0, 2 * Math.PI);
+    ctx.fillStyle = jaune; ctx.fill();
+    ctx.lineWidth = 2 * k; ctx.strokeStyle = "#000"; ctx.stroke();
+  }
+}
+function dessinerPoints(ctx, k) {
+  const e = E();
+  const pts = listePoints(e);
+  let dernier = null;    // dernier point dont le nom est écrit
+  pts.forEach((p, i) => {
+    const actuel = p.image === e.courante;
+    const couleur = actuel ? "#f2ede1" : "#d97a63";
+    const d = (actuel ? 9 : 6) * k;
+    trait(ctx, p.x - d, p.y - d, p.x + d, p.y + d, k, couleur, 2);
+    trait(ctx, p.x - d, p.y + d, p.x + d, p.y - d, k, couleur, 2);
+    // Au début de la chute, les points sont serrés : on n'écrit que les noms lisibles
+    if (actuel || i === pts.length - 1 || !dernier || distance(p, dernier) >= 18 * k) {
+      texteContour(ctx, "M" + i, p.x + 10 * k, p.y + 5 * k, k, couleur);
+      dernier = p;
+    }
+  });
+}
+
+/* =====================================================================
+   SOURIS SUR L'IMAGE
+   ===================================================================== */
+let souris = null;
+let deplace = null;
+
+function positionImage(ev) {
+  const c = $("ecran"), r = c.getBoundingClientRect();
+  return { x: (ev.clientX - r.left) * c.width / r.width, y: (ev.clientY - r.top) * c.height / r.height };
+}
+function extremiteProche(p) {
+  const e = E(), seuil = 14 * pixelsParPixelEcran();
+  if (e.etalonA && distance(p, e.etalonA) < seuil) return "A";
+  if (e.etalonB && distance(p, e.etalonB) < seuil) return "B";
+  return null;
+}
+$("ecran").addEventListener("pointerdown", (ev) => {
+  if (ev.button !== 0) return;
+  const p = positionImage(ev), e = E();
+  if (app.etape === 2) {
+    const proche = extremiteProche(p);
+    if (proche) {
+      deplace = proche;
+      $("ecran").setPointerCapture(ev.pointerId);
+    } else if (!e.etalonA) {
+      e.etalonA = p;
+    } else if (!e.etalonB) {
+      e.etalonB = p;
+    }
+    e.etalonRepris = false;
+    majEtalonnage();
+  } else if (app.etape === 3) {
+    pointer(p);
+  }
+});
+$("ecran").addEventListener("pointermove", (ev) => {
+  souris = positionImage(ev);
+  if (app.etape === 2) {
+    if (deplace) {
+      if (deplace === "A") E().etalonA = souris; else E().etalonB = souris;
+      E().etalonRepris = false;
+      majEtalonnage();
+    }
+    $("ecran").classList.toggle("deplacer", !!(deplace || extremiteProche(souris)));
+  }
+  majLoupe(ev);
+});
+$("ecran").addEventListener("pointerup", () => { deplace = null; });
+$("ecran").addEventListener("pointerleave", () => { souris = null; $("loupe").style.display = "none"; });
+
+document.querySelectorAll(".caseLoupe").forEach((caseL) =>
+  caseL.addEventListener("change", () => {
+    document.querySelectorAll(".caseLoupe").forEach((autre) => (autre.checked = caseL.checked));
+  }));
+
+let dernierEvenementSouris = null;
+function majLoupe(ev) {
+  if (ev) dernierEvenementSouris = ev;
+  const loupe = $("loupe");
+  const active = document.querySelector(".caseLoupe").checked && app.etape >= 2 && app.etape <= 3;
+  if (!active || !souris || !dernierEvenementSouris) { loupe.style.display = "none"; return; }
+  const taille = 170;
+  const dpr = window.devicePixelRatio || 1;
+  if (loupe.width !== Math.round(taille * dpr)) loupe.width = loupe.height = Math.round(taille * dpr);
+  const ctx = loupe.getContext("2d");
+  const k = pixelsParPixelEcran();
+  const cote = (taille / ZOOM_LOUPE) * k;
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, loupe.width, loupe.height);
+  ctx.drawImage($("ecran"), souris.x - cote / 2, souris.y - cote / 2, cote, cote, 0, 0, loupe.width, loupe.height);
+  const m = loupe.width / 2;
+  ctx.strokeStyle = "rgba(255,0,0,0.9)";
+  ctx.lineWidth = 1.5 * dpr;
+  ctx.beginPath();
+  ctx.moveTo(m - 16 * dpr, m); ctx.lineTo(m - 4 * dpr, m);
+  ctx.moveTo(m + 4 * dpr, m);  ctx.lineTo(m + 16 * dpr, m);
+  ctx.moveTo(m, m - 16 * dpr); ctx.lineTo(m, m - 4 * dpr);
+  ctx.moveTo(m, m + 4 * dpr);  ctx.lineTo(m, m + 16 * dpr);
+  ctx.stroke();
+  const cadre = $("cadreImage").getBoundingClientRect();
+  const evs = dernierEvenementSouris;
+  let gauche = evs.clientX - cadre.left + 24;
+  let haut = evs.clientY - cadre.top - taille - 24;
+  if (gauche + taille > cadre.width) gauche = evs.clientX - cadre.left - taille - 24;
+  if (haut < 0) haut = evs.clientY - cadre.top + 24;
+  loupe.style.left = gauche + "px";
+  loupe.style.top = haut + "px";
+  loupe.style.display = "block";
+}
+
+/* =====================================================================
+   ÉTAPE 2 : ÉTALONNAGE
+   La règle doit être verticale : la distance de chute est mesurée le
+   long de la règle, vers le bas.
+   ===================================================================== */
+function directionRegle(e) {
+  const A = e.etalonA, B = e.etalonB;
+  const L = distance(A, B);
+  let ux = (B.x - A.x) / L, uy = (B.y - A.y) / L;
+  if (uy < 0) { ux = -ux; uy = -uy; }     // orientée vers le bas de l'image
+  return { ux, uy };
+}
+function etalonPlace(e) {
+  return !!(e.etalonA && e.etalonB && distance(e.etalonA, e.etalonB) > 5);
+}
+function regleVerticale(e) {
+  return etalonPlace(e) && directionRegle(e).uy > 0.8;     // moins de 37° d'inclinaison
+}
+function etalonnageValide(e = E()) {
+  return regleVerticale(e) && e.longueur > 0;
+}
+function texteLongueur(e = E()) {
+  return e.longueur.toFixed(2).replace(".", ",") + " m";
+}
+const metresParPixel = (e) => e.longueur / distance(e.etalonA, e.etalonB);
+
+/* Reprend l'étalon de l'autre objet si les images ont la même taille */
+function reprendreEtalon() {
+  const e = E(), autre = essais[autreObjet()];
+  if (e.etalonA || !etalonnageValide(autre)) return;
+  if (autre.largeur !== e.largeur || autre.hauteur !== e.hauteur) return;
+  e.etalonA = { ...autre.etalonA };
+  e.etalonB = { ...autre.etalonB };
+  e.longueur = autre.longueur;
+  e.etalonRepris = true;
+  $("champLongueur").value = e.longueur.toFixed(2).replace(".", ",");
+}
+
+$("champLongueur").addEventListener("input", () => {
+  const L = lireNombre($("champLongueur").value);
+  E().longueur = L > 0 ? L : 0;
+  majEtalonnage();
+});
+$("btnEffacerEtalon").addEventListener("click", () => {
+  const e = E();
+  e.etalonA = e.etalonB = null;
+  e.etalonRepris = false;
+  majEtalonnage();
+});
+function majEtalonnage() {
+  majMessagesEtapes();
+  majBarreEtapes();
+  majTableau();
+  dessinerEcran();
+}
+
+/* =====================================================================
+   ÉTAPE 3 : POINTAGE
+   ===================================================================== */
+function listePoints(e = E()) {
+  return [...e.points.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map(([image, p]) => ({ image, x: p.x, y: p.y }));
+}
+function pointer(p) {
+  const e = E(), n = e.courante;
+  e.historique.push({ image: n, ancien: e.points.get(n) || null });
+  e.points.set(n, p);
+  const pas = $("caseUneSurDeux").checked ? 2 : 1;
+  const derniere = e.images.length - 1;
+  if (n + pas <= derniere) e.courante = n + pas;
+  majPointage();
+  if (n + pas > derniere) afficherMessage("msgPointage", "Dernière image atteinte.", "alerte");
+}
+function annulerPoint() {
+  const e = E(), action = e.historique.pop();
+  if (!action) return;
+  if (action.ancien) e.points.set(action.image, action.ancien);
+  else e.points.delete(action.image);
+  e.courante = action.image;
+  majPointage();
+}
+$("btnAnnuler").addEventListener("click", annulerPoint);
+function majPointage() {
+  majMessagesEtapes();
+  majBarreEtapes();
+  majTableau();
+  majScene();
+  afficherImage();
+}
+
+/* =====================================================================
+   MESSAGES D'AIDE DES ÉTAPES 2, 3 ET 4
+   ===================================================================== */
+function majMessagesEtapes() {
+  const e = E();
+  // Étape 2
+  if (!e.etalonA) afficherMessage("msgEtalon", "Cliquez sur la première extrémité de la règle.", "info");
+  else if (!e.etalonB) afficherMessage("msgEtalon", "Cliquez maintenant sur l'autre extrémité.", "info");
+  else if (!regleVerticale(e)) afficherMessage("msgEtalon", "L'étalon doit suivre la règle, qui est verticale. Déplacez ses extrémités.", "erreur");
+  else if (!(e.longueur > 0)) afficherMessage("msgEtalon", "Entrez une longueur d'étalon valide.", "erreur");
+  else if (e.etalonRepris) afficherMessage("msgEtalon",
+    "Étalon repris " + (app.objet === "filtre" ? "de la bille" : "du filtre") +
+    ". Si la caméra a bougé, déplacez ses extrémités sur la règle.", "alerte");
+  else afficherMessage("msgEtalon",
+    "Étalon placé : " + texteLongueur(e) + " = " + Math.round(distance(e.etalonA, e.etalonB)) + " pixels.", "ok");
+
+  // Étape 3
+  const n = e.points.size;
+  afficherMessage("msgPointage",
+    n === 0 ? "Aucun point pour l'instant. Le premier point sera M0."
+            : n + (n > 1 ? " points placés." : " point placé.") + (n < 2 ? " Placez au moins 2 points." : ""),
+    n >= 2 ? "ok" : "info");
+  $("btnAnnuler").disabled = e.historique.length === 0;
+
+  // Étape 4
+  const manque = ["bille", "filtre"].filter((o) => !essaiPointe(o));
+  afficherMessage("msgComparer",
+    manque.length ? "Pas encore pointé : " + manque.map((o) => OBJETS[o].le).join(" et ") +
+                    ". Cliquez sur « " + OBJETS[manque[0]].nom + " » en haut pour le faire."
+                  : "Les deux chutes sont pointées.",
+    manque.length ? "alerte" : "ok");
+}
+
+/* =====================================================================
+   MESURES : t et distance de chute d (le long de la règle, vers le bas)
+   ===================================================================== */
+function lignesMesures(e) {
+  const pts = listePoints(e);
+  if (pts.length === 0 || !etalonnageValide(e)) return [];
+  const { ux, uy } = directionRegle(e);
+  const s = metresParPixel(e);
+  const p0 = pts[0], t0 = e.images[p0.image].t;
+  return pts.map((p, i) => ({
+    nom: "M" + i,
+    image: p.image,
+    t: e.images[p.image].t - t0,
+    d: ((p.x - p0.x) * ux + (p.y - p0.y) * uy) * s,
+  }));
+}
+
+function majTableau() {
+  const e = E();
+  $("titreTableau").textContent = "Positions " + (app.objet === "bille" ? "de la bille" : "du filtre");
+  const corps = $("corpsTableau");
+  corps.innerHTML = "";
+  for (const l of lignesMesures(e)) {
+    const tr = document.createElement("tr");
+    tr.dataset.image = l.image;
+    for (const v of [l.nom, formatTemps(l.t), format3cs(l.d)]) {
+      const td = document.createElement("td");
+      td.textContent = v;
+      tr.appendChild(td);
+    }
+    tr.addEventListener("click", () => changerImage(l.image));
+    corps.appendChild(tr);
+  }
+  majTableauSelection();
+}
+function majTableauSelection() {
+  document.querySelectorAll("#corpsTableau tr").forEach((tr) => {
+    const actuelle = Number(tr.dataset.image) === E().courante;
+    tr.classList.toggle("courante", actuelle);
+    if (actuelle) tr.scrollIntoView({ block: "nearest" });
+  });
+}
+
+/* Tableau des deux objets, ligne par ligne (M0, M1…) */
+function lignesComparaison() {
+  const b = lignesMesures(essais.bille), f = lignesMesures(essais.filtre);
+  const n = Math.max(b.length, f.length), lignes = [];
+  for (let i = 0; i < n; i++) lignes.push({ nom: "M" + i, b: b[i] || null, f: f[i] || null });
+  return lignes;
+}
+function majTableauComparaison() {
+  const corps = $("corpsComparaison");
+  corps.innerHTML = "";
+  for (const l of lignesComparaison()) {
+    const tr = document.createElement("tr");
+    const valeurs = [l.nom,
+      l.b ? formatTemps(l.b.t) : "", l.b ? format3cs(l.b.d) : "",
+      l.f ? formatTemps(l.f.t) : "", l.f ? format3cs(l.f.d) : ""];
+    for (const v of valeurs) {
+      const td = document.createElement("td");
+      td.textContent = v || "·";
+      if (!v) td.className = "vide-cellule";
+      tr.appendChild(td);
+    }
+    corps.appendChild(tr);
+  }
+}
+
+/* Export CSV pour Excel en français (séparateur « ; », virgule décimale) */
+$("btnCSV").addEventListener("click", () => {
+  const v = (x) => String(Number(x.toPrecision(6))).replace(".", ",");
+  let texte = "Point;t bille (s);d bille (m);t filtre (s);d filtre (m)\r\n";
+  for (const l of lignesComparaison()) {
+    texte += [l.nom, l.b ? v(l.b.t) : "", l.b ? v(l.b.d) : "", l.f ? v(l.f.t) : "", l.f ? v(l.f.d) : ""].join(";") + "\r\n";
+  }
+  telecharger(new Blob(["﻿" + texte], { type: "text/csv;charset=utf-8" }), "chute-libre.csv");
+});
+function telecharger(blob, nom) {
+  const lien = document.createElement("a");
+  lien.href = URL.createObjectURL(blob);
+  lien.download = nom;
+  document.body.appendChild(lien);
+  lien.click();
+  lien.remove();
+  setTimeout(() => URL.revokeObjectURL(lien.href), 10000);
+}
+
+/* =====================================================================
+   ÉTAPE 4 : FEUILLE DE COMPARAISON
+   ---------------------------------------------------------------------
+   Le dessin est décrit une seule fois, en millimètres sur la feuille
+   (zone utile de 190 × 258 mm, y vers le bas), sous forme d'une liste
+   de formes simples. Elle est ensuite traduite en SVG (écran,
+   impression) et en PDF (envoi).
+   ===================================================================== */
+const FEUILLE = { l: 190, h: 258 };
+
+if (!AFFICHER_MODELE) {
+  $("ligneModele").classList.add("cache");
+  $("aideModele").classList.add("cache");
+}
+$("caseModele").addEventListener("change", dessinerComparaison);
+
+function construireFeuille() {
+  const formes = [];
+  const ligne = (x1, y1, x2, y2, ep = 0.35, tirets = false) => formes.push({ type: "ligne", x1, y1, x2, y2, ep, tirets });
+  const texte = (t, x, y, taille = 3.5, ancre = "start", gras = false) => formes.push({ type: "texte", t, x, y, taille, ancre, gras });
+
+  const series = {
+    bille: lignesMesures(essais.bille),
+    filtre: lignesMesures(essais.filtre),
+  };
+  const modele = AFFICHER_MODELE && $("caseModele").checked
+    ? series.bille.map((l) => ({ t: l.t, d: 0.5 * G * l.t * l.t })) : [];
+
+  // Échelle verticale commune : la plus grande distance tient dans la feuille
+  const yHaut = 30, yBas = FEUILLE.h - 16;
+  const toutes = [...series.bille, ...series.filtre, ...modele].map((l) => l.d);
+  const dmax = Math.max(0.05, ...toutes);
+  const k = (yBas - yHaut) / dmax;                    // mm de feuille par mètre réel
+  const Y = (d) => yHaut + d * k;
+
+  texte("Chronophotographies de la bille et du filtre (même échelle)", FEUILLE.l / 2, 7, 4.6, "middle", true);
+  texte("Distance de chute d mesurée depuis M0 (d = 0), axe orienté vers le bas", FEUILLE.l / 2, 13, 3.3, "middle");
+
+  // Axe d, vers le bas
+  const xAxe = 22;
+  ligne(xAxe, yHaut - 6, xAxe, yBas + 8, 0.45);
+  ligne(xAxe, yBas + 8, xAxe - 1.6, yBas + 4.5, 0.45);
+  ligne(xAxe, yBas + 8, xAxe + 1.6, yBas + 4.5, 0.45);
+  texte("d", xAxe + 2.5, yBas + 8, 4, "start", true);
+  ligne(xAxe - 2, yHaut, xAxe + 2, yHaut, 0.45);
+  texte("0", xAxe - 3, yHaut + 1.2, 3.5, "end");
+  ligne(xAxe + 2, yHaut, FEUILLE.l - 30, yHaut, 0.2, true);   // repère d = 0
+
+  // Barre d'échelle : 10 cm réels (ou 5 cm, ou 1 m si la chute est longue)
+  let reel = 0.10;
+  if (reel * k > (yBas - yHaut) * 0.6) reel = 0.05;
+  if (reel * k < 12) reel = 0.5;
+  const xE = FEUILLE.l - 14, hE = reel * k;
+  ligne(xE, yHaut, xE, yHaut + hE, 0.45);
+  ligne(xE - 2, yHaut, xE + 2, yHaut, 0.45);
+  ligne(xE - 2, yHaut + hE, xE + 2, yHaut + hE, 0.45);
+  texte(String(Math.round(reel * 100)) + " cm", xE - 3, yHaut + hE / 2 + 1.2, 3.5, "end");
+
+  // Une colonne par objet ; les noms des points sont à l'extérieur
+  const colonnes = [
+    { o: "bille", x: 68, cote: -1 },
+    { o: "filtre", x: 128, cote: 1 },
+  ];
+  for (const col of colonnes) {
+    const s = series[col.o];
+    texte(OBJETS[col.o].nom + (s.length ? "" : " (non pointé)"), col.x, yHaut - 9, 4.2, "middle", true);
+    let dernierY = -Infinity;
+    s.forEach((l, i) => {
+      const y = Y(l.d);
+      formes.push({ type: "croix", x: col.x, y, r: 1.5 });
+      // On n'écrit le nom que s'il ne chevauche pas le précédent
+      if (y - dernierY >= 3.4 || i === s.length - 1) {
+        texte(l.nom, col.x + col.cote * 3.2, y + 1.2, 3, col.cote < 0 ? "end" : "start");
+        dernierY = y;
+      }
+    });
+  }
+  // Modèle de chute libre (ronds vides à côté de la colonne de la bille)
+  if (modele.length) {
+    const xm = 68 + 9;
+    modele.forEach((l) => formes.push({ type: "rond", x: xm, y: Y(l.d), r: 1.3 }));
+    texte("modèle", xm, yHaut - 3.5, 2.8, "middle");
+    texte("○ : positions d'un objet en chute libre aux mêmes instants (d = ½ × g × t²)",
+      FEUILLE.l / 2, FEUILLE.h - 3, 3.1, "middle");
+  }
+  return formes;
+}
+
+/* Ligne d'informations en bas de la feuille */
+function textePied() {
+  const noms = $("champNoms").value.trim() || "....................................";
+  const date = new Date().toLocaleDateString("fr-FR");
+  const f = (o) => essaiPointe(o) ? Math.round(essais[o].frequence) + " images/s" : "non pointé";
+  return "Noms du groupe : " + noms + "     |     Date : " + date +
+    "     |     Bille : f = " + f("bille") + "     |     Filtre : f = " + f("filtre");
+}
+function majPiedFeuille() { $("piedFeuille").textContent = textePied(); }
+$("champNoms").addEventListener("input", majPiedFeuille);
+
+/* ---------- Traduction en SVG ---------- */
+const NS = "http://www.w3.org/2000/svg";
+function elementSVG(nom, attributs, parent) {
+  const el = document.createElementNS(NS, nom);
+  for (const cle in attributs) el.setAttribute(cle, attributs[cle]);
+  parent.appendChild(el);
+  return el;
+}
+function dessinerComparaison() {
+  const svg = $("svgChrono");
+  svg.innerHTML = "";
+  svg.setAttribute("viewBox", "0 0 " + FEUILLE.l + " " + FEUILLE.h);
+  for (const f of construireFeuille()) {
+    if (f.type === "ligne") {
+      elementSVG("line", { x1: f.x1, y1: f.y1, x2: f.x2, y2: f.y2, stroke: "#000", "stroke-width": f.ep,
+        "stroke-linecap": "round", "stroke-dasharray": f.tirets ? "1.5 1.5" : "none" }, svg);
+    } else if (f.type === "texte") {
+      const t = elementSVG("text", { x: f.x, y: f.y, "font-size": f.taille, "font-family": "Arial, sans-serif",
+        "font-weight": f.gras ? "bold" : "normal", "text-anchor": f.ancre, fill: "#000" }, svg);
+      t.textContent = f.t;
+    } else if (f.type === "croix") {
+      elementSVG("path", { d: "M" + (f.x - f.r) + " " + (f.y - f.r) + " L" + (f.x + f.r) + " " + (f.y + f.r) +
+        " M" + (f.x - f.r) + " " + (f.y + f.r) + " L" + (f.x + f.r) + " " + (f.y - f.r),
+        stroke: "#000", "stroke-width": 0.4, "stroke-linecap": "round", fill: "none" }, svg);
+    } else if (f.type === "rond") {
+      elementSVG("circle", { cx: f.x, cy: f.y, r: f.r, stroke: "#000", "stroke-width": 0.3, fill: "none" }, svg);
+    }
+  }
+  majPiedFeuille();
+  majMessagesEtapes();
+}
+
+$("btnImprimer").addEventListener("click", () => { majPiedFeuille(); window.print(); });
+
+/* =====================================================================
+   ÉTAPE 5 : FICHIER PDF ET ENVOI PAR MAIL
+   Le PDF (A4 portrait) contient la feuille de comparaison (page 1)
+   et le tableau des positions (page 2). Écrit « à la main », sans
+   bibliothèque : traits et textes restent nets.
+   ===================================================================== */
+function textePDF(t) {
+  t = t.replace(/[−–—]/g, "-").replace(/…/g, "...").replace(/[’‘]/g, "'").replace(/[«»]/g, '"')
+       .replace(/○/g, "o").replace(/²/g, "\xB2").replace(/½/g, "1/2");
+  let r = "";
+  for (const c of t) r += c.charCodeAt(0) <= 255 ? c : "?";
+  return r.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
+}
+function octets(t) {
+  const o = new Uint8Array(t.length);
+  for (let i = 0; i < t.length; i++) o[i] = t.charCodeAt(i) & 255;
+  return o;
+}
+
+function fabriquerPDF() {
+  const LP = 595.3, HP = 841.9, M = 28.35, MM = 2.835;
+  const X = (x) => (M + x * MM).toFixed(2);
+  const Y = (y) => (HP - M - y * MM).toFixed(2);
+  const largeurTexte = (t, taille) => textePDF(t).length * taille * 0.5;
+
+  // --- Page 1 : la feuille ---
+  let c = "1 J 0 G 0 g\n";
+  for (const f of construireFeuille()) {
+    if (f.type === "ligne") {
+      c += (f.ep * MM).toFixed(2) + " w " + (f.tirets ? "[3 3] 0 d " : "[] 0 d ") +
+           X(f.x1) + " " + Y(f.y1) + " m " + X(f.x2) + " " + Y(f.y2) + " l S\n";
+    } else if (f.type === "texte") {
+      const taille = f.taille * MM;   // la taille en mm devient une taille en points
+      let x = M + f.x * MM;
+      if (f.ancre === "middle") x -= largeurTexte(f.t, taille) / 2;
+      if (f.ancre === "end") x -= largeurTexte(f.t, taille);
+      c += "BT /" + (f.gras ? "F2" : "F1") + " " + taille.toFixed(2) + " Tf " + x.toFixed(2) + " " + Y(f.y) +
+           " Td (" + textePDF(f.t) + ") Tj ET\n";
+    } else if (f.type === "croix") {
+      c += "[] 0 d " + (0.4 * MM).toFixed(2) + " w " +
+           X(f.x - f.r) + " " + Y(f.y - f.r) + " m " + X(f.x + f.r) + " " + Y(f.y + f.r) + " l " +
+           X(f.x - f.r) + " " + Y(f.y + f.r) + " m " + X(f.x + f.r) + " " + Y(f.y - f.r) + " l S\n";
+    } else if (f.type === "rond") {
+      // Cercle tracé avec 4 courbes de Bézier
+      const cx = M + f.x * MM, cy = HP - M - f.y * MM, r = f.r * MM, q = 0.5523 * r;
+      const n = (v) => v.toFixed(2);
+      c += "[] 0 d " + (0.3 * MM).toFixed(2) + " w " + n(cx + r) + " " + n(cy) + " m " +
+        n(cx + r) + " " + n(cy + q) + " " + n(cx + q) + " " + n(cy + r) + " " + n(cx) + " " + n(cy + r) + " c " +
+        n(cx - q) + " " + n(cy + r) + " " + n(cx - r) + " " + n(cy + q) + " " + n(cx - r) + " " + n(cy) + " c " +
+        n(cx - r) + " " + n(cy - q) + " " + n(cx - q) + " " + n(cy - r) + " " + n(cx) + " " + n(cy - r) + " c " +
+        n(cx + q) + " " + n(cy - r) + " " + n(cx + r) + " " + n(cy - q) + " " + n(cx + r) + " " + n(cy) + " c S\n";
+    }
+  }
+  const pied = textePDF(textePied().replace(/ {5}/g, "  "));
+  c += "[] 0 d 0.6 w " + M + " " + (M + 16) + " m " + (LP - M).toFixed(2) + " " + (M + 16) + " l S\n";
+  c += "BT /F1 8.5 Tf " + M + " " + (M + 5) + " Td (" + pied + ") Tj ET\n";
+
+  // --- Pages suivantes : tableau (45 lignes par page) ---
+  const contenus = [c];
+  const lignes = lignesComparaison();
+  const v = (x) => format3cs(x).replace("−", "-");
+  const tt = (x) => formatTemps(x);
+  const colonnes = [M + 10, M + 90, M + 190, M + 290, M + 390];
+  const PAR_PAGE = 45;
+  for (let debut = 0; debut < Math.max(1, lignes.length); debut += PAR_PAGE) {
+    let t = "BT /F2 15 Tf " + M + " " + (HP - M - 16) + " Td (" + textePDF("Positions de la bille et du filtre") + ") Tj ET\n";
+    t += "BT /F1 8.5 Tf " + M + " " + (HP - M - 32) + " Td (" + pied + ") Tj ET\n";
+    let y = HP - M - 62;
+    ["Point", "t bille (s)", "d bille (m)", "t filtre (s)", "d filtre (m)"].forEach((titre, j) => {
+      t += "BT /F2 11 Tf " + colonnes[j] + " " + y + " Td (" + textePDF(titre) + ") Tj ET\n";
+    });
+    t += "0.6 w " + colonnes[0] + " " + (y - 5) + " m " + (colonnes[4] + 80) + " " + (y - 5) + " l S\n";
+    y -= 4;
+    for (const l of lignes.slice(debut, debut + PAR_PAGE)) {
+      y -= 15;
+      [l.nom, l.b ? tt(l.b.t) : "", l.b ? v(l.b.d) : "", l.f ? tt(l.f.t) : "", l.f ? v(l.f.d) : ""]
+        .forEach((val, j) => {
+          if (val) t += "BT /F1 11 Tf " + colonnes[j] + " " + y + " Td (" + textePDF(val) + ") Tj ET\n";
+        });
+    }
+    contenus.push(t);
+  }
+
+  // --- Assemblage : 1 catalogue, 2 pages, 3 police, 4 police grasse, puis page + contenu ---
+  const objets = [];
+  const premierePage = 5;
+  const kids = contenus.map((_, i) => (premierePage + 2 * i) + " 0 R").join(" ");
+  objets.push("<< /Type /Catalog /Pages 2 0 R >>");
+  objets.push("<< /Type /Pages /Kids [" + kids + "] /Count " + contenus.length + " >>");
+  objets.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+  objets.push("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+  contenus.forEach((contenu, i) => {
+    objets.push("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 " + LP + " " + HP + "] " +
+                "/Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents " + (premierePage + 2 * i + 1) + " 0 R >>");
+    objets.push("<< /Length " + contenu.length + " >>\nstream\n" + contenu + "\nendstream");
+  });
+  let pdf = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
+  const decalages = [];
+  objets.forEach((obj, i) => {
+    decalages.push(pdf.length);
+    pdf += (i + 1) + " 0 obj\n" + obj + "\nendobj\n";
+  });
+  const debutXref = pdf.length;
+  pdf += "xref\n0 " + (objets.length + 1) + "\n0000000000 65535 f \n";
+  for (const d of decalages) pdf += String(d).padStart(10, "0") + " 00000 n \n";
+  pdf += "trailer\n<< /Size " + (objets.length + 1) + " /Root 1 0 R >>\nstartxref\n" + debutXref + "\n%%EOF\n";
+  return new Blob([octets(pdf)], { type: "application/pdf" });
+}
+
+function nomFichierPDF() {
+  const noms = $("champNoms").value.normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  return "chute-libre" + (noms ? "-" + noms : "") + ".pdf";
+}
+function telechargerPDF() {
+  const nom = nomFichierPDF();
+  telecharger(fabriquerPDF(), nom);
+  return nom;
+}
+function contenuMail() {
+  const noms = $("champNoms").value.trim();
+  const corps = "Bonjour,\n\nVoici notre TP « Chute libre ou non ? » en pièce jointe " +
+    "(page 1 : chronophotographies ; page 2 : tableau des positions).\n\n" +
+    textePied().replace(/ {5}\| {5}/g, "\n") + "\n\nCordialement,\n" + noms;
+  return { objet: "TP chute libre : " + noms, corps };
+}
+function nomsSaisis() {
+  if ($("champNoms").value.trim()) return true;
+  afficherMessage("msgEnvoi", "Écrivez d'abord les noms du groupe.", "erreur");
+  $("champNoms").focus();
+  return false;
+}
+function envoyer(mode) {
+  if (!nomsSaisis()) return;
+  const { objet, corps } = contenuMail();
+  const e = encodeURIComponent;
+  let onglet = null;
+  if (mode === "web") onglet = window.open("about:blank", "_blank");
+  const nom = telechargerPDF();
+  if (mode === "web") {
+    const url = "https://outlook.office.com/mail/deeplink/compose?to=" + e(EMAIL_PROF) +
+                "&subject=" + e(objet) + "&body=" + e(corps);
+    if (onglet) onglet.location.href = url; else window.open(url, "_blank");
+  } else {
+    window.location.href = "mailto:" + EMAIL_PROF + "?subject=" + e(objet) + "&body=" + e(corps);
+  }
+  afficherMessage("msgEnvoi",
+    "Le fichier « " + nom + " » est dans le dossier Téléchargements. Dans Outlook, cliquez sur « Joindre » " +
+    "(trombone), choisissez ce fichier, puis cliquez sur « Envoyer ».", "ok");
+}
+$("btnEnvoyerWeb").addEventListener("click", () => envoyer("web"));
+$("btnEnvoyerAppli").addEventListener("click", () => envoyer("appli"));
+$("btnPDF").addEventListener("click", () => {
+  if (!nomsSaisis()) return;
+  const nom = telechargerPDF();
+  afficherMessage("msgEnvoi", "Le fichier « " + nom + " » est dans le dossier Téléchargements.", "ok");
+});
+
+window.addEventListener("resize", () => { if (E().images.length && app.etape <= 3) dessinerEcran(); });
+window.addEventListener("pagehide", () => { if (app.flux) app.flux.getTracks().forEach((p) => p.stop()); });
+
+/* =====================================================================
+   DÉMARRAGE
+   ===================================================================== */
+majScene();
+majBarreEtapes();
+majMessagesEtapes();
+</script>
+</body>
+</html>
