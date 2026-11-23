@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapitre 2A : Produire et acheminer l'électricité (Terminale ES)</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  /* ---------- Lien vers le diaporama (page-head) ---------- */
+  .slides-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+    font-family:var(--font-body); font-size:0.88rem; text-decoration:none;
+    color:var(--teal); border:1px solid var(--teal); border-radius:999px;
+    padding:6px 14px; transition:background 0.2s ease, color 0.2s ease;
+  }
+  .slides-link:hover, .slides-link:focus{ background:var(--teal); color:var(--board); }
+
+  /* ---------- Tableau-bilan (comme au Chapitre 0 / Séances 1 et 2) ---------- */
+  .bilan-table{ width:100%; border-collapse:collapse; margin:16px 0 8px; font-size:0.92rem; }
+  .bilan-table th, .bilan-table td{ border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top; }
+  .bilan-table th{ background:rgba(107,191,171,0.12); color:var(--teal); font-family:var(--font-display); font-weight:700; font-size:0.95rem; }
+  .bilan-table tr:nth-child(even) td{ background:rgba(255,255,255,0.02); }
+  @media (max-width:700px){
+    .bilan-table{ font-size:0.82rem; }
+    .bilan-table th, .bilan-table td{ padding:8px; }
+  }
+
+  /* ---------- Liste de définitions dans les encadrés ---------- */
+  .keyword-list{ margin:8px 0 0; padding-left:18px; }
+  .keyword-list li{ margin-bottom:6px; }
+  .keyword-list li:last-child{ margin-bottom:0; }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="../index.html">Accueil</a>
+  <a href="../4eme.html">4ème</a>
+  <a href="../2nde.html">2nde</a>
+  <a href="../1ere.html">1ère spé PC</a>
+  <a href="../terminale.html" class="current">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique-Chimie</div>
+  <h1>Chapitre 2A : Produire et acheminer l'électricité</h1>
+  <p class="sub">De la ressource naturelle à la prise électrique : produire, stocker, transporter. <a href="ch1-seance3.html" style="color:var(--teal);">← Revoir le Chapitre 1</a></p>
+  <a class="slides-link" href="../slides/ch2a-terminale.html" target="_blank" rel="noopener">📽️ Voir le diaporama du cours</a>
+</header>
+
+<main>
+
+  <section>
+    <h2>Introduction</h2>
+    <p class="course-text">
+      Au Chapitre 1, on a vu comment un alternateur et une cellule photovoltaïque produisent de l'électricité. Ce chapitre suit l'électricité sur tout son trajet : d'où vient l'énergie, combien on en perd à chaque conversion, comment la garder pour plus tard, et comment l'amener jusqu'à la prise en perdant le moins possible. Il se termine par une question qui n'a pas de réponse unique : comment choisir les modes de production d'un pays ? Cette page reprend la trace écrite du cours, à relire avant l'évaluation.
+    </p>
+    <div class="objectifs-box">
+      <span class="box-label">🎯 Objectifs du chapitre</span>
+      <ul>
+        <li>Identifier le convertisseur et les formes d'énergie mises en jeu dans un dispositif de production d'électricité</li>
+        <li>Schématiser une chaîne énergétique et calculer un rendement global</li>
+        <li>Comparer différents dispositifs de stockage de l'énergie</li>
+        <li>Expliquer pourquoi l'électricité est transportée sous haute tension et calculer des pertes par effet Joule</li>
+        <li>Comparer des modes de production selon plusieurs critères</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>a. Produire de l'électricité</h2>
+    <p class="course-text">
+      Un barrage, une éolienne, un panneau solaire et une pile à combustible ont un point commun : tous convertissent une forme d'énergie en énergie électrique. Ce qui les distingue, c'est la forme d'énergie qu'ils reçoivent : mécanique, lumineuse ou chimique. On représente ces conversions par une chaîne énergétique : un réservoir (ou ressource) fournit de l'énergie à un convertisseur, qui délivre une énergie utile et perd une partie de l'énergie reçue, le plus souvent sous forme thermique.
+    </p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un <strong>convertisseur</strong> transforme une forme d'énergie en une autre. Trois familles de convertisseurs produisent de l'énergie électrique :
+    </div>
+    <table class="bilan-table">
+      <thead><tr><th>Convertisseur</th><th>Énergie reçue</th><th>Exemples</th></tr></thead>
+      <tbody>
+        <tr><td>Alternateur</td><td>Mécanique</td><td>Barrage, éolienne, hydrolienne, centrales thermiques et nucléaires</td></tr>
+        <tr><td>Panneau photovoltaïque</td><td>Lumineuse (radiative)</td><td>Panneau solaire</td></tr>
+        <tr><td>Pile, accumulateur, pile à combustible</td><td>Chimique</td><td>Pile, batterie, pile à hydrogène</td></tr>
+      </tbody>
+    </table>
+    <p class="course-text">
+      La plupart des centrales sont des machines à faire tourner un alternateur. Ce qui change d'une centrale à l'autre, c'est la manière de faire tourner la turbine : l'eau pour un barrage ou une hydrolienne, le vent pour une éolienne, la vapeur pour les centrales au charbon, au gaz, nucléaires ou géothermiques. La turbine entraîne l'alternateur en rotation, et c'est l'alternateur qui produit l'énergie électrique.
+    </p>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Une cellule photovoltaïque et une pile à combustible produisent de l'électricité sans aucune pièce qui tourne : il n'y a pas d'alternateur. La cellule photovoltaïque convertit l'énergie radiative en énergie électrique ; la pile à combustible convertit l'énergie chimique en énergie électrique.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Dans une centrale nucléaire, le réacteur fournit de l'énergie thermique, la turbine de l'énergie mécanique, et c'est l'alternateur qui la convertit en énergie électrique.
+    </div>
+  </section>
+
+  <section>
+    <h2>b. Rendement d'une conversion</h2>
+    <p class="course-text">
+      Toute l'énergie reçue par un convertisseur ne devient pas de l'énergie utile : une partie est toujours perdue. Pour mesurer l'efficacité d'une conversion, on calcule son rendement.
+    </p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le <strong>rendement</strong> r d'un convertisseur est le rapport entre l'énergie utile qu'il fournit et l'énergie qu'il reçoit (ou entre les puissances correspondantes).
+    </div>
+    <div class="formula">
+      r = <span class="frac"><span class="num">E<sub>utile</sub></span><span class="den">E<sub>reçue</sub></span></span> = <span class="frac"><span class="num">P<sub>utile</sub></span><span class="den">P<sub>reçue</sub></span></span>
+    </div>
+    <p class="course-text">
+      Le rendement est sans unité, compris entre 0 et 1, et souvent exprimé en pourcentage. L'énergie reçue se partage entre l'énergie utile et les pertes : E<sub>reçue</sub> = E<sub>utile</sub> + pertes.
+    </p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Le <strong>rendement global</strong> d'une chaîne de conversions est le produit des rendements de chaque étape.
+    </div>
+    <div class="formula">r<sub>g</sub> = r<sub>1</sub> × r<sub>2</sub> × r<sub>3</sub> × …</div>
+    <p class="course-text">
+      Exemple : dans une centrale nucléaire, sur 100 J libérés par le combustible, seulement 30 J environ arrivent sur le réseau sous forme d'énergie électrique. Le reste est perdu, principalement sous forme de chaleur évacuée par le circuit de refroidissement.
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Plus une chaîne compte d'étapes, plus le rendement global baisse. Un rendement global est toujours plus petit que le plus petit des rendements de la chaîne. Par exemple, pour trois étapes de rendements 0,90, 0,80 et 0,50 : r<sub>g</sub> = 0,90 × 0,80 × 0,50 = 0,36. On multiplie, on n'additionne pas.
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Dans un calcul de rendement, les deux énergies (ou les deux puissances) doivent être exprimées dans la même unité.
+    </div>
+    <h3 style="font-family:var(--font-display);color:var(--teal);font-size:1.15rem;margin:26px 0 10px;">Unités d'énergie et de puissance</h3>
+    <div class="formula">E = P × Δt</div>
+    <p class="course-text">
+      Avec E en joules (J), P en watts (W) et Δt en secondes (s) ; ou bien E en wattheures (W·h), P en watts et Δt en heures (h). Conversions utiles : 1 W·h = 3 600 J et 1 kW·h = 3,6 × 10<sup>6</sup> J. Préfixes : k = 10<sup>3</sup>, M = 10<sup>6</sup>, G = 10<sup>9</sup>, T = 10<sup>12</sup>. Ordre de grandeur : la France a consommé 494,3 TW·h d'électricité en 2023.
+    </p>
+  </section>
+
+  <section>
+    <h2>c. Stocker l'énergie électrique</h2>
+    <p class="course-text">
+      Le Soleil et le vent ne produisent pas toujours quand on en a besoin. Pour adapter la production à la consommation, il faut pouvoir garder l'énergie pour plus tard. Une station de transfert d'énergie par pompage (STEP), comme celle de Grand'Maison en Isère, fonctionne comme une batterie géante : quand l'électricité est abondante, on pompe l'eau d'un bassin inférieur vers un bassin supérieur ; quand on en a besoin, on laisse redescendre l'eau dans des turbines. Pour restituer 100 kW·h, il faut consommer 125 kW·h au pompage.
+    </p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      L'électricité ne peut pas être stockée telle quelle : il faut la <strong>convertir en une autre forme d'énergie</strong>, puis la reconvertir en énergie électrique au moment voulu.
+    </div>
+    <table class="bilan-table">
+      <thead><tr><th>Système</th><th>Énergie stockée</th><th>Principe</th></tr></thead>
+      <tbody>
+        <tr><td>Accumulateur (batterie)</td><td>Chimique</td><td>Réaction chimique inversée lors de la charge</td></tr>
+        <tr><td>Barrage, STEP</td><td>Potentielle de pesanteur</td><td>On remonte l'eau dans le bassin supérieur</td></tr>
+        <tr><td>Supercondensateur</td><td>Électrostatique</td><td>Charges accumulées sur deux électrodes</td></tr>
+      </tbody>
+    </table>
+    <p class="course-text">Pour comparer des systèmes de stockage, on utilise deux grandeurs.</p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définitions</span>
+      <ul class="keyword-list">
+        <li>La <strong>densité énergétique</strong> est la quantité d'énergie stockée (en W·h) pour 1 kg du matériau de stockage.</li>
+        <li>Le <strong>rendement de stockage</strong> est le rapport entre l'énergie électrique restituée et l'énergie électrique consommée pour la stocker : r = E<sub>restituée</sub> / E<sub>consommée</sub>.</li>
+      </ul>
+    </div>
+    <table class="bilan-table">
+      <thead><tr><th>Système</th><th>Densité énergétique</th><th>Rendement de stockage</th></tr></thead>
+      <tbody>
+        <tr><td>Accumulateur lithium-ion</td><td>200 W·h/kg</td><td>environ 90 %</td></tr>
+        <tr><td>STEP de Grand'Maison</td><td>(sans objet)</td><td>r = 100 / 125 = 0,80, soit 80 %</td></tr>
+      </tbody>
+    </table>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Un système de stockage ne produit pas d'énergie : il en restitue toujours moins qu'il n'en a reçu. Un rendement de stockage est donc toujours inférieur à 1.
+    </div>
+  </section>
+
+  <section>
+    <h2>d. Transporter l'énergie électrique</h2>
+    <p class="course-text">
+      Sur les grandes lignes, l'électricité circule sous 400 000 V, alors qu'elle arrive à la prise sous 230 V. Pourquoi une tension aussi élevée ? Parce que les lignes électriques chauffent, et que cette chaleur est de l'énergie perdue.
+    </p>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      <strong>Effet Joule</strong> : un conducteur de résistance R traversé par un courant d'intensité I s'échauffe. La puissance dissipée sous forme thermique vaut :
+    </div>
+    <div class="formula">P<sub>J</sub> = R × I<sup>2</sup> &nbsp;&nbsp;<span style="font-size:0.8rem;color:var(--chalk-dim)">(P<sub>J</sub> en W, R en Ω, I en A)</span></div>
+    <p class="course-text">
+      L'effet Joule est utile dans un grille-pain ou un radiateur, mais c'est une perte dans une ligne électrique. Rappel : la puissance électrique transportée vaut P = U × I (P en W, U en V, I en A).
+    </p>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Pour une puissance transportée P fixée, si on augmente la tension U, l'intensité I = P / U diminue, donc les pertes P<sub>J</sub> = R × I<sup>2</sup> diminuent très fortement. Multiplier U par 2 divise I par 2 et les pertes par 4 ; multiplier U par 10 divise les pertes par 100.
+    </div>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Un <strong>transformateur</strong> modifie la valeur d'une tension alternative avec un très bon rendement (souvent supérieur à 99 %). Il élève la tension à la sortie de la centrale et l'abaisse près des consommateurs.
+    </div>
+    <p class="course-text">
+      Clin d'œil au Chapitre 0 : le transformateur ne fonctionne qu'en courant alternatif. C'est pour cela que l'alternatif de Tesla et Westinghouse l'a emporté sur le continu d'Edison. Le trajet de l'électricité est donc le suivant : la centrale produit sous quelques kV, un transformateur élévateur porte la tension à 400 kV pour les longues distances, des postes de transformation l'abaissent vers la haute et la moyenne tension, puis un transformateur de quartier la ramène à 230 V pour les maisons. Les pertes par effet Joule représentent environ 2 % sur le réseau de transport et 6 % sur le réseau de distribution.
+    </p>
+    <table class="bilan-table">
+      <thead><tr><th>Domaine</th><th>Tension</th><th>Utilisation</th></tr></thead>
+      <tbody>
+        <tr><td>Basse tension</td><td>U ≤ 1 kV</td><td>Habitations, petits commerces</td></tr>
+        <tr><td>Moyenne tension</td><td>1 kV &lt; U ≤ 50 kV</td><td>Industries, hôpitaux, transport ferroviaire</td></tr>
+        <tr><td>Haute tension</td><td>U &gt; 50 kV</td><td>Transport sur longues distances</td></tr>
+      </tbody>
+    </table>
+    <div class="definition-box">
+      <span class="box-label">📘 Définition</span>
+      Les <strong>réseaux intelligents</strong> (<em>smart grids</em>) collectent des données en temps réel pour ajuster la production à la consommation, notamment pour intégrer les sources intermittentes (solaire, éolien).
+    </div>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Ne pas confondre la haute tension U de la ligne avec la chute de tension aux bornes des câbles (U<sub>chute</sub> = R × I), qui est bien plus petite.
+    </div>
+  </section>
+
+  <section>
+    <h2>e. Choisir un mode de production</h2>
+    <p class="course-text">
+      Existe-t-il un mode de production idéal ? Pour choisir le mix électrique d'un pays, c'est-à-dire la répartition de sa production entre les différents modes, il faut les comparer selon plusieurs critères : la ressource est-elle renouvelable ou non ? Quelles sont les émissions de CO<sub>2</sub> sur l'ensemble du cycle de vie ? La production est-elle pilotable (on la déclenche quand on veut) ou intermittente (elle dépend du Soleil ou du vent) ? Quel est le rendement ? Quels sont l'emprise au sol, l'impact sur les paysages et la biodiversité, les risques (accidents, déchets), le coût, les emplois et l'indépendance énergétique ?
+    </p>
+    <p class="course-text">
+      En 2022, la production mondiale d'électricité reposait d'abord sur le charbon (35,5 %), puis le gaz naturel (22,5 %), l'hydraulique (15 %), l'éolien et le solaire (12 %), le nucléaire (9 %), le pétrole (3 %) et d'autres sources (3 %), selon l'Agence internationale de l'énergie. En France, en 2023, la production était à 64,8 % nucléaire, 28,5 % renouvelable et 6,7 % fossile, selon RTE.
+    </p>
+    <table class="bilan-table">
+      <thead><tr><th>Mode</th><th>Renouvelable</th><th>CO<sub>2</sub></th><th>Pilotable</th><th>Principal inconvénient</th></tr></thead>
+      <tbody>
+        <tr><td>Charbon, gaz</td><td>Non</td><td>Élevé</td><td>Oui</td><td>Émissions de CO<sub>2</sub>, pollution</td></tr>
+        <tr><td>Nucléaire</td><td>Non</td><td>Très faible</td><td>Oui</td><td>Déchets radioactifs, risque d'accident</td></tr>
+        <tr><td>Hydraulique</td><td>Oui</td><td>Très faible</td><td>Oui</td><td>Sites limités, vallées noyées</td></tr>
+        <tr><td>Éolien</td><td>Oui</td><td>Très faible</td><td>Non</td><td>Intermittence, paysages</td></tr>
+        <tr><td>Solaire</td><td>Oui</td><td>Faible</td><td>Non</td><td>Intermittence, emprise au sol</td></tr>
+      </tbody>
+    </table>
+    <div class="warning-box">
+      <span class="box-label">⚠️ Attention</span>
+      Une énergie « renouvelable » n'est pas forcément « sans impact », et une énergie « bas carbone » n'est pas forcément renouvelable : c'est le cas du nucléaire, qui émet très peu de CO<sub>2</sub> mais utilise l'uranium, une ressource finie.
+    </div>
+    <div class="recall-box">
+      <span class="box-label">📌 À retenir</span>
+      Le mode de production idéal n'existe pas. Un choix énergétique s'appuie sur des faits, des données scientifiques et des contraintes économiques et sociales.
+    </div>
+  </section>
+
+  <section>
+    <h2>L'essentiel du chapitre</h2>
+    <table class="bilan-table">
+      <thead><tr><th>Partie</th><th>À savoir</th></tr></thead>
+      <tbody>
+        <tr><td>a. Produire</td><td>Alternateur (énergie mécanique), panneau photovoltaïque (énergie lumineuse), pile et accumulateur (énergie chimique). La plupart des centrales font tourner un alternateur.</td></tr>
+        <tr><td>b. Rendement</td><td>r = E<sub>utile</sub> / E<sub>reçue</sub>, entre 0 et 1 ; r<sub>g</sub> = r<sub>1</sub> × r<sub>2</sub> × … ; E = P × Δt ; 1 W·h = 3 600 J.</td></tr>
+        <tr><td>c. Stocker</td><td>Chimique (accumulateur), potentielle de pesanteur (STEP), électrostatique (supercondensateur). Densité énergétique et rendement de stockage.</td></tr>
+        <tr><td>d. Transporter</td><td>P = U × I et P<sub>J</sub> = R × I<sup>2</sup> : haute tension, donc faible intensité, donc faibles pertes par effet Joule. Transformateur, domaines de tension (BT ≤ 1 kV &lt; MT ≤ 50 kV &lt; HT), réseaux intelligents.</td></tr>
+        <tr><td>e. Choisir</td><td>Aucun mode de production idéal. Critères : CO<sub>2</sub>, renouvelable, pilotable, impacts, risques, coût, emplois, indépendance énergétique.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>Chapitre 2A : Produire et acheminer l'électricité (Terminale ES).</footer>
+
+</body>
+</html>
