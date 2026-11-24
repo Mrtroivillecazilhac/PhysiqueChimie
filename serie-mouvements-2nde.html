@@ -540,7 +540,7 @@ function buildDraw(R){
       ctx.lineTo(c - L * Math.cos(ang - 0.4), d - L * Math.sin(ang - 0.4));
       ctx.lineTo(c - L * Math.cos(ang + 0.4), d - L * Math.sin(ang + 0.4)); ctx.closePath(); ctx.fill();
     }
-    if (label) { ctx.font = '600 14px Space Grotesk, sans-serif'; ctx.fillText(label, c + 8, d - 6); }
+    if (label) vecLabel(label, c + 8, d - 6, col);
   }
   function scene(){
     ctx.clearRect(0, 0, it.w * PX, it.h * PX);
@@ -567,7 +567,27 @@ function buildDraw(R){
     ctx.fillStyle = 'rgba(242,237,225,0.75)'; ctx.font = '12px Space Grotesk, sans-serif';
     ctx.fillText('1 carreau = 1 cm', it.w * PX - 110, it.h * PX - 8);
   }
-  const plain = k => { const v = it.vecs.find(x => x.k === k); return v.name.replace(/<[^>]+>/g, '').replace('−', '−'); };
+  const plain = k => it.vecs.find(x => x.k === k).name;
+  /* Nom de vecteur avec sa flèche (et ses indices) dessiné sur le schéma */
+  function vecLabel(html, x, y, col){
+    const inner = html.replace(/<span class="vw">/g, '');
+    y = Math.max(y, 24); x = Math.min(x, it.w * PX - 46);
+    const m = inner.match(/^(.*?)<span class="vec">(.*?)<\/span>(?:<sub>(.*?)<\/sub>)?/);
+    const pre = m ? m[1] : '', main = m ? m[2] : inner, after = m && m[3] ? m[3] : '';
+    const BIG = '600 16px Space Grotesk, sans-serif', SMALL = '600 11px Space Grotesk, sans-serif';
+    ctx.fillStyle = col; ctx.strokeStyle = col; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'start';
+    let cx = x;
+    if (pre) { ctx.font = BIG; ctx.fillText(pre, cx, y); cx += ctx.measureText(pre).width + 1; }
+    const x0 = cx, re = /<sub>(.*?)<\/sub>|([^<]+)/g; let t;
+    while ((t = re.exec(main))) {
+      if (t[1] !== undefined) { ctx.font = SMALL; ctx.fillText(t[1], cx, y + 4); cx += ctx.measureText(t[1]).width; }
+      else { ctx.font = BIG; ctx.fillText(t[2], cx, y); cx += ctx.measureText(t[2]).width; }
+    }
+    const x1 = cx, ya = y - 15;
+    ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(x0, ya); ctx.lineTo(x1 + 1, ya); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1 + 3, ya); ctx.lineTo(x1 - 2, ya - 3); ctx.lineTo(x1 - 2, ya + 3); ctx.closePath(); ctx.fill();
+    if (after) { ctx.font = SMALL; ctx.fillText(after, cx + 1, y + 4); }
+  }
   function redraw(tmp){
     scene();
     const vs = st(R.id).vecs;
