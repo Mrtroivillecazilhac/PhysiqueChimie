@@ -98,7 +98,7 @@
   .p-bar { border-collapse:collapse; width:100%; margin:6px 0 4px; font-size:0.85rem; } .p-bar th, .p-bar td { border:1px solid #333; padding:3px 6px; text-align:center; }
   .p-ex h2 { font-family:Arial, sans-serif; color:#111; font-size:1.15rem; border-bottom:1.5px solid #111; margin:22px 0 8px; padding-bottom:2px; } .p-ex h2 span { font-weight:normal; font-size:0.9rem; }
   .p-data { background:#f1f1f1; border:1px solid #aaa; padding:6px 12px; margin:6px 0 10px; font-size:0.9rem; } .p-data ul { margin:2px 0; padding-left:18px; }
-  .p-q { margin:9px 0; break-inside:avoid; } .p-pts { white-space:nowrap; }
+  .p-q { margin:9px 0; } .p-pts { white-space:nowrap; }
   .p-item { margin:4px 0 0 18px; } .p-opts { list-style:none; margin:2px 0; padding-left:6px; } .p-opts li { display:inline-block; margin:1px 18px 1px 0; }
   .p-fig { text-align:center; margin:8px 0; break-inside:avoid; } .p-fig svg { max-width:none; } .p-cap { font-size:0.78rem; font-style:italic; color:#444; }
   @media print {
@@ -395,6 +395,7 @@ const EX = [
  ]}
 ];
 
+const PTEXT = {"e1-0": "Définir le système étudié et l'extérieur. Citer les objets de l'extérieur qui agissent sur la lampe.", "e1-1": "Établir le diagramme objets-interactions de la lampe, en respectant les conventions de tracé pour les actions de contact et les actions à distance.", "e1-4": "Donner les quatre caractéristiques de la force <span class=\"vw\"><span class=\"vec\">F</span><sub>fil/L</sub></span> exercée par le fil sur la lampe. Justifier sa valeur.", "e2-1": "Déterminer l'incertitude-type U(P) sur la valeur lue, puis écrire le résultat de la mesure sous la forme P = (… ± …) N.", "e2-3": "Inès écrit m = 0,214285714 kg, Yanis écrit m = 0,2 kg et Adam écrit m = 0,21 kg. Compte tenu de l'incertitude, la valeur vraie du poids est comprise entre 2,05 N et 2,15 N.<br>a. Combien de chiffres significatifs comportent les données utilisées ? Qui a écrit le résultat correctement ?<br>b. Calculer les masses correspondant à ces deux valeurs extrêmes du poids.<br>c. En comparant ces deux masses, expliquer pourquoi les derniers chiffres affichés par Inès n'ont aucun sens physique, et pourquoi le résultat de Yanis perd une information.", "e2-4": "Une balance électronique affiche 214 g pour la même pomme. Ce résultat est-il compatible avec la mesure au dynamomètre ? Justifier.", "e3-0": "Établir le diagramme objets-interactions du système {carton A}. Le sol agit-il sur le carton A ? Justifier.", "e3-3": "Énoncer le principe des actions réciproques, puis en déduire les caractéristiques de la force <span class=\"vw\"><span class=\"vec\">F</span><sub>A/B</sub></span> exercée par le carton A sur le carton B.", "e3-4": "Établir le diagramme objets-interactions du système {carton B}.", "e3-5": "Un déménageur affirme : « Le carton B ne subit que son poids et l'action du sol. » Corriger cette affirmation.", "e4-0": "Écrire l'expression de la valeur F<sub>M/R</sub> de la force d'interaction gravitationnelle exercée par Mars sur le rover posé à sa surface. Préciser ce que représente chaque lettre.", "e4-1": "Calculer F<sub>M/R</sub>, puis la valeur P<sub>M</sub> du poids du rover sur Mars. Comparer les deux valeurs et commenter.", "e4-2": "Calculer le poids du rover sur Terre. Le rover est-il « plus léger » sur Mars ? Sa masse a-t-elle changé ?", "e4-3": "En admettant que le poids du rover est égal à la force gravitationnelle exercée par Mars, montrer que g<sub>M</sub> = G × m<sub>M</sub> / R<sub>M</sub><sup>2</sup>. Expliquer pourquoi la masse du rover n'intervient pas dans ce résultat.", "e4-4": "En déduire l'expression de la masse de Mars en fonction de g<sub>M</sub>, R<sub>M</sub> et G, puis la calculer à partir de la mesure du rover. Comparer à la valeur des données. Avec combien de chiffres significatifs faut-il écrire ce résultat ?", "e4-5": "Donner les caractéristiques de la force exercée par le rover sur Mars.", "e5-2": "Donner la direction et le sens des forces <span class=\"vw\"><span class=\"vec\">F</span><sub>1</sub></span> et <span class=\"vw\"><span class=\"vec\">F</span><sub>2</sub></span> exercées par les cordes 1 et 2 sur le système.", "e5-5": "Comparer F à P. Ce résultat vous surprend-il ?"};
 /* ============ Rendu ============ */
 const root = document.getElementById('exercises');
 const REG = []; // tous les items : {ex, q, item, id}
@@ -773,6 +774,12 @@ function sceneSVG(it){
   });
   return '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + 'cm" height="' + H + 'cm" viewBox="0 0 ' + W + ' ' + H + '">' + s + '</svg>';
 }
+function toInf(t){
+  const R = [[/puis calcule-la/g,'puis la calculer'],[/calcule-la/g,'la calculer'],[/trace-les/g,'les tracer'],[/Déduis-en/g,'En déduire'],[/déduis-en/g,'en déduire'],[/t'inspirant/g,"s'inspirant"],[/te surprend-il/g,'vous surprend-il'],[/Remets/g,'Remettre']];
+  R.forEach(([a, b]) => { t = t.replace(a, b); });
+  const W = {Calcule:'Calculer',calcule:'calculer',Trace:'Tracer',trace:'tracer',Donne:'Donner',donne:'donner',Montre:'Montrer',montre:'montrer',Exprime:'Exprimer',exprime:'exprimer','Établis':'Établir','établis':'établir','Décris':'Décrire','Détermine':'Déterminer',Mesure:'Mesurer',Compare:'Comparer','Représente':'Représenter',Explique:'Expliquer',explique:'expliquer',Justifie:'Justifier',Convertis:'Convertir',convertis:'convertir',Construis:'Construire',Corrige:'Corriger',Commente:'Commenter','Précise':'Préciser','décris':'décrire',Propose:'Proposer',propose:'proposer'};
+  return t.replace(/(^|[\s>(.,;:])([A-Za-zÉé]+)(?=[\s.,;:!?)]|$)/g, (m, p, w) => W[w] ? p + W[w] : m);
+}
 function renderPaper(){
   document.body.classList.add('paper');
   const head = document.querySelector('header.page-head');
@@ -782,21 +789,19 @@ function renderPaper(){
     '<div class="no-print p-btns"><button onclick="window.print()">🖨️ Imprimer</button> <a href="' + location.pathname.split('/').pop() + '">← Version en ligne, pour te corriger</a></div>';
   const main = document.querySelector('main');
   let tot = 0; const rows = EX.map(ex => { const p = ex.qs.reduce((a, q) => a + q.items.reduce((b, it) => b + it.pts, 0), 0); tot += p; return [ex.title, p]; });
-  let h = '<div class="p-info"><b>Consignes.</b> Fais les exercices sur ta copie, puis corrige-toi avec la version en ligne de cette série (mêmes questions, même barème). ' +
-    'Chaque résultat numérique est donné dans une phrase, avec son unité et un nombre de chiffres significatifs adapté. Les schémas sont à l\'échelle : imprime en taille réelle (100 %) et trace directement dessus. ' +
+  let h = '<div class="p-info"><b>Consignes.</b> Répondre sur copie. Le corrigé est disponible dans la version en ligne de cette série (même numérotation, même barème). ' +
+    'Chaque résultat numérique est donné dans une phrase, avec son unité et un nombre de chiffres significatifs adapté. Les schémas sont à l\'échelle : imprimer en taille réelle (100 %) et tracer directement dessus. ' +
     '« Exprimer » une grandeur, c\'est écrire une égalité qui ne contient que des lettres ; « montrer que », c\'est partir d\'une relation du cours et arriver au résultat annoncé, étape par étape.</div>';
   h += '<table class="p-bar"><tr>' + rows.map(r => '<th>' + r[0].split('.')[0] + '</th>').join('') + '<th>Total</th></tr><tr>' + rows.map(r => '<td>… / ' + fmt(r[1]) + '</td>').join('') + '<td>… / ' + fmt(tot) + '</td></tr></table>';
   EX.forEach(ex => {
     const pts = ex.qs.reduce((a, q) => a + q.items.reduce((b, it) => b + it.pts, 0), 0);
     h += '<div class="p-ex"><h2>' + ex.title + ' <span>(' + fmt(pts) + ' points)</span></h2><p>' + ex.ctx + '</p>' +
       '<div class="p-data"><b>Données</b><ul>' + ex.data.map(d => '<li>' + d + '</li>').join('') + '</ul></div>';
-    ex.qs.forEach(q => {
+    ex.qs.forEach((q, qi) => {
       const qp = q.items.reduce((a, it) => a + it.pts, 0);
-      const txt = q.text.replace(/ Choisis le vecteur, puis fais glisser depuis son point d'application\./, '').replace(/Le quadrillage est en centimètres\./, 'Le quadrillage du schéma est en centimètres.');
+      const txt = (typeof PTEXT !== 'undefined' && PTEXT[ex.id + '-' + qi]) || toInf(q.text.replace(/ Choisis le vecteur, puis fais glisser depuis son point d'application\./, '').replace(/Le quadrillage est en centimètres\./, 'Le quadrillage du schéma est en centimètres.'));
       h += '<div class="p-q"><b>' + q.n + '.</b> ' + (q.ouv ? '<i>(ouverture)</i> ' : '') + txt + ' <b class="p-pts">[' + fmt(qp) + ' pt' + (qp > 1 ? 's' : '') + ']</b>';
       q.items.forEach(it => {
-        if (it.t === 'choice') h += '<div class="p-item">' + (it.label ? it.label : '') + '<ul class="p-opts">' + it.opts.map(o => '<li>☐ ' + o + '</li>').join('') + '</ul></div>';
-        if (it.t === 'num') h += '<div class="p-item">' + it.label + ' ……………………</div>';
         if (it.t === 'draw') h += '<div class="p-fig">' + sceneSVG(it) + '<div class="p-cap">Schéma à compléter, à l\'échelle : 1 carreau = 1 cm.</div></div>';
       });
       h += '</div>';

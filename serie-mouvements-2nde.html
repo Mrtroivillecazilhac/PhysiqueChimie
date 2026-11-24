@@ -98,7 +98,7 @@
   .p-bar { border-collapse:collapse; width:100%; margin:6px 0 4px; font-size:0.85rem; } .p-bar th, .p-bar td { border:1px solid #333; padding:3px 6px; text-align:center; }
   .p-ex h2 { font-family:Arial, sans-serif; color:#111; font-size:1.15rem; border-bottom:1.5px solid #111; margin:22px 0 8px; padding-bottom:2px; } .p-ex h2 span { font-weight:normal; font-size:0.9rem; }
   .p-data { background:#f1f1f1; border:1px solid #aaa; padding:6px 12px; margin:6px 0 10px; font-size:0.9rem; } .p-data ul { margin:2px 0; padding-left:18px; }
-  .p-q { margin:9px 0; break-inside:avoid; } .p-pts { white-space:nowrap; }
+  .p-q { margin:9px 0; } .p-pts { white-space:nowrap; }
   .p-item { margin:4px 0 0 18px; } .p-opts { list-style:none; margin:2px 0; padding-left:6px; } .p-opts li { display:inline-block; margin:1px 18px 1px 0; }
   .p-fig { text-align:center; margin:8px 0; break-inside:avoid; } .p-fig svg { max-width:none; } .p-cap { font-size:0.78rem; font-style:italic; color:#444; }
   @media print {
@@ -416,6 +416,7 @@ const EX = [
  ]}
 ];
 
+const PTEXT = {"e1-0": "On étudie le mouvement de Léo. Rappeler de quoi est constitué un référentiel.", "e1-1": "Léo est-il immobile ou en mouvement dans le référentiel du tapis ? de Jade ? du sol ? du père ? Justifier.", "e1-3": "Décrire le mouvement du père dans le référentiel de Léo : trajectoire, nature du mouvement, sens et valeur de la vitesse.", "e1-5": "Est-il pertinent de modéliser Léo par un point pour étudier son trajet sur le tapis ? Justifier.", "e2-0": "Décrire le mouvement de la pierre dans le référentiel de la piste (trajectoire et nature du mouvement), en justifiant à partir des positions pointées.", "e2-5": "Adam écrit v<sub>1</sub> = 1,9 m·s<sup>−1</sup>, Inès écrit v<sub>1</sub> = 1,90 m·s<sup>−1</sup>. La longueur M<sub>1</sub>M<sub>2</sub> a été mesurée égale à 1,9 cm avec une règle graduée en millimètres.<br>a. Calculer la valeur de v<sub>1</sub> que l'on obtiendrait si M<sub>1</sub>M<sub>2</sub> valait 1,85 cm sur le schéma, puis 1,95 cm.<br>b. Qui a raison ? Justifier.", "e3-3": "Comparer le vecteur déplacement de mardi à celui de lundi. Justifier.", "e4-0": "Dans quel référentiel la trajectoire de la nacelle est-elle un cercle ? Dans le référentiel de la nacelle, un passager assis est-il en mouvement ? Justifier.", "e4-3": "Donner la nature du mouvement de la nacelle dans le référentiel du sol. Le vecteur vitesse reste-t-il le même au cours du mouvement ? Justifier à l'aide des vecteurs tracés.", "e4-6": "Après un tour complet, la nacelle revient en M<sub>0</sub>. Que vaut le vecteur vitesse moyenne sur ce tour ? Calculer la valeur de la vitesse moyenne sur un demi-tour, de M<sub>0</sub> à M<sub>6</sub>. Commenter.", "e5-0": "Le satellite est-il immobile ou en mouvement dans le référentiel terrestre ? Dans le référentiel géocentrique ? Justifier.", "e5-1": "Décrire la trajectoire du satellite dans le référentiel géocentrique (forme, centre, rayon).", "e5-3": "En s'inspirant de la grande roue, établir l'expression de la vitesse v du satellite en fonction de R<sub>T</sub>, h et T, puis la calculer."};
 /* ============ Rendu ============ */
 const root = document.getElementById('exercises');
 const REG = []; // tous les items : {ex, q, item, id}
@@ -794,6 +795,12 @@ function sceneSVG(it){
   });
   return '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + 'cm" height="' + H + 'cm" viewBox="0 0 ' + W + ' ' + H + '">' + s + '</svg>';
 }
+function toInf(t){
+  const R = [[/puis calcule-la/g,'puis la calculer'],[/calcule-la/g,'la calculer'],[/trace-les/g,'les tracer'],[/Déduis-en/g,'En déduire'],[/déduis-en/g,'en déduire'],[/t'inspirant/g,"s'inspirant"],[/te surprend-il/g,'vous surprend-il'],[/Remets/g,'Remettre']];
+  R.forEach(([a, b]) => { t = t.replace(a, b); });
+  const W = {Calcule:'Calculer',calcule:'calculer',Trace:'Tracer',trace:'tracer',Donne:'Donner',donne:'donner',Montre:'Montrer',montre:'montrer',Exprime:'Exprimer',exprime:'exprimer','Établis':'Établir','établis':'établir','Décris':'Décrire','Détermine':'Déterminer',Mesure:'Mesurer',Compare:'Comparer','Représente':'Représenter',Explique:'Expliquer',explique:'expliquer',Justifie:'Justifier',Convertis:'Convertir',convertis:'convertir',Construis:'Construire',Corrige:'Corriger',Commente:'Commenter','Précise':'Préciser','décris':'décrire',Propose:'Proposer',propose:'proposer'};
+  return t.replace(/(^|[\s>(.,;:])([A-Za-zÉé]+)(?=[\s.,;:!?)]|$)/g, (m, p, w) => W[w] ? p + W[w] : m);
+}
 function renderPaper(){
   document.body.classList.add('paper');
   const head = document.querySelector('header.page-head');
@@ -803,21 +810,19 @@ function renderPaper(){
     '<div class="no-print p-btns"><button onclick="window.print()">🖨️ Imprimer</button> <a href="' + location.pathname.split('/').pop() + '">← Version en ligne, pour te corriger</a></div>';
   const main = document.querySelector('main');
   let tot = 0; const rows = EX.map(ex => { const p = ex.qs.reduce((a, q) => a + q.items.reduce((b, it) => b + it.pts, 0), 0); tot += p; return [ex.title, p]; });
-  let h = '<div class="p-info"><b>Consignes.</b> Fais les exercices sur ta copie, puis corrige-toi avec la version en ligne de cette série (mêmes questions, même barème). ' +
-    'Chaque résultat numérique est donné dans une phrase, avec son unité et un nombre de chiffres significatifs adapté. Les schémas sont à l\'échelle : imprime en taille réelle (100 %) et trace directement dessus. ' +
+  let h = '<div class="p-info"><b>Consignes.</b> Répondre sur copie. Le corrigé est disponible dans la version en ligne de cette série (même numérotation, même barème). ' +
+    'Chaque résultat numérique est donné dans une phrase, avec son unité et un nombre de chiffres significatifs adapté. Les schémas sont à l\'échelle : imprimer en taille réelle (100 %) et tracer directement dessus. ' +
     '« Exprimer » une grandeur, c\'est écrire une égalité qui ne contient que des lettres ; « montrer que », c\'est partir d\'une relation du cours et arriver au résultat annoncé, étape par étape.</div>';
   h += '<table class="p-bar"><tr>' + rows.map(r => '<th>' + r[0].split('.')[0] + '</th>').join('') + '<th>Total</th></tr><tr>' + rows.map(r => '<td>… / ' + fmt(r[1]) + '</td>').join('') + '<td>… / ' + fmt(tot) + '</td></tr></table>';
   EX.forEach(ex => {
     const pts = ex.qs.reduce((a, q) => a + q.items.reduce((b, it) => b + it.pts, 0), 0);
     h += '<div class="p-ex"><h2>' + ex.title + ' <span>(' + fmt(pts) + ' points)</span></h2><p>' + ex.ctx + '</p>' +
       '<div class="p-data"><b>Données</b><ul>' + ex.data.map(d => '<li>' + d + '</li>').join('') + '</ul></div>';
-    ex.qs.forEach(q => {
+    ex.qs.forEach((q, qi) => {
       const qp = q.items.reduce((a, it) => a + it.pts, 0);
-      const txt = q.text.replace(/ Choisis le vecteur, puis fais glisser depuis son point d'application\./, '').replace(/Le quadrillage est en centimètres\./, 'Le quadrillage du schéma est en centimètres.');
+      const txt = (typeof PTEXT !== 'undefined' && PTEXT[ex.id + '-' + qi]) || toInf(q.text.replace(/ Choisis le vecteur, puis fais glisser depuis son point d'application\./, '').replace(/Le quadrillage est en centimètres\./, 'Le quadrillage du schéma est en centimètres.'));
       h += '<div class="p-q"><b>' + q.n + '.</b> ' + (q.ouv ? '<i>(ouverture)</i> ' : '') + txt + ' <b class="p-pts">[' + fmt(qp) + ' pt' + (qp > 1 ? 's' : '') + ']</b>';
       q.items.forEach(it => {
-        if (it.t === 'choice') h += '<div class="p-item">' + (it.label ? it.label : '') + '<ul class="p-opts">' + it.opts.map(o => '<li>☐ ' + o + '</li>').join('') + '</ul></div>';
-        if (it.t === 'num') h += '<div class="p-item">' + it.label + ' ……………………</div>';
         if (it.t === 'draw') h += '<div class="p-fig">' + sceneSVG(it) + '<div class="p-cap">Schéma à compléter, à l\'échelle : 1 carreau = 1 cm.</div></div>';
       });
       h += '</div>';
