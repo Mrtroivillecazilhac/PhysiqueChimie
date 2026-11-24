@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Série d'entraînement : les mouvements (chapitre 4) | 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .vec { position: relative; display: inline-block; padding-top: 0.42em; }
+  .vec::before { content: ""; position: absolute; top: 0.06em; left: 0; right: 3px; border-top: 1.3px solid currentColor; }
+  .vec::after { content: ""; position: absolute; top: -0.09em; right: -1px; width: 0; height: 0; border-style: solid; border-width: 2.6px 0 2.6px 4.2px; border-color: transparent transparent transparent currentColor; }
+  .vw { white-space: nowrap; }
+
+  section.ex h2 { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; }
+  .ex-score { font-family:var(--font-body); font-size:0.95rem; color:var(--yellow); }
+  .ctx { line-height:1.65; }
+  .data { background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:12px; padding:12px 18px; margin:12px 0 18px; font-size:0.94rem; line-height:1.6; }
+  .data b { color:var(--teal); }
+  .data ul { margin:6px 0 0; padding-left:20px; }
+  .info { background:rgba(232,196,104,0.08); border:1px dashed var(--yellow); border-radius:14px; padding:16px 20px; line-height:1.6; font-size:0.95rem; }
+  .info h3 { font-family:var(--font-display); color:var(--yellow); margin:0 0 6px; font-size:1.2rem; }
+  .info ul { margin:4px 0; padding-left:20px; }
+
+  .q { border-top:1px dashed var(--line); padding:18px 0 6px; }
+  .q-head { line-height:1.6; }
+  .q-num { font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-right:6px; }
+  .q-pts { color:var(--chalk-dim); font-size:0.82rem; margin-left:6px; white-space:nowrap; }
+  .tag-ouv { font-family:var(--font-display); color:var(--coral); }
+  .item { margin:12px 0 4px 0; padding:10px 14px; border-radius:10px; background:rgba(0,0,0,0.14); border:1px solid transparent; }
+  .item.ok { border-color:var(--teal); background:rgba(107,191,171,0.10); }
+  .item.ko { border-color:var(--coral); }
+  .item-label { font-size:0.92rem; color:var(--chalk-dim); margin-bottom:8px; line-height:1.5; }
+  .fb { font-size:0.88rem; margin-top:8px; min-height:0; line-height:1.45; }
+  .fb.good { color:var(--teal); } .fb.bad { color:var(--coral); } .fb.warn { color:var(--yellow); }
+
+  input.num { font-family:var(--font-body); font-size:1rem; width:150px; padding:7px 10px; border-radius:8px; border:1.5px solid var(--line); background:rgba(0,0,0,0.25); color:var(--chalk); }
+  input.num:focus, select:focus { outline:none; border-color:var(--yellow); }
+  select { font-family:var(--font-body); font-size:0.95rem; padding:7px 8px; border-radius:8px; border:1.5px solid var(--line); background:#1d3229; color:var(--chalk); }
+  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+
+  .opts { display:flex; flex-direction:column; gap:6px; }
+  .opt { display:flex; gap:10px; align-items:flex-start; padding:7px 10px; border:1.5px dashed var(--line); border-radius:10px; cursor:pointer; line-height:1.45; font-size:0.94rem; }
+  .opt:hover { border-color:var(--chalk-dim); }
+  .opt input { margin-top:4px; accent-color:var(--yellow); }
+
+  .doi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:8px 16px; }
+  .doi-row { display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:0.94rem; }
+  .doi-svg { width:100%; max-width:440px; display:block; margin:10px auto 0; }
+
+  .order-pool, .order-ans { display:flex; flex-direction:column; gap:6px; }
+  .order-ans { min-height:44px; border:1.5px dashed var(--line); border-radius:10px; padding:8px; margin-top:10px; }
+  .step { padding:8px 12px; border-radius:8px; background:rgba(255,255,255,0.05); border:1px solid var(--line); cursor:pointer; font-size:0.93rem; line-height:1.45; }
+  .step:hover { border-color:var(--yellow); }
+  .order-ans .step { cursor:default; border-color:var(--teal); }
+  .order-ans .step b { color:var(--yellow); margin-right:6px; }
+  .small-btn { font-family:var(--font-body); font-size:0.82rem; background:transparent; color:var(--chalk-dim); border:1px solid var(--line); border-radius:999px; padding:5px 12px; cursor:pointer; }
+  .small-btn:hover { color:var(--chalk); border-color:var(--chalk-dim); }
+
+  .draw-tools { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:8px; }
+  .vbtn { font-family:var(--font-body); font-size:0.92rem; background:transparent; color:var(--chalk); border:1.5px solid var(--line); border-radius:999px; padding:6px 14px; cursor:pointer; }
+  .vbtn.active { background:var(--yellow); color:var(--board); border-color:var(--yellow); }
+  .canvas-wrap { position:relative; overflow-x:auto; }
+  canvas.draw { display:block; margin:0 auto; background:rgba(0,0,0,0.25); border:1px solid var(--line); border-radius:8px; touch-action:none; cursor:crosshair; max-width:100%; }
+  .len-live { font-size:0.85rem; color:var(--yellow); min-height:1.2em; }
+
+  .q-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .btn { font-family:var(--font-display); font-size:1rem; border:none; border-radius:10px; padding:8px 16px; cursor:pointer; font-weight:700; }
+  .btn-check { background:var(--teal); color:var(--board); }
+  .btn-hint { background:transparent; color:var(--yellow); border:1.5px solid var(--yellow); }
+  .btn-corr { background:transparent; color:var(--coral); border:1.5px solid var(--coral); }
+  .hint, .corr { margin-top:12px; padding:12px 16px; border-radius:10px; line-height:1.6; font-size:0.94rem; }
+  .hint { background:rgba(232,196,104,0.08); border-left:3px solid var(--yellow); }
+  .corr { background:rgba(217,122,99,0.08); border-left:3px solid var(--coral); }
+  .corr ol { margin:6px 0; padding-left:20px; }
+  .self { margin-top:10px; font-size:0.9rem; }
+  .self button { font-family:var(--font-body); font-size:0.85rem; margin:4px 6px 0 0; background:transparent; color:var(--chalk); border:1.5px solid var(--line); border-radius:999px; padding:5px 12px; cursor:pointer; }
+  .self button.on { background:var(--teal); color:var(--board); border-color:var(--teal); }
+
+  .scoreboard { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }
+  .sb-card { background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:12px; padding:12px; text-align:center; }
+  .sb-card .t { font-size:0.8rem; color:var(--chalk-dim); }
+  .sb-card .v { font-family:var(--font-display); font-size:1.5rem; color:var(--yellow); }
+  .bar { height:6px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; margin-top:6px; }
+  .bar i { display:block; height:100%; background:var(--teal); width:0; transition:width .3s; }
+  .sb-foot { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:14px; align-items:center; font-size:0.88rem; color:var(--chalk-dim); }
+  .back-link { color:var(--teal); }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html" class="current">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique</div>
+  <h1>Série d'entraînement : les mouvements</h1>
+  <p class="sub">Chapitre 4, Description des mouvements. Cinq exercices, du plus guidé au plus exigeant, corrigés automatiquement.</p>
+  <a class="back-link" href="chapitre4-2nde.html">← Retour au cours du chapitre 4</a>
+</header>
+
+<main>
+
+<section>
+  <div class="info">
+    <h3>Comment ça marche ?</h3>
+    <ul>
+      <li>C'est un <b>entraînement</b> pour préparer l'évaluation : aucune note n'est envoyée au professeur. Prends ton temps.</li>
+      <li>Cherche d'abord <b>sur une feuille</b>, puis entre ta réponse et clique sur <b>Vérifier</b>, autant de fois que tu veux.</li>
+      <li>Bloqué ? Clique sur <b>Indice</b>. La <b>correction</b> est toujours disponible, mais si tu l'ouvres avant d'avoir trouvé, la question ne rapporte pas de points.</li>
+      <li>Pour les questions rédigées, compare ta réponse à la correction et <b>note-toi honnêtement</b>.</li>
+      <li>Nombres : virgule ou point acceptés. Pour une puissance de 10, écris <b>4,22e7</b> ou <b>4,22×10^7</b>. Tu peux choisir l'unité (m, km, m/s, km/h…) : la conversion est prise en compte, sauf si l'énoncé impose une unité. Écris le résultat avec le nombre de <b>chiffres significatifs</b> que tu choisirais sur ta copie : il est vérifié.</li>
+      <li>Ta progression est enregistrée sur cet ordinateur, dans ce navigateur.</li>
+    </ul>
+    <h3 style="margin-top:14px">« Exprimer » et « montrer que »</h3>
+    <ul>
+      <li><b>Exprimer</b> une grandeur en fonction d'autres, c'est écrire une égalité avec uniquement des lettres. Exemple : à partir de v = d / Δt, on exprime d = v × Δt.</li>
+      <li><b>Montrer que</b>, c'est partir d'une relation du cours et arriver au résultat annoncé, étape par étape. Ici, tu remettras les étapes dans l'ordre.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Ton score</h2>
+  <div class="scoreboard" id="scoreboard"></div>
+  <div class="sb-foot">
+    <span id="csLine">Chiffres significatifs : aucun résultat vérifié pour l'instant.</span>
+    <button class="small-btn" id="resetAll">Tout effacer et recommencer</button>
+  </div>
+</section>
+
+<div id="exercises" style="display:grid;gap:28px"></div>
+
+</main>
+
+<footer>Série d'entraînement, chapitre 4 (2nde). M. Troiville, professeur de physique-chimie.</footer>
+
+<script>
+(function(){
+"use strict";
+/* ============ Outils ============ */
+const V = (l, s) => '<span class="vw"><span class="vec">' + l + '</span>' + (s ? '<sub>' + s + '</sub>' : '') + '</span>';
+const KEY = 'serie-mouvements-2nde-v1';
+let S = {};
+try { S = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { S = {}; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+function st(id){ if (!S[id]) S[id] = {}; return S[id]; }
+
+function parseNum(raw){
+  if (raw == null) return null;
+  let s = String(raw).trim().replace(/[\s  ]/g, '').replace(/,/g, '.').replace(/−/g, '-');
+  s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻]/g, c => ({'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-'})[c]);
+  let m = s.match(/^([+-]?(?:\d+\.?\d*|\.\d+))(?:(?:[x×*]10\^?|e|E)([+-]?\d+))?$/);
+  if (!m) return null;
+  const mant = m[1], exp = m[2] ? parseInt(m[2], 10) : 0;
+  const val = parseFloat(mant) * Math.pow(10, exp);
+  let digits = mant.replace(/^[+-]/, '').replace('.', '').replace(/^0+/, '');
+  const cs = digits.length || 1;
+  return { val, cs };
+}
+const fmt = x => String(Math.round(x * 100) / 100).replace('.', ',');
+
+/* ============ Contenu ============ */
+const UNITS = ['m', 'cm', 'km', 's', 'min', 'h', 'm/s', 'km/h', 'sans unité'];
+const VV = (s) => V('v', s);
+const MM = (a, b) => V('M<sub>' + a + '</sub>M<sub>' + b + '</sub>');
+const ms = 'm·s<sup>−1</sup>';
+
+/* Exercice 2 : positions de la pierre de curling (m) -> schéma (cm) */
+const CUR = [0, 1.05, 2.0, 2.85, 3.6, 4.25, 4.8];
+const curPts = {}; CUR.forEach((x, i) => curPts['M' + i] = [0.8 + 2 * x, 1.4, 0, -0.75]);
+const curDeco = [{t:'line', p:[[0.3, 1.4], [11.7, 1.4]], dash:true}, {t:'text', x:0.3, y:2.35, s:'sens du lancer →'}];
+
+/* Exercice 4 : grande roue */
+const WC = [5.5, 5.2], WR = 4;
+const wheelPts = {}, wheelDeco = [{t:'circle', c:WC, r:WR, dash:true}, {t:'cross', p:WC}, {t:'text', x:WC[0] + 0.2, y:WC[1] - 0.45, s:'O'}];
+for (let i = 0; i < 12; i++) {
+  const a = (-90 + 30 * i) * Math.PI / 180, x = WC[0] + WR * Math.cos(a), y = WC[1] + WR * Math.sin(a);
+  if (i <= 6) wheelPts['M' + i] = [x, y, 0.6 * Math.cos(a), 0.6 * Math.sin(a) - 0.15];
+  else wheelDeco.push({t:'cross', p:[x, y]});
+}
+const chord = 2 * 20 * Math.sin(15 * Math.PI / 180); // 10,35 m
+
+/* Exercice 5 : satellite */
+const r5 = 6.37e6 + 3.58e7, T5 = 8.62e4, v5 = 2 * Math.PI * r5 / T5;
+
+const EX = [
+{
+ id:'e1', title:'Exercice 1. Le tapis roulant',
+ ctx:'À l\'aéroport, Léo se tient immobile sur un tapis roulant rectiligne. Sa sœur Jade marche sur le sol, juste à côté de lui, exactement à la même vitesse que le tapis. Leur père, assis sur un banc, les regarde passer.',
+ data:['Vitesse du tapis par rapport au sol : 0,75 '+ms+'.', 'Longueur du tapis : L = 60 m.'],
+ qs:[
+  {n:'1', text:'On étudie le mouvement de Léo. Un référentiel est constitué…',
+   items:[{t:'choice', pts:1.5, opts:['d\'un repère d\'espace et d\'une horloge','d\'un système et d\'une trajectoire','d\'un point et d\'un vecteur','uniquement d\'un objet immobile'], ans:0}],
+   hint:'Pour repérer une position il faut des axes ; pour repérer un instant il faut…',
+   corr:'Un référentiel est un objet de référence auquel on associe un repère d\'espace (pour les positions) et une horloge (pour le temps).'},
+  {n:'2', text:'Dans quels référentiels Léo est-il immobile ? (plusieurs réponses possibles)',
+   items:[{t:'choice', multi:true, pts:1.5, opts:['Le référentiel du tapis','Le référentiel de Jade','Le référentiel du sol','Le référentiel du père assis sur le banc'], ans:[0,1]}],
+   hint:'Léo ne bouge pas par rapport au tapis. Jade reste toujours juste à côté de lui.',
+   corr:'Léo est immobile par rapport au tapis et par rapport à Jade, qui reste à côté de lui. Par rapport au sol et au père, il avance : le mouvement est relatif au référentiel choisi.'},
+  {n:'3', text:'Dans le référentiel du sol, décris la trajectoire et la nature du mouvement de Léo.',
+   items:[{t:'choice', pts:1, label:'Trajectoire :', opts:['rectiligne','circulaire','curviligne','aucune, il est immobile'], ans:0},
+          {t:'choice', pts:1, label:'Nature du mouvement :', opts:['rectiligne uniforme','rectiligne accéléré','rectiligne décéléré'], ans:0}],
+   hint:'Le tapis est droit et avance toujours à la même vitesse.',
+   corr:'Le tapis est rectiligne : la trajectoire de Léo est une portion de droite. La vitesse garde la même valeur (0,75 '+ms+') : le mouvement est rectiligne uniforme.'},
+  {n:'4', text:'Dans le référentiel de Léo, comment le père se déplace-t-il ?',
+   items:[{t:'choice', pts:1, opts:['Il est immobile','Il recule en mouvement rectiligne uniforme à 0,75 '+ms,'Il avance dans le même sens que Léo à 0,75 '+ms], ans:1}],
+   hint:'Mets-toi à la place de Léo : que vois-tu défiler ?',
+   corr:'Pour Léo, c\'est tout le décor qui défile vers l\'arrière : le père recule en ligne droite, à 0,75 '+ms+', comme le paysage vu depuis un train.'},
+  {n:'5', text:'Exprime la durée Δt du trajet de Léo sur le tapis en fonction de la longueur L et de la vitesse v, puis calcule-la.',
+   items:[{t:'choice', pts:0.5, label:'Expression :', opts:['Δt = L × v','Δt = L / v','Δt = v / L'], ans:1},
+          {t:'num', pts:1, label:'Δt =', val:80, unit:'s', cs:[2]}],
+   hint:'v = L / Δt. Pour isoler Δt, multiplie les deux membres par Δt, puis divise par v.',
+   corr:'v = L / Δt donc Δt = L / v = 60 / 0,75 = 80 s.'},
+  {n:'6', text:'Est-il pertinent de modéliser Léo par un point pour étudier son trajet sur le tapis ?',
+   items:[{t:'choice', pts:1, opts:['Oui : ses dimensions sont petites devant la distance parcourue (60 m)','Non : un être humain ne peut jamais être modélisé par un point','Oui, mais seulement s\'il est immobile dans le référentiel du sol'], ans:0}],
+   hint:'Compare la taille de Léo à la longueur du tapis.',
+   corr:'Oui : Léo mesure moins de 2 m, ce qui est petit devant les 60 m parcourus. On perd des informations (position de ses bras, de ses jambes), mais elles sont inutiles ici.'},
+  {n:'7', ouv:true, text:'Jade monte à son tour sur le tapis et y marche à 0,75 '+ms+' par rapport au tapis. Quelle est sa vitesse par rapport au sol ? Combien de temps met-elle pour parcourir le tapis ? Comment Léo, immobile sur le tapis, voit-il Jade bouger ?',
+   items:[{t:'num', pts:0.5, label:'Durée du trajet de Jade :', val:40, unit:'s', cs:[2]},
+          {t:'self', pts:1, label:'Rédige ta réponse sur ta feuille (vitesse par rapport au sol, mouvement de Jade vu par Léo), puis compare.'}],
+   hint:'En une seconde, le tapis avance de 0,75 m ET Jade avance de 0,75 m sur le tapis.',
+   corr:'Par rapport au sol, Jade avance chaque seconde de 0,75 m (sa marche) + 0,75 m (le tapis) : sa vitesse vaut 1,5 '+ms+'. Elle met 60 / 1,5 = 40 s. Dans le référentiel de Léo (lié au tapis), Jade s\'éloigne vers l\'avant à 0,75 '+ms+' seulement : la même marche n\'a pas la même vitesse selon le référentiel.'}
+ ]},
+{
+ id:'e2', title:'Exercice 2. La pierre de curling',
+ ctx:'Une joueuse de curling lâche sa pierre en M<sub>0</sub>. La pierre glisse en ligne droite sur la glace. On a pointé sa position toutes les τ = 0,50 s. Sur le schéma, chaque carreau mesure 1 cm et <b>1 cm représente 0,50 m</b>.',
+ data:['Durée entre deux positions successives : τ = 0,50 s.','Échelle des distances : 1 cm ↔ 0,50 m. Échelle des vitesses : 1 cm ↔ 0,50 '+ms+'.','Règle graduée en millimètres ; pour un instrument gradué, l\'incertitude-type vaut la moitié de la plus petite graduation.'],
+ qs:[
+  {n:'1', text:'Décris le mouvement de la pierre dans le référentiel de la piste, à partir des positions pointées.',
+   items:[{t:'choice', pts:0.5, label:'Trajectoire :', opts:['rectiligne','circulaire','curviligne'], ans:0},
+          {t:'choice', pts:1, label:'Nature du mouvement, et pourquoi :', opts:['décéléré : les positions sont de plus en plus rapprochées pour une même durée τ','accéléré : les positions sont de plus en plus rapprochées','uniforme : les positions sont alignées'], ans:0}],
+   hint:'Pendant chaque durée τ, la pierre parcourt-elle toujours la même distance ?',
+   corr:'Les positions sont alignées : trajectoire rectiligne. Pendant chaque intervalle τ, la distance parcourue diminue : la vitesse diminue, le mouvement est rectiligne décéléré.'},
+  {n:'2', text:'Trace le vecteur déplacement '+MM(0,6)+' sur le schéma, puis donne sa valeur réelle.',
+   items:[{t:'draw', pts:1, w:12.6, h:3, pts0:curPts, deco:curDeco,
+     vecs:[{k:'D', name:MM(0,6), o:'M0', ang:0, len:9.6}]},
+          {t:'num', pts:0.5, label:'M<sub>0</sub>M<sub>6</sub> =', val:4.8, unit:'m', cs:[2]}],
+   hint:'Mesure M<sub>0</sub>M<sub>6</sub> en carreaux, puis multiplie par 0,50 m.',
+   corr:'Flèche de M<sub>0</sub> à M<sub>6</sub> : 9,6 cm sur le schéma, soit 9,6 × 0,50 = 4,8 m.'},
+  {n:'3', text:'Calcule la valeur de la vitesse moyenne de la pierre entre M<sub>0</sub> et M<sub>6</sub>.',
+   items:[{t:'num', pts:1, label:'v<sub>moy</sub> =', val:1.6, unit:'m/s', cs:[2]}],
+   hint:'Δt = nombre d\'intervalles × τ. Combien d\'intervalles entre M<sub>0</sub> et M<sub>6</sub> ?',
+   corr:'Δt = 6 × 0,50 = 3,0 s. v<sub>moy</sub> = M<sub>0</sub>M<sub>6</sub> / Δt = 4,8 / 3,0 = 1,6 '+ms+'.'},
+  {n:'4', text:'Calcule les valeurs v<sub>1</sub> et v<sub>5</sub> de la vitesse de la pierre en M<sub>1</sub> et en M<sub>5</sub>.',
+   items:[{t:'num', pts:0.75, label:'v<sub>1</sub> =', val:1.9, unit:'m/s', cs:[2]},
+          {t:'num', pts:0.75, label:'v<sub>5</sub> =', val:1.1, unit:'m/s', cs:[2]}],
+   hint:'v<sub>1</sub> ≈ M<sub>1</sub>M<sub>2</sub> / τ. Mesure M<sub>1</sub>M<sub>2</sub> sur le schéma et convertis-la en mètres.',
+   corr:'M<sub>1</sub>M<sub>2</sub> = 1,9 cm sur le schéma, soit 0,95 m : v<sub>1</sub> = 0,95 / 0,50 = 1,9 '+ms+'. M<sub>5</sub>M<sub>6</sub> = 1,1 cm, soit 0,55 m : v<sub>5</sub> = 0,55 / 0,50 = 1,1 '+ms+'.'},
+  {n:'5', text:'Trace '+VV('1')+' et '+VV('5')+' à l\'échelle 1 cm ↔ 0,50 '+ms+'.',
+   items:[{t:'draw', pts:1.5, w:12.6, h:3, pts0:curPts, deco:curDeco,
+     vecs:[{k:'v1', name:VV('1'), o:'M1', ang:0, len:3.8},{k:'v5', name:VV('5'), o:'M5', ang:0, len:2.2}]}],
+   hint:'Longueur de la flèche = valeur de la vitesse / 0,50. Origine au point, direction (M<sub>i</sub>M<sub>i+1</sub>), sens du mouvement.',
+   corr:VV('1')+' : flèche de 1,9 / 0,50 = 3,8 cm partant de M<sub>1</sub>, vers la droite. '+VV('5')+' : 1,1 / 0,50 = 2,2 cm partant de M<sub>5</sub>, vers la droite. La flèche raccourcit : mouvement décéléré.'},
+  {n:'6', text:'Adam écrit v<sub>1</sub> = 1,9 '+ms+', Inès écrit v<sub>1</sub> = 1,90 '+ms+'. La longueur M<sub>1</sub>M<sub>2</sub> a été mesurée égale à 1,9 cm avec une règle graduée en millimètres.',
+   items:[{t:'num', pts:0.5, label:'a. Si M<sub>1</sub>M<sub>2</sub> = 1,85 cm sur le schéma, v<sub>1</sub> vaudrait :', val:1.85, unit:'m/s', cs:null, tol:0.01},
+          {t:'num', pts:0.5, label:'a. Si M<sub>1</sub>M<sub>2</sub> = 1,95 cm sur le schéma, v<sub>1</sub> vaudrait :', val:1.95, unit:'m/s', cs:null, tol:0.01},
+          {t:'choice', pts:1, label:'b. Qui a raison, et pourquoi ?', opts:['Adam : le chiffre des dixièmes est déjà incertain, écrire 1,90 ferait croire qu\'on connaît la vitesse au centième près','Inès : il faut toujours deux chiffres après la virgule','Les deux, car 1,9 = 1,90','Inès : le zéro final ne change rien, mais c\'est plus précis'], ans:0}],
+   hint:'U = moitié de la plus petite graduation : 0,05 cm. Donc M<sub>1</sub>M<sub>2</sub> est entre 1,85 et 1,95 cm.',
+   corr:'a. 1,85 cm ↔ 0,925 m, v<sub>1</sub> = 1,85 '+ms+' ; 1,95 cm ↔ 0,975 m, v<sub>1</sub> = 1,95 '+ms+'.<br>b. La vitesse est entre 1,85 et 1,95 '+ms+' : le chiffre des dixièmes est déjà incertain. En écrivant 1,90, Inès prétend connaître le chiffre des centièmes, ce qui est faux. Mathématiquement 1,9 = 1,90, mais en physique le zéro final annonce une précision : Adam a raison.'},
+  {n:'7', ouv:true, text:'Entre deux positions successives, l\'écart diminue à chaque fois de 0,10 m. Si cela continue, à quelle distance de M<sub>0</sub> la pierre s\'arrêtera-t-elle ? Pour la faire aller plus loin, les joueuses balaient la glace devant elle : que deviendraient les écarts si le balayage supprimait tout ralentissement ?',
+   items:[{t:'num', pts:0.5, label:'Distance d\'arrêt depuis M<sub>0</sub> :', val:6.05, unit:'m', cs:null, tol:0.03},
+          {t:'self', pts:0.5, label:'Réponds à la deuxième question sur ta feuille, puis compare.'}],
+   hint:'Le dernier écart (M<sub>5</sub>M<sub>6</sub>) vaut 0,55 m. Les suivants : 0,45 ; 0,35 ; …',
+   corr:'Écarts suivants : 0,45 + 0,35 + 0,25 + 0,15 + 0,05 = 1,25 m, puis la pierre s\'arrête. Distance totale : 4,8 + 1,25 = 6,05 m, soit environ 6,1 m depuis M<sub>0</sub>. Si tout ralentissement disparaissait, les écarts resteraient égaux : le mouvement deviendrait rectiligne uniforme.'}
+ ]},
+{
+ id:'e3', title:'Exercice 3. Le livreur à vélo',
+ ctx:'Un livreur part du restaurant R et apporte une commande à un client C. Lundi, il suit l\'itinéraire 1. Mardi, à cause de travaux, il suit l\'itinéraire 2. Les deux jours, la livraison dure 5,0 min. Sur le plan, chaque carreau mesure 1 cm et <b>1 cm représente 100 m</b>.',
+ data:['Échelle du plan : 1 cm ↔ 100 m.','Durée de chaque livraison : Δt = 5,0 min.'],
+ qs:[
+  {n:'1', text:'Trace le vecteur déplacement '+V('RC')+' du livreur.',
+   items:[{t:'draw', pts:1.5, w:10.5, h:10, pts0:{R:[1,3,-0.5,-0.2], C:[9,9,0.55,-0.35]},
+     deco:[{t:'line', p:[[1,3],[9,3],[9,9]], dash:false, col:'rgba(107,191,171,0.75)', w:3},
+           {t:'line', p:[[1,3],[5,3],[5,1],[9,1],[9,9]], dash:true, col:'rgba(217,122,99,0.85)', w:2},
+           {t:'text', x:5.6, y:3.35, s:'itinéraire 1 (lundi)', col:'rgba(107,191,171,1)'},
+           {t:'text', x:5.6, y:0.55, s:'itinéraire 2 (mardi)', col:'rgba(217,122,99,1)'}],
+     vecs:[{k:'RC', name:V('RC'), o:'R', ang:Math.atan2(6, 8) * 180 / Math.PI, len:10}]}],
+   hint:'Le vecteur déplacement va en ligne droite du point de départ au point d\'arrivée, quel que soit le chemin suivi.',
+   corr:'Flèche en ligne droite de R à C (10 cm sur le plan). Elle ne suit aucune des deux rues : le vecteur déplacement est le plus court chemin.'},
+  {n:'2', text:'Détermine la valeur réelle RC du déplacement.',
+   items:[{t:'num', pts:1, label:'RC =', val:1000, unit:'m', cs:null}],
+   hint:'Mesure RC en carreaux (ou utilise le triangle rectangle de côtés 8 et 6).',
+   corr:'RC = 10 cm sur le plan, soit 10 × 100 = 1 000 m = 1,0 km.'},
+  {n:'3', text:'Calcule la distance parcourue par le livreur lundi, puis mardi.',
+   items:[{t:'num', pts:0.5, label:'Lundi :', val:1400, unit:'m', cs:null},
+          {t:'num', pts:0.5, label:'Mardi :', val:1800, unit:'m', cs:null}],
+   hint:'Additionne les longueurs de chaque portion de rue, en carreaux, puis convertis.',
+   corr:'Lundi : 8 + 6 = 14 cm, soit 1 400 m. Mardi : 4 + 2 + 4 + 8 = 18 cm, soit 1 800 m.'},
+  {n:'4', text:'Le vecteur déplacement de mardi est…',
+   items:[{t:'choice', pts:1, opts:['identique à celui de lundi','plus long que celui de lundi, car le trajet est plus long','dirigé selon la première rue empruntée'], ans:0}],
+   hint:'Départ et arrivée ont-ils changé ?',
+   corr:'Les points de départ et d\'arrivée sont les mêmes : le vecteur déplacement '+V('RC')+' est identique. Il ne dépend pas de la trajectoire suivie.'},
+  {n:'5', text:'Calcule la valeur du vecteur vitesse moyenne du livreur entre R et C. Est-elle différente mardi ?',
+   items:[{t:'num', pts:1, label:'v<sub>moy</sub> =', val:1000/300, unit:'m/s', cs:[2,3]},
+          {t:'choice', pts:0.5, label:'Mardi, le vecteur vitesse moyenne est…', opts:['le même que lundi','plus grand que lundi','plus petit que lundi'], ans:0}],
+   hint:'v<sub>moy</sub> = RC / Δt, avec Δt en secondes.',
+   corr:'Δt = 5,0 min = 300 s. v<sub>moy</sub> = RC / Δt = 1 000 / 300 = 3,3 '+ms+'. Même déplacement, même durée : le vecteur vitesse moyenne est le même les deux jours.'},
+  {n:'6', text:'Montre que 1 '+ms+' = 3,6 km·h<sup>−1</sup>, puis calcule, en km·h<sup>−1</sup>, la vitesse « du compteur » du vélo lundi, c\'est-à-dire la distance parcourue divisée par la durée.',
+   items:[{t:'order', pts:1, label:'Remets les étapes dans l\'ordre :',
+     steps:['1 m = 10<sup>−3</sup> km.','1 s = 1/3 600 h.','Donc 1 '+ms+' = 10<sup>−3</sup> km ÷ (1/3 600 h) = 10<sup>−3</sup> × 3 600 km·h<sup>−1</sup>.','Donc 1 '+ms+' = 3,6 km·h<sup>−1</sup> : pour passer des '+ms+' aux km·h<sup>−1</sup>, on multiplie par 3,6.']},
+          {t:'num', pts:1, label:'Vitesse du compteur lundi :', val:1400/300*3.6, unit:'km/h', strict:true, cs:[2,3]}],
+   hint:'Diviser par une fraction, c\'est multiplier par son inverse. Lundi : 1 400 m en 300 s.',
+   corr:'1 m = 10<sup>−3</sup> km et 1 s = 1/3 600 h, donc 1 '+ms+' = 10<sup>−3</sup> × 3 600 = 3,6 km·h<sup>−1</sup>. Lundi : 1 400 / 300 = 4,7 '+ms+', soit 4,7 × 3,6 = 17 km·h<sup>−1</sup>.'},
+  {n:'7', ouv:true, text:'Mardi soir, l\'application affiche : « vitesse moyenne : 12 km/h ». Le livreur proteste : « J\'ai roulé bien plus vite que ça, et plus vite que lundi ! » Qui a raison ? Après la livraison, il revient au restaurant : que vaut le vecteur vitesse moyenne sur l\'aller-retour complet ? Est-ce choquant ?',
+   items:[{t:'self', pts:2}],
+   hint:'Convertis 3,3 '+ms+' en km·h<sup>−1</sup>. Puis : quel est le vecteur déplacement quand on revient au point de départ ?',
+   corr:'L\'application calcule RC / Δt = 3,3 '+ms+' ≈ 12 km·h<sup>−1</sup> : c\'est la valeur du vecteur vitesse moyenne, qui ne tient pas compte du chemin. Mais le vélo a parcouru 1 800 m en 300 s, soit 6,0 '+ms+' = 22 km·h<sup>−1</sup> (contre 17 lundi) : le livreur a raison sur sa vitesse « au compteur ». Les deux ont raison, ils ne parlent pas de la même grandeur. Sur l\'aller-retour, le vecteur déplacement est nul (retour au point de départ), donc le vecteur vitesse moyenne est nul, alors que le livreur a beaucoup roulé : la vitesse moyenne ne décrit pas le trajet réel.'}
+ ]},
+{
+ id:'e4', title:'Exercice 4. La grande roue',
+ ctx:'Une grande roue de fête foraine tourne à vitesse constante, dans le sens inverse des aiguilles d\'une montre. On a pointé la position d\'une nacelle toutes les τ = 10,0 s, en partant de M<sub>0</sub> (embarquement, en bas). Sur le schéma, <b>1 cm représente 5,00 m</b>.',
+ data:['Rayon de la roue : R = 20,0 m ; durée d\'un tour : T = 120 s.','τ = 10,0 s. Échelle des distances : 1 cm ↔ 5,00 m. Échelle des vitesses : 1 cm ↔ 0,500 '+ms+'.'],
+ qs:[
+  {n:'1', text:'Question de référentiel.',
+   items:[{t:'choice', pts:0.5, label:'Dans quel référentiel la trajectoire de la nacelle est-elle un cercle ?', opts:['le référentiel du sol','le référentiel de la nacelle','le référentiel d\'un passager de la nacelle'], ans:0},
+          {t:'choice', pts:0.5, label:'Dans le référentiel de la nacelle, le passager assis est…', opts:['immobile','en mouvement circulaire','en mouvement rectiligne'], ans:0}],
+   hint:'Le passager tourne avec la nacelle.',
+   corr:'Dans le référentiel du sol, la nacelle décrit un cercle de centre O. Le passager est immobile par rapport à sa nacelle, mais en mouvement circulaire par rapport au sol.'},
+  {n:'2', text:'Mesure M<sub>0</sub>M<sub>1</sub> sur le schéma et convertis cette longueur, puis calcule la valeur v<sub>0</sub> de la vitesse en M<sub>0</sub>.',
+   items:[{t:'num', pts:1, label:'M<sub>0</sub>M<sub>1</sub> (distance réelle) =', val:chord, unit:'m', cs:null, tol:0.05},
+          {t:'num', pts:1, label:'v<sub>0</sub> =', val:chord / 10, unit:'m/s', cs:[2,3], tol:0.05}],
+   hint:'Sur le schéma, M<sub>0</sub>M<sub>1</sub> mesure environ 2 carreaux. Multiplie par 5,00 m, puis divise par τ.',
+   corr:'M<sub>0</sub>M<sub>1</sub> ≈ 2,07 cm sur le schéma, soit 2,07 × 5,00 = 10,4 m. v<sub>0</sub> ≈ M<sub>0</sub>M<sub>1</sub> / τ = 10,4 / 10,0 = 1,04 '+ms+'.'},
+  {n:'3', text:'Trace '+VV('0')+' et '+VV('3')+' à l\'échelle 1 cm ↔ 0,500 '+ms+'.',
+   items:[{t:'draw', pts:1.5, w:11, h:10.4, pts0:wheelPts, deco:wheelDeco,
+     vecs:[{k:'v0', name:VV('0'), o:'M0', ang:15, alt:[0], len:2.08},{k:'v3', name:VV('3'), o:'M3', ang:105, alt:[90], len:2.08}]}],
+   hint:'Flèche d\'environ 2 cm partant du point, dirigée vers le point suivant (ou tangente au cercle), dans le sens du mouvement.',
+   corr:'Deux flèches de 1,04 / 0,500 ≈ 2,1 cm, partant de M<sub>0</sub> et de M<sub>3</sub>, dirigées selon (M<sub>0</sub>M<sub>1</sub>) et (M<sub>3</sub>M<sub>4</sub>), presque tangentes au cercle. Les deux directions (corde ou tangente) sont acceptées.'},
+  {n:'4', text:'Nature du mouvement.',
+   items:[{t:'choice', pts:0.5, label:'Le mouvement de la nacelle dans le référentiel du sol est…', opts:['circulaire uniforme','circulaire accéléré','rectiligne uniforme'], ans:0},
+          {t:'choice', pts:0.5, label:'Le vecteur vitesse reste-t-il le même au cours du mouvement ?', opts:['Non : sa valeur est constante mais sa direction change','Oui : la valeur de la vitesse ne change pas','Non : sa valeur augmente en montant'], ans:0}],
+   hint:'Compare '+VV('0')+' et '+VV('3')+' : même longueur ? même direction ?',
+   corr:'Les flèches ont la même longueur : la valeur de la vitesse est constante, le mouvement est circulaire uniforme. Mais leur direction change : le vecteur vitesse n\'est pas constant. Uniforme ne veut pas dire « vecteur vitesse constant ».'},
+  {n:'5', text:'Montre que la valeur de la vitesse s\'écrit v = 2πR / T, puis calcule-la.',
+   items:[{t:'order', pts:1, label:'Remets les étapes dans l\'ordre :',
+     steps:['En un tour, la nacelle parcourt le périmètre du cercle : d = 2πR.','Un tour dure T.','La vitesse est la distance parcourue divisée par la durée : v = d / T.','Donc v = 2πR / T.']},
+          {t:'num', pts:0.5, label:'v =', val:2 * Math.PI * 20 / 120, unit:'m/s', cs:[3]}],
+   hint:'Périmètre d\'un cercle de rayon R : 2πR.',
+   corr:'d = 2πR pendant T, donc v = 2πR / T = 2π × 20,0 / 120 = 1,05 '+ms+'.'},
+  {n:'6', text:'La valeur v<sub>0</sub> trouvée à la question 2 est un peu plus petite que celle de la question 5. Pourquoi ?',
+   items:[{t:'choice', pts:1, opts:['La corde M<sub>0</sub>M<sub>1</sub> est plus courte que l\'arc de cercle réellement parcouru pendant τ','La nacelle accélère entre M<sub>0</sub> et M<sub>1</sub>','La formule 2πR / T est fausse pour une grande roue'], ans:0}],
+   hint:'Entre M<sub>0</sub> et M<sub>1</sub>, la nacelle suit-elle la ligne droite ?',
+   corr:'Pendant τ, la nacelle parcourt un arc de cercle, plus long que la corde M<sub>0</sub>M<sub>1</sub> mesurée. Avec un τ plus court, la corde serait plus proche de l\'arc et l\'approximation meilleure : c\'est pourquoi le vecteur vitesse se définit pour une durée très courte.'},
+  {n:'7', ouv:true, text:'Après un tour complet, la nacelle revient en M<sub>0</sub>. Que vaut le vecteur vitesse moyenne sur ce tour ? Que vaut-il sur un demi-tour, de M<sub>0</sub> à M<sub>6</sub> ? Commente.',
+   items:[{t:'choice', pts:0.5, label:'Sur un tour complet, le vecteur vitesse moyenne est…', opts:['nul','égal à 1,05 '+ms,'tangent au cercle'], ans:0},
+          {t:'self', pts:1.5, label:'Calcule la vitesse moyenne sur le demi-tour sur ta feuille et commente, puis compare.'}],
+   hint:'Sur le demi-tour, M<sub>0</sub>M<sub>6</sub> est le diamètre de la roue, parcouru en 60 s.',
+   corr:'Sur un tour, le déplacement est nul (retour au point de départ), donc le vecteur vitesse moyenne est nul, alors que la nacelle roule en permanence à 1,05 '+ms+'. Sur le demi-tour : M<sub>0</sub>M<sub>6</sub> = 2R = 40,0 m en 60 s, soit v<sub>moy</sub> = 0,667 '+ms+', verticale vers le haut. C\'est moins que 1,05 '+ms+', car le chemin réel (un demi-cercle, πR = 62,8 m) est plus long que le diamètre.'}
+ ]},
+{
+ id:'e5', title:'Exercice 5. Le satellite qui ne bouge pas',
+ ctx:'Une antenne parabolique sur un toit est réglée une fois pour toutes : elle vise un satellite de télévision qui paraît immobile dans le ciel. Ce satellite géostationnaire tourne pourtant autour de la Terre, sur un cercle situé dans le plan de l\'équateur. On l\'étudie dans le référentiel géocentrique : un repère centré sur le centre de la Terre, dont les axes pointent vers trois étoiles lointaines, et une horloge.',
+ data:['Rayon de la Terre : R<sub>T</sub> = 6,37×10<sup>3</sup> km ; altitude du satellite : h = 3,58×10<sup>4</sup> km.','Durée d\'un tour du satellite dans le référentiel géocentrique : T = 8,62×10<sup>4</sup> s (un peu moins de 24 h), la même que la durée d\'un tour de la Terre sur elle-même.','Vue depuis le pôle Nord, la Terre et le satellite tournent dans le sens inverse des aiguilles d\'une montre.'],
+ qs:[
+  {n:'1', text:'Question de référentiel.',
+   items:[{t:'choice', pts:1, label:'Dans le référentiel terrestre (lié au sol), le satellite est…', opts:['immobile','en mouvement circulaire','en mouvement rectiligne'], ans:0},
+          {t:'choice', pts:0.5, label:'Dans le référentiel géocentrique, le satellite est…', opts:['en mouvement','immobile'], ans:0}],
+   hint:'L\'antenne n\'a jamais besoin de bouger.',
+   corr:'L\'antenne vise toujours le même point du ciel : dans le référentiel terrestre, le satellite est immobile. Dans le référentiel géocentrique, il tourne autour de la Terre : le mouvement est relatif.'},
+  {n:'2', text:'Dans le référentiel géocentrique, la trajectoire du satellite est…',
+   items:[{t:'choice', pts:1, opts:['un cercle de centre le centre de la Terre, de rayon R<sub>T</sub> + h','un cercle de rayon h','une droite au-dessus de l\'équateur'], ans:0}],
+   hint:'L\'altitude se mesure depuis la surface, le rayon depuis le centre.',
+   corr:'Un cercle centré sur le centre de la Terre, de rayon r = R<sub>T</sub> + h (on ajoute le rayon de la Terre à l\'altitude).'},
+  {n:'3', text:'Calcule le rayon r de l\'orbite, en mètres.',
+   items:[{t:'num', pts:1, label:'r =', val:r5, unit:'m', strict:true, cs:[3]}],
+   hint:'r = R<sub>T</sub> + h, avec les deux longueurs dans la même unité. 1 km = 10<sup>3</sup> m.',
+   corr:'r = 6,37×10<sup>3</sup> + 3,58×10<sup>4</sup> = 4,22×10<sup>4</sup> km = 4,22×10<sup>7</sup> m.'},
+  {n:'4', text:'En t\'inspirant de la grande roue, établis l\'expression de la vitesse du satellite en fonction de R<sub>T</sub>, h et T, puis calcule-la.',
+   items:[{t:'choice', pts:1, label:'Expression :', opts:['v = 2π(R<sub>T</sub> + h) / T','v = 2πh / T','v = 2π(R<sub>T</sub> + h) × T','v = (R<sub>T</sub> + h) / T'], ans:0},
+          {t:'num', pts:1, label:'v =', val:v5, unit:'m/s', cs:[3]}],
+   hint:'En un tour, le satellite parcourt le périmètre de son orbite, 2πr. Attention aux unités : r en m, T en s.',
+   corr:'En un tour (durée T), le satellite parcourt 2πr = 2π(R<sub>T</sub> + h). v = 2π(R<sub>T</sub> + h) / T = 2π × 4,22×10<sup>7</sup> / 8,62×10<sup>4</sup> = 3,07×10<sup>3</sup> '+ms+'.'},
+  {n:'5', text:'Convertis cette vitesse en km·h<sup>−1</sup>.',
+   items:[{t:'num', pts:1, label:'v =', val:v5 * 3.6, unit:'km/h', strict:true, cs:[3]}],
+   hint:'1 '+ms+' = 3,6 km·h<sup>−1</sup>.',
+   corr:'v = 3,07×10<sup>3</sup> × 3,6 = 1,11×10<sup>4</sup> km·h<sup>−1</sup> : plus de 11 000 km/h pour un objet « immobile » !'},
+  {n:'6', text:'Trace le vecteur vitesse du satellite aux positions S<sub>1</sub> et S<sub>2</sub>, à l\'échelle 1 cm ↔ 1 000 '+ms+'. Le schéma n\'est pas à l\'échelle pour les distances.',
+   items:[{t:'draw', pts:1.5, w:12, h:12, pts0:{S1:[6,10.2,0.5,0.35], S2:[10.2,6,0.55,-0.5]},
+     deco:[{t:'circle', c:[6,6], r:1.3, fill:'rgba(107,191,171,0.25)'},{t:'text', x:5.3, y:5.85, s:'Terre'},{t:'circle', c:[6,6], r:4.2, dash:true},{t:'text', x:7.2, y:2.5, s:'orbite'}],
+     vecs:[{k:'s1', name:V('v','1'), o:'S1', ang:180, len:v5 / 1000},{k:'s2', name:V('v','2'), o:'S2', ang:90, len:v5 / 1000}]}],
+   hint:'Pour un mouvement circulaire, le vecteur vitesse est tangent au cercle, dans le sens du mouvement (sens inverse des aiguilles d\'une montre).',
+   corr:'Deux flèches de 3,07 / 1 = 3,1 cm, tangentes à l\'orbite : en S<sub>1</sub> (en haut), vers la gauche ; en S<sub>2</sub> (à droite), vers le haut.'},
+  {n:'7', ouv:true, text:'Calcule la vitesse, dans le référentiel géocentrique, d\'une antenne posée sur l\'équateur. Explique alors pourquoi le satellite paraît immobile depuis le sol alors qu\'il file à plus de 11 000 km·h<sup>−1</sup>.',
+   items:[{t:'num', pts:0.5, label:'Vitesse de l\'antenne :', val:2 * Math.PI * 6.37e6 / T5, unit:'m/s', cs:[3]},
+          {t:'self', pts:1.5, label:'Rédige ton explication sur ta feuille, puis compare.'}],
+   hint:'L\'antenne fait elle aussi un tour en T, sur un cercle de rayon R<sub>T</sub>.',
+   corr:'v<sub>antenne</sub> = 2πR<sub>T</sub> / T = 2π × 6,37×10<sup>6</sup> / 8,62×10<sup>4</sup> = 464 '+ms+'. L\'antenne et le satellite tournent autour de l\'axe de la Terre avec la même durée T : ils restent toujours alignés avec le centre de la Terre. Le satellite va plus vite que l\'antenne (3,07×10<sup>3</sup> contre 464 '+ms+'), mais il parcourt un cercle bien plus grand dans le même temps. Vu depuis l\'antenne (référentiel terrestre), il ne bouge donc pas : c\'est la relativité du mouvement.'}
+ ]}
+];
+
+/* ============ Rendu ============ */
+const root = document.getElementById('exercises');
+const REG = []; // tous les items : {ex, q, item, id}
+
+function showSelf(qid){
+  REG.filter(r => r.qid === qid && r.it.t === 'self').forEach(r => r.selfBox.classList.remove('hidden'));
+}
+
+/* ---- Constructeurs ---- */
+const BUILD = {
+  num(R){
+    const s = st(R.id);
+    const row = document.createElement('div'); row.className = 'row';
+    row.innerHTML = '<input class="num" type="text" inputmode="decimal" placeholder="valeur" autocomplete="off">' +
+      '<select><option value="">unité…</option>' + UNITS.map(u => '<option>' + u + '</option>').join('') + '</select>';
+    R.box.appendChild(row);
+    R.inp = row.querySelector('input'); R.sel = row.querySelector('select');
+    if (s.v) R.inp.value = s.v; if (s.u) R.sel.value = s.u;
+    R.inp.oninput = () => { st(R.id).v = R.inp.value; save(); };
+    R.sel.onchange = () => { st(R.id).u = R.sel.value; save(); };
+    R.inp.onkeydown = e => { if (e.key === 'Enter') { CHECK.num(R, true); save(); updateScores(); } };
+  },
+  choice(R){
+    const s = st(R.id), it = R.it;
+    const o = document.createElement('div'); o.className = 'opts';
+    it.opts.forEach((txt, k) => {
+      const lab = document.createElement('label'); lab.className = 'opt';
+      lab.innerHTML = '<input type="' + (it.multi ? 'checkbox' : 'radio') + '" name="' + R.id + '" value="' + k + '"><span>' + txt + '</span>';
+      o.appendChild(lab);
+    });
+    R.box.appendChild(o);
+    R.inputs = [...o.querySelectorAll('input')];
+    if (s.sel) R.inputs.forEach(i => { i.checked = s.sel.includes(+i.value); });
+    R.inputs.forEach(i => i.onchange = () => { st(R.id).sel = R.inputs.filter(x => x.checked).map(x => +x.value); save(); });
+  },
+  doi(R){
+    const s = st(R.id), it = R.it;
+    const g = document.createElement('div'); g.className = 'doi-grid';
+    it.objs.forEach(([name], k) => {
+      const row = document.createElement('div'); row.className = 'doi-row';
+      row.innerHTML = '<span>' + name + '</span><select data-k="' + k + '"><option value="">choisir…</option><option value="none">n\'agit pas sur le système</option><option value="contact">action de contact</option><option value="distance">action à distance</option></select>';
+      g.appendChild(row);
+    });
+    R.box.appendChild(g);
+    R.sels = [...g.querySelectorAll('select')];
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('viewBox', '0 0 440 220'); svg.classList.add('doi-svg');
+    R.box.appendChild(svg); R.svg = svg;
+    if (s.sel) R.sels.forEach((x, k) => x.value = s.sel[k] || '');
+    R.sels.forEach(x => x.onchange = () => { st(R.id).sel = R.sels.map(y => y.value); save(); drawDOI(R); });
+    drawDOI(R);
+  },
+  order(R){
+    const s = st(R.id), it = R.it;
+    if (!s.perm) { s.perm = it.steps.map((_, k) => k).sort(() => Math.random() - 0.5); if (s.perm.every((v, k) => v === k)) s.perm.reverse(); }
+    if (!s.ans) s.ans = [];
+    const pool = document.createElement('div'); pool.className = 'order-pool';
+    const ans = document.createElement('div'); ans.className = 'order-ans';
+    const bar = document.createElement('div'); bar.style.marginTop = '6px';
+    bar.innerHTML = '<button class="small-btn">Recommencer l\'ordre</button>';
+    R.box.appendChild(pool); R.box.appendChild(ans); R.box.appendChild(bar);
+    const render = () => {
+      const sx = st(R.id);
+      pool.innerHTML = ''; ans.innerHTML = sx.ans.length ? '' : '<span style="color:var(--chalk-dim);font-size:0.85rem">Ta démonstration apparaîtra ici.</span>';
+      sx.perm.forEach(k => {
+        if (sx.ans.includes(k)) return;
+        const d = document.createElement('div'); d.className = 'step'; d.innerHTML = it.steps[k];
+        d.onclick = () => { sx.ans.push(k); save(); render(); };
+        pool.appendChild(d);
+      });
+      sx.ans.forEach((k, j) => { const d = document.createElement('div'); d.className = 'step'; d.innerHTML = '<b>' + (j + 1) + '.</b>' + it.steps[k]; ans.appendChild(d); });
+    };
+    bar.querySelector('button').onclick = () => { st(R.id).ans = []; save(); render(); };
+    save(); render();
+  },
+  self(R){
+    const s = st(R.id);
+    const p = document.createElement('div');
+    if (!R.it.label) p.innerHTML = '<div class="item-label">Rédige ta réponse sur ta feuille, puis ouvre la correction pour te noter.</div>';
+    R.box.appendChild(p);
+    const sb = document.createElement('div'); sb.className = 'self hidden';
+    sb.innerHTML = 'Je me note : <button data-f="0">Pas trouvé</button><button data-f="0.5">À moitié</button><button data-f="1">Juste</button>';
+    R.box.appendChild(sb); R.selfBox = sb;
+    const btns = [...sb.querySelectorAll('button')];
+    const mark = () => btns.forEach(b => b.classList.toggle('on', st(R.id).f !== undefined && +b.dataset.f === st(R.id).f));
+    btns.forEach(b => b.onclick = () => { st(R.id).f = +b.dataset.f; save(); mark(); updateScores(); });
+    mark();
+  },
+  draw(R){ buildDraw(R); }
+};
+
+/* ---- Diagramme objets-interactions dynamique ---- */
+function drawDOI(R){
+  const svg = R.svg, it = R.it, s = st(R.id);
+  const n = it.objs.length, cx = 220, cy = 110;
+  let h = '<rect x="' + (cx - 55) + '" y="' + (cy - 20) + '" width="110" height="40" rx="4" fill="none" stroke="#f2ede1" stroke-width="2"/>' +
+    '<text x="' + cx + '" y="' + (cy + 5) + '" fill="#f2ede1" font-size="14" text-anchor="middle" font-family="Space Grotesk, sans-serif">' + it.sys + '</text>';
+  it.objs.forEach(([name], k) => {
+    const a = -Math.PI / 2 + (2 * Math.PI * k) / n + (n === 4 ? Math.PI / 4 : 0);
+    const x = cx + 175 * Math.cos(a), y = cy + 82 * Math.sin(a);
+    const v = (s.sel || [])[k] || '';
+    if (v === 'contact' || v === 'distance') {
+      const x0 = cx + 60 * Math.cos(a), y0 = cy + 24 * Math.sin(a), x1 = x - 50 * Math.cos(a), y1 = y - 16 * Math.sin(a);
+      h += '<line x1="' + x0 + '" y1="' + y0 + '" x2="' + x1 + '" y2="' + y1 + '" stroke="#e8c468" stroke-width="2.2"' + (v === 'distance' ? ' stroke-dasharray="6 5"' : '') + '/>';
+    }
+    h += '<ellipse cx="' + x + '" cy="' + y + '" rx="52" ry="17" fill="#1d3229" stroke="#6bbfab" stroke-width="1.6"/>' +
+      '<text x="' + x + '" y="' + (y + 5) + '" fill="#f2ede1" font-size="13" text-anchor="middle" font-family="Space Grotesk, sans-serif">' + name + '</text>';
+  });
+  svg.innerHTML = h;
+}
+
+/* ---- Tracé de vecteurs ---- */
+const PX = 40; // pixels par cm
+function buildDraw(R){
+  const it = R.it, s = st(R.id);
+  if (!s.vecs) s.vecs = {};
+  const tools = document.createElement('div'); tools.className = 'draw-tools';
+  it.vecs.forEach((v, k) => {
+    const b = document.createElement('button'); b.className = 'vbtn' + (k === 0 ? ' active' : ''); b.innerHTML = 'Tracer ' + v.name; b.dataset.k = v.k;
+    tools.appendChild(b);
+  });
+  const clr = document.createElement('button'); clr.className = 'small-btn'; clr.textContent = 'Effacer ce vecteur'; tools.appendChild(clr);
+  const live = document.createElement('div'); live.className = 'len-live';
+  const wrap = document.createElement('div'); wrap.className = 'canvas-wrap';
+  const cv = document.createElement('canvas'); cv.className = 'draw';
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = it.w * PX * dpr; cv.height = it.h * PX * dpr; cv.style.width = (it.w * PX) + 'px';
+  wrap.appendChild(cv);
+  R.box.appendChild(tools); R.box.appendChild(wrap); R.box.appendChild(live);
+  const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+  R.cur = it.vecs[0].k;
+  const btns = [...tools.querySelectorAll('.vbtn')];
+  btns.forEach(b => b.onclick = () => { R.cur = b.dataset.k; btns.forEach(x => x.classList.toggle('active', x === b)); });
+  clr.onclick = () => { delete st(R.id).vecs[R.cur]; save(); redraw(); };
+  const toPx = (x, y) => [x * PX, (it.h - y) * PX];
+  const fromEvt = e => { const r = cv.getBoundingClientRect(); const k = (it.w * PX) / r.width; return [((e.clientX - r.left) * k) / PX, it.h - ((e.clientY - r.top) * k) / PX]; };
+  let drag = null;
+  function arrow(x0, y0, x1, y1, col, lw, label){
+    const [a, b] = toPx(x0, y0), [c, d] = toPx(x1, y1);
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = lw;
+    ctx.beginPath(); ctx.moveTo(a, b); ctx.lineTo(c, d); ctx.stroke();
+    const ang = Math.atan2(d - b, c - a), L = 11;
+    if (Math.hypot(c - a, d - b) > 4) {
+      ctx.beginPath(); ctx.moveTo(c, d);
+      ctx.lineTo(c - L * Math.cos(ang - 0.4), d - L * Math.sin(ang - 0.4));
+      ctx.lineTo(c - L * Math.cos(ang + 0.4), d - L * Math.sin(ang + 0.4)); ctx.closePath(); ctx.fill();
+    }
+    if (label) { ctx.font = '600 14px Space Grotesk, sans-serif'; ctx.fillText(label, c + 8, d - 6); }
+  }
+  function scene(){
+    ctx.clearRect(0, 0, it.w * PX, it.h * PX);
+    for (let x = 0; x <= it.w * 2; x++) { ctx.strokeStyle = x % 2 ? 'rgba(242,237,225,0.05)' : 'rgba(242,237,225,0.13)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x * PX / 2, 0); ctx.lineTo(x * PX / 2, it.h * PX); ctx.stroke(); }
+    for (let y = 0; y <= it.h * 2; y++) { ctx.strokeStyle = y % 2 ? 'rgba(242,237,225,0.05)' : 'rgba(242,237,225,0.13)'; ctx.beginPath(); ctx.moveTo(0, y * PX / 2); ctx.lineTo(it.w * PX, y * PX / 2); ctx.stroke(); }
+    (it.deco || []).forEach(d => {
+      ctx.save(); ctx.lineWidth = d.w || 1.5; ctx.strokeStyle = d.col || 'rgba(242,237,225,0.55)'; ctx.setLineDash(d.dash ? [6, 5] : []);
+      if (d.t === 'line') { ctx.beginPath(); d.p.forEach(([x, y], k) => { const [a, b] = toPx(x, y); k ? ctx.lineTo(a, b) : ctx.moveTo(a, b); }); ctx.stroke(); }
+      if (d.t === 'circle') { const [a, b] = toPx(d.c[0], d.c[1]); ctx.beginPath(); ctx.arc(a, b, d.r * PX, 0, 2 * Math.PI); if (d.fill) { ctx.fillStyle = d.fill; ctx.fill(); } else ctx.stroke(); }
+      if (d.t === 'cross') { const [a, b] = toPx(d.p[0], d.p[1]); ctx.setLineDash([]); ctx.strokeStyle = 'rgba(242,237,225,0.6)'; ctx.beginPath(); ctx.moveTo(a - 5, b); ctx.lineTo(a + 5, b); ctx.moveTo(a, b - 5); ctx.lineTo(a, b + 5); ctx.stroke(); }
+      if (d.t === 'text') { const [a, b] = toPx(d.x, d.y); ctx.fillStyle = d.col || 'rgba(242,237,225,0.75)'; ctx.font = '12px Space Grotesk, sans-serif'; ctx.fillText(d.s, a, b); }
+      ctx.restore();
+    });
+    ctx.setLineDash([]);
+    const SUB = {'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉'};
+    Object.entries(it.pts0).forEach(([n, p]) => {
+      const [x, y, lx = -0.55, ly = -0.45] = p;
+      const [a, b] = toPx(x, y); ctx.strokeStyle = '#f2ede1'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(a - 7, b); ctx.lineTo(a + 7, b); ctx.moveTo(a, b - 7); ctx.lineTo(a, b + 7); ctx.stroke();
+      const [c, d] = toPx(x + lx, y + ly);
+      ctx.fillStyle = '#f2ede1'; ctx.font = '600 15px Space Grotesk, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(n.replace(/\d/g, m => SUB[m]), c, d); ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
+    });
+    ctx.fillStyle = 'rgba(242,237,225,0.75)'; ctx.font = '12px Space Grotesk, sans-serif';
+    ctx.fillText('1 carreau = 1 cm', it.w * PX - 110, it.h * PX - 8);
+  }
+  const plain = k => { const v = it.vecs.find(x => x.k === k); return v.name.replace(/<[^>]+>/g, '').replace('−', '−'); };
+  function redraw(tmp){
+    scene();
+    const vs = st(R.id).vecs;
+    Object.entries(vs).forEach(([k, v]) => arrow(v[0], v[1], v[2], v[3], k === R.cur ? '#e8c468' : '#6bbfab', 2.6, plain(k)));
+    if (tmp) arrow(tmp[0], tmp[1], tmp[2], tmp[3], '#e8c468', 2.6, '');
+  }
+  R.redraw = redraw;
+  cv.addEventListener('pointerdown', e => { e.preventDefault(); cv.setPointerCapture(e.pointerId); const [x, y] = fromEvt(e); drag = [x, y, x, y]; });
+  cv.addEventListener('pointermove', e => { if (!drag) return; const [x, y] = fromEvt(e); drag[2] = x; drag[3] = y; redraw(drag);
+    live.textContent = 'Longueur de la flèche : ' + (Math.hypot(drag[2] - drag[0], drag[3] - drag[1])).toFixed(1).replace('.', ',') + ' cm'; });
+  cv.addEventListener('pointerup', () => { if (!drag) return;
+    if (Math.hypot(drag[2] - drag[0], drag[3] - drag[1]) > 0.2) { st(R.id).vecs[R.cur] = drag.map(v => Math.round(v * 100) / 100); save(); }
+    drag = null; redraw(); });
+  redraw();
+}
+
+/* ---- Vérifications ---- */
+function setFb(R, cls, html){ R.fb.className = 'fb ' + cls; R.fb.innerHTML = html; R.box.classList.toggle('ok', cls === 'good'); R.box.classList.toggle('ko', cls === 'bad'); }
+const CHECK = {
+  num(R, show){
+    const it = R.it, s = st(R.id), p = parseNum(R.inp.value);
+    if (!R.inp.value.trim()) { if (show) setFb(R, 'bad', 'Entre une valeur.'); return; }
+    if (!p) { if (show) setFb(R, 'bad', 'Je ne comprends pas ce nombre. Exemples : 0,21 ou 1,8e2 ou 1,8×10^2.'); return; }
+    const tol = it.tol || 0.04;
+    const UF = {m:[1,'L'], cm:[0.01,'L'], km:[1000,'L'], s:[1,'T'], min:[60,'T'], h:[3600,'T'], 'm/s':[1,'V'], 'km/h':[1/3.6,'V'], N:[1,'F'], kg:[1,'M'], g:[0.001,'M'], 'N/kg':[1,'G'], 'sans unité':[1,'0']};
+    const su = UF[R.sel.value], eu = UF[it.unit];
+    if (!R.sel.value) { if (show) setFb(R, 'bad', 'Choisis une unité.'); return; }
+    const sameDim = su && eu && su[1] === eu[1];
+    const okUnit = it.strict ? R.sel.value === it.unit : sameDim;
+    const pv = sameDim ? p.val * su[0] / eu[0] : p.val;
+    const okVal = Math.abs(pv - it.val) <= tol * Math.abs(it.val);
+    if (it.strict && sameDim && okVal && R.sel.value !== it.unit) { s.ok = false; if (show) setFb(R, 'bad', 'Valeur cohérente, mais l\'énoncé demande le résultat en ' + it.unit + '.'); return; }
+    if (!okVal) {
+      const r = pv / it.val; let m = 'Valeur incorrecte.';
+      [[1e3,'Erreur d\'un facteur 1000 : vérifie tes conversions d\'unités.'],[1e-3,'Erreur d\'un facteur 1000 : vérifie tes conversions d\'unités.'],[1e6,'Erreur d\'un facteur 10^6 : vérifie tes conversions.'],[1e-6,'Erreur d\'un facteur 10^6 : vérifie tes conversions.'],[3.6,'Erreur d\'un facteur 3,6 : attention à la conversion entre m/s et km/h.'],[1/3.6,'Erreur d\'un facteur 3,6 : attention à la conversion entre m/s et km/h.'],[60,'Erreur d\'un facteur 60 : as-tu converti les minutes en secondes ?'],[1/60,'Erreur d\'un facteur 60 : as-tu converti les minutes en secondes ?']].forEach(([f, t]) => { if (Math.abs(r / f - 1) < tol) m = t; });
+      s.ok = false; if (show) setFb(R, 'bad', m + ' Réessaie ou demande un indice.'); return;
+    }
+    if (!okUnit) { s.ok = false; if (show) setFb(R, 'bad', 'La valeur est bonne, mais l\'unité ne l\'est pas.'); return; }
+    s.ok = true;
+    if (it.cs) { s.csOk = it.cs.includes(p.cs); s.csSeen = true; }
+    if (it.cs && !s.csOk) {
+      const need = it.cs[0];
+      setFb(R, 'warn', '✓ Valeur et unité justes. Mais tu as écrit ' + p.cs + ' chiffre' + (p.cs > 1 ? 's' : '') + ' significatif' + (p.cs > 1 ? 's' : '') + ' : les données en imposent ' + need + '. Sur ta copie, ce point serait perdu. Corrige et revérifie !');
+      R.box.classList.add('ok');
+    } else setFb(R, 'good', '✓ Juste !' + (it.cs ? ' Bon nombre de chiffres significatifs.' : ''));
+  },
+  choice(R, show){
+    const it = R.it, s = st(R.id), sel = R.inputs.filter(x => x.checked).map(x => +x.value);
+    if (!sel.length) { if (show) setFb(R, 'bad', 'Choisis une réponse.'); return; }
+    const ans = Array.isArray(it.ans) ? it.ans : [it.ans];
+    s.ok = sel.length === ans.length && ans.every(a => sel.includes(a));
+    if (show) setFb(R, s.ok ? 'good' : 'bad', s.ok ? '✓ Juste !' : (it.multi ? 'Pas tout à fait : il manque une réponse ou il y en a une de trop.' : 'Ce n\'est pas ça. Réessaie.'));
+  },
+  doi(R, show){
+    const it = R.it, s = st(R.id), sel = R.sels.map(x => x.value);
+    if (sel.some(v => !v)) { if (show) setFb(R, 'bad', 'Choisis une option pour chaque objet.'); return; }
+    const bad = it.objs.filter(([n, a], k) => sel[k] !== a).map(([n]) => n);
+    s.ok = !bad.length;
+    if (show) setFb(R, s.ok ? 'good' : 'bad', s.ok ? '✓ Diagramme juste !' : 'À revoir pour : ' + bad.join(', ') + '.');
+  },
+  order(R, show){
+    const it = R.it, s = st(R.id);
+    if (s.ans.length < it.steps.length) { if (show) setFb(R, 'bad', 'Place toutes les étapes.'); return; }
+    s.ok = s.ans.every((k, j) => k === j);
+    const first = s.ans.findIndex((k, j) => k !== j);
+    if (show) setFb(R, s.ok ? 'good' : 'bad', s.ok ? '✓ Démonstration dans le bon ordre !' : 'L\'étape ' + (first + 1) + ' n\'est pas à sa place. Clique sur « Recommencer l\'ordre ».');
+  },
+  draw(R, show){
+    const it = R.it, s = st(R.id), msgs = []; let all = true;
+    it.vecs.forEach(v => {
+      const d = s.vecs[v.k], nm = v.name;
+      if (!d) { all = false; msgs.push(nm + ' : pas encore tracé.'); return; }
+      const o = it.pts0[v.o];
+      const dist = Math.hypot(d[0] - o[0], d[1] - o[1]);
+      const len = Math.hypot(d[2] - d[0], d[3] - d[1]);
+      const ang = Math.atan2(d[3] - d[1], d[2] - d[0]) * 180 / Math.PI;
+      let da = Math.min(...[v.ang].concat(v.alt || []).map(t => Math.abs(((ang - t + 540) % 360) - 180)));
+      if (dist > 0.35) { all = false; msgs.push(nm + ' : la flèche doit partir du point d\'application ' + v.o + '.'); return; }
+      if (da > 150) { all = false; msgs.push(nm + ' : le sens est inversé.'); return; }
+      if (da > 6) { all = false; msgs.push(nm + ' : la direction n\'est pas la bonne.'); return; }
+      if (Math.abs(len - v.len) > Math.max(0.2, 0.08 * v.len)) { all = false; msgs.push(nm + ' : la longueur n\'est pas bonne (tu as tracé ' + len.toFixed(1).replace('.', ',') + ' cm). Recalcule avec l\'échelle.'); return; }
+      msgs.push(nm + ' : ✓');
+    });
+    s.ok = all;
+    if (show) setFb(R, all ? 'good' : 'bad', all ? '✓ Tous les vecteurs sont justes !' : msgs.join('<br>'));
+  },
+  self(){}
+};
+
+/* ---- Scores ---- */
+function itemScore(R){
+  const s = st(R.id);
+  if (R.it.t === 'self') return s.f !== undefined ? s.f * R.it.pts : 0;
+  return s.ok && !s.spoiled ? R.it.pts : 0;
+}
+function updateScores(){
+  const sb = document.getElementById('scoreboard'); let tot = 0, max = 0, html = '';
+  EX.forEach(ex => {
+    const rs = REG.filter(r => r.ex === ex);
+    const sc = rs.reduce((a, r) => a + itemScore(r), 0), mx = rs.reduce((a, r) => a + r.it.pts, 0);
+    tot += sc; max += mx;
+    document.getElementById('sc-' + ex.id).textContent = fmt(sc) + ' / ' + fmt(mx);
+    html += '<div class="sb-card"><div class="t">' + ex.title.split('.')[0] + '</div><div class="v">' + fmt(sc) + ' / ' + fmt(mx) + '</div><div class="bar"><i style="width:' + (100 * sc / mx) + '%"></i></div></div>';
+  });
+  html += '<div class="sb-card"><div class="t">Total</div><div class="v">' + fmt(tot) + ' / ' + fmt(max) + '</div><div class="bar"><i style="width:' + (100 * tot / max) + '%"></i></div></div>';
+  sb.innerHTML = html;
+  const nums = REG.filter(r => r.it.t === 'num' && r.it.cs && st(r.id).csSeen);
+  const good = nums.filter(r => st(r.id).csOk).length;
+  document.getElementById('csLine').textContent = nums.length ? 'Chiffres significatifs : ' + good + ' résultat' + (good > 1 ? 's' : '') + ' bien écrit' + (good > 1 ? 's' : '') + ' sur ' + nums.length + ' vérifié' + (nums.length > 1 ? 's' : '') + '.' : 'Chiffres significatifs : aucun résultat vérifié pour l\'instant.';
+}
+
+function renderAll(){
+EX.forEach(ex => {
+  const sec = document.createElement('section'); sec.className = 'ex'; sec.id = ex.id;
+  sec.innerHTML = '<h2><span>' + ex.title + '</span><span class="ex-score" id="sc-' + ex.id + '"></span></h2>' +
+    '<p class="ctx">' + ex.ctx + '</p><div class="data"><b>Données</b><ul>' + ex.data.map(d => '<li>' + d + '</li>').join('') + '</ul></div>';
+  ex.qs.forEach((q, qi) => {
+    const qid = ex.id + '-q' + qi;
+    const qd = document.createElement('div'); qd.className = 'q'; qd.id = qid;
+    const tot = q.items.reduce((a, it) => a + it.pts, 0);
+    qd.innerHTML = '<div class="q-head"><span class="q-num">' + q.n + '.</span>' + (q.ouv ? '<span class="tag-ouv">(ouverture) </span>' : '') + q.text +
+      '<span class="q-pts">[' + fmt(tot) + ' pt' + (tot > 1 ? 's' : '') + ']</span></div>';
+    const itemsBox = document.createElement('div'); qd.appendChild(itemsBox);
+    let hasAuto = false;
+    q.items.forEach((it, ii) => {
+      const id = qid + '-i' + ii;
+      const box = document.createElement('div'); box.className = 'item'; box.id = id;
+      if (it.label) box.innerHTML = '<div class="item-label">' + it.label + '</div>';
+      itemsBox.appendChild(box);
+      const R = { ex, q, it, id, box, qid };
+      REG.push(R);
+      if (it.t !== 'self') hasAuto = true;
+      BUILD[it.t](R);
+      const fb = document.createElement('div'); fb.className = 'fb'; box.appendChild(fb); R.fb = fb;
+    });
+    const act = document.createElement('div'); act.className = 'q-actions';
+    if (hasAuto) act.innerHTML += '<button class="btn btn-check">Vérifier</button>';
+    act.innerHTML += '<button class="btn btn-hint">Indice</button><button class="btn btn-corr">Voir la correction</button>';
+    qd.appendChild(act);
+    const hint = document.createElement('div'); hint.className = 'hint hidden'; hint.innerHTML = '💡 ' + q.hint; qd.appendChild(hint);
+    const corr = document.createElement('div'); corr.className = 'corr hidden'; corr.innerHTML = '<b>Correction.</b> ' + q.corr; qd.appendChild(corr);
+    const qs = st(qid);
+    if (qs.hint) hint.classList.remove('hidden');
+    if (qs.corr) { corr.classList.remove('hidden'); showSelf(qid); }
+    act.querySelector('.btn-hint').onclick = () => { hint.classList.toggle('hidden'); st(qid).hint = !hint.classList.contains('hidden'); save(); };
+    act.querySelector('.btn-corr').onclick = () => {
+      const s = st(qid);
+      if (!s.corr) {
+        REG.filter(r => r.qid === qid && r.it.t !== 'self').forEach(r => { if (!st(r.id).ok) st(r.id).spoiled = true; });
+      }
+      s.corr = true; corr.classList.remove('hidden'); showSelf(qid); save(); updateScores();
+    };
+    const cb = act.querySelector('.btn-check');
+    if (cb) cb.onclick = () => { REG.filter(r => r.qid === qid && r.it.t !== 'self').forEach(r => CHECK[r.it.t](r, true)); save(); updateScores(); };
+    sec.appendChild(qd);
+  });
+  root.appendChild(sec);
+});
+
+}
+renderAll();
+
+/* Restauration de l'affichage des réponses déjà vérifiées */
+REG.forEach(R => { const s = st(R.id); if (R.it.t !== 'self' && s.ok !== undefined) CHECK[R.it.t](R, true); });
+updateScores();
+
+document.getElementById('resetAll').onclick = () => {
+  if (confirm('Effacer toutes tes réponses et ton score ?')) { S = {}; save(); location.reload(); }
+};
+})();
+</script>
+</body>
+</html>
