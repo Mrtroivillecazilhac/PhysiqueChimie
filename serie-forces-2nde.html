@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Série d'entraînement : les forces (chapitre 5) | 2nde</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .vec { position: relative; display: inline-block; padding-top: 0.42em; }
+  .vec::before { content: ""; position: absolute; top: 0.06em; left: 0; right: 3px; border-top: 1.3px solid currentColor; }
+  .vec::after { content: ""; position: absolute; top: -0.09em; right: -1px; width: 0; height: 0; border-style: solid; border-width: 2.6px 0 2.6px 4.2px; border-color: transparent transparent transparent currentColor; }
+  .vw { white-space: nowrap; }
+
+  section.ex h2 { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; }
+  .ex-score { font-family:var(--font-body); font-size:0.95rem; color:var(--yellow); }
+  .ctx { line-height:1.65; }
+  .data { background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:12px; padding:12px 18px; margin:12px 0 18px; font-size:0.94rem; line-height:1.6; }
+  .data b { color:var(--teal); }
+  .data ul { margin:6px 0 0; padding-left:20px; }
+  .info { background:rgba(232,196,104,0.08); border:1px dashed var(--yellow); border-radius:14px; padding:16px 20px; line-height:1.6; font-size:0.95rem; }
+  .info h3 { font-family:var(--font-display); color:var(--yellow); margin:0 0 6px; font-size:1.2rem; }
+  .info ul { margin:4px 0; padding-left:20px; }
+
+  .q { border-top:1px dashed var(--line); padding:18px 0 6px; }
+  .q-head { line-height:1.6; }
+  .q-num { font-family:var(--font-display); color:var(--teal); font-size:1.15rem; margin-right:6px; }
+  .q-pts { color:var(--chalk-dim); font-size:0.82rem; margin-left:6px; white-space:nowrap; }
+  .tag-ouv { font-family:var(--font-display); color:var(--coral); }
+  .item { margin:12px 0 4px 0; padding:10px 14px; border-radius:10px; background:rgba(0,0,0,0.14); border:1px solid transparent; }
+  .item.ok { border-color:var(--teal); background:rgba(107,191,171,0.10); }
+  .item.ko { border-color:var(--coral); }
+  .item-label { font-size:0.92rem; color:var(--chalk-dim); margin-bottom:8px; line-height:1.5; }
+  .fb { font-size:0.88rem; margin-top:8px; min-height:0; line-height:1.45; }
+  .fb.good { color:var(--teal); } .fb.bad { color:var(--coral); } .fb.warn { color:var(--yellow); }
+
+  input.num { font-family:var(--font-body); font-size:1rem; width:150px; padding:7px 10px; border-radius:8px; border:1.5px solid var(--line); background:rgba(0,0,0,0.25); color:var(--chalk); }
+  input.num:focus, select:focus { outline:none; border-color:var(--yellow); }
+  select { font-family:var(--font-body); font-size:0.95rem; padding:7px 8px; border-radius:8px; border:1.5px solid var(--line); background:#1d3229; color:var(--chalk); }
+  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+
+  .opts { display:flex; flex-direction:column; gap:6px; }
+  .opt { display:flex; gap:10px; align-items:flex-start; padding:7px 10px; border:1.5px dashed var(--line); border-radius:10px; cursor:pointer; line-height:1.45; font-size:0.94rem; }
+  .opt:hover { border-color:var(--chalk-dim); }
+  .opt input { margin-top:4px; accent-color:var(--yellow); }
+
+  .doi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:8px 16px; }
+  .doi-row { display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:0.94rem; }
+  .doi-svg { width:100%; max-width:440px; display:block; margin:10px auto 0; }
+
+  .order-pool, .order-ans { display:flex; flex-direction:column; gap:6px; }
+  .order-ans { min-height:44px; border:1.5px dashed var(--line); border-radius:10px; padding:8px; margin-top:10px; }
+  .step { padding:8px 12px; border-radius:8px; background:rgba(255,255,255,0.05); border:1px solid var(--line); cursor:pointer; font-size:0.93rem; line-height:1.45; }
+  .step:hover { border-color:var(--yellow); }
+  .order-ans .step { cursor:default; border-color:var(--teal); }
+  .order-ans .step b { color:var(--yellow); margin-right:6px; }
+  .small-btn { font-family:var(--font-body); font-size:0.82rem; background:transparent; color:var(--chalk-dim); border:1px solid var(--line); border-radius:999px; padding:5px 12px; cursor:pointer; }
+  .small-btn:hover { color:var(--chalk); border-color:var(--chalk-dim); }
+
+  .draw-tools { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:8px; }
+  .vbtn { font-family:var(--font-body); font-size:0.92rem; background:transparent; color:var(--chalk); border:1.5px solid var(--line); border-radius:999px; padding:6px 14px; cursor:pointer; }
+  .vbtn.active { background:var(--yellow); color:var(--board); border-color:var(--yellow); }
+  .canvas-wrap { position:relative; overflow-x:auto; }
+  canvas.draw { display:block; margin:0 auto; background:rgba(0,0,0,0.25); border:1px solid var(--line); border-radius:8px; touch-action:none; cursor:crosshair; max-width:100%; }
+  .len-live { font-size:0.85rem; color:var(--yellow); min-height:1.2em; }
+
+  .q-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .btn { font-family:var(--font-display); font-size:1rem; border:none; border-radius:10px; padding:8px 16px; cursor:pointer; font-weight:700; }
+  .btn-check { background:var(--teal); color:var(--board); }
+  .btn-hint { background:transparent; color:var(--yellow); border:1.5px solid var(--yellow); }
+  .btn-corr { background:transparent; color:var(--coral); border:1.5px solid var(--coral); }
+  .hint, .corr { margin-top:12px; padding:12px 16px; border-radius:10px; line-height:1.6; font-size:0.94rem; }
+  .hint { background:rgba(232,196,104,0.08); border-left:3px solid var(--yellow); }
+  .corr { background:rgba(217,122,99,0.08); border-left:3px solid var(--coral); }
+  .corr ol { margin:6px 0; padding-left:20px; }
+  .self { margin-top:10px; font-size:0.9rem; }
+  .self button { font-family:var(--font-body); font-size:0.85rem; margin:4px 6px 0 0; background:transparent; color:var(--chalk); border:1.5px solid var(--line); border-radius:999px; padding:5px 12px; cursor:pointer; }
+  .self button.on { background:var(--teal); color:var(--board); border-color:var(--teal); }
+
+  .scoreboard { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }
+  .sb-card { background:rgba(0,0,0,0.18); border:1px solid var(--line); border-radius:12px; padding:12px; text-align:center; }
+  .sb-card .t { font-size:0.8rem; color:var(--chalk-dim); }
+  .sb-card .v { font-family:var(--font-display); font-size:1.5rem; color:var(--yellow); }
+  .bar { height:6px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; margin-top:6px; }
+  .bar i { display:block; height:100%; background:var(--teal); width:0; transition:width .3s; }
+  .sb-foot { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:14px; align-items:center; font-size:0.88rem; color:var(--chalk-dim); }
+  .back-link { color:var(--teal); }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="index.html">Accueil</a>
+  <a href="4eme.html">4ème</a>
+  <a href="2nde.html" class="current">2nde</a>
+  <a href="1ere.html">1ère spé PC</a>
+  <a href="terminale.html">Terminale ES</a>
+</nav>
+
+<header class="page-head">
+  <div class="badge-inline physique">Physique</div>
+  <h1>Série d'entraînement : les forces</h1>
+  <p class="sub">Chapitre 5, Modéliser une action mécanique sur un système. Cinq exercices, du plus guidé au plus exigeant, corrigés automatiquement.</p>
+  <a class="back-link" href="chapitre5-2nde.html">← Retour au cours du chapitre 5</a>
+</header>
+
+<main>
+
+<section>
+  <div class="info">
+    <h3>Comment ça marche ?</h3>
+    <ul>
+      <li>C'est un <b>entraînement</b> pour préparer l'évaluation : aucune note n'est envoyée au professeur. Prends ton temps.</li>
+      <li>Cherche d'abord <b>sur une feuille</b>, puis entre ta réponse et clique sur <b>Vérifier</b>, autant de fois que tu veux.</li>
+      <li>Bloqué ? Clique sur <b>Indice</b>. La <b>correction</b> est toujours disponible, mais si tu l'ouvres avant d'avoir trouvé, la question ne rapporte pas de points.</li>
+      <li>Pour les questions rédigées, compare ta réponse à la correction et <b>note-toi honnêtement</b>.</li>
+      <li>Nombres : virgule ou point acceptés. Pour une puissance de 10, écris <b>1,8e2</b> ou <b>1,8×10^2</b>. Écris le résultat avec le nombre de <b>chiffres significatifs</b> que tu choisirais sur ta copie : il est vérifié.</li>
+      <li>Ta progression est enregistrée sur cet ordinateur, dans ce navigateur.</li>
+    </ul>
+    <h3 style="margin-top:14px">« Exprimer » et « montrer que »</h3>
+    <ul>
+      <li><b>Exprimer</b> une grandeur en fonction d'autres, c'est écrire une égalité avec uniquement des lettres. Exemple : à partir de P = m × g, on exprime g = P / m.</li>
+      <li><b>Montrer que</b>, c'est partir d'une relation du cours et arriver au résultat annoncé, étape par étape. Ici, tu remettras les étapes dans l'ordre.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Ton score</h2>
+  <div class="scoreboard" id="scoreboard"></div>
+  <div class="sb-foot">
+    <span id="csLine">Chiffres significatifs : aucun résultat vérifié pour l'instant.</span>
+    <button class="small-btn" id="resetAll">Tout effacer et recommencer</button>
+  </div>
+</section>
+
+<div id="exercises" style="display:grid;gap:28px"></div>
+
+</main>
+
+<footer>Série d'entraînement, chapitre 5 (2nde). M. Troiville, professeur de physique-chimie.</footer>
+
+<script>
+(function(){
+"use strict";
+/* ============ Outils ============ */
+const V = (l, s) => '<span class="vw"><span class="vec">' + l + '</span>' + (s ? '<sub>' + s + '</sub>' : '') + '</span>';
+const KEY = 'serie-forces-2nde-v1';
+let S = {};
+try { S = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { S = {}; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+function st(id){ if (!S[id]) S[id] = {}; return S[id]; }
+
+function parseNum(raw){
+  if (raw == null) return null;
+  let s = String(raw).trim().replace(/[\s  ]/g, '').replace(/,/g, '.').replace(/−/g, '-');
+  s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻]/g, c => ({'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-'})[c]);
+  let m = s.match(/^([+-]?(?:\d+\.?\d*|\.\d+))(?:(?:[x×*]10\^?|e|E)([+-]?\d+))?$/);
+  if (!m) return null;
+  const mant = m[1], exp = m[2] ? parseInt(m[2], 10) : 0;
+  const val = parseFloat(mant) * Math.pow(10, exp);
+  let digits = mant.replace(/^[+-]/, '').replace('.', '').replace(/^0+/, '');
+  const cs = digits.length || 1;
+  return { val, cs };
+}
+const fmt = x => String(Math.round(x * 100) / 100).replace('.', ',');
+
+/* ============ Contenu ============ */
+const UNITS = ['N', 'kg', 'g', 'N/kg', 'm', 'cm', 'sans unité'];
+
+const EX = [
+{
+ id:'e1', title:'Exercice 1. La suspension du salon',
+ ctx:'Une lampe est suspendue au plafond du salon par un fil. Elle est immobile. On étudie le système {lampe}, modélisé par un point L. L\'action de l\'air est négligée.',
+ data:['Masse de la lampe : m = 1,2 kg.', 'Intensité de la pesanteur sur Terre : g = 9,8 N·kg<sup>−1</sup>.'],
+ qs:[
+  {n:'1', text:'Quels objets de l\'extérieur agissent sur la lampe ? (plusieurs réponses possibles)',
+   items:[{t:'choice', multi:true, pts:1, opts:['Le fil','La Terre','Le plafond','La table du salon'], ans:[0,1]}],
+   hint:'Un objet agit sur la lampe s\'il la touche (contact) ou s\'il l\'attire à distance. Le plafond touche-t-il la lampe ?',
+   corr:'Système : la lampe. Extérieur : tout le reste. Le fil (contact) et la Terre (à distance) agissent sur la lampe. Le plafond agit sur le fil, mais pas directement sur la lampe.'},
+  {n:'2', text:'Construis le diagramme objets-interactions de la lampe : pour chaque objet, choisis le type d\'interaction.',
+   items:[{t:'doi', pts:1.5, sys:'lampe', objs:[['Fil','contact'],['Terre','distance'],['Plafond','none']]}],
+   hint:'Trait plein pour une interaction de contact, pointillés pour une interaction à distance.',
+   corr:'Lampe et fil : contact (trait plein). Lampe et Terre : à distance (pointillés). Le plafond n\'est pas relié à la lampe.'},
+  {n:'3', text:'Calcule la valeur P du poids de la lampe.',
+   items:[{t:'num', pts:1, label:'P =', val:11.76, unit:'N', cs:[2]}],
+   hint:'P = m × g. Les données ont 2 chiffres significatifs.',
+   corr:'P = m × g = 1,2 × 9,8 = 12 N (11,76 N avant arrondi). Deux chiffres significatifs, comme m et g.'},
+  {n:'4', text:'À partir de P = m × g, exprime la masse m en fonction de P et de g. Le voisin possède un lustre dont le poids vaut 29 N : calcule sa masse.',
+   items:[{t:'choice', pts:1, label:'Expression de m :', opts:['m = P × g','m = P / g','m = g / P'], ans:1},
+          {t:'num', pts:1, label:'Masse du lustre m =', val:29/9.8, unit:'kg', cs:[2]}],
+   hint:'Pour isoler m dans P = m × g, on divise les deux membres de l\'égalité par g.',
+   corr:'P = m × g, donc en divisant par g : m = P / g. Pour le lustre : m = 29 / 9,8 = 3,0 kg.'},
+  {n:'5', text:'Donne les caractéristiques de la force '+V('F','fil/L')+' exercée par le fil sur la lampe.',
+   items:[{t:'choice', pts:0.5, label:'Direction et sens :', opts:['verticale, vers le bas','verticale, vers le haut','horizontale','oblique, le long du plafond'], ans:1},
+          {t:'num', pts:1, label:'Valeur F<sub>fil/L</sub> =', val:11.76, unit:'N', cs:[2]}],
+   hint:'La lampe est immobile et ne subit que deux forces : son poids et la force du fil.',
+   corr:'Point d\'application L ; direction : celle du fil, verticale ; sens : vers le haut (de la lampe vers le fil). La lampe immobile ne subit que '+V('P')+' et '+V('F','fil/L')+', donc '+V('F','fil/L')+' = −'+V('P')+' et F<sub>fil/L</sub> = 12 N.'},
+  {n:'6', text:'Représente '+V('P')+' et '+V('F','fil/L')+' à l\'échelle <b>1 cm ↔ 5 N</b>. Choisis le vecteur, puis fais glisser depuis son point d\'application. Le quadrillage est en centimètres.',
+   items:[{t:'draw', pts:1.5, scene:'lampe', w:6, h:7, pts0:{L:[3,3.4]},
+     vecs:[{k:'P', name:V('P'), o:'L', ang:-90, len:11.76/5},{k:'F', name:V('F','fil/L'), o:'L', ang:90, len:11.76/5}]}],
+   hint:'Longueur de chaque flèche = valeur de la force / 5 N. Les deux flèches partent de L.',
+   corr:'Deux flèches verticales partant de L, de longueur 12 / 5 ≈ 2,4 cm : '+V('P')+' vers le bas, '+V('F','fil/L')+' vers le haut.'},
+  {n:'7', ouv:true, text:'Le chat saute sur la lampe, qui se met à se balancer. À un instant, le fil fait un angle de 30° avec la verticale. Quelle est la direction de la force exercée par le fil ? Peut-on encore écrire '+V('F','fil/L')+' = −'+V('P')+' ? Que peut-on en déduire sur le mouvement de la lampe ?',
+   items:[{t:'self', pts:1.5}],
+   hint:'Un fil tire toujours le long du fil. Deux vecteurs opposés doivent avoir la même direction.',
+   corr:'La force du fil est dirigée le long du fil : elle est inclinée de 30° par rapport à la verticale. '+V('P')+' est vertical : les deux forces n\'ont pas la même direction, on ne peut pas avoir '+V('F','fil/L')+' = −'+V('P')+'. Elles ne se compensent pas : la lampe ne peut pas rester immobile dans cette position, elle oscille.'}
+ ]},
+{
+ id:'e2', title:'Exercice 2. Peser une pomme : combien de chiffres ?',
+ ctx:'En TP, Inès, Yanis et Adam accrochent une pomme à un dynamomètre. L\'aiguille se stabilise sur la graduation 2,1 N. Le dynamomètre est gradué tous les 0,1 N.',
+ data:['Intensité de la pesanteur : sur Terre g = 9,8 N·kg<sup>−1</sup> ; sur Mars g<sub>M</sub> = 3,7 N·kg<sup>−1</sup>.','Pour un instrument gradué, l\'incertitude-type vaut la moitié de la plus petite graduation.'],
+ qs:[
+  {n:'1', text:'La pomme est immobile. Le dynamomètre exerce sur elle une force '+V('F','dyn/pomme')+'. Quelle force la pomme exerce-t-elle sur le dynamomètre ? Pourquoi la valeur lue est-elle égale au poids de la pomme ?',
+   items:[{t:'choice', pts:0.75, label:'La force exercée par la pomme sur le dynamomètre…', opts:['…a même direction, même valeur et sens contraire que '+V('F','dyn/pomme'),'…a même direction, même sens et même valeur que '+V('F','dyn/pomme'),'…n\'existe pas, car la pomme est immobile','…est plus petite, car la pomme est plus légère que le dynamomètre'], ans:0},
+          {t:'self', pts:0.75, label:'Explique sur ta feuille pourquoi la valeur lue est égale au poids, puis compare à la correction.'}],
+   hint:'Principe des actions réciproques. Et la pomme immobile ne subit que deux forces.',
+   corr:'Principe des actions réciproques : '+V('F','pomme/dyn')+' = −'+V('F','dyn/pomme')+'. La pomme immobile ne subit que son poids et '+V('F','dyn/pomme')+', donc F<sub>dyn/pomme</sub> = P. Le dynamomètre mesure F<sub>pomme/dyn</sub>, qui a la même valeur : il affiche donc P.'},
+  {n:'2', text:'Détermine l\'incertitude-type U(P) sur la valeur lue.',
+   items:[{t:'num', pts:1, label:'U(P) =', val:0.05, unit:'N', cs:null}],
+   hint:'Relis les données : moitié de la plus petite graduation.',
+   corr:'U(P) = 0,1 / 2 = 0,05 N, donc P = (2,10 ± 0,05) N.'},
+  {n:'3', text:'Exprime la masse m de la pomme en fonction de P et g, puis calcule-la. La calculatrice affiche 0,214285714.',
+   items:[{t:'num', pts:1, label:'m =', val:2.1/9.8, unit:'kg', cs:[2]}],
+   hint:'m = P / g. Combien de chiffres significatifs ont 2,1 et 9,8 ?',
+   corr:'m = P / g = 2,1 / 9,8 = 0,21 kg.'},
+  {n:'4', text:'Inès écrit m = 0,214285714 kg, Yanis écrit m = 0,2 kg et Adam écrit m = 0,21 kg. Compte tenu de l\'incertitude, la valeur vraie du poids est comprise entre 2,05 N et 2,15 N.',
+   items:[{t:'choice', pts:0.5, label:'a. Qui a écrit le résultat correctement ?', opts:['Inès','Yanis','Adam'], ans:2},
+          {t:'num', pts:0.5, label:'b. Masse correspondant à P = 2,05 N :', val:2.05/9.8, unit:'kg', cs:null, tol:0.01},
+          {t:'num', pts:0.5, label:'b. Masse correspondant à P = 2,15 N :', val:2.15/9.8, unit:'kg', cs:null, tol:0.01},
+          {t:'choice', pts:1, label:'c. Pourquoi les derniers chiffres d\'Inès n\'ont-ils aucun sens physique ?', opts:['Parce que le troisième chiffre change déjà entre les deux masses extrêmes : les chiffres suivants sont inventés','Parce que la calculatrice fait des erreurs d\'arrondi','Parce qu\'il faut toujours écrire deux chiffres après la virgule','Parce qu\'une masse s\'écrit toujours avec un nombre rond'], ans:0}],
+   hint:'Calcule 2,05 / 9,8 et 2,15 / 9,8, puis compare chiffre par chiffre.',
+   corr:'a. P et g ont 2 chiffres significatifs : Adam a raison, m = 0,21 kg.<br>b. 2,05 / 9,8 = 0,209 kg et 2,15 / 9,8 = 0,219 kg.<br>c. La masse est entre 0,209 et 0,219 kg : le troisième chiffre est déjà incertain. « 0,214285714 » fait croire à une précision au milliardième de kilogramme que la mesure ne donne pas. À l\'inverse, « 0,2 kg » laisse croire que la masse pourrait valoir 0,15 ou 0,25 kg : Yanis jette une information sûre. Le nombre de chiffres significatifs dit au lecteur quelle est la précision réelle de la mesure.'},
+  {n:'5', text:'Une balance électronique affiche 214 g pour la même pomme. Ce résultat est-il compatible avec la mesure au dynamomètre ?',
+   items:[{t:'choice', pts:1, opts:['Oui','Non'], ans:0}],
+   hint:'Convertis 214 g en kg et compare à l\'encadrement de la question 4.b.',
+   corr:'214 g = 0,214 kg, compris entre 0,209 et 0,219 kg : les deux mesures sont compatibles.'},
+  {n:'6', text:'On emporte la pomme et le dynamomètre sur Mars. Montre que P<sub>M</sub> = P × g<sub>M</sub> / g, puis calcule P<sub>M</sub>.',
+   items:[{t:'order', pts:0.75, label:'Remets les étapes de la démonstration dans l\'ordre (clique-les dans le bon ordre) :',
+     steps:['Sur Terre, P = m × g, donc m = P / g.','La masse ne dépend pas du lieu : elle est la même sur Mars.','Sur Mars, le poids s\'écrit P<sub>M</sub> = m × g<sub>M</sub>.','On remplace m par P / g : P<sub>M</sub> = P × g<sub>M</sub> / g.']},
+          {t:'num', pts:0.75, label:'P<sub>M</sub> =', val:2.1*3.7/9.8, unit:'N', cs:[2]}],
+   hint:'Ce qui ne change pas entre la Terre et Mars, c\'est la masse.',
+   corr:'P = m × g donc m = P / g. La masse est la même sur Mars, où P<sub>M</sub> = m × g<sub>M</sub> = (P / g) × g<sub>M</sub> = P × g<sub>M</sub> / g. P<sub>M</sub> = 2,1 × 3,7 / 9,8 = 0,79 N.'},
+  {n:'7', ouv:true, text:'Sur Mars, l\'aiguille se stabilise sur la graduation 0,8 N. Détermine l\'encadrement de la masse de la pomme obtenu à partir de cette mesure. Sur quelle planète la mesure est-elle la plus précise ? Pourquoi ? Propose un moyen d\'améliorer la mesure sur Mars.',
+   items:[{t:'self', pts:1.5}],
+   hint:'L\'incertitude du dynamomètre est toujours 0,05 N. Divise 0,75 N et 0,85 N par g<sub>M</sub>.',
+   corr:'P<sub>M</sub> est entre 0,75 et 0,85 N, donc m est entre 0,75 / 3,7 = 0,20 kg et 0,85 / 3,7 = 0,23 kg. L\'encadrement est environ trois fois plus large que sur Terre (0,209 à 0,219 kg) : la mesure est moins précise sur Mars. L\'incertitude du dynamomètre est la même (0,05 N), mais la force mesurée est plus petite, donc l\'erreur relative est plus grande (environ 6 % au lieu de 2 %). Pour améliorer : un dynamomètre gradué plus finement, ou une balance qui compare la pomme à des masses marquées (le résultat ne dépend alors plus de g).'}
+ ]},
+{
+ id:'e3', title:'Exercice 3. Le déménagement',
+ ctx:'Pendant un déménagement, un carton A rempli de livres est posé sur un carton B rempli de vêtements, lui-même posé sur le sol horizontal. Les deux cartons sont immobiles. Chaque carton est modélisé par un point.',
+ data:['Masse du carton A : m<sub>A</sub> = 18 kg ; masse du carton B : m<sub>B</sub> = 6,0 kg.','Intensité de la pesanteur : g = 9,8 N·kg<sup>−1</sup>.'],
+ qs:[
+  {n:'1', text:'Construis le diagramme objets-interactions du système {carton A}.',
+   items:[{t:'doi', pts:1, sys:'carton A', objs:[['Terre','distance'],['Carton B','contact'],['Sol','none']]}],
+   hint:'Le sol touche-t-il le carton A ?',
+   corr:'A interagit avec la Terre (à distance) et avec le carton B (contact). Le sol ne touche pas A : il n\'agit pas directement sur A.'},
+  {n:'2', text:'Calcule la valeur P<sub>A</sub> du poids du carton A.',
+   items:[{t:'num', pts:0.5, label:'P<sub>A</sub> =', val:18*9.8, unit:'N', cs:[2]}],
+   hint:'Avec 2 chiffres significatifs, 176,4 s\'écrit 1,8×10^2.',
+   corr:'P<sub>A</sub> = m<sub>A</sub> × g = 18 × 9,8 = 1,8×10<sup>2</sup> N (176 N).'},
+  {n:'3', text:'Donne les caractéristiques de la force '+V('F','B/A')+' exercée par le carton B sur le carton A.',
+   items:[{t:'choice', pts:0.5, label:'Direction et sens :', opts:['verticale, vers le haut','verticale, vers le bas','horizontale'], ans:0},
+          {t:'num', pts:1, label:'Valeur F<sub>B/A</sub> =', val:18*9.8, unit:'N', cs:[2]}],
+   hint:'A est immobile et ne subit que deux forces.',
+   corr:'A immobile ne subit que '+V('P','A')+' et '+V('F','B/A')+', donc '+V('F','B/A')+' = −'+V('P','A')+' : point d\'application, le point qui modélise A ; verticale ; vers le haut ; 1,8×10<sup>2</sup> N.'},
+  {n:'4', text:'À l\'aide du principe des actions réciproques, donne les caractéristiques de la force '+V('F','A/B')+' exercée par le carton A sur le carton B.',
+   items:[{t:'choice', pts:0.5, label:'Point d\'application :', opts:['le point qui modélise A','le point qui modélise B','le sol'], ans:1},
+          {t:'choice', pts:0.5, label:'Direction et sens :', opts:['verticale, vers le haut','verticale, vers le bas','horizontale'], ans:1},
+          {t:'num', pts:0.5, label:'Valeur F<sub>A/B</sub> =', val:18*9.8, unit:'N', cs:[2]}],
+   hint:V('F','A/B')+' = −'+V('F','B/A')+'. Une force exercée SUR B s\'applique au point qui modélise B.',
+   corr:V('F','A/B')+' = −'+V('F','B/A')+' : appliquée au point qui modélise B ; verticale ; vers le bas ; 1,8×10<sup>2</sup> N.'},
+  {n:'5', text:'Construis le diagramme objets-interactions du système {carton B}.',
+   items:[{t:'doi', pts:1, sys:'carton B', objs:[['Terre','distance'],['Carton A','contact'],['Sol','contact'],['Déménageur','none']]}],
+   hint:'B touche deux objets.',
+   corr:'B interagit avec la Terre (à distance), avec le carton A (contact) et avec le sol (contact). Le déménageur ne touche plus les cartons.'},
+  {n:'6', text:'Un déménageur affirme : « Le carton B ne subit que son poids et l\'action du sol. » Quelle force oublie-t-il ?',
+   items:[{t:'choice', pts:1, opts:['La force exercée par le carton A sur le carton B','La force exercée par le carton B sur le carton A','La force exercée par l\'air','Aucune : il a raison'], ans:0}],
+   hint:'Regarde ton diagramme de la question 5.',
+   corr:'Il oublie '+V('F','A/B')+' : le carton A appuie sur B (vers le bas, 1,8×10<sup>2</sup> N).'},
+  {n:'7', text:'B est immobile : on admet que les forces dirigées vers le haut compensent exactement les forces dirigées vers le bas. Montre que F<sub>sol/B</sub> = (m<sub>A</sub> + m<sub>B</sub>) × g, puis calcule cette valeur.',
+   items:[{t:'order', pts:0.75, label:'Remets les étapes dans l\'ordre :',
+     steps:['Vers le bas, B subit son poids P<sub>B</sub> = m<sub>B</sub> × g et la force F<sub>A/B</sub> exercée par A.','D\'après la question 4, F<sub>A/B</sub> = P<sub>A</sub> = m<sub>A</sub> × g.','Les forces vers le haut compensent les forces vers le bas : F<sub>sol/B</sub> = m<sub>A</sub> × g + m<sub>B</sub> × g.','On factorise par g : F<sub>sol/B</sub> = (m<sub>A</sub> + m<sub>B</sub>) × g.']},
+          {t:'num', pts:0.75, label:'F<sub>sol/B</sub> =', val:24*9.8, unit:'N', cs:[2]}],
+   hint:'Une seule force vers le haut, deux forces vers le bas.',
+   corr:'Vers le haut : F<sub>sol/B</sub>. Vers le bas : P<sub>B</sub> = m<sub>B</sub> × g et F<sub>A/B</sub> = m<sub>A</sub> × g. Donc F<sub>sol/B</sub> = (m<sub>A</sub> + m<sub>B</sub>) × g = (18 + 6,0) × 9,8 = 2,4×10<sup>2</sup> N.'},
+  {n:'8', ouv:true, text:'Les cartons empilés sont maintenant immobiles sur la rampe du camion, inclinée de 15°. On étudie le système {A + B}. Quelles sont la direction et le sens de la force exercée par la rampe ? Est-elle perpendiculaire à la rampe ? Qu\'en déduire ? Que se passerait-il si la rampe était parfaitement glissante ?',
+   items:[{t:'self', pts:2}],
+   hint:'Le système immobile ne subit que deux forces. Sans frottement, la force d\'un support est perpendiculaire à sa surface.',
+   corr:'Le système immobile ne subit que son poids et l\'action de la rampe : cette force est opposée au poids, donc verticale, vers le haut, de valeur 2,4×10<sup>2</sup> N. Elle n\'est pas perpendiculaire à la rampe inclinée : il y a des frottements entre B et la rampe. Sans frottement, la force serait perpendiculaire à la rampe, donc pas opposée au poids : les forces ne se compenseraient pas et les cartons glisseraient.'}
+ ]},
+{
+ id:'e4', title:'Exercice 4. Peser une planète',
+ ctx:'Un rover d\'exploration vient de se poser sur Mars. Ses instruments mesurent l\'intensité de la pesanteur à la surface. Les scientifiques veulent s\'en servir pour retrouver la masse de Mars.',
+ data:['G = 6,67×10<sup>−11</sup> N·m<sup>2</sup>·kg<sup>−2</sup>.','Masse du rover : m = 1,03×10<sup>3</sup> kg.','Mars : m<sub>M</sub> = 6,42×10<sup>23</sup> kg ; R<sub>M</sub> = 3,39×10<sup>3</sup> km ; g<sub>M</sub> mesurée = 3,7 N·kg<sup>−1</sup>.','Terre : m<sub>T</sub> = 5,97×10<sup>24</sup> kg ; R<sub>T</sub> = 6,37×10<sup>3</sup> km ; g = 9,8 N·kg<sup>−1</sup>.'],
+ qs:[
+  {n:'1', text:'Quelle est l\'expression de la valeur F<sub>M/R</sub> de la force gravitationnelle exercée par Mars sur le rover posé à sa surface ?',
+   items:[{t:'choice', pts:1, opts:['F = G × m<sub>M</sub> × m / R<sub>M</sub><sup>2</sup>','F = G × m<sub>M</sub> × m / R<sub>M</sub>','F = G × m<sub>M</sub> / R<sub>M</sub><sup>2</sup>','F = G × m<sub>M</sub> × m × R<sub>M</sub><sup>2</sup>'], ans:0}],
+   hint:'Deux masses, une distance au carré.',
+   corr:'F<sub>M/R</sub> = G × m<sub>M</sub> × m / R<sub>M</sub><sup>2</sup> : la distance entre le centre de Mars et le rover posé en surface est le rayon R<sub>M</sub>.'},
+  {n:'2', text:'Calcule F<sub>M/R</sub>, puis le poids P<sub>M</sub> du rover sur Mars. Compare.',
+   items:[{t:'num', pts:0.5, label:'F<sub>M/R</sub> =', val:6.67e-11*6.42e23*1030/Math.pow(3.39e6,2), unit:'N', cs:[3]},
+          {t:'num', pts:0.5, label:'P<sub>M</sub> =', val:1030*3.7, unit:'N', cs:[2]},
+          {t:'choice', pts:0.5, label:'Comparaison :', opts:['Les deux valeurs sont quasiment égales : le poids est, en bonne approximation, la force gravitationnelle exercée par Mars','Les deux valeurs sont très différentes : poids et gravitation n\'ont aucun rapport','Le poids vaut toujours le double de la force gravitationnelle'], ans:0}],
+   hint:'Convertis R<sub>M</sub> en mètres : 3,39×10^6 m.',
+   corr:'F<sub>M/R</sub> = 6,67×10<sup>−11</sup> × 6,42×10<sup>23</sup> × 1,03×10<sup>3</sup> / (3,39×10<sup>6</sup>)<sup>2</sup> = 3,84×10<sup>3</sup> N. P<sub>M</sub> = 1,03×10<sup>3</sup> × 3,7 = 3,8×10<sup>3</sup> N. Valeurs très proches : à la surface, le poids est en bonne approximation la force gravitationnelle exercée par l\'astre.'},
+  {n:'3', text:'Calcule le poids du rover sur Terre. Sa masse a-t-elle changé sur Mars ?',
+   items:[{t:'num', pts:0.5, label:'P<sub>T</sub> =', val:1030*9.8, unit:'N', cs:[2]},
+          {t:'choice', pts:0.5, label:'Sur Mars, la masse du rover est…', opts:['la même que sur Terre','2,6 fois plus petite','2,6 fois plus grande'], ans:0}],
+   hint:'Le poids dépend du lieu, la masse non.',
+   corr:'P<sub>T</sub> = 1,03×10<sup>3</sup> × 9,8 = 1,0×10<sup>4</sup> N, environ 2,6 fois plus que sur Mars. La masse (1,03×10<sup>3</sup> kg) n\'a pas changé.'},
+  {n:'4', text:'En admettant que le poids du rover est égal à la force gravitationnelle exercée par Mars, montre que g<sub>M</sub> = G × m<sub>M</sub> / R<sub>M</sub><sup>2</sup>.',
+   items:[{t:'order', pts:1, label:'Remets les étapes dans l\'ordre :',
+     steps:['Le poids du rover s\'écrit P<sub>M</sub> = m × g<sub>M</sub>.','La force gravitationnelle s\'écrit F = G × m<sub>M</sub> × m / R<sub>M</sub><sup>2</sup>.','Comme P<sub>M</sub> = F : m × g<sub>M</sub> = G × m<sub>M</sub> × m / R<sub>M</sub><sup>2</sup>.','On divise les deux membres par m : g<sub>M</sub> = G × m<sub>M</sub> / R<sub>M</sub><sup>2</sup>.']},
+          {t:'choice', pts:0.5, label:'Pourquoi la masse du rover n\'apparaît-elle pas dans le résultat ?', opts:['Elle se simplifie : g<sub>M</sub> est une propriété de la planète, la même pour tous les objets','Parce que le rover est très léger devant Mars','Parce que la masse du rover est inconnue'], ans:0}],
+   hint:'m apparaît des deux côtés de l\'égalité.',
+   corr:'P<sub>M</sub> = m × g<sub>M</sub> et F = G × m<sub>M</sub> × m / R<sub>M</sub><sup>2</sup>. Comme P<sub>M</sub> = F, on divise par m : g<sub>M</sub> = G × m<sub>M</sub> / R<sub>M</sub><sup>2</sup>. La masse du rover se simplifie : la pesanteur est une propriété de la planète.'},
+  {n:'5', text:'Déduis-en l\'expression de la masse de Mars, puis calcule-la à partir de la mesure du rover (g<sub>M</sub> = 3,7 N·kg<sup>−1</sup>).',
+   items:[{t:'choice', pts:0.5, label:'Expression :', opts:['m<sub>M</sub> = g<sub>M</sub> × R<sub>M</sub><sup>2</sup> / G','m<sub>M</sub> = G × R<sub>M</sub><sup>2</sup> / g<sub>M</sub>','m<sub>M</sub> = g<sub>M</sub> × G / R<sub>M</sub><sup>2</sup>'], ans:0},
+          {t:'num', pts:1, label:'m<sub>M</sub> =', val:3.7*Math.pow(3.39e6,2)/6.67e-11, unit:'kg', cs:[2]}],
+   hint:'Multiplie les deux membres par R<sub>M</sub><sup>2</sup>, puis divise par G. Combien de chiffres significatifs a g<sub>M</sub> ?',
+   corr:'m<sub>M</sub> = g<sub>M</sub> × R<sub>M</sub><sup>2</sup> / G = 3,7 × (3,39×10<sup>6</sup>)<sup>2</sup> / 6,67×10<sup>−11</sup> = 6,4×10<sup>23</sup> kg, à moins de 1 % de la valeur des données. Deux chiffres significatifs seulement, car g<sub>M</sub> n\'en a que deux.'},
+  {n:'6', text:'Donne le point d\'application et le sens de la force exercée par le rover sur Mars.',
+   items:[{t:'choice', pts:0.5, label:'Point d\'application :', opts:['le centre de Mars','le rover'], ans:0},
+          {t:'choice', pts:0.5, label:'Sens :', opts:['de Mars vers le rover','du rover vers le centre de Mars'], ans:0}],
+   hint:'Une force exercée SUR Mars s\'applique au centre de Mars. La gravitation est attractive.',
+   corr:V('F','R/M')+' = −'+V('F','M/R')+' : appliquée au centre de Mars, dirigée selon la droite centre de Mars et rover, orientée de Mars vers le rover, de valeur 3,84×10<sup>3</sup> N.'},
+  {n:'7', ouv:true, text:'Montre que g<sub>M</sub> / g = (m<sub>M</sub> / m<sub>T</sub>) × (R<sub>T</sub> / R<sub>M</sub>)<sup>2</sup> et calcule ce rapport. Un élève affirme : « Mars est environ dix fois moins massive que la Terre, donc la pesanteur y est dix fois plus faible. » Explique son erreur.',
+   items:[{t:'num', pts:1, label:'g<sub>M</sub> / g =', val:(6.42e23/5.97e24)*Math.pow(6.37/3.39,2), unit:'sans unité', cs:[3]},
+          {t:'self', pts:1.5, label:'Explique l\'erreur de l\'élève sur ta feuille, puis compare.'}],
+   hint:'Écris g<sub>M</sub> = G m<sub>M</sub> / R<sub>M</sub><sup>2</sup> et g = G m<sub>T</sub> / R<sub>T</sub><sup>2</sup>, puis divise. Diviser par une fraction, c\'est multiplier par son inverse.',
+   corr:'g<sub>M</sub> / g = (G m<sub>M</sub> / R<sub>M</sub><sup>2</sup>) / (G m<sub>T</sub> / R<sub>T</sub><sup>2</sup>) = (m<sub>M</sub> / m<sub>T</sub>) × (R<sub>T</sub> / R<sub>M</sub>)<sup>2</sup> = 0,108 × 3,53 = 0,380. L\'élève oublie le rayon : on est environ deux fois plus près du centre de Mars, et la distance intervient au carré, ce qui multiplie la pesanteur par environ 3,5. Résultat : g<sub>M</sub> n\'est que 2,6 fois plus faible que g, et non 10 fois.'}
+ ]},
+{
+ id:'e5', title:'Exercice 5. Le hamac',
+ ctx:'Sami s\'allonge dans un hamac attaché à deux arbres. Il est immobile. Les deux cordes sont symétriques : chacune fait un angle α avec l\'horizontale. On étudie le système S = {Sami + hamac}, modélisé par un point G. La masse du hamac et des cordes est négligeable.',
+ data:['Masse de Sami : m = 70 kg ; g = 9,8 N·kg<sup>−1</sup>.','α = 20°.','Chaque corde casse si la force qu\'elle exerce dépasse 1,5×10<sup>3</sup> N.','Dans un triangle rectangle : sin(angle) = côté opposé / hypoténuse ; sin(20°) = 0,34 ; sin(5°) = 0,087.'],
+ qs:[
+  {n:'1', text:'Construis le diagramme objets-interactions du système S.',
+   items:[{t:'doi', pts:1, sys:'S', objs:[['Terre','distance'],['Corde 1','contact'],['Corde 2','contact'],['Arbres','none']]}],
+   hint:'Les arbres tiennent les cordes, mais touchent-ils Sami ?',
+   corr:'S interagit avec la Terre (à distance) et avec les cordes 1 et 2 (contact). Les arbres agissent sur les cordes, pas directement sur S.'},
+  {n:'2', text:'Calcule la valeur P du poids du système.',
+   items:[{t:'num', pts:0.5, label:'P =', val:686, unit:'N', cs:[2]}],
+   hint:'2 chiffres significatifs : 6,9×10^2.',
+   corr:'P = 70 × 9,8 = 6,9×10<sup>2</sup> N (686 N).'},
+  {n:'3', text:'Quelles sont la direction et le sens de la force '+V('F','1')+' exercée par la corde 1 ?',
+   items:[{t:'choice', pts:1, opts:['Le long de la corde 1, de G vers l\'arbre de gauche','Verticale, vers le haut','Le long de la corde 1, de l\'arbre vers G','Horizontale, vers la gauche'], ans:0}],
+   hint:'Un fil (ou une corde) tire le système vers lui.',
+   corr:V('F','1')+' est dirigée le long de la corde 1, du système vers la corde : vers le haut et vers la gauche, à 20° au-dessus de l\'horizontale. De même pour '+V('F','2')+' vers la droite.'},
+  {n:'4', text:'Sami est immobile : on admet que '+V('F','1')+' + '+V('F','2')+' + '+V('P')+' = '+V('0')+'. Explique pourquoi '+V('F','1')+' et '+V('F','2')+' ont la même valeur F.',
+   items:[{t:'self', pts:1}],
+   hint:'Que se passe-t-il si on échange la gauche et la droite ?',
+   corr:'La situation est symétrique par rapport à la verticale passant par G : rien ne distingue la corde 1 de la corde 2, elles tirent aussi fort l\'une que l\'autre. Autre argument : leurs effets horizontaux doivent se compenser, car '+V('P')+' n\'a pas d\'effet horizontal.'},
+  {n:'5', text:'Détermination graphique de F, à l\'échelle <b>1 cm ↔ 200 N</b>. Trace '+V('P')+', puis −'+V('P')+'. Comme '+V('F','1')+' + '+V('F','2')+' = −'+V('P')+', les flèches '+V('F','1')+' et '+V('F','2')+' sont les côtés d\'un parallélogramme dont −'+V('P')+' est la diagonale : depuis G, trace-les le long des cordes jusqu\'aux parallèles menées par l\'extrémité de −'+V('P')+'. Mesure leur longueur et déduis-en F.',
+   items:[{t:'draw', pts:1.5, scene:'hamac', w:14, h:8, pts0:{G:[7,4.2]},
+     vecs:[{k:'P', name:V('P'), o:'G', ang:-90, len:686/200},{k:'mP', name:'−'+V('P'), o:'G', ang:90, len:686/200},
+           {k:'F1', name:V('F','1'), o:'G', ang:160, len:686/(2*Math.sin(20*Math.PI/180))/200},{k:'F2', name:V('F','2'), o:'G', ang:20, len:686/(2*Math.sin(20*Math.PI/180))/200}]},
+          {t:'num', pts:1, label:'F =', val:686/(2*Math.sin(20*Math.PI/180)), unit:'N', cs:[2], tol:0.06}],
+   hint:'Les pointillés gris donnent la direction des cordes. L\'extrémité de '+V('F','1')+' est sur la corde 1, à l\'endroit où la parallèle à la corde 2 tracée par l\'extrémité de −'+V('P')+' la coupe.',
+   corr:V('P')+' et −'+V('P')+' : 686 / 200 ≈ 3,4 cm. Chaque flèche '+V('F','1')+' et '+V('F','2')+' mesure environ 5,0 cm, donc F = 5,0 × 200 = 1,0×10<sup>3</sup> N.'},
+  {n:'6', text:'Compare F à P.',
+   items:[{t:'choice', pts:1, opts:['F est plus grande que P : chaque corde tire plus fort que le poids entier de Sami','F = P / 2 : chaque corde porte la moitié du poids','F = P'], ans:0}],
+   hint:'Compare 1,0×10^3 N et 6,9×10^2 N.',
+   corr:'F ≈ 1,0×10<sup>3</sup> N > P ≈ 6,9×10<sup>2</sup> N. Les cordes tirent surtout « sur les côtés » et leurs effets horizontaux s\'annulent : seule une petite partie de chaque force sert à porter Sami.'},
+  {n:'7', ouv:true, text:'Dans le parallélogramme, la moitié de −'+V('P')+' est le côté opposé à l\'angle α dans un triangle rectangle dont l\'hypoténuse est '+V('F','1')+'. Montre que F = P / (2 × sin α). Calcule F si Sami tend son hamac jusqu\'à α = 5°. Les cordes résistent-elles ? Pourquoi ne peut-on jamais tendre un hamac parfaitement à l\'horizontale ?',
+   items:[{t:'order', pts:1, label:'Remets les étapes dans l\'ordre :',
+     steps:['Dans le triangle rectangle, le côté opposé à α mesure P / 2 et l\'hypoténuse mesure F.','Par définition du sinus : sin α = (P / 2) / F.','On multiplie par F et on divise par sin α : F = (P / 2) / sin α.','Donc F = P / (2 × sin α).']},
+          {t:'num', pts:0.5, label:'F pour α = 5° :', val:686/(2*0.087), unit:'N', cs:[2]},
+          {t:'self', pts:1.5, label:'Les cordes résistent-elles ? Pourquoi un hamac pend-il toujours un peu ? Réponds sur ta feuille, puis compare.'}],
+   hint:'Quand α devient très petit, que devient sin α ? Et donc F ?',
+   corr:'sin α = (P / 2) / F donc F = P / (2 × sin α). Pour 20° : 686 / (2 × 0,34) = 1,0×10<sup>3</sup> N, ce qui confirme la construction. Pour 5° : F = 686 / (2 × 0,087) = 3,9×10<sup>3</sup> N > 1,5×10<sup>3</sup> N : les cordes cassent. Quand α tend vers 0, sin α tend vers 0 et F devient immense : un hamac parfaitement horizontal exigerait des cordes infiniment résistantes. Il pend donc toujours un peu.'}
+ ]}
+];
+
+/* ============ Rendu ============ */
+const root = document.getElementById('exercises');
+const REG = []; // tous les items : {ex, q, item, id}
+
+function showSelf(qid){
+  REG.filter(r => r.qid === qid && r.it.t === 'self').forEach(r => r.selfBox.classList.remove('hidden'));
+}
+
+/* ---- Constructeurs ---- */
+const BUILD = {
+  num(R){
+    const s = st(R.id);
+    const row = document.createElement('div'); row.className = 'row';
+    row.innerHTML = '<input class="num" type="text" inputmode="decimal" placeholder="valeur" autocomplete="off">' +
+      '<select><option value="">unité…</option>' + UNITS.map(u => '<option>' + u + '</option>').join('') + '</select>';
+    R.box.appendChild(row);
+    R.inp = row.querySelector('input'); R.sel = row.querySelector('select');
+    if (s.v) R.inp.value = s.v; if (s.u) R.sel.value = s.u;
+    R.inp.oninput = () => { st(R.id).v = R.inp.value; save(); };
+    R.sel.onchange = () => { st(R.id).u = R.sel.value; save(); };
+    R.inp.onkeydown = e => { if (e.key === 'Enter') { CHECK.num(R, true); save(); updateScores(); } };
+  },
+  choice(R){
+    const s = st(R.id), it = R.it;
+    const o = document.createElement('div'); o.className = 'opts';
+    it.opts.forEach((txt, k) => {
+      const lab = document.createElement('label'); lab.className = 'opt';
+      lab.innerHTML = '<input type="' + (it.multi ? 'checkbox' : 'radio') + '" name="' + R.id + '" value="' + k + '"><span>' + txt + '</span>';
+      o.appendChild(lab);
+    });
+    R.box.appendChild(o);
+    R.inputs = [...o.querySelectorAll('input')];
+    if (s.sel) R.inputs.forEach(i => { i.checked = s.sel.includes(+i.value); });
+    R.inputs.forEach(i => i.onchange = () => { st(R.id).sel = R.inputs.filter(x => x.checked).map(x => +x.value); save(); });
+  },
+  doi(R){
+    const s = st(R.id), it = R.it;
+    const g = document.createElement('div'); g.className = 'doi-grid';
+    it.objs.forEach(([name], k) => {
+      const row = document.createElement('div'); row.className = 'doi-row';
+      row.innerHTML = '<span>' + name + '</span><select data-k="' + k + '"><option value="">choisir…</option><option value="none">n\'agit pas sur le système</option><option value="contact">action de contact</option><option value="distance">action à distance</option></select>';
+      g.appendChild(row);
+    });
+    R.box.appendChild(g);
+    R.sels = [...g.querySelectorAll('select')];
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('viewBox', '0 0 440 220'); svg.classList.add('doi-svg');
+    R.box.appendChild(svg); R.svg = svg;
+    if (s.sel) R.sels.forEach((x, k) => x.value = s.sel[k] || '');
+    R.sels.forEach(x => x.onchange = () => { st(R.id).sel = R.sels.map(y => y.value); save(); drawDOI(R); });
+    drawDOI(R);
+  },
+  order(R){
+    const s = st(R.id), it = R.it;
+    if (!s.perm) { s.perm = it.steps.map((_, k) => k).sort(() => Math.random() - 0.5); if (s.perm.every((v, k) => v === k)) s.perm.reverse(); }
+    if (!s.ans) s.ans = [];
+    const pool = document.createElement('div'); pool.className = 'order-pool';
+    const ans = document.createElement('div'); ans.className = 'order-ans';
+    const bar = document.createElement('div'); bar.style.marginTop = '6px';
+    bar.innerHTML = '<button class="small-btn">Recommencer l\'ordre</button>';
+    R.box.appendChild(pool); R.box.appendChild(ans); R.box.appendChild(bar);
+    const render = () => {
+      const sx = st(R.id);
+      pool.innerHTML = ''; ans.innerHTML = sx.ans.length ? '' : '<span style="color:var(--chalk-dim);font-size:0.85rem">Ta démonstration apparaîtra ici.</span>';
+      sx.perm.forEach(k => {
+        if (sx.ans.includes(k)) return;
+        const d = document.createElement('div'); d.className = 'step'; d.innerHTML = it.steps[k];
+        d.onclick = () => { sx.ans.push(k); save(); render(); };
+        pool.appendChild(d);
+      });
+      sx.ans.forEach((k, j) => { const d = document.createElement('div'); d.className = 'step'; d.innerHTML = '<b>' + (j + 1) + '.</b>' + it.steps[k]; ans.appendChild(d); });
+    };
+    bar.querySelector('button').onclick = () => { st(R.id).ans = []; save(); render(); };
+    save(); render();
+  },
+  self(R){
+    const s = st(R.id);
+    const p = document.createElement('div');
+    if (!R.it.label) p.innerHTML = '<div class="item-label">Rédige ta réponse sur ta feuille, puis ouvre la correction pour te noter.</div>';
+    R.box.appendChild(p);
+    const sb = document.createElement('div'); sb.className = 'self hidden';
+    sb.innerHTML = 'Je me note : <button data-f="0">Pas trouvé</button><button data-f="0.5">À moitié</button><button data-f="1">Juste</button>';
+    R.box.appendChild(sb); R.selfBox = sb;
+    const btns = [...sb.querySelectorAll('button')];
+    const mark = () => btns.forEach(b => b.classList.toggle('on', st(R.id).f !== undefined && +b.dataset.f === st(R.id).f));
+    btns.forEach(b => b.onclick = () => { st(R.id).f = +b.dataset.f; save(); mark(); updateScores(); });
+    mark();
+  },
+  draw(R){ buildDraw(R); }
+};
+
+/* ---- Diagramme objets-interactions dynamique ---- */
+function drawDOI(R){
+  const svg = R.svg, it = R.it, s = st(R.id);
+  const n = it.objs.length, cx = 220, cy = 110;
+  let h = '<rect x="' + (cx - 55) + '" y="' + (cy - 20) + '" width="110" height="40" rx="4" fill="none" stroke="#f2ede1" stroke-width="2"/>' +
+    '<text x="' + cx + '" y="' + (cy + 5) + '" fill="#f2ede1" font-size="14" text-anchor="middle" font-family="Space Grotesk, sans-serif">' + it.sys + '</text>';
+  it.objs.forEach(([name], k) => {
+    const a = -Math.PI / 2 + (2 * Math.PI * k) / n + (n === 4 ? Math.PI / 4 : 0);
+    const x = cx + 175 * Math.cos(a), y = cy + 82 * Math.sin(a);
+    const v = (s.sel || [])[k] || '';
+    if (v === 'contact' || v === 'distance') {
+      const x0 = cx + 60 * Math.cos(a), y0 = cy + 24 * Math.sin(a), x1 = x - 50 * Math.cos(a), y1 = y - 16 * Math.sin(a);
+      h += '<line x1="' + x0 + '" y1="' + y0 + '" x2="' + x1 + '" y2="' + y1 + '" stroke="#e8c468" stroke-width="2.2"' + (v === 'distance' ? ' stroke-dasharray="6 5"' : '') + '/>';
+    }
+    h += '<ellipse cx="' + x + '" cy="' + y + '" rx="52" ry="17" fill="#1d3229" stroke="#6bbfab" stroke-width="1.6"/>' +
+      '<text x="' + x + '" y="' + (y + 5) + '" fill="#f2ede1" font-size="13" text-anchor="middle" font-family="Space Grotesk, sans-serif">' + name + '</text>';
+  });
+  svg.innerHTML = h;
+}
+
+/* ---- Tracé de vecteurs ---- */
+const PX = 40; // pixels par cm
+function buildDraw(R){
+  const it = R.it, s = st(R.id);
+  if (!s.vecs) s.vecs = {};
+  const tools = document.createElement('div'); tools.className = 'draw-tools';
+  it.vecs.forEach((v, k) => {
+    const b = document.createElement('button'); b.className = 'vbtn' + (k === 0 ? ' active' : ''); b.innerHTML = 'Tracer ' + v.name; b.dataset.k = v.k;
+    tools.appendChild(b);
+  });
+  const clr = document.createElement('button'); clr.className = 'small-btn'; clr.textContent = 'Effacer ce vecteur'; tools.appendChild(clr);
+  const live = document.createElement('div'); live.className = 'len-live';
+  const wrap = document.createElement('div'); wrap.className = 'canvas-wrap';
+  const cv = document.createElement('canvas'); cv.className = 'draw';
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = it.w * PX * dpr; cv.height = it.h * PX * dpr; cv.style.width = (it.w * PX) + 'px';
+  wrap.appendChild(cv);
+  R.box.appendChild(tools); R.box.appendChild(wrap); R.box.appendChild(live);
+  const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+  R.cur = it.vecs[0].k;
+  const btns = [...tools.querySelectorAll('.vbtn')];
+  btns.forEach(b => b.onclick = () => { R.cur = b.dataset.k; btns.forEach(x => x.classList.toggle('active', x === b)); });
+  clr.onclick = () => { delete st(R.id).vecs[R.cur]; save(); redraw(); };
+  const toPx = (x, y) => [x * PX, (it.h - y) * PX];
+  const fromEvt = e => { const r = cv.getBoundingClientRect(); const k = (it.w * PX) / r.width; return [((e.clientX - r.left) * k) / PX, it.h - ((e.clientY - r.top) * k) / PX]; };
+  let drag = null;
+  function arrow(x0, y0, x1, y1, col, lw, label){
+    const [a, b] = toPx(x0, y0), [c, d] = toPx(x1, y1);
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = lw;
+    ctx.beginPath(); ctx.moveTo(a, b); ctx.lineTo(c, d); ctx.stroke();
+    const ang = Math.atan2(d - b, c - a), L = 11;
+    if (Math.hypot(c - a, d - b) > 4) {
+      ctx.beginPath(); ctx.moveTo(c, d);
+      ctx.lineTo(c - L * Math.cos(ang - 0.4), d - L * Math.sin(ang - 0.4));
+      ctx.lineTo(c - L * Math.cos(ang + 0.4), d - L * Math.sin(ang + 0.4)); ctx.closePath(); ctx.fill();
+    }
+    if (label) { ctx.font = '600 14px Space Grotesk, sans-serif'; ctx.fillText(label, c + 8, d - 6); }
+  }
+  function scene(){
+    ctx.clearRect(0, 0, it.w * PX, it.h * PX);
+    for (let x = 0; x <= it.w * 2; x++) { ctx.strokeStyle = x % 2 ? 'rgba(242,237,225,0.05)' : 'rgba(242,237,225,0.13)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x * PX / 2, 0); ctx.lineTo(x * PX / 2, it.h * PX); ctx.stroke(); }
+    for (let y = 0; y <= it.h * 2; y++) { ctx.strokeStyle = y % 2 ? 'rgba(242,237,225,0.05)' : 'rgba(242,237,225,0.13)'; ctx.beginPath(); ctx.moveTo(0, y * PX / 2); ctx.lineTo(it.w * PX, y * PX / 2); ctx.stroke(); }
+    ctx.setLineDash([6, 5]); ctx.strokeStyle = 'rgba(242,237,225,0.55)'; ctx.lineWidth = 1.5;
+    if (it.scene === 'lampe') {
+      ctx.fillStyle = 'rgba(242,237,225,0.18)'; ctx.fillRect(0, 0, it.w * PX, 0.4 * PX);
+      const [a, b] = toPx(3, it.h - 0.4), [c, d] = toPx(3, 3.6);
+      ctx.beginPath(); ctx.moveTo(a, b); ctx.lineTo(c, d); ctx.stroke();
+      ctx.setLineDash([]); ctx.fillStyle = 'rgba(242,237,225,0.7)'; ctx.font = '12px Space Grotesk, sans-serif';
+      ctx.fillText('plafond', 6, 0.4 * PX - 4); ctx.fillText('fil', 3 * PX - 22, 1.2 * PX);
+    }
+    if (it.scene === 'hamac') {
+      const a = 20 * Math.PI / 180;
+      [[-1, 'corde 1'], [1, 'corde 2']].forEach(([sg, lab]) => {
+        const xe = 7 + sg * 6.1, ye = 4.2 + 6.1 * Math.tan(a);
+        const [p, q] = toPx(7, 4.2), [r, t] = toPx(xe, ye);
+        ctx.beginPath(); ctx.moveTo(p, q); ctx.lineTo(r, t); ctx.stroke();
+        ctx.save(); ctx.setLineDash([]); ctx.fillStyle = 'rgba(242,237,225,0.18)';
+        const [bx] = toPx(7 + sg * 6.35, 0); ctx.fillRect(bx - 9, 0, 18, it.h * PX); ctx.restore();
+        ctx.save(); ctx.setLineDash([]); ctx.fillStyle = 'rgba(242,237,225,0.7)'; ctx.font = '12px Space Grotesk, sans-serif';
+        const [lx, ly] = toPx(7 + sg * 3.6 - (sg < 0 ? 0.6 : 0), 4.2 + 3.6 * Math.tan(a) + 0.35); ctx.fillText(lab, lx, ly); ctx.restore();
+      });
+    }
+    ctx.setLineDash([]);
+    Object.entries(it.pts0).forEach(([n, [x, y]]) => {
+      const [a, b] = toPx(x, y); ctx.strokeStyle = '#f2ede1'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(a - 7, b); ctx.lineTo(a + 7, b); ctx.moveTo(a, b - 7); ctx.lineTo(a, b + 7); ctx.stroke();
+      ctx.fillStyle = '#f2ede1'; ctx.font = '600 15px Space Grotesk, sans-serif'; ctx.fillText(n, a - 22, b + 18);
+    });
+    ctx.fillStyle = 'rgba(242,237,225,0.75)'; ctx.font = '12px Space Grotesk, sans-serif';
+    ctx.fillText('1 carreau = 1 cm', it.w * PX - 110, it.h * PX - 8);
+  }
+  const plain = k => { const v = it.vecs.find(x => x.k === k); return v.name.replace(/<[^>]+>/g, '').replace('−', '−'); };
+  function redraw(tmp){
+    scene();
+    const vs = st(R.id).vecs;
+    Object.entries(vs).forEach(([k, v]) => arrow(v[0], v[1], v[2], v[3], k === R.cur ? '#e8c468' : '#6bbfab', 2.6, plain(k)));
+    if (tmp) arrow(tmp[0], tmp[1], tmp[2], tmp[3], '#e8c468', 2.6, '');
+  }
+  R.redraw = redraw;
+  cv.addEventListener('pointerdown', e => { e.preventDefault(); cv.setPointerCapture(e.pointerId); const [x, y] = fromEvt(e); drag = [x, y, x, y]; });
+  cv.addEventListener('pointermove', e => { if (!drag) return; const [x, y] = fromEvt(e); drag[2] = x; drag[3] = y; redraw(drag);
+    live.textContent = 'Longueur de la flèche : ' + (Math.hypot(drag[2] - drag[0], drag[3] - drag[1])).toFixed(1).replace('.', ',') + ' cm'; });
+  cv.addEventListener('pointerup', () => { if (!drag) return;
+    if (Math.hypot(drag[2] - drag[0], drag[3] - drag[1]) > 0.2) { st(R.id).vecs[R.cur] = drag.map(v => Math.round(v * 100) / 100); save(); }
+    drag = null; redraw(); });
+  redraw();
+}
+
+/* ---- Vérifications ---- */
+function setFb(R, cls, html){ R.fb.className = 'fb ' + cls; R.fb.innerHTML = html; R.box.classList.toggle('ok', cls === 'good'); R.box.classList.toggle('ko', cls === 'bad'); }
+const CHECK = {
+  num(R, show){
+    const it = R.it, s = st(R.id), p = parseNum(R.inp.value);
+    if (!R.inp.value.trim()) { if (show) setFb(R, 'bad', 'Entre une valeur.'); return; }
+    if (!p) { if (show) setFb(R, 'bad', 'Je ne comprends pas ce nombre. Exemples : 0,21 ou 1,8e2 ou 1,8×10^2.'); return; }
+    const tol = it.tol || 0.04;
+    const okVal = Math.abs(p.val - it.val) <= tol * Math.abs(it.val);
+    const okUnit = R.sel.value === it.unit;
+    if (!okVal) {
+      const r = p.val / it.val; let m = 'Valeur incorrecte.';
+      [[1e3,'Erreur d\'un facteur 1000 : vérifie tes conversions d\'unités.'],[1e-3,'Erreur d\'un facteur 1000 : vérifie tes conversions d\'unités.'],[1e6,'Erreur d\'un facteur 10^6 : as-tu converti les km en m ?'],[1e-6,'Erreur d\'un facteur 10^6 : as-tu converti les km en m ?']].forEach(([f, t]) => { if (Math.abs(r / f - 1) < tol) m = t; });
+      s.ok = false; if (show) setFb(R, 'bad', m + ' Réessaie ou demande un indice.'); return;
+    }
+    if (!okUnit) { s.ok = false; if (show) setFb(R, 'bad', 'La valeur est bonne, mais l\'unité ne l\'est pas.'); return; }
+    s.ok = true;
+    if (it.cs) { s.csOk = it.cs.includes(p.cs); s.csSeen = true; }
+    if (it.cs && !s.csOk) {
+      const need = it.cs[0];
+      setFb(R, 'warn', '✓ Valeur et unité justes. Mais tu as écrit ' + p.cs + ' chiffre' + (p.cs > 1 ? 's' : '') + ' significatif' + (p.cs > 1 ? 's' : '') + ' : les données en imposent ' + need + '. Sur ta copie, ce point serait perdu. Corrige et revérifie !');
+      R.box.classList.add('ok');
+    } else setFb(R, 'good', '✓ Juste !' + (it.cs ? ' Bon nombre de chiffres significatifs.' : ''));
+  },
+  choice(R, show){
+    const it = R.it, s = st(R.id), sel = R.inputs.filter(x => x.checked).map(x => +x.value);
+    if (!sel.length) { if (show) setFb(R, 'bad', 'Choisis une réponse.'); return; }
+    const ans = Array.isArray(it.ans) ? it.ans : [it.ans];
+    s.ok = sel.length === ans.length && ans.every(a => sel.includes(a));
+    if (show) setFb(R, s.ok ? 'good' : 'bad', s.ok ? '✓ Juste !' : (it.multi ? 'Pas tout à fait : il manque une réponse ou il y en a une de trop.' : 'Ce n\'est pas ça. Réessaie.'));
+  },
+  doi(R, show){
+    const it = R.it, s = st(R.id), sel = R.sels.map(x => x.value);
+    if (sel.some(v => !v)) { if (show) setFb(R, 'bad', 'Choisis une option pour chaque objet.'); return; }
+    const bad = it.objs.filter(([n, a], k) => sel[k] !== a).map(([n]) => n);
+    s.ok = !bad.length;
+    if (show) setFb(R, s.ok ? 'good' : 'bad', s.ok ? '✓ Diagramme juste !' : 'À revoir pour : ' + bad.join(', ') + '.');
+  },
+  order(R, show){
+    const it = R.it, s = st(R.id);
+    if (s.ans.length < it.steps.length) { if (show) setFb(R, 'bad', 'Place toutes les étapes.'); return; }
+    s.ok = s.ans.every((k, j) => k === j);
+    const first = s.ans.findIndex((k, j) => k !== j);
+    if (show) setFb(R, s.ok ? 'good' : 'bad', s.ok ? '✓ Démonstration dans le bon ordre !' : 'L\'étape ' + (first + 1) + ' n\'est pas à sa place. Clique sur « Recommencer l\'ordre ».');
+  },
+  draw(R, show){
+    const it = R.it, s = st(R.id), msgs = []; let all = true;
+    it.vecs.forEach(v => {
+      const d = s.vecs[v.k], nm = v.name;
+      if (!d) { all = false; msgs.push(nm + ' : pas encore tracé.'); return; }
+      const o = it.pts0[v.o];
+      const dist = Math.hypot(d[0] - o[0], d[1] - o[1]);
+      const len = Math.hypot(d[2] - d[0], d[3] - d[1]);
+      const ang = Math.atan2(d[3] - d[1], d[2] - d[0]) * 180 / Math.PI;
+      let da = Math.abs(((ang - v.ang + 540) % 360) - 180);
+      if (dist > 0.35) { all = false; msgs.push(nm + ' : la flèche doit partir du point d\'application ' + v.o + '.'); return; }
+      if (da > 150) { all = false; msgs.push(nm + ' : le sens est inversé.'); return; }
+      if (da > 6) { all = false; msgs.push(nm + ' : la direction n\'est pas la bonne.'); return; }
+      if (Math.abs(len - v.len) > Math.max(0.2, 0.08 * v.len)) { all = false; msgs.push(nm + ' : la longueur n\'est pas bonne (tu as tracé ' + len.toFixed(1).replace('.', ',') + ' cm). Recalcule avec l\'échelle.'); return; }
+      msgs.push(nm + ' : ✓');
+    });
+    s.ok = all;
+    if (show) setFb(R, all ? 'good' : 'bad', all ? '✓ Tous les vecteurs sont justes !' : msgs.join('<br>'));
+  },
+  self(){}
+};
+
+/* ---- Scores ---- */
+function itemScore(R){
+  const s = st(R.id);
+  if (R.it.t === 'self') return s.f !== undefined ? s.f * R.it.pts : 0;
+  return s.ok && !s.spoiled ? R.it.pts : 0;
+}
+function updateScores(){
+  const sb = document.getElementById('scoreboard'); let tot = 0, max = 0, html = '';
+  EX.forEach(ex => {
+    const rs = REG.filter(r => r.ex === ex);
+    const sc = rs.reduce((a, r) => a + itemScore(r), 0), mx = rs.reduce((a, r) => a + r.it.pts, 0);
+    tot += sc; max += mx;
+    document.getElementById('sc-' + ex.id).textContent = fmt(sc) + ' / ' + fmt(mx);
+    html += '<div class="sb-card"><div class="t">' + ex.title.split('.')[0] + '</div><div class="v">' + fmt(sc) + ' / ' + fmt(mx) + '</div><div class="bar"><i style="width:' + (100 * sc / mx) + '%"></i></div></div>';
+  });
+  html += '<div class="sb-card"><div class="t">Total</div><div class="v">' + fmt(tot) + ' / ' + fmt(max) + '</div><div class="bar"><i style="width:' + (100 * tot / max) + '%"></i></div></div>';
+  sb.innerHTML = html;
+  const nums = REG.filter(r => r.it.t === 'num' && r.it.cs && st(r.id).csSeen);
+  const good = nums.filter(r => st(r.id).csOk).length;
+  document.getElementById('csLine').textContent = nums.length ? 'Chiffres significatifs : ' + good + ' résultat' + (good > 1 ? 's' : '') + ' bien écrit' + (good > 1 ? 's' : '') + ' sur ' + nums.length + ' vérifié' + (nums.length > 1 ? 's' : '') + '.' : 'Chiffres significatifs : aucun résultat vérifié pour l\'instant.';
+}
+
+function renderAll(){
+EX.forEach(ex => {
+  const sec = document.createElement('section'); sec.className = 'ex'; sec.id = ex.id;
+  sec.innerHTML = '<h2><span>' + ex.title + '</span><span class="ex-score" id="sc-' + ex.id + '"></span></h2>' +
+    '<p class="ctx">' + ex.ctx + '</p><div class="data"><b>Données</b><ul>' + ex.data.map(d => '<li>' + d + '</li>').join('') + '</ul></div>';
+  ex.qs.forEach((q, qi) => {
+    const qid = ex.id + '-q' + qi;
+    const qd = document.createElement('div'); qd.className = 'q'; qd.id = qid;
+    const tot = q.items.reduce((a, it) => a + it.pts, 0);
+    qd.innerHTML = '<div class="q-head"><span class="q-num">' + q.n + '.</span>' + (q.ouv ? '<span class="tag-ouv">(ouverture) </span>' : '') + q.text +
+      '<span class="q-pts">[' + fmt(tot) + ' pt' + (tot > 1 ? 's' : '') + ']</span></div>';
+    const itemsBox = document.createElement('div'); qd.appendChild(itemsBox);
+    let hasAuto = false;
+    q.items.forEach((it, ii) => {
+      const id = qid + '-i' + ii;
+      const box = document.createElement('div'); box.className = 'item'; box.id = id;
+      if (it.label) box.innerHTML = '<div class="item-label">' + it.label + '</div>';
+      itemsBox.appendChild(box);
+      const R = { ex, q, it, id, box, qid };
+      REG.push(R);
+      if (it.t !== 'self') hasAuto = true;
+      BUILD[it.t](R);
+      const fb = document.createElement('div'); fb.className = 'fb'; box.appendChild(fb); R.fb = fb;
+    });
+    const act = document.createElement('div'); act.className = 'q-actions';
+    if (hasAuto) act.innerHTML += '<button class="btn btn-check">Vérifier</button>';
+    act.innerHTML += '<button class="btn btn-hint">Indice</button><button class="btn btn-corr">Voir la correction</button>';
+    qd.appendChild(act);
+    const hint = document.createElement('div'); hint.className = 'hint hidden'; hint.innerHTML = '💡 ' + q.hint; qd.appendChild(hint);
+    const corr = document.createElement('div'); corr.className = 'corr hidden'; corr.innerHTML = '<b>Correction.</b> ' + q.corr; qd.appendChild(corr);
+    const qs = st(qid);
+    if (qs.hint) hint.classList.remove('hidden');
+    if (qs.corr) { corr.classList.remove('hidden'); showSelf(qid); }
+    act.querySelector('.btn-hint').onclick = () => { hint.classList.toggle('hidden'); st(qid).hint = !hint.classList.contains('hidden'); save(); };
+    act.querySelector('.btn-corr').onclick = () => {
+      const s = st(qid);
+      if (!s.corr) {
+        REG.filter(r => r.qid === qid && r.it.t !== 'self').forEach(r => { if (!st(r.id).ok) st(r.id).spoiled = true; });
+      }
+      s.corr = true; corr.classList.remove('hidden'); showSelf(qid); save(); updateScores();
+    };
+    const cb = act.querySelector('.btn-check');
+    if (cb) cb.onclick = () => { REG.filter(r => r.qid === qid && r.it.t !== 'self').forEach(r => CHECK[r.it.t](r, true)); save(); updateScores(); };
+    sec.appendChild(qd);
+  });
+  root.appendChild(sec);
+});
+
+}
+renderAll();
+
+/* Restauration de l'affichage des réponses déjà vérifiées */
+REG.forEach(R => { const s = st(R.id); if (R.it.t !== 'self' && s.ok !== undefined) CHECK[R.it.t](R, true); });
+updateScores();
+
+document.getElementById('resetAll').onclick = () => {
+  if (confirm('Effacer toutes tes réponses et ton score ?')) { S = {}; save(); location.reload(); }
+};
+})();
+</script>
+</body>
+</html>
