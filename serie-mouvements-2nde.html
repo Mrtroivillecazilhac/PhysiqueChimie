@@ -84,6 +84,29 @@
   .bar i { display:block; height:100%; background:var(--teal); width:0; transition:width .3s; }
   .sb-foot { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:14px; align-items:center; font-size:0.88rem; color:var(--chalk-dim); }
   .back-link { color:var(--teal); }
+  /* ---- Version papier ---- */
+  body.paper { background:#fff; background-image:none; color:#111; padding-bottom:30px; }
+  body.paper header.page-head { margin-bottom:10px; }
+  body.paper .p-top { font-size:0.8rem; color:#444; text-align:right; max-width:820px; margin:0 auto; }
+  body.paper h1 { font-family:Arial, sans-serif; color:#111; text-shadow:none; font-size:1.6rem; margin:4px 0; }
+  body.paper .sub { color:#333; }
+  body.paper footer { color:#444; }
+  body.paper main { display:block; }
+  .p-btns { margin-top:10px; } .p-btns button { font-size:1rem; padding:8px 16px; border-radius:8px; border:1.5px solid #111; background:#fff; cursor:pointer; } .p-btns a { color:#0a6; margin-left:12px; }
+  .paper-wrap { max-width:820px; margin:0 auto; padding:0 20px; font-family:Arial, sans-serif; color:#111; line-height:1.5; font-size:0.95rem; }
+  .p-info { border:1px solid #999; padding:8px 12px; font-size:0.88rem; margin-bottom:10px; }
+  .p-bar { border-collapse:collapse; width:100%; margin:6px 0 4px; font-size:0.85rem; } .p-bar th, .p-bar td { border:1px solid #333; padding:3px 6px; text-align:center; }
+  .p-ex h2 { font-family:Arial, sans-serif; color:#111; font-size:1.15rem; border-bottom:1.5px solid #111; margin:22px 0 8px; padding-bottom:2px; } .p-ex h2 span { font-weight:normal; font-size:0.9rem; }
+  .p-data { background:#f1f1f1; border:1px solid #aaa; padding:6px 12px; margin:6px 0 10px; font-size:0.9rem; } .p-data ul { margin:2px 0; padding-left:18px; }
+  .p-q { margin:9px 0; break-inside:avoid; } .p-pts { white-space:nowrap; }
+  .p-item { margin:4px 0 0 18px; } .p-opts { list-style:none; margin:2px 0; padding-left:6px; } .p-opts li { display:inline-block; margin:1px 18px 1px 0; }
+  .p-fig { text-align:center; margin:8px 0; break-inside:avoid; } .p-fig svg { max-width:none; } .p-cap { font-size:0.78rem; font-style:italic; color:#444; }
+  @media print {
+    nav.topbar, .no-print { display:none !important; }
+    body.paper { padding:0; } body.paper header.page-head { margin:0 0 6px; padding:0; }
+    .paper-wrap { padding:0; max-width:none; font-size:10.5pt; }
+    @page { size:A4; margin:12mm; }
+  }
 </style>
 </head>
 <body>
@@ -100,7 +123,7 @@
   <div class="badge-inline physique">Physique</div>
   <h1>Série d'entraînement : les mouvements</h1>
   <p class="sub">Chapitre 4, Description des mouvements. Cinq exercices, du plus guidé au plus exigeant, corrigés automatiquement.</p>
-  <a class="back-link" href="chapitre4-2nde.html">← Retour au cours du chapitre 4</a>
+  <a class="back-link" href="?papier">🖨️ Version papier à imprimer</a> · <a class="back-link" href="chapitre4-2nde.html">← Retour au cours du chapitre 4</a>
 </header>
 
 <main>
@@ -550,6 +573,7 @@ function buildDraw(R){
       ctx.save(); ctx.lineWidth = d.w || 1.5; ctx.strokeStyle = d.col || 'rgba(242,237,225,0.55)'; ctx.setLineDash(d.dash ? [6, 5] : []);
       if (d.t === 'line') { ctx.beginPath(); d.p.forEach(([x, y], k) => { const [a, b] = toPx(x, y); k ? ctx.lineTo(a, b) : ctx.moveTo(a, b); }); ctx.stroke(); }
       if (d.t === 'circle') { const [a, b] = toPx(d.c[0], d.c[1]); ctx.beginPath(); ctx.arc(a, b, d.r * PX, 0, 2 * Math.PI); if (d.fill) { ctx.fillStyle = d.fill; ctx.fill(); } else ctx.stroke(); }
+      if (d.t === 'rect') { const [a, b] = toPx(d.x, d.y + d.h); ctx.fillStyle = d.fill || 'rgba(242,237,225,0.18)'; ctx.fillRect(a, b, d.w * PX, d.h * PX); }
       if (d.t === 'cross') { const [a, b] = toPx(d.p[0], d.p[1]); ctx.setLineDash([]); ctx.strokeStyle = 'rgba(242,237,225,0.6)'; ctx.beginPath(); ctx.moveTo(a - 5, b); ctx.lineTo(a + 5, b); ctx.moveTo(a, b - 5); ctx.lineTo(a, b + 5); ctx.stroke(); }
       if (d.t === 'text') { const [a, b] = toPx(d.x, d.y); ctx.fillStyle = d.col || 'rgba(242,237,225,0.75)'; ctx.font = '12px Space Grotesk, sans-serif'; ctx.fillText(d.s, a, b); }
       ctx.restore();
@@ -748,13 +772,72 @@ EX.forEach(ex => {
 });
 
 }
-renderAll();
+/* ============ Version papier (?papier) ============ */
+function paperLabel(n){ const m = n.match(/^([A-Za-z]+)(\d*)$/); return m && m[2] ? m[1] + '<tspan baseline-shift="sub" font-size="0.26">' + m[2] + '</tspan>' : n; }
+function sceneSVG(it){
+  const W = it.w, H = it.h, Y = y => H - y; let s = '';
+  for (let k = 0; k <= W * 2 + 1e-9; k++) { const x = k / 2; s += '<line x1="' + x + '" y1="0" x2="' + x + '" y2="' + H + '" stroke="' + (k % 2 ? '#e2e2e2' : '#b8b8b8') + '" stroke-width="' + (k % 2 ? 0.008 : 0.014) + '"/>'; }
+  for (let k = 0; k <= H * 2 + 1e-9; k++) { const y = k / 2; s += '<line x1="0" y1="' + y + '" x2="' + W + '" y2="' + y + '" stroke="' + (k % 2 ? '#e2e2e2' : '#b8b8b8') + '" stroke-width="' + (k % 2 ? 0.008 : 0.014) + '"/>'; }
+  (it.deco || []).forEach(d => {
+    const dash = d.dash ? ' stroke-dasharray="0.18 0.12"' : '';
+    const sw = d.w && d.w >= 3 ? 0.06 : 0.035;
+    if (d.t === 'line') s += '<polyline fill="none" stroke="#444" stroke-width="' + sw + '"' + dash + ' points="' + d.p.map(([x, y]) => x + ',' + Y(y)).join(' ') + '"/>';
+    if (d.t === 'circle') s += '<circle cx="' + d.c[0] + '" cy="' + Y(d.c[1]) + '" r="' + d.r + '"' + (d.fill ? ' fill="#e4e4e4" stroke="#888" stroke-width="0.02"' : ' fill="none" stroke="#444" stroke-width="0.035"' + dash) + '/>';
+    if (d.t === 'rect') s += '<rect x="' + d.x + '" y="' + Y(d.y + d.h) + '" width="' + d.w + '" height="' + d.h + '" fill="#e4e4e4" stroke="#888" stroke-width="0.02"/>';
+    if (d.t === 'cross') { const [x, y] = d.p; s += '<path d="M' + (x - 0.13) + ' ' + Y(y) + 'h0.26M' + x + ' ' + (Y(y) - 0.13) + 'v0.26" stroke="#555" stroke-width="0.025"/>'; }
+    if (d.t === 'text') s += '<text x="' + d.x + '" y="' + Y(d.y) + '" font-size="0.3" fill="#333" font-family="Arial, sans-serif">' + d.s + '</text>';
+  });
+  Object.entries(it.pts0).forEach(([n, p]) => {
+    const [x, y, lx = -0.55, ly = -0.45] = p;
+    s += '<path d="M' + (x - 0.18) + ' ' + Y(y) + 'h0.36M' + x + ' ' + (Y(y) - 0.18) + 'v0.36" stroke="#000" stroke-width="0.035"/>';
+    s += '<text x="' + (x + lx) + '" y="' + (Y(y + ly) + 0.13) + '" font-size="0.38" font-weight="bold" text-anchor="middle" font-family="Arial, sans-serif">' + paperLabel(n) + '</text>';
+  });
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + 'cm" height="' + H + 'cm" viewBox="0 0 ' + W + ' ' + H + '">' + s + '</svg>';
+}
+function renderPaper(){
+  document.body.classList.add('paper');
+  const head = document.querySelector('header.page-head');
+  const h1 = head.querySelector('h1').textContent;
+  head.innerHTML = '<div class="p-top">Physique-Chimie, Seconde</div><h1>' + h1 + '</h1>' +
+    '<p class="sub">' + head.querySelector('.sub').innerHTML.replace(', corrigés automatiquement.', '.') + '</p>' +
+    '<div class="no-print p-btns"><button onclick="window.print()">🖨️ Imprimer</button> <a href="' + location.pathname.split('/').pop() + '">← Version en ligne, pour te corriger</a></div>';
+  const main = document.querySelector('main');
+  let tot = 0; const rows = EX.map(ex => { const p = ex.qs.reduce((a, q) => a + q.items.reduce((b, it) => b + it.pts, 0), 0); tot += p; return [ex.title, p]; });
+  let h = '<div class="p-info"><b>Consignes.</b> Fais les exercices sur ta copie, puis corrige-toi avec la version en ligne de cette série (mêmes questions, même barème). ' +
+    'Chaque résultat numérique est donné dans une phrase, avec son unité et un nombre de chiffres significatifs adapté. Les schémas sont à l\'échelle : imprime en taille réelle (100 %) et trace directement dessus. ' +
+    '« Exprimer » une grandeur, c\'est écrire une égalité qui ne contient que des lettres ; « montrer que », c\'est partir d\'une relation du cours et arriver au résultat annoncé, étape par étape.</div>';
+  h += '<table class="p-bar"><tr>' + rows.map(r => '<th>' + r[0].split('.')[0] + '</th>').join('') + '<th>Total</th></tr><tr>' + rows.map(r => '<td>… / ' + fmt(r[1]) + '</td>').join('') + '<td>… / ' + fmt(tot) + '</td></tr></table>';
+  EX.forEach(ex => {
+    const pts = ex.qs.reduce((a, q) => a + q.items.reduce((b, it) => b + it.pts, 0), 0);
+    h += '<div class="p-ex"><h2>' + ex.title + ' <span>(' + fmt(pts) + ' points)</span></h2><p>' + ex.ctx + '</p>' +
+      '<div class="p-data"><b>Données</b><ul>' + ex.data.map(d => '<li>' + d + '</li>').join('') + '</ul></div>';
+    ex.qs.forEach(q => {
+      const qp = q.items.reduce((a, it) => a + it.pts, 0);
+      const txt = q.text.replace(/ Choisis le vecteur, puis fais glisser depuis son point d'application\./, '').replace(/Le quadrillage est en centimètres\./, 'Le quadrillage du schéma est en centimètres.');
+      h += '<div class="p-q"><b>' + q.n + '.</b> ' + (q.ouv ? '<i>(ouverture)</i> ' : '') + txt + ' <b class="p-pts">[' + fmt(qp) + ' pt' + (qp > 1 ? 's' : '') + ']</b>';
+      q.items.forEach(it => {
+        if (it.t === 'choice') h += '<div class="p-item">' + (it.label ? it.label : '') + '<ul class="p-opts">' + it.opts.map(o => '<li>☐ ' + o + '</li>').join('') + '</ul></div>';
+        if (it.t === 'num') h += '<div class="p-item">' + it.label + ' ……………………</div>';
+        if (it.t === 'draw') h += '<div class="p-fig">' + sceneSVG(it) + '<div class="p-cap">Schéma à compléter, à l\'échelle : 1 carreau = 1 cm.</div></div>';
+      });
+      h += '</div>';
+    });
+    h += '</div>';
+  });
+  main.innerHTML = '<div class="paper-wrap">' + h + '</div>';
+  document.querySelector('footer').textContent = 'M. Troiville, professeur de physique-chimie';
+}
 
+const PAPER = new URLSearchParams(location.search).has('papier');
+if (PAPER) renderPaper();
+else {
+renderAll();
 /* Restauration de l'affichage des réponses déjà vérifiées */
 REG.forEach(R => { const s = st(R.id); if (R.it.t !== 'self' && s.ok !== undefined) CHECK[R.it.t](R, true); });
 updateScores();
+}
 
-document.getElementById('resetAll').onclick = () => {
+if (!PAPER) document.getElementById('resetAll').onclick = () => {
   if (confirm('Effacer toutes tes réponses et ton score ?')) { S = {}; save(); location.reload(); }
 };
 })();
