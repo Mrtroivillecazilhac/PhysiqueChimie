@@ -660,6 +660,146 @@ const QUIZ_BANQUES = [
       "correct": true
      }
     ]
+   },
+   {
+    "prompt": "Combien vaut 12,5 + 3,27, écrit avec le bon nombre de chiffres ?",
+    "explanation": "Pour une somme, le résultat garde le plus petit nombre de décimales des données : 12,5 n'en a qu'une, donc 15,77 s'arrondit à 15,8.",
+    "options": [
+     {
+      "text": "15,8",
+      "correct": true
+     },
+     {
+      "text": "15,77",
+      "correct": false
+     },
+     {
+      "text": "16",
+      "correct": false
+     },
+     {
+      "text": "15,80",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Combien vaut 2,5 × 3,14, écrit avec le bon nombre de chiffres significatifs ?",
+    "explanation": "Pour un produit, le résultat garde le plus petit nombre de chiffres significatifs des données : 2,5 en a 2, donc 7,85 s'arrondit à 7,9.",
+    "options": [
+     {
+      "text": "7,9",
+      "correct": true
+     },
+     {
+      "text": "7,85",
+      "correct": false
+     },
+     {
+      "text": "7,850",
+      "correct": false
+     },
+     {
+      "text": "8",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "On mesure L = 20,0 ± 0,2 cm. Que vaut l'incertitude relative ?",
+    "explanation": "Incertitude relative = U(L) / L = 0,2 / 20,0 = 0,01, soit 1 %.",
+    "options": [
+     {
+      "text": "1 %",
+      "correct": true
+     },
+     {
+      "text": "0,2 %",
+      "correct": false
+     },
+     {
+      "text": "2 %",
+      "correct": false
+     },
+     {
+      "text": "10 %",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Les zéros placés à gauche du premier chiffre non nul sont des chiffres significatifs.",
+    "explanation": "Ils ne servent qu'à placer la virgule : 0,0045 ne comporte que 2 chiffres significatifs.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "Le nombre 4,50 × 10³ comporte 3 chiffres significatifs.",
+    "explanation": "En écriture scientifique, on compte tous les chiffres de 4,50 : 4, 5 et 0.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Une balance mal tarée affiche toujours 2 g de trop. De quel type d'erreur s'agit-il ?",
+    "explanation": "L'erreur décale toutes les mesures dans le même sens, de la même valeur : c'est une erreur systématique.",
+    "options": [
+     {
+      "text": "Une erreur systématique",
+      "correct": true
+     },
+     {
+      "text": "Une erreur aléatoire",
+      "correct": false
+     },
+     {
+      "text": "Une erreur de lecture",
+      "correct": false
+     },
+     {
+      "text": "Aucune erreur",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Parmi ces résultats, lequel est le plus précis ?",
+    "explanation": "Le plus précis est celui dont l'incertitude relative est la plus petite : 0,05 / 15,30 ≈ 0,3 %.",
+    "options": [
+     {
+      "text": "L = 15,30 ± 0,05 cm",
+      "correct": true
+     },
+     {
+      "text": "L = 15,3 ± 0,3 cm",
+      "correct": false
+     },
+     {
+      "text": "L = 15 ± 1 cm",
+      "correct": false
+     },
+     {
+      "text": "L = 15,3 ± 0,5 cm",
+      "correct": false
+     }
+    ]
    }
   ]
  },
@@ -718,6 +858,153 @@ const QUIZ_BANQUES = [
       "correct": false
      }
     ]
+   },
+   {
+    "prompt": "50,0 mL d'huile ont une masse de 46,0 g. Quelle est sa masse volumique ?",
+    "explanation": "ρ = m / V = 46,0 / 50,0 = 0,920 g/mL.",
+    "options": [
+     {
+      "text": "0,920 g/mL",
+      "correct": true
+     },
+     {
+      "text": "1,09 g/mL",
+      "correct": false
+     },
+     {
+      "text": "2,30 kg/L",
+      "correct": false
+     },
+     {
+      "text": "4,60 g/mL",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "La densité d'un liquide s'exprime en g/L.",
+    "explanation": "La densité est le quotient de deux masses volumiques : elle est sans unité.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "Un liquide de densité 0,80, non miscible à l'eau, est versé dans l'eau. Où se place-t-il ?",
+    "explanation": "Sa densité est inférieure à 1 : il est moins dense que l'eau et flotte au-dessus.",
+    "options": [
+     {
+      "text": "Au-dessus de l'eau",
+      "correct": true
+     },
+     {
+      "text": "Au fond",
+      "correct": false
+     },
+     {
+      "text": "Il se mélange à l'eau",
+      "correct": false
+     },
+     {
+      "text": "Au milieu de l'eau",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "L'eau salée, où l'on ne distingue qu'une seule phase, est…",
+    "explanation": "Elle contient au moins deux espèces chimiques (eau et sel) mais on n'en distingue qu'une phase : mélange homogène.",
+    "options": [
+     {
+      "text": "Un mélange homogène",
+      "correct": true
+     },
+     {
+      "text": "Un corps pur",
+      "correct": false
+     },
+     {
+      "text": "Un mélange hétérogène",
+      "correct": false
+     },
+     {
+      "text": "Une espèce chimique",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "On dissout 5,0 g de sel dans 95,0 g d'eau. Quelle est la proportion en masse du sel ?",
+    "explanation": "Les masses s'additionnent : m tot = 100,0 g. Proportion = 5,0 / 100,0 = 5,0 %.",
+    "options": [
+     {
+      "text": "5,0 %",
+      "correct": true
+     },
+     {
+      "text": "5,3 %",
+      "correct": false
+     },
+     {
+      "text": "95 %",
+      "correct": false
+     },
+     {
+      "text": "10 %",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Pendant la fusion d'un échantillon, la température reste constante à 80 °C. L'échantillon est probablement…",
+    "explanation": "Un palier de température lors d'un changement d'état est caractéristique d'un corps pur.",
+    "options": [
+     {
+      "text": "Un corps pur",
+      "correct": true
+     },
+     {
+      "text": "Un mélange homogène",
+      "correct": false
+     },
+     {
+      "text": "Un mélange hétérogène",
+      "correct": false
+     },
+     {
+      "text": "Une solution aqueuse",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Sur une CCM, un corps pur donne après élution…",
+    "explanation": "Un corps pur ne contient qu'une espèce chimique : une seule tache.",
+    "options": [
+     {
+      "text": "Une seule tache",
+      "correct": true
+     },
+     {
+      "text": "Deux taches au moins",
+      "correct": false
+     },
+     {
+      "text": "Aucune tache",
+      "correct": false
+     },
+     {
+      "text": "Une tache sur la ligne de dépôt",
+      "correct": false
+     }
+    ]
    }
   ]
  },
@@ -773,6 +1060,146 @@ const QUIZ_BANQUES = [
      },
      {
       "text": "Uniquement la couleur de la solution, rien de plus",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "On dissout 4,0 g de soluté dans 250 mL de solution. Quelle est la concentration en masse t ?",
+    "explanation": "t = m / V = 4,0 / (250 × 10⁻³) = 16 g·L⁻¹.",
+    "options": [
+     {
+      "text": "16 g·L⁻¹",
+      "correct": true
+     },
+     {
+      "text": "1,0 g·L⁻¹",
+      "correct": false
+     },
+     {
+      "text": "0,016 g·L⁻¹",
+      "correct": false
+     },
+     {
+      "text": "62,5 g·L⁻¹",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelle masse de soluté faut-il peser pour préparer 200,0 mL de solution à t = 5,0 g·L⁻¹ ?",
+    "explanation": "m = t × V = 5,0 × 200,0 × 10⁻³ = 1,0 g.",
+    "options": [
+     {
+      "text": "1,0 g",
+      "correct": true
+     },
+     {
+      "text": "40 g",
+      "correct": false
+     },
+     {
+      "text": "1000 g",
+      "correct": false
+     },
+     {
+      "text": "0,025 g",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "On veut préparer 50,0 mL de solution fille avec un facteur de dilution F = 10. Quel volume de solution mère prélever ?",
+    "explanation": "V m = V f / F = 50,0 / 10 = 5,0 mL.",
+    "options": [
+     {
+      "text": "5,0 mL",
+      "correct": true
+     },
+     {
+      "text": "500 mL",
+      "correct": false
+     },
+     {
+      "text": "10 mL",
+      "correct": false
+     },
+     {
+      "text": "0,50 mL",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Dans l'eau sucrée, l'eau est…",
+    "explanation": "Le solvant est l'espèce majoritaire qui dissout le soluté (ici le sucre).",
+    "options": [
+     {
+      "text": "Le solvant",
+      "correct": true
+     },
+     {
+      "text": "Le soluté",
+      "correct": false
+     },
+     {
+      "text": "La solution",
+      "correct": false
+     },
+     {
+      "text": "Un mélange hétérogène",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Une solution saturée peut encore dissoudre du soluté.",
+    "explanation": "Saturée signifie que la solubilité est atteinte : le soluté ajouté ne se dissout plus.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "Avec quelle verrerie prélève-t-on précisément le volume de solution mère lors d'une dilution ?",
+    "explanation": "La pipette jaugée donne le volume le plus précis ; la solution fille est ensuite préparée dans une fiole jaugée.",
+    "options": [
+     {
+      "text": "Une pipette jaugée",
+      "correct": true
+     },
+     {
+      "text": "Un bécher",
+      "correct": false
+     },
+     {
+      "text": "Une éprouvette graduée",
+      "correct": false
+     },
+     {
+      "text": "Un erlenmeyer",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "La masse volumique d'une solution et la concentration en masse d'un soluté s'expriment dans la même unité, mais ce sont deux grandeurs différentes.",
+    "explanation": "Toutes deux en g·L⁻¹, mais ρ = m solution / V alors que t = m soluté / V.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
       "correct": false
      }
     ]
@@ -888,6 +1315,131 @@ const QUIZ_BANQUES = [
       "correct": false
      }
     ]
+   },
+   {
+    "prompt": "Sur une chronophotographie, les positions sont alignées et régulièrement espacées. Le mouvement est…",
+    "explanation": "Points alignés : trajectoire droite. Espacement constant pour des durées égales : vitesse constante.",
+    "options": [
+     {
+      "text": "Rectiligne uniforme",
+      "correct": true
+     },
+     {
+      "text": "Rectiligne accéléré",
+      "correct": false
+     },
+     {
+      "text": "Circulaire uniforme",
+      "correct": false
+     },
+     {
+      "text": "Rectiligne ralenti",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Les positions sont alignées et de plus en plus espacées. Le mouvement est…",
+    "explanation": "L'objet parcourt des distances de plus en plus grandes pendant des durées égales : il accélère.",
+    "options": [
+     {
+      "text": "Rectiligne accéléré",
+      "correct": true
+     },
+     {
+      "text": "Rectiligne uniforme",
+      "correct": false
+     },
+     {
+      "text": "Rectiligne ralenti",
+      "correct": false
+     },
+     {
+      "text": "Circulaire",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Entre deux positions, un système parcourt 0,60 m en 0,20 s. Quelle est la valeur de sa vitesse ?",
+    "explanation": "v = MM' / Δt = 0,60 / 0,20 = 3,0 m/s.",
+    "options": [
+     {
+      "text": "3,0 m/s",
+      "correct": true
+     },
+     {
+      "text": "0,12 m/s",
+      "correct": false
+     },
+     {
+      "text": "0,33 m/s",
+      "correct": false
+     },
+     {
+      "text": "30 m/s",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "À combien de m/s correspond une vitesse de 36 km/h ?",
+    "explanation": "On divise par 3,6 : 36 / 3,6 = 10 m/s.",
+    "options": [
+     {
+      "text": "10 m/s",
+      "correct": true
+     },
+     {
+      "text": "36 m/s",
+      "correct": false
+     },
+     {
+      "text": "3,6 m/s",
+      "correct": false
+     },
+     {
+      "text": "130 m/s",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "La description du mouvement d'un objet dépend du référentiel choisi.",
+    "explanation": "Le voyageur sur le tapis roulant est immobile par rapport au tapis mais en mouvement par rapport au sol.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quel référentiel est adapté pour étudier le mouvement d'une voiture sur une route ?",
+    "explanation": "On étudie un mouvement à la surface de la Terre, sur une courte durée : le référentiel terrestre convient.",
+    "options": [
+     {
+      "text": "Le référentiel terrestre",
+      "correct": true
+     },
+     {
+      "text": "Le référentiel héliocentrique",
+      "correct": false
+     },
+     {
+      "text": "Le référentiel géocentrique",
+      "correct": false
+     },
+     {
+      "text": "Le référentiel lié à la voiture",
+      "correct": false
+     }
+    ]
    }
   ]
  },
@@ -962,6 +1514,131 @@ const QUIZ_BANQUES = [
      },
      {
       "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelle est l'unité d'une force ?",
+    "explanation": "La valeur d'une force s'exprime en newton, noté N.",
+    "options": [
+     {
+      "text": "Le newton (N)",
+      "correct": true
+     },
+     {
+      "text": "Le kilogramme (kg)",
+      "correct": false
+     },
+     {
+      "text": "Le joule (J)",
+      "correct": false
+     },
+     {
+      "text": "Le watt (W)",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelle est la valeur du poids d'un objet de masse 2,0 kg (g = 9,8 N/kg) ?",
+    "explanation": "P = m × g = 2,0 × 9,8 = 19,6 N, soit 20 N avec 2 chiffres significatifs.",
+    "options": [
+     {
+      "text": "20 N",
+      "correct": true
+     },
+     {
+      "text": "2,0 N",
+      "correct": false
+     },
+     {
+      "text": "4,9 N",
+      "correct": false
+     },
+     {
+      "text": "0,20 N",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelles sont les caractéristiques du vecteur force ?",
+    "explanation": "Un vecteur force est défini par son point d'application, sa direction, son sens et sa valeur (sa norme).",
+    "options": [
+     {
+      "text": "Point d'application, direction, sens, valeur",
+      "correct": true
+     },
+     {
+      "text": "Masse, vitesse, direction",
+      "correct": false
+     },
+     {
+      "text": "Point d'application et masse seulement",
+      "correct": false
+     },
+     {
+      "text": "Direction et durée",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Le poids est une action mécanique de contact.",
+    "explanation": "Le poids modélise l'action de la Terre, qui s'exerce à distance.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "Si la distance entre deux objets double, la force d'interaction gravitationnelle est…",
+    "explanation": "F = G × m A × m B / d² : la distance est au carré, donc doubler d divise F par 2² = 4.",
+    "options": [
+     {
+      "text": "Divisée par 4",
+      "correct": true
+     },
+     {
+      "text": "Divisée par 2",
+      "correct": false
+     },
+     {
+      "text": "Multipliée par 2",
+      "correct": false
+     },
+     {
+      "text": "Inchangée",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un objet est suspendu à un fil. L'action du fil sur l'objet est représentée par une force…",
+    "explanation": "Un fil tendu tire l'objet suivant sa propre direction, vers le point d'attache.",
+    "options": [
+     {
+      "text": "Dirigée le long du fil, vers le point d'attache",
+      "correct": true
+     },
+     {
+      "text": "Verticale vers le bas",
+      "correct": false
+     },
+     {
+      "text": "Perpendiculaire au fil",
+      "correct": false
+     },
+     {
+      "text": "Nulle",
       "correct": false
      }
     ]
@@ -1056,6 +1733,102 @@ const QUIZ_BANQUES = [
       "correct": true
      }
     ]
+   },
+   {
+    "prompt": "Selon le principe d'inertie, si les forces qui s'exercent sur un système se compensent, il est…",
+    "explanation": "Forces qui se compensent ⇔ vecteur vitesse constant : immobilité ou mouvement rectiligne uniforme.",
+    "options": [
+     {
+      "text": "Immobile ou en mouvement rectiligne uniforme",
+      "correct": true
+     },
+     {
+      "text": "Forcément immobile",
+      "correct": false
+     },
+     {
+      "text": "Forcément en mouvement accéléré",
+      "correct": false
+     },
+     {
+      "text": "En mouvement circulaire",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un palet glisse sur une glace sans frottement après avoir été lancé. Son mouvement est…",
+    "explanation": "Son poids et l'action de la glace se compensent : d'après le principe d'inertie, son mouvement est rectiligne uniforme.",
+    "options": [
+     {
+      "text": "Rectiligne uniforme",
+      "correct": true
+     },
+     {
+      "text": "Rectiligne ralenti",
+      "correct": false
+     },
+     {
+      "text": "Rectiligne accéléré",
+      "correct": false
+     },
+     {
+      "text": "Circulaire",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un parachutiste descend verticalement à vitesse constante. Que peut-on dire des forces qui s'exercent sur lui ?",
+    "explanation": "Mouvement rectiligne uniforme : d'après le principe d'inertie, les forces se compensent.",
+    "options": [
+     {
+      "text": "Elles se compensent",
+      "correct": true
+     },
+     {
+      "text": "Le poids l'emporte",
+      "correct": false
+     },
+     {
+      "text": "L'action de l'air l'emporte",
+      "correct": false
+     },
+     {
+      "text": "Il n'est soumis à aucune force",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un système en mouvement circulaire uniforme est soumis à des forces qui se compensent.",
+    "explanation": "La direction du vecteur vitesse change à chaque instant : les forces ne se compensent pas.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "Un système immobile dans un référentiel est soumis à des forces qui se compensent.",
+    "explanation": "C'est la réciproque du principe d'inertie : vecteur vitesse constant (nul) ⇒ forces qui se compensent.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
+     }
+    ]
    }
   ]
  },
@@ -1114,6 +1887,153 @@ const QUIZ_BANQUES = [
       "correct": true
      }
     ]
+   },
+   {
+    "prompt": "Combien le noyau ²⁷₁₃Al contient-il de protons et de neutrons ?",
+    "explanation": "Z = 13 protons ; N = A − Z = 27 − 13 = 14 neutrons.",
+    "options": [
+     {
+      "text": "13 protons et 14 neutrons",
+      "correct": true
+     },
+     {
+      "text": "27 protons et 13 neutrons",
+      "correct": false
+     },
+     {
+      "text": "13 protons et 27 neutrons",
+      "correct": false
+     },
+     {
+      "text": "14 protons et 13 neutrons",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "L'ion sodium Na⁺ (Z = 11) possède combien d'électrons ?",
+    "explanation": "L'atome a 11 électrons ; l'ion Na⁺ en a perdu un : 10 électrons.",
+    "options": [
+     {
+      "text": "10",
+      "correct": true
+     },
+     {
+      "text": "11",
+      "correct": false
+     },
+     {
+      "text": "12",
+      "correct": false
+     },
+     {
+      "text": "23",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "L'ion chlorure Cl⁻ s'est formé à partir d'un atome de chlore qui a…",
+    "explanation": "Une charge négative signifie un électron en plus : l'atome a gagné un électron.",
+    "options": [
+     {
+      "text": "Gagné 1 électron",
+      "correct": true
+     },
+     {
+      "text": "Perdu 1 électron",
+      "correct": false
+     },
+     {
+      "text": "Gagné 1 proton",
+      "correct": false
+     },
+     {
+      "text": "Perdu 1 proton",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelle particule est électriquement neutre ?",
+    "explanation": "Le proton porte +e, l'électron −e, le neutron n'est pas chargé.",
+    "options": [
+     {
+      "text": "Le neutron",
+      "correct": true
+     },
+     {
+      "text": "Le proton",
+      "correct": false
+     },
+     {
+      "text": "L'électron",
+      "correct": false
+     },
+     {
+      "text": "L'ion",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "La masse d'un atome est presque entièrement concentrée dans son noyau.",
+    "explanation": "Les électrons sont environ 2000 fois plus légers que les nucléons.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Le rayon d'un atome est environ combien de fois plus grand que celui de son noyau ?",
+    "explanation": "r atome / r noyau = 10⁻¹⁰ / 10⁻¹⁵ = 10⁵.",
+    "options": [
+     {
+      "text": "10⁵ fois",
+      "correct": true
+     },
+     {
+      "text": "10 fois",
+      "correct": false
+     },
+     {
+      "text": "100 fois",
+      "correct": false
+     },
+     {
+      "text": "10¹⁵ fois",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un élément chimique est caractérisé par…",
+    "explanation": "Tous les atomes et ions d'un même élément ont le même nombre de protons Z.",
+    "options": [
+     {
+      "text": "Son numéro atomique Z",
+      "correct": true
+     },
+     {
+      "text": "Son nombre de neutrons",
+      "correct": false
+     },
+     {
+      "text": "Son nombre de nucléons A",
+      "correct": false
+     },
+     {
+      "text": "Sa masse",
+      "correct": false
+     }
+    ]
    }
   ]
  },
@@ -1152,6 +2072,153 @@ const QUIZ_BANQUES = [
      {
       "text": "Faux",
       "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "Quelle est la configuration électronique de l'oxygène (Z = 8) ?",
+    "explanation": "On remplit 1s, puis 2s, puis 2p : 2 + 2 + 4 = 8 électrons.",
+    "options": [
+     {
+      "text": "1s² 2s² 2p⁴",
+      "correct": true
+     },
+     {
+      "text": "1s² 2s² 2p⁶",
+      "correct": false
+     },
+     {
+      "text": "1s² 2s⁶",
+      "correct": false
+     },
+     {
+      "text": "1s² 2p⁶",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Le phosphore a pour configuration 1s² 2s² 2p⁶ 3s² 3p³. Combien a-t-il d'électrons de valence ?",
+    "explanation": "Électrons de la dernière couche (n = 3) : 3s² 3p³, soit 2 + 3 = 5.",
+    "options": [
+     {
+      "text": "5",
+      "correct": true
+     },
+     {
+      "text": "3",
+      "correct": false
+     },
+     {
+      "text": "15",
+      "correct": false
+     },
+     {
+      "text": "2",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quel ion stable forme le sodium (Z = 11) ?",
+    "explanation": "En perdant 1 électron, il prend la configuration du néon, gaz noble le plus proche.",
+    "options": [
+     {
+      "text": "Na⁺",
+      "correct": true
+     },
+     {
+      "text": "Na⁻",
+      "correct": false
+     },
+     {
+      "text": "Na²⁺",
+      "correct": false
+     },
+     {
+      "text": "Na²⁻",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quel ion stable forme le magnésium (Z = 12) ?",
+    "explanation": "En perdant ses 2 électrons de valence, il prend la configuration du néon.",
+    "options": [
+     {
+      "text": "Mg²⁺",
+      "correct": true
+     },
+     {
+      "text": "Mg⁺",
+      "correct": false
+     },
+     {
+      "text": "Mg²⁻",
+      "correct": false
+     },
+     {
+      "text": "Mg⁻",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Les éléments d'une même colonne du tableau périodique ont…",
+    "explanation": "Ils forment une famille chimique, aux propriétés chimiques communes.",
+    "options": [
+     {
+      "text": "Le même nombre d'électrons de valence",
+      "correct": true
+     },
+     {
+      "text": "Le même nombre de protons",
+      "correct": false
+     },
+     {
+      "text": "La même masse",
+      "correct": false
+     },
+     {
+      "text": "Le même nombre de neutrons",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Les gaz nobles réagissent très facilement avec les autres éléments.",
+    "explanation": "Les gaz nobles sont remarquablement stables et réagissent très rarement.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "En général, combien de liaisons covalentes un atome de carbone établit-il ?",
+    "explanation": "Le carbone a 4 électrons de valence ; il forme 4 liaisons pour atteindre la configuration du néon (comme dans CH₄).",
+    "options": [
+     {
+      "text": "4",
+      "correct": true
+     },
+     {
+      "text": "1",
+      "correct": false
+     },
+     {
+      "text": "2",
+      "correct": false
+     },
+     {
+      "text": "3",
+      "correct": false
      }
     ]
    }
@@ -1245,6 +2312,131 @@ const QUIZ_BANQUES = [
       "correct": true
      }
     ]
+   },
+   {
+    "prompt": "Un signal sonore a une période T = 2,0 ms. Quelle est sa fréquence ?",
+    "explanation": "f = 1 / T = 1 / (2,0 × 10⁻³) = 500 Hz.",
+    "options": [
+     {
+      "text": "500 Hz",
+      "correct": true
+     },
+     {
+      "text": "2,0 Hz",
+      "correct": false
+     },
+     {
+      "text": "0,50 Hz",
+      "correct": false
+     },
+     {
+      "text": "2000 Hz",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelles fréquences l'oreille humaine peut-elle entendre ?",
+    "explanation": "En dessous de 20 Hz : infrasons ; au-dessus de 20 kHz : ultrasons.",
+    "options": [
+     {
+      "text": "De 20 Hz à 20 kHz",
+      "correct": true
+     },
+     {
+      "text": "De 0 Hz à 20 Hz",
+      "correct": false
+     },
+     {
+      "text": "De 20 kHz à 200 kHz",
+      "correct": false
+     },
+     {
+      "text": "De 200 Hz à 2 kHz",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelle est la vitesse approximative du son dans l'air ?",
+    "explanation": "Dans l'air, à température ambiante, le son se propage à environ 340 m/s.",
+    "options": [
+     {
+      "text": "340 m/s",
+      "correct": true
+     },
+     {
+      "text": "3,0 × 10⁸ m/s",
+      "correct": false
+     },
+     {
+      "text": "34 m/s",
+      "correct": false
+     },
+     {
+      "text": "3400 m/s",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "On entend le tonnerre 3,0 s après avoir vu l'éclair. À quelle distance est l'orage ?",
+    "explanation": "d = v × Δt = 340 × 3,0 ≈ 1,0 × 10³ m. La lumière arrive presque instantanément.",
+    "options": [
+     {
+      "text": "Environ 1 km",
+      "correct": true
+     },
+     {
+      "text": "Environ 100 m",
+      "correct": false
+     },
+     {
+      "text": "Environ 10 km",
+      "correct": false
+     },
+     {
+      "text": "Environ 3 m",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Plus un son est aigu, plus sa fréquence est élevée.",
+    "explanation": "La hauteur d'un son est liée à sa fréquence : un son aigu a une fréquence élevée.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Avec quel appareil mesure-t-on un niveau d'intensité sonore ?",
+    "explanation": "Le sonomètre affiche directement le niveau d'intensité sonore, en décibel (dB).",
+    "options": [
+     {
+      "text": "Un sonomètre",
+      "correct": true
+     },
+     {
+      "text": "Un oscilloscope",
+      "correct": false
+     },
+     {
+      "text": "Un voltmètre",
+      "correct": false
+     },
+     {
+      "text": "Un microphone seul",
+      "correct": false
+     }
+    ]
    }
   ]
  },
@@ -1321,6 +2513,131 @@ const QUIZ_BANQUES = [
       "correct": false
      }
     ]
+   },
+   {
+    "prompt": "Entre quelles longueurs d'onde se situe la lumière visible, dans le vide ou dans l'air ?",
+    "explanation": "Du violet (400 nm) au rouge (800 nm) environ.",
+    "options": [
+     {
+      "text": "Environ 400 nm et 800 nm",
+      "correct": true
+     },
+     {
+      "text": "Environ 100 nm et 400 nm",
+      "correct": false
+     },
+     {
+      "text": "Environ 800 nm et 1200 nm",
+      "correct": false
+     },
+     {
+      "text": "Environ 4 nm et 8 nm",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Une lumière constituée d'une seule radiation est dite…",
+    "explanation": "Mono = une seule ; la lumière blanche, elle, est polychromatique.",
+    "options": [
+     {
+      "text": "Monochromatique",
+      "correct": true
+     },
+     {
+      "text": "Polychromatique",
+      "correct": false
+     },
+     {
+      "text": "Blanche",
+      "correct": false
+     },
+     {
+      "text": "Continue",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quel type de spectre donne le filament d'une lampe à incandescence ?",
+    "explanation": "Un corps chaud émet un spectre continu, qui dépend de sa température.",
+    "options": [
+     {
+      "text": "Un spectre continu",
+      "correct": true
+     },
+     {
+      "text": "Un spectre de raies d'émission",
+      "correct": false
+     },
+     {
+      "text": "Un spectre vide",
+      "correct": false
+     },
+     {
+      "text": "Une seule raie",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quel type de spectre donne une lampe à vapeur de sodium ?",
+    "explanation": "Un gaz excité émet seulement certaines radiations : spectre de raies.",
+    "options": [
+     {
+      "text": "Un spectre de raies d'émission",
+      "correct": true
+     },
+     {
+      "text": "Un spectre continu",
+      "correct": false
+     },
+     {
+      "text": "Le spectre de la lumière blanche",
+      "correct": false
+     },
+     {
+      "text": "Aucun spectre",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Chaque élément chimique possède un spectre de raies qui lui est propre.",
+    "explanation": "C'est sa « signature » : on peut identifier un gaz par ses raies.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Une radiation de longueur d'onde 450 nm a une couleur…",
+    "explanation": "450 nm est dans le visible, du côté du bleu.",
+    "options": [
+     {
+      "text": "Bleue",
+      "correct": true
+     },
+     {
+      "text": "Rouge",
+      "correct": false
+     },
+     {
+      "text": "Jaune",
+      "correct": false
+     },
+     {
+      "text": "Invisible (ultraviolet)",
+      "correct": false
+     }
+    ]
    }
   ]
  },
@@ -1358,6 +2675,146 @@ const QUIZ_BANQUES = [
      },
      {
       "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "En quelle unité s'exprime la quantité de matière n ?",
+    "explanation": "La quantité de matière compte les entités par paquets : elle s'exprime en mole.",
+    "options": [
+     {
+      "text": "En mole (mol)",
+      "correct": true
+     },
+     {
+      "text": "En kilogramme (kg)",
+      "correct": false
+     },
+     {
+      "text": "Sans unité",
+      "correct": false
+     },
+     {
+      "text": "En mol⁻¹",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un échantillon contient N = 1,204 × 10²⁴ molécules. Quelle est sa quantité de matière ? (N A = 6,02 × 10²³ mol⁻¹)",
+    "explanation": "n = N / N A = 1,204 × 10²⁴ / 6,02 × 10²³ = 2,00 mol.",
+    "options": [
+     {
+      "text": "2,00 mol",
+      "correct": true
+     },
+     {
+      "text": "0,500 mol",
+      "correct": false
+     },
+     {
+      "text": "7,25 mol",
+      "correct": false
+     },
+     {
+      "text": "1,204 mol",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Combien d'entités contient 0,50 mol de matière ? (N A = 6,02 × 10²³ mol⁻¹)",
+    "explanation": "N = n × N A = 0,50 × 6,02 × 10²³ ≈ 3,0 × 10²³.",
+    "options": [
+     {
+      "text": "3,0 × 10²³",
+      "correct": true
+     },
+     {
+      "text": "1,2 × 10²⁴",
+      "correct": false
+     },
+     {
+      "text": "6,02 × 10²³",
+      "correct": false
+     },
+     {
+      "text": "0,50",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelle est la masse d'un atome d'aluminium (A = 27) ? (m nucléon = 1,67 × 10⁻²⁷ kg)",
+    "explanation": "m ≈ A × m nucléon = 27 × 1,67 × 10⁻²⁷ = 4,51 × 10⁻²⁶ kg.",
+    "options": [
+     {
+      "text": "4,51 × 10⁻²⁶ kg",
+      "correct": true
+     },
+     {
+      "text": "1,67 × 10⁻²⁷ kg",
+      "correct": false
+     },
+     {
+      "text": "2,70 × 10⁻²⁶ kg",
+      "correct": false
+     },
+     {
+      "text": "6,19 × 10⁻²⁹ kg",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Le nombre d'entités N s'exprime en mole.",
+    "explanation": "N est un nombre, sans unité. C'est n = N / N A qui s'exprime en mole.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "Deux échantillons de même masse contiennent toujours la même quantité de matière.",
+    "explanation": "Cela dépend de la masse des entités : 1 g de fer et 1 g d'eau ne contiennent pas le même nombre d'entités.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "Un échantillon de carbone a une masse de 2,0 g, et m(C) = 2,00 × 10⁻²⁶ kg. Combien contient-il d'atomes ?",
+    "explanation": "N = m échantillon / m entité = 2,0 × 10⁻³ / 2,00 × 10⁻²⁶ = 1,0 × 10²³ (masses en kg).",
+    "options": [
+     {
+      "text": "1,0 × 10²³",
+      "correct": true
+     },
+     {
+      "text": "1,0 × 10²⁶",
+      "correct": false
+     },
+     {
+      "text": "1,0 × 10²⁰",
+      "correct": false
+     },
+     {
+      "text": "4,0 × 10⁻²⁶",
       "correct": false
      }
     ]
@@ -1419,6 +2876,131 @@ const QUIZ_BANQUES = [
       "correct": false
      }
     ]
+   },
+   {
+    "prompt": "Quelle est l'équation ajustée de la formation de l'eau ?",
+    "explanation": "Il faut 2 O de chaque côté et 4 H de chaque côté : 2 H₂ + O₂ → 2 H₂O.",
+    "options": [
+     {
+      "text": "2 H₂ + O₂ → 2 H₂O",
+      "correct": true
+     },
+     {
+      "text": "H₂ + O₂ → H₂O",
+      "correct": false
+     },
+     {
+      "text": "H₂ + O₂ → 2 H₂O",
+      "correct": false
+     },
+     {
+      "text": "2 H₂ + 2 O₂ → 2 H₂O",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "On fait réagir 1 mol de H₂ avec 1 mol de O₂ (2 H₂ + O₂ → 2 H₂O). Quel est le réactif limitant ?",
+    "explanation": "1 mol de O₂ demanderait 2 mol de H₂ : il n'y en a qu'1 mol, H₂ est entièrement consommé en premier.",
+    "options": [
+     {
+      "text": "H₂",
+      "correct": true
+     },
+     {
+      "text": "O₂",
+      "correct": false
+     },
+     {
+      "text": "Aucun, le mélange est stœchiométrique",
+      "correct": false
+     },
+     {
+      "text": "H₂O",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Lors d'une transformation chimique, qu'est-ce qui est conservé ?",
+    "explanation": "Les atomes se réarrangent : les éléments et la masse sont conservés, mais de nouvelles espèces apparaissent.",
+    "options": [
+     {
+      "text": "Les éléments chimiques et la masse totale",
+      "correct": true
+     },
+     {
+      "text": "Les espèces chimiques",
+      "correct": false
+     },
+     {
+      "text": "Les molécules",
+      "correct": false
+     },
+     {
+      "text": "Le volume total",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Lors d'une transformation exothermique, la température du milieu extérieur…",
+    "explanation": "Le système cède de l'énergie au milieu extérieur, qui se réchauffe.",
+    "options": [
+     {
+      "text": "Augmente",
+      "correct": true
+     },
+     {
+      "text": "Diminue",
+      "correct": false
+     },
+     {
+      "text": "Reste constante",
+      "correct": false
+     },
+     {
+      "text": "S'annule",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Une espèce chimique synthétisée au laboratoire est différente de la même espèce extraite de la nature.",
+    "explanation": "Une espèce synthétique est identique à l'espèce naturelle : mêmes propriétés.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "Dans l'équation C + O₂ → CO₂, quels sont les réactifs ?",
+    "explanation": "Les réactifs sont à gauche de la flèche ; les produits à droite.",
+    "options": [
+     {
+      "text": "C et O₂",
+      "correct": true
+     },
+     {
+      "text": "CO₂",
+      "correct": false
+     },
+     {
+      "text": "C seulement",
+      "correct": false
+     },
+     {
+      "text": "O₂ et CO₂",
+      "correct": false
+     }
+    ]
    }
   ]
  },
@@ -1475,6 +3057,124 @@ const QUIZ_BANQUES = [
      {
       "text": "H₂O(ℓ) → H₂O(g)",
       "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quel est le nom du changement d'état liquide → gaz ?",
+    "explanation": "Liquide → gaz : vaporisation. L'inverse (gaz → liquide) est la liquéfaction.",
+    "options": [
+     {
+      "text": "Vaporisation",
+      "correct": true
+     },
+     {
+      "text": "Liquéfaction",
+      "correct": false
+     },
+     {
+      "text": "Sublimation",
+      "correct": false
+     },
+     {
+      "text": "Fusion",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quel est le nom du changement d'état solide → gaz ?",
+    "explanation": "Solide → gaz : sublimation, comme pour la neige carbonique (CO₂ solide).",
+    "options": [
+     {
+      "text": "Sublimation",
+      "correct": true
+     },
+     {
+      "text": "Condensation",
+      "correct": false
+     },
+     {
+      "text": "Vaporisation",
+      "correct": false
+     },
+     {
+      "text": "Fusion",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "La fusion de la glace est une transformation…",
+    "explanation": "La glace doit recevoir de l'énergie pour fondre : transformation endothermique.",
+    "options": [
+     {
+      "text": "Endothermique",
+      "correct": true
+     },
+     {
+      "text": "Exothermique",
+      "correct": false
+     },
+     {
+      "text": "Sans échange d'énergie",
+      "correct": false
+     },
+     {
+      "text": "Chimique",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelle énergie faut-il fournir pour faire fondre 0,50 kg de glace ? (L fusion = 334 kJ/kg)",
+    "explanation": "Q = m × L = 0,50 × 334 = 167 kJ.",
+    "options": [
+     {
+      "text": "167 kJ",
+      "correct": true
+     },
+     {
+      "text": "668 kJ",
+      "correct": false
+     },
+     {
+      "text": "334 kJ",
+      "correct": false
+     },
+     {
+      "text": "0,67 kJ",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "La solidification de l'eau libère de l'énergie vers le milieu extérieur.",
+    "explanation": "C'est la transformation inverse de la fusion : elle est exothermique.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Lors d'un changement d'état, de nouvelles espèces chimiques se forment.",
+    "explanation": "C'est une transformation physique : seul l'état physique change, l'espèce chimique est conservée.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
      }
     ]
    }
@@ -1553,6 +3253,124 @@ const QUIZ_BANQUES = [
       "correct": false
      }
     ]
+   },
+   {
+    "prompt": "Quelle relation traduit la loi de Snell-Descartes pour la réfraction ?",
+    "explanation": "C'est la deuxième loi de Snell-Descartes pour la réfraction.",
+    "options": [
+     {
+      "text": "n₁ × sin i₁ = n₂ × sin i₂",
+      "correct": true
+     },
+     {
+      "text": "n₁ × i₁ = n₂ × i₂",
+      "correct": false
+     },
+     {
+      "text": "sin i₁ = sin i₂",
+      "correct": false
+     },
+     {
+      "text": "n₁ × sin i₂ = n₂ × sin i₁",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un rayon arrive sur un miroir avec un angle d'incidence de 40°. Que vaut l'angle de réflexion ?",
+    "explanation": "Loi de la réflexion : l'angle de réflexion est égal à l'angle d'incidence.",
+    "options": [
+     {
+      "text": "40°",
+      "correct": true
+     },
+     {
+      "text": "50°",
+      "correct": false
+     },
+     {
+      "text": "80°",
+      "correct": false
+     },
+     {
+      "text": "20°",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un rayon passe de l'air dans l'eau (n eau > n air) avec un angle d'incidence non nul. Le rayon réfracté…",
+    "explanation": "n₂ > n₁ donc sin i₂ < sin i₁ : i₂ < i₁, le rayon se rapproche de la normale.",
+    "options": [
+     {
+      "text": "Se rapproche de la normale",
+      "correct": true
+     },
+     {
+      "text": "S'écarte de la normale",
+      "correct": false
+     },
+     {
+      "text": "N'est pas dévié",
+      "correct": false
+     },
+     {
+      "text": "Est entièrement réfléchi",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un rayon qui arrive perpendiculairement à la surface de séparation (i₁ = 0°) n'est pas dévié.",
+    "explanation": "sin i₁ = 0 donc sin i₂ = 0 : i₂ = 0°, le rayon continue tout droit.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Pourquoi un prisme décompose-t-il la lumière blanche ?",
+    "explanation": "Chaque radiation est déviée différemment, car n dépend de λ : c'est la dispersion.",
+    "options": [
+     {
+      "text": "L'indice du verre dépend de la longueur d'onde",
+      "correct": true
+     },
+     {
+      "text": "Le verre colore la lumière",
+      "correct": false
+     },
+     {
+      "text": "Le prisme réfléchit chaque couleur",
+      "correct": false
+     },
+     {
+      "text": "Le prisme absorbe le blanc",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "L'indice de réfraction d'un milieu s'exprime en mètre par seconde.",
+    "explanation": "L'indice de réfraction est un nombre sans unité.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": false
+     },
+     {
+      "text": "Faux",
+      "correct": true
+     }
+    ]
    }
   ]
  },
@@ -1624,6 +3442,131 @@ const QUIZ_BANQUES = [
      {
       "text": "Faux",
       "correct": true
+     }
+    ]
+   },
+   {
+    "prompt": "Un rayon passant par le centre optique O d'une lentille mince convergente…",
+    "explanation": "C'est l'un des trois rayons particuliers : le rayon passant par O traverse la lentille sans être dévié.",
+    "options": [
+     {
+      "text": "N'est pas dévié",
+      "correct": true
+     },
+     {
+      "text": "Ressort parallèle à l'axe optique",
+      "correct": false
+     },
+     {
+      "text": "Passe par F'",
+      "correct": false
+     },
+     {
+      "text": "Est réfléchi",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un rayon incident parallèle à l'axe optique ressort…",
+    "explanation": "Tout rayon incident parallèle à l'axe optique émerge en passant par F'.",
+    "options": [
+     {
+      "text": "En passant par le foyer image F'",
+      "correct": true
+     },
+     {
+      "text": "En passant par le foyer objet F",
+      "correct": false
+     },
+     {
+      "text": "Parallèle à l'axe optique",
+      "correct": false
+     },
+     {
+      "text": "Sans être dévié",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un rayon incident passant par le foyer objet F ressort…",
+    "explanation": "Tout rayon passant par F émerge parallèlement à l'axe optique.",
+    "options": [
+     {
+      "text": "Parallèle à l'axe optique",
+      "correct": true
+     },
+     {
+      "text": "En passant par F'",
+      "correct": false
+     },
+     {
+      "text": "En passant par O",
+      "correct": false
+     },
+     {
+      "text": "Sans être dévié",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Une image renversée par rapport à l'objet correspond à un grandissement γ…",
+    "explanation": "Le signe de γ indique le sens de l'image : γ < 0 pour une image renversée.",
+    "options": [
+     {
+      "text": "Négatif",
+      "correct": true
+     },
+     {
+      "text": "Positif",
+      "correct": false
+     },
+     {
+      "text": "Égal à 1",
+      "correct": false
+     },
+     {
+      "text": "Nul",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Dans le modèle de l'œil réduit, quel élément joue le rôle de l'écran ?",
+    "explanation": "Le cristallin est modélisé par une lentille, l'iris par un diaphragme et la rétine par l'écran.",
+    "options": [
+     {
+      "text": "La rétine",
+      "correct": true
+     },
+     {
+      "text": "Le cristallin",
+      "correct": false
+     },
+     {
+      "text": "L'iris",
+      "correct": false
+     },
+     {
+      "text": "La pupille",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Une lentille convergente est plus épaisse au centre que sur les bords.",
+    "explanation": "C'est ce qui permet de la reconnaître au toucher.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
      }
     ]
    }
@@ -1702,6 +3645,131 @@ const QUIZ_BANQUES = [
       "correct": true
      }
     ]
+   },
+   {
+    "prompt": "Combien le noyau ¹⁴₆C contient-il de neutrons ?",
+    "explanation": "N = A − Z = 14 − 6 = 8.",
+    "options": [
+     {
+      "text": "8",
+      "correct": true
+     },
+     {
+      "text": "6",
+      "correct": false
+     },
+     {
+      "text": "14",
+      "correct": false
+     },
+     {
+      "text": "20",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Lors d'une transformation nucléaire, qu'est-ce qui est conservé ?",
+    "explanation": "Les sommes des A et des Z sont les mêmes de chaque côté de l'équation ; les éléments, eux, changent.",
+    "options": [
+     {
+      "text": "Le nombre de nucléons A et le nombre de charge Z",
+      "correct": true
+     },
+     {
+      "text": "Les éléments chimiques",
+      "correct": false
+     },
+     {
+      "text": "Les espèces chimiques",
+      "correct": false
+     },
+     {
+      "text": "Les noyaux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Compléter : ²₁H + ³₁H → ⁴₂He + ?",
+    "explanation": "A : 2 + 3 = 4 + 1 ; Z : 1 + 1 = 2 + 0. La particule manquante est un neutron ¹₀n.",
+    "options": [
+     {
+      "text": "¹₀n",
+      "correct": true
+     },
+     {
+      "text": "¹₁H",
+      "correct": false
+     },
+     {
+      "text": "⁰₋₁e",
+      "correct": false
+     },
+     {
+      "text": "²₁H",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelle particule est notée ⁰₋₁e ?",
+    "explanation": "A = 0 et charge −1 : c'est un électron.",
+    "options": [
+     {
+      "text": "Un électron",
+      "correct": true
+     },
+     {
+      "text": "Un proton",
+      "correct": false
+     },
+     {
+      "text": "Un neutron",
+      "correct": false
+     },
+     {
+      "text": "Un noyau d'hélium",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Une transformation nucléaire libère, pour une même masse, beaucoup plus d'énergie qu'une transformation chimique.",
+    "explanation": "C'est ce qui explique l'énergie produite par le Soleil ou par les centrales nucléaires.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "La transformation H₂O(ℓ) → H₂O(g) est…",
+    "explanation": "Seul l'état physique change : c'est une transformation physique.",
+    "options": [
+     {
+      "text": "Physique",
+      "correct": true
+     },
+     {
+      "text": "Chimique",
+      "correct": false
+     },
+     {
+      "text": "Nucléaire",
+      "correct": false
+     },
+     {
+      "text": "Impossible",
+      "correct": false
+     }
+    ]
    }
   ]
  },
@@ -1757,6 +3825,153 @@ const QUIZ_BANQUES = [
      },
      {
       "text": "intensité",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un conducteur ohmique de résistance R = 100 Ω est traversé par I = 0,050 A. Que vaut la tension à ses bornes ?",
+    "explanation": "Loi d'Ohm : U = R × I = 100 × 0,050 = 5,0 V.",
+    "options": [
+     {
+      "text": "5,0 V",
+      "correct": true
+     },
+     {
+      "text": "2000 V",
+      "correct": false
+     },
+     {
+      "text": "0,50 V",
+      "correct": false
+     },
+     {
+      "text": "100 V",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Un conducteur ohmique de résistance 60 Ω est soumis à une tension de 12 V. Quelle est l'intensité du courant ?",
+    "explanation": "I = U / R = 12 / 60 = 0,20 A.",
+    "options": [
+     {
+      "text": "0,20 A",
+      "correct": true
+     },
+     {
+      "text": "5,0 A",
+      "correct": false
+     },
+     {
+      "text": "720 A",
+      "correct": false
+     },
+     {
+      "text": "72 A",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Dans un circuit en série, le générateur délivre 9,0 V et la lampe a 5,5 V à ses bornes. Que vaut la tension aux bornes de la résistance ?",
+    "explanation": "Loi des mailles : U G = U L + U R, donc U R = 9,0 − 5,5 = 3,5 V.",
+    "options": [
+     {
+      "text": "3,5 V",
+      "correct": true
+     },
+     {
+      "text": "14,5 V",
+      "correct": false
+     },
+     {
+      "text": "9,0 V",
+      "correct": false
+     },
+     {
+      "text": "5,5 V",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Deux dipôles branchés en dérivation ont la même tension à leurs bornes.",
+    "explanation": "C'est la loi d'unicité des tensions dans les branches en dérivation.",
+    "vf": true,
+    "options": [
+     {
+      "text": "Vrai",
+      "correct": true
+     },
+     {
+      "text": "Faux",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Comment branche-t-on un ampèremètre ?",
+    "explanation": "L'ampèremètre mesure le courant qui le traverse : il se place en série.",
+    "options": [
+     {
+      "text": "En série",
+      "correct": true
+     },
+     {
+      "text": "En dérivation",
+      "correct": false
+     },
+     {
+      "text": "Aux bornes du générateur seulement",
+      "correct": false
+     },
+     {
+      "text": "Il n'a pas besoin d'être branché",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Quelle est l'allure de la caractéristique U = f(I) d'un conducteur ohmique ?",
+    "explanation": "U = R × I : la tension est proportionnelle à l'intensité.",
+    "options": [
+     {
+      "text": "Une droite passant par l'origine",
+      "correct": true
+     },
+     {
+      "text": "Une courbe croissante",
+      "correct": false
+     },
+     {
+      "text": "Une droite horizontale",
+      "correct": false
+     },
+     {
+      "text": "Une droite qui ne passe pas par l'origine",
+      "correct": false
+     }
+    ]
+   },
+   {
+    "prompt": "Une thermistance permet de réaliser un capteur de…",
+    "explanation": "La résistance d'une thermistance varie avec la température.",
+    "options": [
+     {
+      "text": "Température",
+      "correct": true
+     },
+     {
+      "text": "Lumière",
+      "correct": false
+     },
+     {
+      "text": "Pression",
+      "correct": false
+     },
+     {
+      "text": "Son",
       "correct": false
      }
     ]
